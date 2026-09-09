@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.3/experiment_run.schema.json",
+  "title": "AIPF Experiment Run",
+  "type": "object",
+  "required": [
+    "run_id",
+    "experiment_id",
+    "experiment_version",
+    "status",
+    "model",
+    "model_snapshot",
+    "settings",
+    "variants"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "experiment_id": {
+      "type": "string"
+    },
+    "experiment_version": {
+      "type": "string"
+    },
+    "experiment_definition_sha256": {
+      "type": "string"
+    },
+    "created_at_utc": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "running",
+        "completed",
+        "partial",
+        "failed"
+      ]
+    },
+    "model": {
+      "type": "string"
+    },
+    "model_snapshot": {
+      "type": "string"
+    },
+    "settings": {
+      "type": "object",
+      "required": [
+        "replicates",
+        "size",
+        "quality"
+      ],
+      "properties": {
+        "replicates": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "size": {
+          "type": "string"
+        },
+        "quality": {
+          "type": "string"
+        },
+        "background": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "variants": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "variant_id",
+          "factor",
+          "prompt",
+          "prompt_sha256",
+          "outputs"
+        ],
+        "properties": {
+          "variant_id": {
+            "type": "string"
+          },
+          "factor": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "prompt_sha256": {
+            "type": "string"
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "replicate",
+                "status"
+              ],
+              "properties": {
+                "replicate": {
+                  "type": "integer"
+                },
+                "status": {
+                  "enum": [
+                    "planned",
+                    "generated",
+                    "failed"
+                  ]
+                },
+                "image": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "image_sha256": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "metadata": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "error": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

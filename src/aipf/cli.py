@@ -15,6 +15,7 @@ from .patterns import all_patterns,get_pattern
 from .experiments import load_experiment,plan_experiment,experiment_inventory,experiment_report
 from .benchmarks import benchmark_report
 from .prompt_mechanisms import quality_audit
+from .experiment_runs import create_run_plan, write_run_plan
 
 
 def _load(p): return json.loads(Path(p).read_text(encoding='utf-8'))
@@ -40,6 +41,8 @@ def main():
     p=sub.add_parser('experiment-inventory')
     p=sub.add_parser('benchmark-report')
     p=sub.add_parser('prompt-audit'); p.add_argument('prompt')
+    p = sub.add_parser("experiment-run-plan"); p.add_argument("experiment"); p.add_argument("--replicates", type=int, default=4); p.add_argument("--size", default="1024x1536"); p.add_argument("--quality", default="medium"); p.add_argument("--output");
+
     args=ap.parse_args()
     if args.cmd=='classify': print(classify(args.request,args.has_reference)); return
     if args.cmd=='compile':
@@ -92,5 +95,28 @@ def main():
     if args.cmd=='experiment-inventory': _dump(experiment_inventory()); return
     if args.cmd=='benchmark-report': _dump(benchmark_report()); return
     if args.cmd=='prompt-audit': _dump(quality_audit(Path(args.prompt).read_text(encoding='utf-8'))); return
+    if args.cmd == "experiment-run-plan":
+        run = create_run_plan(
+            args.experiment,
+            replicates=args.replicates,
+            size=args.size,
+            quality=args.quality,
+        )
+
+        path = write_run_plan(
+            run,
+            args.output,
+        )
+
+        _dump(
+            {
+                "run_id": run["run_id"],
+                "experiment_id": run["experiment_id"],
+                "variants": len(run["variants"]),
+                "replicates": args.replicates,
+                "run_file": str(path),
+            }
+        )
+        return
 
 if __name__=='__main__': main()
