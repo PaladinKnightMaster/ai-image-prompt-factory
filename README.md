@@ -1,4 +1,10 @@
 # AI Image Prompt Factory V3.2
+[![CI](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/ci.yml)
+[![GitHub Pages](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/pages.yml/badge.svg)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/pages.yml)
+[![Latest Release](https://img.shields.io/github/v/release/PaladinKnightMaster/ai-image-prompt-factory)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/releases/latest)
+[![License](https://img.shields.io/github/license/PaladinKnightMaster/ai-image-prompt-factory)](LICENSE)
+
+**[View the public benchmark gallery →](https://paladinknightmaster.github.io/ai-image-prompt-factory/)**
 
 **Visual Intelligence Lab** — an installable, agentic GPT Image 2 prompt compiler that combines evidence-backed historical/material reasoning with an internal prompt/image research corpus, prompt-mechanism decomposition, a VisualPattern registry, controlled ablation experiments, and first-party benchmark planning.
 
