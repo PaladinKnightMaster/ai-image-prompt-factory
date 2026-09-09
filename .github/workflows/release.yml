@@ -1,0 +1,102 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build release artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install project
+        run: pip install -e ".[dev]"
+
+      - name: Resolve project version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(python - <<'PY'
+          import tomllib
+
+          with open("pyproject.toml", "rb") as f:
+              data = tomllib.load(f)
+
+          print(data["project"]["version"])
+          PY
+          )
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Project version: $VERSION"
+
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            EXPECTED="v${VERSION}"
+
+            if [[ "${GITHUB_REF_NAME}" != "$EXPECTED" ]]; then
+              echo "Tag/version mismatch."
+              echo "Tag:      ${GITHUB_REF_NAME}"
+              echo "Expected: ${EXPECTED}"
+              exit 1
+            fi
+          fi
+
+      - name: Build and verify release artifacts
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            python scripts/build_release.py \
+              --ref "${GITHUB_REF_NAME}"
+          else
+            python scripts/build_release.py \
+              --ref HEAD
+          fi
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aipf-v${{ steps.version.outputs.version }}-release
+          path: dist/release/*
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Create draft GitHub Release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          TAG="v${VERSION}"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "A GitHub Release already exists for $TAG."
+            echo "Refusing to overwrite an existing release."
+            exit 1
+          fi
+
+          gh release create "$TAG" \
+            dist/release/* \
+            --verify-tag \
+            --draft \
+            --title "AI Image Prompt Factory v${VERSION}" \
+            --generate-notes
