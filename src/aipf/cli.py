@@ -16,6 +16,12 @@ from .experiments import load_experiment,plan_experiment,experiment_inventory,ex
 from .benchmarks import benchmark_report
 from .prompt_mechanisms import quality_audit
 from .experiment_runs import create_run_plan, write_run_plan
+from .experiment_execution import (
+    execute_run,
+    export_host_package,
+    import_output,
+    record_failed_output,
+)
 
 
 def _load(p): return json.loads(Path(p).read_text(encoding='utf-8'))
@@ -41,7 +47,43 @@ def main():
     p=sub.add_parser('experiment-inventory')
     p=sub.add_parser('benchmark-report')
     p=sub.add_parser('prompt-audit'); p.add_argument('prompt')
-    p = sub.add_parser("experiment-run-plan"); p.add_argument("experiment"); p.add_argument("--replicates", type=int, default=4); p.add_argument("--size", default="1024x1536"); p.add_argument("--quality", default="medium"); p.add_argument("--output");
+    p = sub.add_parser("experiment-run-plan")
+    p.add_argument("experiment")
+    p.add_argument("--replicates", type=int, default=4)
+    p.add_argument("--size", default="1024x1536")
+    p.add_argument("--quality", default="medium")
+    p.add_argument(
+        "--generation-mode",
+        choices=["host_native", "api", "manual_import"],
+        default="host_native",
+    )
+    p.add_argument("--model", default="gpt-image-2")
+    p.add_argument("--model-snapshot")
+    p.add_argument("--output")
+
+    p = sub.add_parser("experiment-export")
+    p.add_argument("run_file")
+    p.add_argument("--output")
+
+    p = sub.add_parser("experiment-import")
+    p.add_argument("run_file")
+    p.add_argument("--blind-id", required=True)
+    p.add_argument("--image", required=True)
+    p.add_argument("--provider", default="chatgpt")
+    p.add_argument("--model")
+    p.add_argument("--model-snapshot")
+    p.add_argument("--notes")
+    p.add_argument("--overwrite", action="store_true")
+
+    p = sub.add_parser("experiment-fail")
+    p.add_argument("run_file")
+    p.add_argument("--blind-id", required=True)
+    p.add_argument("--error", required=True)
+
+    p = sub.add_parser("experiment-run")
+    p.add_argument("run_file")
+    p.add_argument("--limit", type=int)
+    p.add_argument("--dry-run", action="store_true")
 
     args=ap.parse_args()
     if args.cmd=='classify': print(classify(args.request,args.has_reference)); return
@@ -101,6 +143,9 @@ def main():
             replicates=args.replicates,
             size=args.size,
             quality=args.quality,
+            generation_mode=args.generation_mode,
+            model=args.model,
+            model_snapshot=args.model_snapshot,
         )
 
         path = write_run_plan(
@@ -116,6 +161,46 @@ def main():
                 "replicates": args.replicates,
                 "run_file": str(path),
             }
+        )
+        return
+    if args.cmd == "experiment-export":
+        _dump(
+            export_host_package(
+                args.run_file,
+                output=args.output,
+            )
+        )
+        return
+    if args.cmd == "experiment-import":
+        _dump(
+            import_output(
+                args.run_file,
+                blind_id=args.blind_id,
+                image=args.image,
+                provider=args.provider,
+                model=args.model,
+                model_snapshot=args.model_snapshot,
+                notes=args.notes,
+                overwrite=args.overwrite,
+            )
+        )
+        return
+    if args.cmd == "experiment-fail":
+        _dump(
+            record_failed_output(
+                args.run_file,
+                blind_id=args.blind_id,
+                error=args.error,
+            )
+        )
+        return
+    if args.cmd == "experiment-run":
+        _dump(
+            execute_run(
+                args.run_file,
+                limit=args.limit,
+                dry_run=args.dry_run,
+            )
         )
         return
 

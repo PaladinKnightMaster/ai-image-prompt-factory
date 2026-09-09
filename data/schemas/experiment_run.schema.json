@@ -8,67 +8,39 @@
     "experiment_id",
     "experiment_version",
     "status",
+    "generation_mode",
     "model",
     "model_snapshot",
     "settings",
     "variants"
   ],
   "properties": {
-    "run_id": {
-      "type": "string"
-    },
-    "experiment_id": {
-      "type": "string"
-    },
-    "experiment_version": {
-      "type": "string"
-    },
+    "run_id": {"type": "string", "minLength": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "experiment_version": {"type": "string", "minLength": 1},
     "experiment_definition_sha256": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
     },
-    "created_at_utc": {
-      "type": "string"
-    },
+    "created_at_utc": {"type": "string"},
     "status": {
-      "enum": [
-        "planned",
-        "running",
-        "completed",
-        "partial",
-        "failed"
-      ]
+      "enum": ["planned", "running", "completed", "partial", "failed"]
     },
-    "model": {
-      "type": "string"
+    "generation_mode": {
+      "enum": ["host_native", "api", "manual_import"]
     },
-    "model_snapshot": {
-      "type": "string"
-    },
+    "model": {"type": "string", "minLength": 1},
+    "model_snapshot": {"type": "string", "minLength": 1},
     "settings": {
       "type": "object",
-      "required": [
-        "replicates",
-        "size",
-        "quality"
-      ],
+      "required": ["replicates", "size", "quality"],
       "properties": {
-        "replicates": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "size": {
-          "type": "string"
-        },
-        "quality": {
-          "type": "string"
-        },
-        "background": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
-      }
+        "replicates": {"type": "integer", "minimum": 1},
+        "size": {"type": "string", "minLength": 1},
+        "quality": {"type": "string", "minLength": 1},
+        "background": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
     },
     "variants": {
       "type": "array",
@@ -83,66 +55,46 @@
           "outputs"
         ],
         "properties": {
-          "variant_id": {
-            "type": "string"
-          },
-          "factor": {
-            "type": "string"
-          },
-          "prompt": {
-            "type": "string"
-          },
+          "variant_id": {"type": "string", "minLength": 1},
+          "factor": {"type": "string", "minLength": 1},
+          "prompt": {"type": "string", "minLength": 1},
           "prompt_sha256": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
           },
           "outputs": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
-              "required": [
-                "replicate",
-                "status"
-              ],
+              "required": ["replicate", "blind_id", "status"],
               "properties": {
-                "replicate": {
-                  "type": "integer"
+                "replicate": {"type": "integer", "minimum": 1},
+                "blind_id": {
+                  "type": "string",
+                  "minLength": 4,
+                  "pattern": "^[A-Z2-9]+$"
                 },
                 "status": {
-                  "enum": [
-                    "planned",
-                    "generated",
-                    "failed"
-                  ]
+                  "enum": ["planned", "generated", "failed"]
                 },
-                "image": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
+                "image": {"type": ["string", "null"]},
                 "image_sha256": {
-                  "type": [
-                    "string",
-                    "null"
+                  "anyOf": [
+                    {"type": "null"},
+                    {"type": "string", "pattern": "^[0-9a-f]{64}$"}
                   ]
                 },
-                "metadata": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                },
-                "error": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
+                "metadata": {"type": ["string", "null"]},
+                "error": {"type": ["string", "null"]}
+              },
+              "additionalProperties": true
             }
           }
-        }
+        },
+        "additionalProperties": true
       }
     }
-  }
+  },
+  "additionalProperties": true
 }

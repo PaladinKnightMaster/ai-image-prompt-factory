@@ -171,8 +171,20 @@ def check_v32_artifacts(errors):
     for bp in sorted((ROOT/'benchmarks/candidates').glob('*.json'))+sorted((ROOT/'benchmarks/golden').glob('*.json')):
         validate_obj(json.loads(bp.read_text(encoding='utf-8')),bench_schema,str(bp.relative_to(ROOT)),errors)
     br=benchmark_report()
-    # Hard public/internal boundary: no collected raster assets in distributable tree.
-    raw=[x for x in ROOT.rglob('*') if x.is_file() and x.suffix.lower() in {'.jpg','.jpeg','.png','.webp'} and 'website/generated' not in x.as_posix()]
+    # Hard public/internal boundary: no collected raster assets in the
+    # distributable source tree. Ignore local test/build environments because
+    # tests may intentionally create temporary image fixtures.
+    ignored_parts={'.git','.venv','.pytest_tmp','.pytest_cache','__pycache__','dist','build'}
+    raw=[]
+    for x in ROOT.rglob('*'):
+        if not x.is_file() or x.suffix.lower() not in {'.jpg','.jpeg','.png','.webp'}:
+            continue
+        rel=x.relative_to(ROOT)
+        if any(part in ignored_parts or part.endswith('.egg-info') for part in rel.parts):
+            continue
+        if rel.as_posix().startswith('website/generated/'):
+            continue
+        raw.append(x)
     if raw: errors.append('raw internal/public raster assets unexpectedly present: '+', '.join(str(x.relative_to(ROOT)) for x in raw[:5]))
     return len(pats),sum(x.get('compiler_usage',{}).get('compiler_eligible',False) for x in pats),inv['count'],inv['executed'],br['candidate_count'],br['golden_count']
 
