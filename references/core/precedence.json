@@ -1,0 +1,20 @@
+{
+  "id": "precedence-v3",
+  "version": "3.0.0",
+  "order": [
+    "safety",
+    "explicit_user_instruction",
+    "reference_and_identity_locks",
+    "historical_compatibility",
+    "route",
+    "optional_overlays",
+    "defaults"
+  ],
+  "rules": [
+    "Never use a default to overwrite an explicit user fact.",
+    "A reference role grants permission only for the assigned visual dimensions.",
+    "Identity locks preserve identity but do not block an explicitly selected body-transformation mode.",
+    "Strict historical reconstruction may reject an explicit period-incompatible element only by surfacing the conflict; it must not silently replace the user's element.",
+    "If the user intentionally requests a hybrid, retain the conflict as an intentional adaptation and label it in the semantic spec."
+  ]
+}

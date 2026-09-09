@@ -1,0 +1,214 @@
+{
+  "id": "tang",
+  "name": "Tang dynasty",
+  "pack_type": "historical_era",
+  "period": "618–907 CE",
+  "region": "China; Chang’an/Luoyang and regional contexts",
+  "summary": "Cosmopolitan imperial period with abundant court, tomb, Buddhist and trade-related visual material; avoid collapsing all three centuries into one fashion moment.",
+  "social_roles": [
+    {
+      "text": "court woman / attendant",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "court dancer or musician",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "official",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "merchant or traveler",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "court leisure/banquet",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "Shangyuan/lantern-festival scene",
+      "compatibility": "plausible",
+      "confidence": "medium",
+      "note": "Festival staging details need narrower evidence for strict reconstruction."
+    },
+    {
+      "text": "Buddhist devotional context",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "high-waisted long skirts and layered court dress appear in Tang visual culture; exact ensemble varies by decade/status",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [
+    {
+      "text": "silk and patterned textiles",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "sancai glazed earthenware",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    }
+  ],
+  "hairstyle_headwear": [
+    {
+      "text": "elaborate updos are well represented; choose ornament density by status and date",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [
+    {
+      "text": "period cosmetics and forehead/face adornment vary; use only when evidence or user strictness supports them",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "jewelry": [
+    {
+      "text": "gold/silver/hair ornaments appropriate to elite contexts",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "architecture": [
+    {
+      "text": "palace/courtyard architecture with timber construction and tiled roofs",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [
+    {
+      "text": "stools and imported forms can appear in cosmopolitan elite contexts",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "food_drink_tableware": [
+    {
+      "text": "ceramic, metal and lacquer dining vessels",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "musical_instruments": [
+    {
+      "text": "pipa and court ensemble instruments",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "weapons_tools": [
+    {
+      "text": "swords/bows in military contexts",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [
+    {
+      "text": "horses are a strong Tang visual/cultural anchor",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "writing_calligraphy": [
+    {
+      "text": "Tang calligraphic culture; use verified inscriptions only",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [
+    {
+      "text": "court ceremonial and Buddhist devotional settings should remain role-specific",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "lighting_technology": [
+    {
+      "text": "lanterns/oil lamps/candles as motivated night sources",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [
+    {
+      "text": "peony associations are popular but should not be treated as mandatory documentary décor",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "visual_arts": [
+    {
+      "text": "sancai ceramics",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "Buddhist mural/sculptural traditions",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "court/tomb figurines",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Qing Manchu court robe",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "Ming blue-and-white as default Tang tableware",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    },
+    {
+      "text": "generic xianxia glow presented as historical",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "portrait": "Render an adult Tang court subject as a living person in a coherent, role-specific ensemble; keep ornament, furniture and light motivated by occasion.",
+    "lantern": "Build the lantern festival as a human social event: warm practical lantern light, layered courtyard depth, attendants/guests in restrained supporting roles, no magical floating lights unless fantasy mode."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/75765",
+      "type": "museum",
+      "supports": "8th-century court figure, clothing layers, sancai, cosmopolitan exchange"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should narrow century/reign, capital/region, status, and whether evidence is court, tomb, Buddhist, or literary.",
+  "version": "1.1.0",
+  "evidence_claims": [
+    "tang-court-leisure-001",
+    "tang-sancai-001",
+    "tang-cobalt-rare-001",
+    "yuan-bluewhite-flowering-001"
+  ]
+}

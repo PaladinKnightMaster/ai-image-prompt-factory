@@ -1,0 +1,27 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 1,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "tang-court-leisure-001",
+      "claim_version": "1.0.0",
+      "subject": "court_life",
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For an 8th-century court scene, use layered elite dress and a materially grounded court setting; do not copy one tomb figure as a universal costume.",
+      "source_ids": [
+        "met-tang-court-lady-75765"
+      ],
+      "survival_bias": null
+    }
+  ],
+  "claim_relationships": []
+}

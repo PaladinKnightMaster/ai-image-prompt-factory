@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "sources": "evidence/sources/registry.json",
+  "claim_sets": [
+    {
+      "selector": "classical_greek",
+      "path": "evidence/claims/classical_greek.json"
+    },
+    {
+      "selector": "dunhuang",
+      "path": "evidence/claims/dunhuang.json"
+    },
+    {
+      "selector": "edo",
+      "path": "evidence/claims/edo.json"
+    },
+    {
+      "selector": "hellenistic_greek",
+      "path": "evidence/claims/hellenistic_greek.json"
+    },
+    {
+      "selector": "ming",
+      "path": "evidence/claims/ming.json"
+    },
+    {
+      "selector": "roman_imperial",
+      "path": "evidence/claims/roman_imperial.json"
+    },
+    {
+      "selector": "tang",
+      "path": "evidence/claims/tang.json"
+    }
+  ],
+  "art_method_claim_sets": {
+    "marble_sculpture": [
+      "evidence/claims/classical_greek.json",
+      "evidence/claims/hellenistic_greek.json"
+    ],
+    "bronze_sculpture": [
+      "evidence/claims/classical_greek.json",
+      "evidence/claims/roman_imperial.json",
+      "evidence/claims/hellenistic_greek.json"
+    ],
+    "japanese_woodblock_print": [
+      "evidence/claims/edo.json"
+    ],
+    "blue_white_ceramic": [
+      "evidence/claims/edo.json",
+      "evidence/claims/tang.json",
+      "evidence/claims/ming.json"
+    ],
+    "mineral_pigment_mural": [
+      "evidence/claims/dunhuang.json"
+    ]
+  },
+  "progressive_disclosure": "Load only claim files selected by historical packs and primary art method; never load every claim file for a simple request.",
+  "conflicts": "evidence/conflicts/registry.json"
+}

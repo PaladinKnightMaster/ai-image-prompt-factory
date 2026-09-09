@@ -1,0 +1,56 @@
+{
+  "version": "3.2.0",
+  "audit_date": "2026-09-07",
+  "attached_sources": [
+    {
+      "name": "gpt-image-2-1.0.4",
+      "role": "installable skill/runtime architecture reference"
+    },
+    {
+      "name": "AI_Image_Prompt_Factory_v2_1_ChatGPT_Install_Kit",
+      "role": "semantic-system migration source"
+    },
+    {
+      "name": "Image Library",
+      "files_inspected": 642,
+      "sample_output_images": 606,
+      "text_or_data_files": 36,
+      "role": "internal visual intelligence research corpus",
+      "ingestion": {
+        "source_name": "Image Library(1).zip",
+        "source_sha256": "c9f8c13df79891d0e6b1e7046d1c87ebaac73fb55af001e8987e665aebccb45f",
+        "image_assets": 606,
+        "text_documents": 36,
+        "unique_hashes": 587,
+        "exact_duplicate_groups": 19,
+        "exact_duplicate_extra_files": 19,
+        "collections": {
+          "APC": 100,
+          "FSC": 24,
+          "GAC": 33,
+          "LAC": 71,
+          "LCC": 378
+        },
+        "prompt_records": 191,
+        "image_prompt_associations": {
+          "exact_section": 463,
+          "probable_section": 0,
+          "unknown": 143
+        },
+        "verified_provenance_assets": 606,
+        "internal_only_assets": 606,
+        "public_gallery_eligible": 0,
+        "pattern_observation_types": 21,
+        "policy": "Collected source assets are internal development material. Public release packaging excludes the raw source corpus and internal gallery output."
+      }
+    }
+  ],
+  "collection_mappings": {
+    "APC": "AIPixLab Collection.md",
+    "FSC": "Fashion Style Collections.md",
+    "GAC": "Game_Anim Style Collections.md",
+    "LCC": "Larus Canus Collection.md / MrLarus / https://x.com/MrLarus",
+    "LAC": "Liyue AI Collection.md / Liyue AI / https://x.com/liyue_ai"
+  },
+  "migration_policy": "Keep raw collected images/prompts internal; ship only tooling, derived indexes/patterns, experiment definitions, and first-party benchmark material."
+}

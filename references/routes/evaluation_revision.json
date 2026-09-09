@@ -1,0 +1,8 @@
+{
+  "id": "evaluation_revision",
+  "description": "Evaluate an output and produce a minimal revision",
+  "loads": [
+    "evaluation"
+  ],
+  "logic": "Score independent axes and change only failed dimensions."
+}

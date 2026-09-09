@@ -1,0 +1,150 @@
+{
+  "version": "1.0.0",
+  "pack_id": "edo",
+  "claims": [
+    {
+      "claim_id": "edo-arita-porcelain-001",
+      "version": "1.0.0",
+      "subject": "ceramic_production",
+      "value": "Japanese porcelain production developed in Hizen/Arita in the early seventeenth century; early Imari commonly used cobalt blue under a transparent glaze on a white ground.",
+      "context": {
+        "pack_ids": [
+          "edo"
+        ]
+      },
+      "compatibility": "canonical",
+      "confidence": 0.96,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-edo-porcelain-essay",
+        "met-arita-dishes-63588"
+      ],
+      "interpretation": "Use Hizen/Arita context for Edo blue-and-white porcelain instead of importing Chinese Ming manufacturing identity wholesale.",
+      "prompt_implications": [
+        "For an Edo blue-and-white artifact, use Arita/Hizen porcelain logic: cobalt underglaze, clear glaze, kiln-fired white porcelain body, and period-appropriate Japanese decorative handling."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "blue-and-white",
+        "blue and white",
+        "ceramic",
+        "porcelain",
+        "imari",
+        "arita",
+        "hizen"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "edo-ukiyoe-collaboration-001",
+      "version": "1.0.0",
+      "subject": "print_process",
+      "value": "Edo ukiyo-e woodblock prints were collaborative products involving designer, engraver/carver, printer, and publisher.",
+      "context": {
+        "pack_ids": [
+          "edo"
+        ],
+        "art_methods": [
+          "japanese_woodblock_print"
+        ]
+      },
+      "compatibility": "canonical",
+      "confidence": 0.97,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-ukiyoe-process",
+        "britishmuseum-ukiyoe-process-2025"
+      ],
+      "interpretation": "The visible image should behave like a print made through carved blocks and registered color impressions, not like a digital painting with an “ukiyo-e” label.",
+      "prompt_implications": [
+        "Use carved keyline logic, separate color impressions, registration-aware edges, absorbent paper, and hand-printed tonal variation."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "ukiyo-e",
+        "ukiyoe",
+        "woodblock",
+        "print",
+        "hiroshige",
+        "hokusai"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "edo-ukiyoe-blocks-001",
+      "version": "1.0.0",
+      "subject": "print_material",
+      "value": "Cherry wood blocks, separate color blocks, registration guides, mulberry paper, and baren printing are historically grounded production anchors for Edo color woodblock printing.",
+      "context": {
+        "pack_ids": [
+          "edo"
+        ],
+        "art_methods": [
+          "japanese_woodblock_print"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.95,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-ukiyoe-process",
+        "britishmuseum-ukiyoe-process-2025"
+      ],
+      "interpretation": "Use these as causal material cues, not decorative jargon.",
+      "prompt_implications": [
+        "Let contours show carved-line discipline; let colors read as layered hand-printed impressions with subtle registration/pressure variation and paper absorption."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "ukiyo-e",
+        "woodblock",
+        "print",
+        "bokashi"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "edo-ceramic-not-print-001",
+      "version": "1.0.0",
+      "subject": "medium_boundary",
+      "value": "Edo blue-and-white porcelain and ukiyo-e are distinct production systems even when they share period or motifs.",
+      "context": {
+        "pack_ids": [
+          "edo"
+        ],
+        "art_methods": [
+          "blue_white_ceramic"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.92,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-edo-porcelain-essay",
+        "met-ukiyoe-process"
+      ],
+      "interpretation": "Shared Edo context does not justify importing woodblock paper texture, carved keylines, or registration artifacts onto glazed porcelain unless explicitly requested as a hybrid.",
+      "prompt_implications": [
+        "For ceramic transformation, express brush-painted cobalt under clear glaze following the curved vessel surface; do not add paper fibers, key-block outlines, or print-registration artifacts."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "porcelain",
+        "ceramic",
+        "plate",
+        "bowl",
+        "vase",
+        "jar"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    }
+  ]
+}

@@ -1,0 +1,1717 @@
+[
+  {
+    "group": "golden",
+    "id": "01-classical-greek-heroic-living",
+    "title": "Classical Greek heroic living portrait",
+    "status": "spec_only",
+    "request": "Make this person a Classical Greek heroic figure standing alive before a sanctuary at dawn.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "classical_greek"
+      ],
+      "subperiod": "late 5th to early 4th century BCE impression",
+      "region": null,
+      "role": "heroic citizen/warrior-inspired living subject",
+      "occasion": "quiet pre-action sanctuary moment",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Make this person a Classical Greek heroic figure standing alive before a sanctuary at dawn. Use a 4:5 composition.\n\nIdentity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.\n\nBody/presentation: No anatomy change; permit pose, camera presentation, styling, garment shaping, and posture changes.\n\nHistorical/cultural direction (historically_informed): Classical Greek. subperiod: late 5th to early 4th century BCE impression; role: heroic citizen/warrior-inspired living subject; occasion: quiet pre-action sanctuary moment.\n\nUse Classical Greek anchors selectively: draped garments such as chiton/himation in appropriate contexts; armor for warriors; stone temple/stoa/agora vocabulary must be site and date aware.\n\nCreate a living adult figure with Classical balance and material culture, not a marble statue unless the requested art method is sculpture.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. When reconstructing a living ancient sculptural environment, do not default every Greek statue to white marble merely because more marble copies survive.\n\nOriginal-vs-surviving appearance (living/in-period scene): Survival is selective: bronze was recyclable and often lost, while marble copies survived differently.\n\nMoment: a breath before stepping down from the sanctuary terrace. Action: standing in controlled contrapposto-like balance, cloak caught by a light breeze. Gaze: past the camera toward an implied approach. Body weight/support: one leg bears weight, the free leg relaxed but ready. Hands: one hand gathers the cloak; the other rests near a sheathed sword without drawing it. Foreground: worn stone step edge. Midground: subject and restrained votive architecture. Background: sunlit sanctuary columns and distant dry landscape. Camera/framing: eye-to-slightly-low three-quarter full portrait. Motivated light: low dawn sun from one side, reflected fill from pale stone. Emotional micro-story: a civic hero before action, dignified rather than theatrical.\n\nAvoid only these likely drift modes: Roman imperial cuirass portrait conventions labeled Classical Greek.\n",
+    "evidence": {
+      "claim_ids": [
+        "greek-bronze-survival-001"
+      ],
+      "source_labels": [
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "0a4e348768216876980b75c2a5f5d739ee0bba7839216979734c6fd4fb27c02f"
+    },
+    "compatibility_summary": {
+      "accepted": 1,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/01-classical-greek-heroic-living/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "02-greek-marble-artifact",
+    "title": "Greek marble artifact transformation",
+    "status": "spec_only",
+    "request": "Turn the portrait into a museum-quality Classical Greek marble statue while keeping the person recognizable.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "classical_greek"
+      ],
+      "subperiod": "Classical",
+      "region": null,
+      "role": "idealized heroic portrait subject",
+      "occasion": "sculptural dedication",
+      "intentional_hybrids": [
+        "modern sitter translated into Classical sculptural language"
+      ]
+    },
+    "art": {
+      "method": "marble_sculpture",
+      "artifact_form": "free_standing_statue",
+      "artifact_state": "museum_conserved",
+      "variant": "restrained traces of historically plausible polychromy optional, not mandatory"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Turn the portrait into a museum-quality Classical Greek marble statue while keeping the person recognizable. Use a 4:5 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Preserve the reference person's recognizable identity as the highest visual lock; avoid voluntary face redesign.\n\nBody/presentation: Permit medium-driven proportion or form stylization when clearly artistic rather than presented as literal anatomy.\n\nHistorical/cultural direction (historically_informed): Classical Greek. subperiod: Classical; role: idealized heroic portrait subject; occasion: sculptural dedication.\n\nUse Classical Greek anchors selectively: draped garments such as chiton/himation in appropriate contexts; armor for warriors; stone temple/stoa/agora vocabulary must be site and date aware.\n\nUse a coherent load-bearing stance, intentional contrapposto when appropriate, carved/cast surface logic and restrained evidence-aware color state.\n\nIntentional adaptation (do not present as documentary fact): modern sitter translated into Classical sculptural language.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. For newly created or in-period Classical marble, allow evidence-aware polychromy or pigment details when appropriate. For conserved/excavated states, largely bare marble with surviving pigment traces can be plausible while preserving the distinction from original appearance. When reconstructing a living ancient sculptural environment, do not default every Greek statue to white marble merely because more marble copies survive.\n\nOriginal-vs-surviving appearance (museum_conserved): Weathering, cleaning, burial, and conservation can remove or reduce ancient paint; present white marble is not identical to original surface intent. Survival is selective: bronze was recyclable and often lost, while marble copies survived differently.\n\nArt/craft method — Marble sculpture: Translate flesh, hair and cloth into carved stone masses: readable planar transitions, intentional chisel-to-polish hierarchy, weight-bearing support and stone-continuous details.\n\nArtifact form — free standing statue: 360-degree figure with load-bearing stance, base/contact logic and silhouette.\n\nArtifact state — museum conserved: Stabilized, cleaned and supported with restrained conservation evidence; displayed with museum-appropriate mounts/light if in scene.\n\nMethod variant: restrained traces of historically plausible polychromy optional, not mandatory.\n\nMaterial behavior: Crystalline stone, subtle subsurface light at thin edges, matte-to-polished variation; never waxy skin. Edges range from crisp carved ridges to softened polished transitions; thin unsupported projections are risky and often require supports.\n\nMoment: museum display after conservation. Action: stable free-standing heroic pose with drapery supporting the composition. Gaze: calm forward focus. Body weight/support: clear load-bearing leg and relaxed counter-leg. Hands: hands simplified into stone-safe gestures; no unsupported thin fingers. Foreground: stone plinth and subtle conservation mount. Midground: full statue. Background: quiet museum gallery. Camera/framing: three-quarter museum documentation view with slight human eye-level perspective. Motivated light: warm museum key plus soft ambient fill. Material response: crystalline marble, polished high points, restrained tool texture in recesses. Emotional micro-story: a modern identity reimagined as an archaeological-style sculptural dedication.\n\nAvoid only these likely drift modes: Roman imperial cuirass portrait conventions labeled Classical Greek.\n\nMaterial failure checks: avoid living skin patches; plastic/resin gloss; floating hair strands.\n",
+    "evidence": {
+      "claim_ids": [
+        "greek-marble-polychromy-001",
+        "greek-bronze-survival-001"
+      ],
+      "source_labels": [
+        "The British Museum",
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "c7d4e540956e88ed08cfa4f61221768b7ce030b1115cad0331f58101f31ffe1a"
+    },
+    "compatibility_summary": {
+      "accepted": 2,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/02-greek-marble-artifact/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "03-roman-bronze-bust",
+    "title": "Roman bronze bust",
+    "status": "spec_only",
+    "request": "Transform this person into a conserved Roman Imperial bronze portrait bust.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "roman_imperial"
+      ],
+      "subperiod": "2nd century CE-inspired",
+      "region": "Roman Mediterranean",
+      "role": "private elite portrait",
+      "occasion": "portrait display",
+      "intentional_hybrids": [
+        "modern sitter mapped to Roman portrait convention"
+      ]
+    },
+    "art": {
+      "method": "bronze_sculpture",
+      "artifact_form": "bust",
+      "artifact_state": "museum_conserved",
+      "variant": "individualized rather than emperor-like idealization"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Transform this person into a conserved Roman Imperial bronze portrait bust. Use a 4:5 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Preserve the reference person's recognizable identity as the highest visual lock; avoid voluntary face redesign.\n\nBody/presentation: Permit medium-driven proportion or form stylization when clearly artistic rather than presented as literal anatomy.\n\nHistorical/cultural direction (historically_informed): Roman Imperial. subperiod: 2nd century CE-inspired; region: Roman Mediterranean; role: private elite portrait; occasion: portrait display.\n\nUse Roman Imperial anchors selectively: toga/stola/tunic/armor only when role and context justify them; portrait hairstyle is highly date-sensitive and useful for narrowing chronology; forum, basilica, domus/villa, baths, streets or provincial settings by context; oil lamps and daylight in interiors.\n\nBuild a materially credible Roman portrait bust: intentional truncation and support, period-sensitive hair, modeled flesh/hair contrast, and either idealized or individualized likeness chosen from the narrative—not both accidentally.\n\nIntentional adaptation (do not present as documentary fact): modern sitter mapped to Roman portrait convention.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. For a Roman bronze bust, preserve modeled portrait specificity, metallic depth, cast-and-finished surface behavior, and any inlay logic supported by the chosen example/context. If visible and appropriate, use restrained contrasting metal/stone inlays to support lifelike eyes or details; do not turn them into fantasy glow. Use a date-sensitive Roman coiffure tied to the selected century/reign; if the date is broad, keep hair restrained and avoid overclaiming specificity.\n\nArt/craft method — Bronze sculpture: Render a cast copper-alloy object with true metallic reflection, chased surface detail, plausible joins and state-specific patina; model hair/cloth as cast masses, not living strands.\n\nArtifact form — bust: head, neck and upper torso; terminate deliberately at chest/shoulders or pedestal.\n\nArtifact state — museum conserved: Stabilized, cleaned and supported with restrained conservation evidence; displayed with museum-appropriate mounts/light if in scene.\n\nMethod variant: individualized rather than emperor-like idealization.\n\nMaterial behavior: Metal reflects environment; aged patina may be brown/black/green in varied layers, with rubbed high points and localized corrosion. Cast edges can be crisp but transition through modeled volumes; thin projections require casting/support logic rather than carved-stone mass.\n\nMoment: newly installed in a museum case. Action: frontal-three-quarter bust with subtle head turn. Gaze: focused slightly off-axis. Body weight/support: not applicable beyond stable bust support. Hands: no hands in crop. Foreground: dark bronze mount edge. Midground: head, neck, shoulders and deliberate bust termination. Background: neutral museum wall with soft falloff. Camera/framing: close museum portrait at eye level. Motivated light: controlled warm side key with cooler ambient fill. Material response: dark copper-alloy patina, rubbed high points, chased hair detail, localized green corrosion only in recesses. Emotional micro-story: an individualized private portrait rediscovered and conserved.\n\nAvoid only these likely drift modes: Renaissance neoclassical costume presented as Roman evidence.\n\nMaterial failure checks: avoid orange plastic surface; stone-like diffuse shading; uniform green corrosion.\n",
+    "evidence": {
+      "claim_ids": [
+        "roman-bronze-portrait-001",
+        "roman-bronze-inlay-001",
+        "roman-portrait-hair-date-001"
+      ],
+      "source_labels": [
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "46d57ffeaea73c2c8044889de0a16cb03637d44342b99387556aadcec21af59b"
+    },
+    "compatibility_summary": {
+      "accepted": 3,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/03-roman-bronze-bust/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "04-tang-court-lantern",
+    "title": "Tang court lantern portrait",
+    "status": "spec_only",
+    "request": "Make me a Tang dynasty princess at a lantern festival.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "tang"
+      ],
+      "subperiod": "8th-century-inspired",
+      "region": "Chang’an-inspired court setting",
+      "role": "adult Tang princess / high-status court woman; title explicitly requested by user",
+      "occasion": "Shangyuan lantern-festival evening",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Make me a Tang dynasty princess at a lantern festival. Use a 4:5 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.\n\nBody/presentation: No anatomy change; permit pose, camera presentation, styling, garment shaping, and posture changes.\n\nHistorical/cultural direction (historically_informed): Tang dynasty. subperiod: 8th-century-inspired; region: Chang’an-inspired court setting; role: adult Tang princess / high-status court woman; title explicitly requested by user; occasion: Shangyuan lantern-festival evening.\n\nUse Tang dynasty anchors selectively: high-waisted long skirts and layered court dress appear in Tang visual culture; exact ensemble varies by decade/status; elaborate updos are well represented; choose ornament density by status and date; palace/courtyard architecture with timber construction and tiled roofs; silk and patterned textiles.\n\nBuild the lantern festival as a human social event: warm practical lantern light, layered courtyard depth, attendants/guests in restrained supporting roles, no magical floating lights unless fantasy mode.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. For an 8th-century court scene, use layered elite dress and a materially grounded court setting; do not copy one tomb figure as a universal costume.\n\nMoment: she pauses midway through a lantern-lit courtyard while attendants continue behind her. Action: one measured step forward, sleeve and sash responding to motion. Gaze: brief direct glance as if recognizing someone across the courtyard. Body weight/support: front foot receiving weight, rear foot still engaged. Hands: one hand lightly steadies a small lantern handle; other hand gathers sleeve away from the flame. Fabric response: silk layers move with the step and night breeze. Foreground: soft out-of-focus lantern edge. Midground: subject and one nearby attendant. Background: timber palace garden corridor and layered lanterns. Camera/framing: three-quarter portrait, slightly below eye level, enough space for garment silhouette. Motivated light: warm practical lanterns plus cool night ambient. Emotional micro-story: a private recognition inside a public festival.\n\nAvoid only these likely drift modes: Qing Manchu court robe; Ming blue-and-white as default Tang tableware.\n",
+    "evidence": {
+      "claim_ids": [
+        "tang-court-leisure-001"
+      ],
+      "source_labels": [
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "3df526a8859cbce7416bd950828a1dd65beb8f7bed213260602ba6e804bd9727"
+    },
+    "compatibility_summary": {
+      "accepted": 1,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/04-tang-court-lantern/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "05-tang-dunhuang-mural",
+    "title": "Tang/Dunhuang mural transformation",
+    "status": "spec_only",
+    "request": "Turn this portrait into a Tang-period Dunhuang-inspired cave mural artifact.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "dunhuang",
+        "tang"
+      ],
+      "subperiod": "Tang-period Mogao-inspired, not a specific sacred icon unless separately sourced",
+      "region": "Mogao/Dunhuang",
+      "role": "secular donor/attendant-inspired portrait rather than deity",
+      "occasion": "painted cave-wall portrait zone",
+      "intentional_hybrids": [
+        "modern identity translated into a Tang-period Dunhuang-inspired non-sacred figure"
+      ]
+    },
+    "art": {
+      "method": "mineral_pigment_mural",
+      "artifact_form": "architectural_frieze",
+      "artifact_state": "aged",
+      "variant": "matte cave-wall mural"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Turn this portrait into a Tang-period Dunhuang-inspired cave mural artifact. Use a 4:5 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.\n\nBody/presentation: Permit medium-driven proportion or form stylization when clearly artistic rather than presented as literal anatomy.\n\nHistorical/cultural direction (historically_informed): Dunhuang / Mogao visual tradition + Tang dynasty. subperiod: Tang-period Mogao-inspired, not a specific sacred icon unless separately sourced; region: Mogao/Dunhuang; role: secular donor/attendant-inspired portrait rather than deity; occasion: painted cave-wall portrait zone.\n\nUse Dunhuang / Mogao visual tradition anchors selectively: garment/iconography must follow chosen cave/subperiod and role; do not mix deity, donor and court costume casually; iconographic hair/headwear varies widely by subject and period; rock-cut cave-temple interior and painted architectural illusion; painted cave-wall surface with layered preparation and mineral/earth pigments as a visual-material abstraction.\n\nTranslate the subject into a wall-bound painted figure: flattened but graceful contour logic, mineral/earth pigment behavior, plaster/cave-wall texture, period-specific iconographic restraint, and physically plausible age state.\n\nUse Tang dynasty anchors selectively: high-waisted long skirts and layered court dress appear in Tang visual culture; exact ensemble varies by decade/status; elaborate updos are well represented; choose ornament density by status and date; palace/courtyard architecture with timber construction and tiled roofs; silk and patterned textiles.\n\nRender an adult Tang court subject as a living person in a coherent, role-specific ensemble; keep ornament, furniture and light motivated by occasion.\n\nIntentional adaptation (do not present as documentary fact): modern identity translated into a Tang-period Dunhuang-inspired non-sacred figure.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. Tie pigment palette and mural-making details to the selected cave/subperiod when possible. For strict or research-facing work, anchor the mural to a cave, dynasty/subperiod, or tightly bounded evidence family. For aged, damaged, excavated, or museum-conserved mural states, include fading, discoloration, loss, and conservation selectively; for in-period reconstruction, do not copy every modern deterioration artifact. When the selected evidence family matches Cave 55, express mural depth through plaster ground, mineral paint layers, localized gilding, and organic-binder behavior rather than a flat digital “mural filter.” For an 8th-century court scene, use layered elite dress and a materially grounded court setting; do not copy one tomb figure as a universal costume.\n\nOriginal-vs-surviving appearance (aged): The colors visible today are not a transparent record of original saturation; discoloration and conservation state can materially alter appearance.\n\nArt/craft method — Mineral-pigment mural / cave mural: Make the image inseparable from a prepared wall: matte pigment, brush contours interrupted by plaster grain, localized loss and aging, and composition designed for architectural surface rather than a floating poster.\n\nArtifact form — architectural frieze: horizontal narrative/decorative band designed for architectural viewing.\n\nArtifact state — aged: Long-term aging with restrained discoloration, surface wear, patina or abrasion appropriate to material and environment.\n\nMethod variant: matte cave-wall mural.\n\nMaterial behavior: Pigment film sits on/within a mineral wall ground; cracks, abrasions and losses cross painted forms physically. Paint edges are brush-defined but physically interrupted by plaster grain, cracks and loss; no floating digital vector edge.\n\nMoment: surviving wall section under conservation lighting. Action: graceful three-quarter attendant/donor-inspired standing pose. Gaze: calm sideward gaze. Body weight/support: flattened pictorial stance with readable but non-photographic anatomy. Hands: simple hands close to torso; no sacred mudra. Foreground: edge of plaster loss. Midground: painted figure and textile motifs. Background: restrained mural field, no fake deep cave bokeh. Camera/framing: orthographic-to-slight oblique documentation view. Motivated light: soft conservation/documentation light revealing plaster relief. Material response: matte mineral pigment integrated with plaster, localized cracking and paint loss. Emotional micro-story: a surviving secular portrait fragment whose identity remains recognizable through painted facial structure.\n\nAvoid only these likely drift modes: a single timeless “Dunhuang dynasty outfit”; random modern fantasy runes; Qing Manchu court robe; Ming blue-and-white as default Tang tableware.\n\nMaterial failure checks: avoid digital fresco filter; uniform cracked overlay; neon pigments.\n",
+    "evidence": {
+      "claim_ids": [
+        "mogao-pigment-variation-001",
+        "mogao-multicentury-001",
+        "mogao-discoloration-001",
+        "mogao-cave55-layering-001",
+        "tang-court-leisure-001"
+      ],
+      "source_labels": [
+        "Dunhuang Academy",
+        "UNESCO World Heritage Centre",
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "06afe90693702a85d7f666573b0d7c0cd9082c58b8d8a445ff84731f8f92ac8e"
+    },
+    "compatibility_summary": {
+      "accepted": 5,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/05-tang-dunhuang-mural/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "06-ming-grounded-wuxia",
+    "title": "Ming grounded Wuxia portrait",
+    "status": "spec_only",
+    "request": "Give this person a grounded Ming-era wuxia portrait: a traveling swordswoman at an inn, no magic.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "period_drama",
+      "packs": [
+        "ming",
+        "wuxia"
+      ],
+      "subperiod": "late Ming-inspired",
+      "region": "Jiangnan-inspired fictional travel setting",
+      "role": "adult traveling swordswoman",
+      "occasion": "tense pause outside an inn after rain",
+      "intentional_hybrids": [
+        "wuxia genre overlay on Ming material setting"
+      ]
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Give this person a grounded Ming-era wuxia portrait: a traveling swordswoman at an inn, no magic. Use a 4:5 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.\n\nBody/presentation: No anatomy change; permit pose, camera presentation, styling, garment shaping, and posture changes.\n\nHistorical/cultural direction (period_drama): Ming dynasty + Wuxia. subperiod: late Ming-inspired; region: Jiangnan-inspired fictional travel setting; role: adult traveling swordswoman; occasion: tense pause outside an inn after rain.\n\nUse Ming dynasty anchors selectively: role-specific Ming robes and civilian garments; do not default to theatrical wuxia robes; select adult hairstyle/headwear by sex/status and subperiod; avoid Qing queue; courtyard/garden/town contexts with timber construction and masonry surfaces; silk and metallic-thread embroidery.\n\nGround the wuxia fiction in Ming material life first: plausible travel clothing, practical footwear, a single traceable weapon, timber/masonry setting, and human-scale action; then add genre tension without supernatural effects.\n\nGenre/fantasy overlay: Add restrained martial narrative: alert weight distribution, believable hand-to-weapon relationship, travel-worn but era-compatible clothing, environmental story and tension. Keep action physically plausible unless a stronger fantasy overlay is explicit.\n\nIntentional adaptation (do not present as documentary fact): wuxia genre overlay on Ming material setting.\n\nHistorical integrity: maintain a coherent period base while treating familiar dramatic conventions as adaptations, not proof. Keep Ming as the material-historical base; express wuxia through restrained weapon logic, travel context, social tension, and cinematic narrative—not supernatural glow.\n\nMoment: a heartbeat after she hears movement from the upper balcony. Action: half-turn from walking, one hand near sword guard but blade still sheathed. Gaze: upward past camera toward the sound. Body weight/support: rear leg brakes movement while front foot pivots. Hands: weapon hand near guard; free hand controls travel cloak, not a second prop. Fabric response: damp outer layer hangs heavier; hem moves from the stopped turn. Foreground: wet stone threshold and rain drip. Midground: subject beside timber inn post. Background: dim upper balcony, stable lantern, one indistinct patron. Camera/framing: slightly low three-quarter medium-full shot. Motivated light: warm inn lantern against cool overcast/rain ambient. Emotional micro-story: danger is inferred from attention and posture rather than VFX.\n\nAvoid only these likely drift modes: Qing horse-hoof cuffs / queue hairstyle; fantasy flying sword as historical martial practice; using wuxia as a dynasty name; unmotivated xianxia magic in grounded wuxia.\n",
+    "evidence": {
+      "claim_ids": [
+        "ming-wuxia-overlay-001"
+      ],
+      "source_labels": [
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "c08176be88eba4801931aac33b4db0eb0b712b0b13d77a53e82b70905b77837d"
+    },
+    "compatibility_summary": {
+      "accepted": 1,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/06-ming-grounded-wuxia/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "07-edo-ukiyoe-transform",
+    "title": "Edo ukiyo-e transformation",
+    "status": "spec_only",
+    "request": "Turn this portrait into an Edo-period ukiyo-e woodblock print while preserving my recognizable face.",
+    "route": "reference_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "edo"
+      ],
+      "subperiod": "late 18th-century full-color print-inspired",
+      "region": "Edo",
+      "role": "urban adult portrait subject",
+      "occasion": "beauty/fashion print-inspired portrait without assigning courtesan status",
+      "intentional_hybrids": [
+        "modern sitter identity in Edo print grammar"
+      ]
+    },
+    "art": {
+      "method": "japanese_woodblock_print",
+      "artifact_form": "album_leaf",
+      "artifact_state": "newly_created",
+      "variant": "polychrome nishiki-e-inspired production logic"
+    },
+    "profile": "standard",
+    "aspect_ratio": "3:4",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Turn this portrait into an Edo-period ukiyo-e woodblock print while preserving my recognizable face. Use a 3:4 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.\n\nBody/presentation: Permit medium-driven proportion or form stylization when clearly artistic rather than presented as literal anatomy.\n\nHistorical/cultural direction (historically_informed): Edo period. subperiod: late 18th-century full-color print-inspired; region: Edo; role: urban adult portrait subject; occasion: beauty/fashion print-inspired portrait without assigning courtesan status.\n\nUse Edo period anchors selectively: kimono and obi arrangements vary greatly by gender, class, occupation and century; elaborate coiffures vary sharply by role and era; never use one “Edo hairstyle” default; wooden urban architecture, shops, bridges, inns and domestic interiors; lanterns and oil lamps for night interiors/streets.\n\nUse print logic rather than a digital cartoon filter: carved contour hierarchy, flat color areas, paper absorbency, registration, selective bokashi and composition built for the page.\n\nIntentional adaptation (do not present as documentary fact): modern sitter identity in Edo print grammar.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. Let contours show carved-line discipline; let colors read as layered hand-printed impressions with subtle registration/pressure variation and paper absorption. Use carved keyline logic, separate color impressions, registration-aware edges, absorbent paper, and hand-printed tonal variation.\n\nArt/craft method — Japanese woodblock print: Rebuild the scene as a carved-and-printed image: authoritative keyline, flat color blocks, visible paper, precise registration with subtle hand-print variation, and selective bokashi rather than digital gradients.\n\nArtifact form — album leaf: bounded intimate picture field, often square/rectangular.\n\nArtifact state — newly created: Fresh fabrication: crisp tool/brush marks, clean joins, minimal dirt or oxidation unless process-native.\n\nMethod variant: polychrome nishiki-e-inspired production logic.\n\nMaterial behavior: Mulberry-type paper absorbency and slight emboss/pressure cues; ink sits as a print, not glossy digital paint. Edges are carved/printed: crisp graphic contour with occasional organic print variation, not anti-aliased vector perfection.\n\nMoment: fresh impression pulled from the blocks. Action: three-quarter bust with one hand adjusting an outer sleeve. Gaze: quiet direct gaze. Body weight/support: implied through shoulder angle rather than photoreal pose depth. Hands: single visible hand with simplified carved contour. Foreground: none; page field kept clear. Midground: subject with patterned garment. Background: one flat architectural/seasonal motif zone. Camera/framing: print composition, not lens simulation. Motivated light: represented as graphic value/color, not cinematic spotlight. Material response: mulberry-type paper, carved keyline, flat color blocks, selective bokashi. Emotional micro-story: a contemporary identity translated into a plausible Edo commercial print object.\n\nAvoid only these likely drift modes: Heian multilayer court dress used for ordinary Edo townswoman; modern school-uniform styling in strict reconstruction.\n\nMaterial failure checks: avoid anime screenshot with paper texture; smooth vector outlines; 3D photoreal shading.\n",
+    "evidence": {
+      "claim_ids": [
+        "edo-ukiyoe-blocks-001",
+        "edo-ukiyoe-collaboration-001"
+      ],
+      "source_labels": [
+        "The Metropolitan Museum of Art",
+        "The British Museum"
+      ],
+      "snapshot_sha256": "cf94c7a4086b0c50a4c42fa0b0e5d01aef07620172211d498f772fb95dd293d9"
+    },
+    "compatibility_summary": {
+      "accepted": 2,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/07-edo-ukiyoe-transform/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "08-edo-blue-white-ceramic",
+    "title": "Edo blue-and-white ceramic transformation",
+    "status": "spec_only",
+    "request": "Turn this portrait into an Edo-period blue-and-white ceramic artwork on a plate.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "edo"
+      ],
+      "subperiod": "Edo-period Japanese blue-and-white / Hizen-Arita-inspired rather than Ming court porcelain",
+      "region": "Japan",
+      "role": "portrait motif",
+      "occasion": "decorative ceramic object",
+      "intentional_hybrids": [
+        "modern identity rendered as Edo Japanese ceramic decoration"
+      ]
+    },
+    "art": {
+      "method": "blue_white_ceramic",
+      "artifact_form": "plate",
+      "artifact_state": "aged",
+      "variant": "Japanese underglaze-cobalt ceramic, not a Ming Jingdezhen copy"
+    },
+    "profile": "standard",
+    "aspect_ratio": "1:1",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Turn this portrait into an Edo-period blue-and-white ceramic artwork on a plate. Use a 1:1 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.\n\nBody/presentation: Permit medium-driven proportion or form stylization when clearly artistic rather than presented as literal anatomy.\n\nHistorical/cultural direction (historically_informed): Edo period. subperiod: Edo-period Japanese blue-and-white / Hizen-Arita-inspired rather than Ming court porcelain; region: Japan; role: portrait motif; occasion: decorative ceramic object.\n\nUse Edo period anchors selectively: kimono and obi arrangements vary greatly by gender, class, occupation and century; elaborate coiffures vary sharply by role and era; never use one “Edo hairstyle” default; wooden urban architecture, shops, bridges, inns and domestic interiors; lanterns and oil lamps for night interiors/streets.\n\nFor Edo blue-and-white, use an Edo Japanese ceramic reference family rather than silently importing Ming Jingdezhen court motifs.\n\nIntentional adaptation (do not present as documentary fact): modern identity rendered as Edo Japanese ceramic decoration.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. For an Edo blue-and-white artifact, use Arita/Hizen porcelain logic: cobalt underglaze, clear glaze, kiln-fired white porcelain body, and period-appropriate Japanese decorative handling. For ceramic transformation, express brush-painted cobalt under clear glaze following the curved vessel surface; do not add paper fibers, key-block outlines, or print-registration artifacts.\n\nArt/craft method — Blue-and-white ceramic / porcelain decoration: Treat the image as cobalt brush decoration fused beneath a transparent glaze: blue density varies with brush load, motifs follow the ceramic curvature, glaze reflections sit above the painting, and object zones structure the composition.\n\nArtifact form — plate: broad planar field with rim/border hierarchy.\n\nArtifact state — aged: Long-term aging with restrained discoloration, surface wear, patina or abrasion appropriate to material and environment.\n\nMethod variant: Japanese underglaze-cobalt ceramic, not a Ming Jingdezhen copy.\n\nMaterial behavior: Glazed ceramic has hard specular highlights over painted underglaze; foot/rim may reveal body and firing evidence. Painted edges are brush-made and slightly integrated into glaze/body; decoration must wrap geometry rather than float as a 2D decal.\n\nMoment: historic plate shown in a museum study view. Action: portrait motif rendered as a bust/half figure integrated into central medallion. Gaze: simplified sideward gaze within brush decoration. Body weight/support: not literal; implied pictorially. Hands: omit hands unless they fit the plate field cleanly. Foreground: plate rim close to camera. Midground: central cobalt portrait and border motifs. Background: neutral museum surface. Camera/framing: slight oblique to reveal curvature and glaze. Motivated light: soft side light creating glaze reflection without obscuring cobalt. Material response: cobalt underglaze beneath transparent glaze, brush-density variation, slight firing/age irregularity. Emotional micro-story: a portrait preserved as a handled decorative object rather than a printed photograph.\n\nAvoid only these likely drift modes: Heian multilayer court dress used for ordinary Edo townswoman; modern school-uniform styling in strict reconstruction.\n\nMaterial failure checks: avoid photo printed as blue decal; blue paint floats above glaze; flat poster shaped like a vase.\n",
+    "evidence": {
+      "claim_ids": [
+        "edo-arita-porcelain-001",
+        "edo-ceramic-not-print-001"
+      ],
+      "source_labels": [
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "4da78d14455f5449c9eeaccfa10041ed791efaf553a96a80404d100050466364"
+    },
+    "compatibility_summary": {
+      "accepted": 2,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/08-edo-blue-white-ceramic/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "09-song-ink-transform",
+    "title": "Song / Chinese ink transformation",
+    "status": "spec_only",
+    "request": "Turn this reference into a Song-dynasty-informed Chinese ink painting memory.",
+    "route": "art_style_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "song"
+      ],
+      "subperiod": "Southern Song-inspired pictorial restraint",
+      "region": "China",
+      "role": "traveler/scholar-inspired subject",
+      "occasion": "quiet landscape encounter",
+      "intentional_hybrids": [
+        "modern source translated into Song-informed ink grammar"
+      ]
+    },
+    "art": {
+      "method": "chinese_ink_painting",
+      "artifact_form": "scroll",
+      "artifact_state": "newly_created",
+      "variant": "monochrome ink with minimal restrained color optional"
+    },
+    "profile": "standard",
+    "aspect_ratio": "2:3",
+    "references": [
+      {
+        "id": "ref-source-01",
+        "roles": [
+          "identity",
+          "environment"
+        ],
+        "notes": "The single source image supplies the depicted person and travel-memory environment; no outfit/style import beyond visible source content unless requested."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Turn this reference into a Song-dynasty-informed Chinese ink painting memory. Use a 2:3 composition.\n\nReference discipline: ref-source-01 supplies identity, environment only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Retain selected distinctive cues without requiring a faithful likeness.\n\nBody/presentation: Permit medium-driven proportion or form stylization when clearly artistic rather than presented as literal anatomy.\n\nHistorical/cultural direction (historically_informed): Song dynasty. subperiod: Southern Song-inspired pictorial restraint; region: China; role: traveler/scholar-inspired subject; occasion: quiet landscape encounter.\n\nUse Song dynasty anchors selectively: restrained layered robes; exact silhouette and headwear depend on gender/status/subperiod; official/scholar headwear and women’s hair should be selected from dated works rather than Tang/Ming defaults; timber halls, gardens, urban river/canal contexts depending on region; silk.\n\nFor a Song-oriented ink transformation, let brush line, ink density, blank paper/silk and spatial rhythm carry the image; do not simulate a photograph with an ink filter.\n\nIntentional adaptation (do not present as documentary fact): modern source translated into Song-informed ink grammar.\n\nArt/craft method — Chinese ink painting: Reconstruct the subject with calligraphic brush line, controlled ink dilution, dry/wet stroke contrast and meaningful untouched paper/silk; let brush rhythm describe form rather than tracing a photo under a filter.\n\nArtifact form — scroll: elongated sequential viewing surface with mounting/border logic.\n\nArtifact state — newly created: Fresh fabrication: crisp tool/brush marks, clean joins, minimal dirt or oxidation unless process-native.\n\nMethod variant: monochrome ink with minimal restrained color optional.\n\nMaterial behavior: Absorbent fibers/silk weave subtly affect stroke edges; no thick acrylic impasto. Edges vary by brush speed, moisture and absorbency: decisive calligraphic contours can coexist with dissolved wash edges.\n\nMoment: the traveler pauses under a tree before a distant waterside path. Action: small human figure integrated into landscape rather than dominating it. Gaze: toward distant water/mountain space. Body weight/support: simple grounded stance. Hands: hands mostly contained by robe/gesture; no extra props unless source requires. Foreground: dry-brush rock/tree texture. Midground: small figure and path. Background: mist/blank paper opening into distant landscape. Camera/framing: pictorial scroll space, no photographic lens language. Motivated light: paper and ink value rather than literal spotlight. Material response: calligraphic brush line, wet/dry ink, absorbent paper, reserved blank space. Emotional micro-story: a remembered journey reduced to brush rhythm and atmospheric absence.\n\nAvoid only these likely drift modes: Tang high-waisted court styling copied wholesale; Qing queue hairstyle.\n\nMaterial failure checks: avoid photograph with black watercolor overlay; uniform gray wash; airbrushed gradients.\n",
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": "e92b4423939cd47b7edb3fdff1719b5442785fc20900bbd8fcda106fb6a41403"
+    },
+    "compatibility_summary": {
+      "accepted": 0,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/09-song-ink-transform/case.json"
+  },
+  {
+    "group": "golden",
+    "id": "10-artifact-modern-museum",
+    "title": "Historical artifact → modern museum encounter",
+    "status": "spec_only",
+    "request": "Show a modern person encountering an ancient Roman bronze bust that resembles them in a museum, as if meeting a historical echo.",
+    "route": "new_generation",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "roman_imperial"
+      ],
+      "subperiod": "2nd-century-inspired portrait bust",
+      "region": "Roman Mediterranean + modern museum",
+      "role": "modern visitor and historical portrait artifact",
+      "occasion": "museum encounter",
+      "intentional_hybrids": [
+        "modern present and ancient artifact intentionally coexist in one scene"
+      ]
+    },
+    "art": {
+      "method": "bronze_sculpture",
+      "artifact_form": "bust",
+      "artifact_state": "museum_conserved",
+      "variant": "artifact only; modern visitor remains living/photographic"
+    },
+    "profile": "standard",
+    "aspect_ratio": "3:2",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": "# Compiled Prompt\n\nCreate a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Show a modern person encountering an ancient Roman bronze bust that resembles them in a museum, as if meeting a historical echo. Use a 3:2 composition.\n\nReference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.\n\nIdentity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.\n\nBody/presentation: Preserve apparent anatomy/body characteristics; changes may come only from pose, clothing, lens, and light.\n\nHistorical/cultural direction (historically_informed): Roman Imperial. subperiod: 2nd-century-inspired portrait bust; region: Roman Mediterranean + modern museum; role: modern visitor and historical portrait artifact; occasion: museum encounter.\n\nUse Roman Imperial anchors selectively: toga/stola/tunic/armor only when role and context justify them; portrait hairstyle is highly date-sensitive and useful for narrowing chronology; forum, basilica, domus/villa, baths, streets or provincial settings by context; oil lamps and daylight in interiors.\n\nBuild a materially credible Roman portrait bust: intentional truncation and support, period-sensitive hair, modeled flesh/hair contrast, and either idealized or individualized likeness chosen from the narrative—not both accidentally.\n\nIntentional adaptation (do not present as documentary fact): modern present and ancient artifact intentionally coexist in one scene.\n\nHistorical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. For a Roman bronze bust, preserve modeled portrait specificity, metallic depth, cast-and-finished surface behavior, and any inlay logic supported by the chosen example/context. If visible and appropriate, use restrained contrasting metal/stone inlays to support lifelike eyes or details; do not turn them into fantasy glow. Use a date-sensitive Roman coiffure tied to the selected century/reign; if the date is broad, keep hair restrained and avoid overclaiming specificity.\n\nArt/craft method — Bronze sculpture: Render a cast copper-alloy object with true metallic reflection, chased surface detail, plausible joins and state-specific patina; model hair/cloth as cast masses, not living strands.\n\nArtifact form — bust: head, neck and upper torso; terminate deliberately at chest/shoulders or pedestal.\n\nArtifact state — museum conserved: Stabilized, cleaned and supported with restrained conservation evidence; displayed with museum-appropriate mounts/light if in scene.\n\nMethod variant: artifact only; modern visitor remains living/photographic.\n\nMaterial behavior: Metal reflects environment; aged patina may be brown/black/green in varied layers, with rubbed high points and localized corrosion. Cast edges can be crisp but transition through modeled volumes; thin projections require casting/support logic rather than carved-stone mass.\n\nMoment: the visitor stops in profile when the resemblance becomes obvious. Action: visitor leans slightly toward the display while keeping respectful distance. Gaze: visitor studies the bust; bust faces slightly away, creating an uncanny near-match. Body weight/support: visitor weight shifted to front foot but behind barrier. Hands: hands relaxed, not touching display glass or sculpture. Foreground: soft museum rail or case edge. Midground: visitor and bust in visual dialogue. Background: quiet gallery with one distant doorway. Camera/framing: eye-level two-subject composition, visitor and bust both legible. Motivated light: cool ambient gallery light plus warm focused light on bronze. Material response: living skin/fabric and cast bronze remain unmistakably different materials. Emotional micro-story: a private recognition across two thousand years.\n\nAvoid only these likely drift modes: Renaissance neoclassical costume presented as Roman evidence.\n\nMaterial failure checks: avoid orange plastic surface; stone-like diffuse shading; uniform green corrosion.\n",
+    "evidence": {
+      "claim_ids": [
+        "roman-bronze-portrait-001",
+        "roman-bronze-inlay-001",
+        "roman-portrait-hair-date-001"
+      ],
+      "source_labels": [
+        "The Metropolitan Museum of Art"
+      ],
+      "snapshot_sha256": "46d57ffeaea73c2c8044889de0a16cb03637d44342b99387556aadcec21af59b"
+    },
+    "compatibility_summary": {
+      "accepted": 3,
+      "qualified": 0,
+      "adapted": 0,
+      "rejected": 0,
+      "hybrids": 0
+    },
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/golden/10-artifact-modern-museum/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-dunhuang-strict-unbounded",
+    "title": "Dunhuang strict without cave/date",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a strict Dunhuang mural artifact.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "strict_reconstruction",
+      "packs": [
+        "dunhuang",
+        "tang"
+      ],
+      "subperiod": null,
+      "region": "Mogao/Dunhuang",
+      "role": "secular donor/attendant-inspired portrait rather than deity",
+      "occasion": "painted cave-wall portrait zone",
+      "intentional_hybrids": [
+        "modern identity translated into a Tang-period Dunhuang-inspired non-sacred figure"
+      ]
+    },
+    "art": {
+      "method": "mineral_pigment_mural",
+      "artifact_form": "architectural_frieze",
+      "artifact_state": "aged",
+      "variant": "matte cave-wall mural"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-dunhuang-strict-unbounded/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-edo-ceramic-no-print-leak",
+    "title": "Edo porcelain without ukiyo-e leakage",
+    "status": "regression_spec",
+    "request": "Turn this portrait into an Edo Arita blue-and-white porcelain plate decoration.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "edo"
+      ],
+      "subperiod": "Edo-period Japanese blue-and-white / Hizen-Arita-inspired rather than Ming court porcelain",
+      "region": "Japan",
+      "role": "portrait motif",
+      "occasion": "decorative ceramic object",
+      "intentional_hybrids": [
+        "modern identity rendered as Edo Japanese ceramic decoration"
+      ]
+    },
+    "art": {
+      "method": "blue_white_ceramic",
+      "artifact_form": "plate",
+      "artifact_state": "aged",
+      "variant": "Japanese underglaze-cobalt ceramic, not a Ming Jingdezhen copy"
+    },
+    "profile": "standard",
+    "aspect_ratio": "1:1",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-edo-ceramic-no-print-leak/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-edo-ukiyoe-process",
+    "title": "Edo ukiyo-e production logic",
+    "status": "regression_spec",
+    "request": "Turn this portrait into an Edo ukiyo-e woodblock print.",
+    "route": "reference_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "edo"
+      ],
+      "subperiod": "late 18th-century full-color print-inspired",
+      "region": "Edo",
+      "role": "urban adult portrait subject",
+      "occasion": "beauty/fashion print-inspired portrait without assigning courtesan status",
+      "intentional_hybrids": [
+        "modern sitter identity in Edo print grammar"
+      ]
+    },
+    "art": {
+      "method": "japanese_woodblock_print",
+      "artifact_form": "album_leaf",
+      "artifact_state": "newly_created",
+      "variant": "polychrome nishiki-e-inspired production logic"
+    },
+    "profile": "standard",
+    "aspect_ratio": "3:4",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-edo-ukiyoe-process/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-greek-living-not-artifact",
+    "title": "Greek living hero",
+    "status": "regression_spec",
+    "request": "Show me as a living Classical Greek heroic figure, not a statue.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "classical_greek"
+      ],
+      "subperiod": "late 5th to early 4th century BCE impression",
+      "region": null,
+      "role": "heroic citizen/warrior-inspired living subject",
+      "occasion": "quiet pre-action sanctuary moment",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-greek-living-not-artifact/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-greek-marble-excavated",
+    "title": "Greek marble — excavated",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a Classical Greek marble hero as a excavated artifact.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "classical_greek"
+      ],
+      "subperiod": "Classical",
+      "region": null,
+      "role": "idealized heroic portrait subject",
+      "occasion": "sculptural dedication",
+      "intentional_hybrids": [
+        "modern sitter translated into Classical sculptural language"
+      ]
+    },
+    "art": {
+      "method": "marble_sculpture",
+      "artifact_form": "free_standing_statue",
+      "artifact_state": "excavated",
+      "variant": "restrained traces of historically plausible polychromy optional, not mandatory"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-greek-marble-excavated/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-greek-marble-museum-conserved",
+    "title": "Greek marble — museum_conserved",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a Classical Greek marble hero as a museum conserved artifact.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "classical_greek"
+      ],
+      "subperiod": "Classical",
+      "region": null,
+      "role": "idealized heroic portrait subject",
+      "occasion": "sculptural dedication",
+      "intentional_hybrids": [
+        "modern sitter translated into Classical sculptural language"
+      ]
+    },
+    "art": {
+      "method": "marble_sculpture",
+      "artifact_form": "free_standing_statue",
+      "artifact_state": "museum_conserved",
+      "variant": "restrained traces of historically plausible polychromy optional, not mandatory"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-greek-marble-museum-conserved/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-greek-marble-newly-created",
+    "title": "Greek marble — newly_created",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a Classical Greek marble hero as a newly created artifact.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "classical_greek"
+      ],
+      "subperiod": "Classical",
+      "region": null,
+      "role": "idealized heroic portrait subject",
+      "occasion": "sculptural dedication",
+      "intentional_hybrids": [
+        "modern sitter translated into Classical sculptural language"
+      ]
+    },
+    "art": {
+      "method": "marble_sculpture",
+      "artifact_form": "free_standing_statue",
+      "artifact_state": "newly_created",
+      "variant": "restrained traces of historically plausible polychromy optional, not mandatory"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-greek-marble-newly-created/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-hellenistic-copy-survival-bias",
+    "title": "Hellenistic reconstruction from later copy",
+    "status": "regression_spec",
+    "request": "Reconstruct a lost Hellenistic Greek marble ruler statue from a later Roman copy, historically informed.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "hellenistic_greek"
+      ],
+      "subperiod": "Hellenistic, broadly 3rd–1st century BCE",
+      "region": "Mediterranean; exact original center unknown",
+      "role": "ruler portrait reconstruction",
+      "occasion": "scholarly visual reconstruction",
+      "intentional_hybrids": [
+        "modern reconstruction using later-copy evidence while preserving uncertainty about the lost original"
+      ]
+    },
+    "art": {
+      "method": "marble_sculpture",
+      "artifact_form": "free_standing_statue",
+      "artifact_state": "modern_reconstruction",
+      "variant": "reconstruction should distinguish secure copy evidence from uncertain original details"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-hellenistic-copy-survival-bias/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-layout-no-identity-leak",
+    "title": "Layout reference does not alter identity",
+    "status": "regression_spec",
+    "request": "Create a historically informed Ming swordswoman using five references with isolated identity, outfit, pose, style, and layout roles.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "ming",
+        "wuxia"
+      ],
+      "subperiod": "late Ming-inspired",
+      "region": "Jiangnan-inspired fictional travel setting",
+      "role": "adult traveling swordswoman",
+      "occasion": "tense pause outside an inn after rain",
+      "intentional_hybrids": [
+        "wuxia genre overlay on Ming material setting"
+      ]
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "identity-ref",
+        "roles": [
+          "identity"
+        ]
+      },
+      {
+        "id": "layout-ref",
+        "roles": [
+          "layout"
+        ]
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-layout-no-identity-leak/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-ming-wuxia-overlay",
+    "title": "Ming base + Wuxia overlay",
+    "status": "regression_spec",
+    "request": "Create a historically informed Ming swordswoman at a roadside inn, grounded wuxia, no magic.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "ming",
+        "wuxia"
+      ],
+      "subperiod": "late Ming-inspired",
+      "region": "Jiangnan-inspired fictional travel setting",
+      "role": "adult traveling swordswoman",
+      "occasion": "tense pause outside an inn after rain",
+      "intentional_hybrids": [
+        "wuxia genre overlay on Ming material setting"
+      ]
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-ming-wuxia-overlay/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-ming-xianxia-hybrid",
+    "title": "Ming + Xianxia explicit hybrid",
+    "status": "regression_spec",
+    "request": "Create a Ming-inspired xianxia swordswoman with deliberately supernatural floating talismans.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "fantasy_hybrid",
+      "packs": [
+        "ming",
+        "xianxia"
+      ],
+      "subperiod": "late Ming-inspired",
+      "region": "Jiangnan-inspired fictional travel setting",
+      "role": "adult traveling swordswoman",
+      "occasion": "tense pause outside an inn after rain",
+      "intentional_hybrids": [
+        "xianxia supernatural overlay on Ming-inspired material base"
+      ]
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-ming-xianxia-hybrid/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-reference-five-role-isolation",
+    "title": "Five-reference role isolation",
+    "status": "regression_spec",
+    "request": "Create a historically informed Ming swordswoman using five references with isolated identity, outfit, pose, style, and layout roles.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "ming",
+        "wuxia"
+      ],
+      "subperiod": "late Ming-inspired",
+      "region": "Jiangnan-inspired fictional travel setting",
+      "role": "adult traveling swordswoman",
+      "occasion": "tense pause outside an inn after rain",
+      "intentional_hybrids": [
+        "wuxia genre overlay on Ming material setting"
+      ]
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "image-1",
+        "roles": [
+          "identity"
+        ],
+        "notes": "identity only"
+      },
+      {
+        "id": "image-2",
+        "roles": [
+          "outfit"
+        ],
+        "notes": "outfit only; reconcile incompatible details"
+      },
+      {
+        "id": "image-3",
+        "roles": [
+          "pose"
+        ],
+        "notes": "pose only"
+      },
+      {
+        "id": "image-4",
+        "roles": [
+          "style"
+        ],
+        "notes": "style treatment only"
+      },
+      {
+        "id": "image-5",
+        "roles": [
+          "layout"
+        ],
+        "notes": "layout only"
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-reference-five-role-isolation/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-roman-bronze-material",
+    "title": "Roman bronze material behavior",
+    "status": "regression_spec",
+    "request": "Turn this portrait into a Roman Imperial bronze bust with realistic ancient metalworking.",
+    "route": "artifact_transform",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "roman_imperial"
+      ],
+      "subperiod": "2nd century CE-inspired",
+      "region": "Roman Mediterranean",
+      "role": "private elite portrait",
+      "occasion": "portrait display",
+      "intentional_hybrids": [
+        "modern sitter mapped to Roman portrait convention"
+      ]
+    },
+    "art": {
+      "method": "bronze_sculpture",
+      "artifact_form": "bust",
+      "artifact_state": "museum_conserved",
+      "variant": "individualized rather than emperor-like idealization"
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-roman-bronze-material/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-style-no-object-leak",
+    "title": "Style reference does not import objects",
+    "status": "regression_spec",
+    "request": "Create a historically informed Ming swordswoman using five references with isolated identity, outfit, pose, style, and layout roles.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "ming",
+        "wuxia"
+      ],
+      "subperiod": "late Ming-inspired",
+      "region": "Jiangnan-inspired fictional travel setting",
+      "role": "adult traveling swordswoman",
+      "occasion": "tense pause outside an inn after rain",
+      "intentional_hybrids": [
+        "wuxia genre overlay on Ming material setting"
+      ]
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "identity-ref",
+        "roles": [
+          "identity"
+        ]
+      },
+      {
+        "id": "style-ref",
+        "roles": [
+          "style"
+        ]
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-style-no-object-leak/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-tang-bluewhite-fantasy-hybrid",
+    "title": "Tang blue-and-white — fantasy_hybrid",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a Tang princess holding a mature blue-and-white porcelain vase.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "fantasy_hybrid",
+      "packs": [
+        "tang"
+      ],
+      "subperiod": "8th century",
+      "region": "Chang’an-inspired court setting",
+      "role": "adult Tang princess / high-status court woman; title explicitly requested by user",
+      "occasion": "court portrait holding a ceramic vessel",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-tang-bluewhite-fantasy-hybrid/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-tang-bluewhite-historically-informed",
+    "title": "Tang blue-and-white — historically_informed",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a Tang princess holding a mature blue-and-white porcelain vase.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "tang"
+      ],
+      "subperiod": "8th century",
+      "region": "Chang’an-inspired court setting",
+      "role": "adult Tang princess / high-status court woman; title explicitly requested by user",
+      "occasion": "court portrait holding a ceramic vessel",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-tang-bluewhite-historically-informed/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-tang-bluewhite-period-drama",
+    "title": "Tang blue-and-white — period_drama",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a Tang princess holding a mature blue-and-white porcelain vase.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "period_drama",
+      "packs": [
+        "tang"
+      ],
+      "subperiod": "8th century",
+      "region": "Chang’an-inspired court setting",
+      "role": "adult Tang princess / high-status court woman; title explicitly requested by user",
+      "occasion": "court portrait holding a ceramic vessel",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-tang-bluewhite-period-drama/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-tang-bluewhite-strict-reconstruction",
+    "title": "Tang blue-and-white — strict_reconstruction",
+    "status": "regression_spec",
+    "request": "Turn my portrait into a Tang princess holding a mature blue-and-white porcelain vase.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "strict_reconstruction",
+      "packs": [
+        "tang"
+      ],
+      "subperiod": "8th century",
+      "region": "Chang’an-inspired court setting",
+      "role": "adult Tang princess / high-status court woman; title explicitly requested by user",
+      "occasion": "court portrait holding a ceramic vessel",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-tang-bluewhite-strict-reconstruction/case.json"
+  },
+  {
+    "group": "regression",
+    "id": "reg-wuxia-no-base",
+    "title": "Wuxia without base",
+    "status": "regression_spec",
+    "request": "Create a grounded wuxia swordswoman.",
+    "route": "historical_portrait",
+    "historical": {
+      "strictness": "period_drama",
+      "packs": [
+        "wuxia"
+      ],
+      "subperiod": null,
+      "region": null,
+      "role": "adult traveling swordswoman",
+      "occasion": "tense pause outside an inn after rain",
+      "intentional_hybrids": [
+        "wuxia genre overlay on Ming material setting"
+      ]
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "references": [
+      {
+        "id": "ref-identity-01",
+        "roles": [
+          "identity"
+        ],
+        "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+      }
+    ],
+    "compiled_prompt": null,
+    "evidence": {
+      "claim_ids": [],
+      "source_labels": [],
+      "snapshot_sha256": null
+    },
+    "compatibility_summary": null,
+    "evaluation_scores": null,
+    "revision_count": 0,
+    "model": {
+      "alias": "gpt-image-2",
+      "snapshot": "gpt-image-2-2026-04-21",
+      "compiler": "3.1.0",
+      "skill": "3.1.0"
+    },
+    "output_image": null,
+    "relative_case": "cases/regression/reg-wuxia-no-base/case.json"
+  }
+]

@@ -1,0 +1,77 @@
+{
+  "id": "embroidery_textile",
+  "name": "Embroidery / textile art",
+  "family": "textile",
+  "material": "thread stitched or woven onto/through textile support; silk and metallic threads can create fine linear and reflective effects",
+  "fabrication_process": [
+    "stretch/support textile",
+    "transfer or sketch design",
+    "build outlines and fills with stitch families",
+    "change thread direction/density for modeling",
+    "add couching/metallic thread where appropriate",
+    "finish backing/mounting"
+  ],
+  "visible_production_marks": [
+    "individual thread paths",
+    "stitch direction changes",
+    "tiny gaps/overlaps",
+    "couched metallic threads",
+    "fabric weave visible between stitches"
+  ],
+  "edge_behavior": "Edges are constructed from thread direction and stitch boundaries; fuzzy thread bloom may soften close edges but not dissolve like watercolor.",
+  "mark_making": [
+    "individual thread paths",
+    "stitch direction changes",
+    "tiny gaps/overlaps",
+    "couched metallic threads",
+    "fabric weave visible between stitches"
+  ],
+  "color_behavior": "Color is thread-based and can be highly saturated; silk changes brightness with angle; metallic threads produce directional highlights.",
+  "surface_behavior": "Textile drape/weave and raised stitch relief remain visible; embroidered image is not printed ink.",
+  "composition_behavior": "Design follows textile field and seam/border logic; stitch direction can model volume while retaining decorative flatness.",
+  "structural_limitations": [
+    "stitches cannot become infinitely fine photographic pixels",
+    "thread must lie on or pass through textile",
+    "metallic shine follows thread orientation"
+  ],
+  "aging_weathering": [
+    "fraying, fading, thread loss, tarnish and creases follow handling and material",
+    "museum-conserved textile may be flattened/mounted and stabilized"
+  ],
+  "artifact_compatibility": [
+    "scroll",
+    "folding_screen",
+    "book_page"
+  ],
+  "prompt_fragments": {
+    "core": "Reconstruct the image with visible thread decisions: stitch direction models form, silk sheen changes with angle, metallic accents are couched/stitched, and the ground weave remains legible between dense areas."
+  },
+  "typical_generation_failures": [
+    "printed fabric texture",
+    "photographic skin with embroidery overlay",
+    "random cross-stitch pixels",
+    "metallic thread rendered as glitter",
+    "no fabric weave/drape"
+  ],
+  "evaluation_criteria": [
+    "thread paths are visible and purposeful",
+    "surface relief belongs to stitches",
+    "ground textile remains present",
+    "light follows fiber direction",
+    "wear affects threads realistically"
+  ],
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/exhibitions/listings/2014/painting-with-threads",
+      "type": "museum",
+      "supports": "silk strength/thinness, fluid outlines, rich colors, calligraphy/seals in textile images"
+    },
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/52472",
+      "type": "museum",
+      "supports": "counted embroidery stitch and even tension on silk gauze"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.0.0"
+}

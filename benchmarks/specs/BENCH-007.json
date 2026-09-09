@@ -1,0 +1,72 @@
+{
+  "version": "3.2",
+  "id": "bench-007",
+  "request": "Create a historically informed Tang court portrait.",
+  "route": "historical_portrait",
+  "locks": {
+    "adult_subject": true,
+    "primary_subject": "same adult subject across transformations",
+    "do_not_silently_add_rank_or_sacred_status": true
+  },
+  "references": [
+    {
+      "id": "ref-identity-01",
+      "roles": [
+        "identity"
+      ],
+      "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+    }
+  ],
+  "identity": {
+    "mode": "recognizable_identity",
+    "locked_features": [
+      "recognizable facial structure"
+    ]
+  },
+  "body_transformation": {
+    "mode": "presentation_only",
+    "anatomy_change": "none unless explicitly stated in request",
+    "pose_change": "allowed as director choice",
+    "camera_presentation": "allowed",
+    "garment_shaping": "allowed when route requires it",
+    "artistic_stylization": "only when selected by body mode/art method"
+  },
+  "historical": {
+    "strictness": "historically_informed",
+    "packs": [
+      "tang"
+    ],
+    "subperiod": "8th-century-inspired",
+    "region": "Chang’an-inspired court setting",
+    "role": "adult Tang princess / high-status court woman; title explicitly requested by user",
+    "occasion": "quiet court audience",
+    "intentional_hybrids": []
+  },
+  "art": {
+    "method": null,
+    "artifact_form": null,
+    "artifact_state": null,
+    "variant": null
+  },
+  "requested_elements": [],
+  "director": {
+    "moment": "she pauses midway through a lantern-lit courtyard while attendants continue behind her",
+    "action": "one measured step forward, sleeve and sash responding to motion",
+    "gaze": "brief direct glance as if recognizing someone across the courtyard",
+    "body_weight": "front foot receiving weight, rear foot still engaged",
+    "hand_logic": "one hand lightly steadies a small lantern handle; other hand gathers sleeve away from the flame",
+    "fabric_response": "silk layers move with the step and night breeze",
+    "foreground": "soft out-of-focus lantern edge",
+    "midground": "subject and one nearby attendant",
+    "background": "timber palace garden corridor and layered lanterns",
+    "camera": "three-quarter portrait, slightly below eye level, enough space for garment silhouette",
+    "light_source": "warm practical lanterns plus cool night ambient",
+    "micro_story": "a private recognition inside a public festival"
+  },
+  "output": {
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "text_in_image": [],
+    "generation_requested": false
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "core-poses-v3",
+  "migration_origin": "Curated from V2.1 pose system + Image Library posing collections; prompt prose intentionally not copied.",
+  "poses": [
+    {
+      "id": "natural_front_stand",
+      "mechanics": "weight balanced or subtly shifted to one leg; shoulders relaxed; hands each have a clear destination",
+      "use": "portrait/fashion/historical living figure"
+    },
+    {
+      "id": "over_shoulder_turn",
+      "mechanics": "pelvis and torso establish the turn before the head; gaze returns toward camera; avoid impossible neck rotation",
+      "use": "portrait/travel/editorial"
+    },
+    {
+      "id": "hair_touch",
+      "mechanics": "one hand lightly contacts a small hair section near temple/ear; fingers remain visible and relaxed",
+      "use": "portrait/editorial"
+    },
+    {
+      "id": "shallow_seated",
+      "mechanics": "sit near front edge of seat, spine supported by pelvis, legs grouped/angled, at least one hand anchors naturally",
+      "use": "editorial/interior"
+    },
+    {
+      "id": "one_knee_up_seated",
+      "mechanics": "one knee raised as structural anchor; one arm may rest on it; second leg/support stays physically readable",
+      "use": "casual/travel/editorial"
+    },
+    {
+      "id": "weapon_ready_grounded",
+      "mechanics": "one hand controls grip, other controls scabbard/balance; feet establish a recoverable stance; no floating weapon",
+      "use": "wuxia/historical martial"
+    },
+    {
+      "id": "artifact_viewer",
+      "mechanics": "viewer weight shifted toward display but remains behind barrier; hands do not penetrate glass/object",
+      "use": "museum encounter"
+    }
+  ]
+}

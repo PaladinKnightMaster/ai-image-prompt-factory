@@ -1,0 +1,37 @@
+{
+  "experiment_id": "EXP-013",
+  "version": "1.0.0",
+  "hypothesis": "Repeating identity locks should be tested against a single precise lock",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "identity_repetition",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "identity_repetition",
+      "operation": "append",
+      "text": " Preserve the same recognizable identity once, clearly, without repeating the lock in every section."
+    }
+  ],
+  "preserved_dimensions": [
+    "subject",
+    "environment",
+    "lighting",
+    "aspect ratio",
+    "identity unless factor explicitly tests it"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "identity_repetition"
+  ],
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "reference-identity-isolation"
+  ]
+}

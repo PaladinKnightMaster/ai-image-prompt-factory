@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.2/experiment.schema.json",
+  "type": "object",
+  "required": [
+    "experiment_id",
+    "version",
+    "hypothesis",
+    "baseline_prompt",
+    "variants",
+    "preserved_dimensions",
+    "evaluation_dimensions",
+    "status"
+  ],
+  "properties": {
+    "experiment_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "hypothesis": {
+      "type": "string"
+    },
+    "baseline_prompt": {
+      "type": "string",
+      "minLength": 20
+    },
+    "variants": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "factor",
+          "operation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "factor": {
+            "type": "string"
+          },
+          "operation": {
+            "enum": [
+              "identity",
+              "remove_regex",
+              "replace_regex",
+              "append",
+              "replace_literal"
+            ]
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "replacement": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "old": {
+            "type": "string"
+          },
+          "new": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "preserved_dimensions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evaluation_dimensions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "model_target": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "executed",
+        "mixed",
+        "cancelled"
+      ]
+    },
+    "related_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

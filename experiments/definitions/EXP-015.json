@@ -1,0 +1,37 @@
+{
+  "experiment_id": "EXP-015",
+  "version": "1.0.0",
+  "hypothesis": "Pre-compiler historical adaptation should outperform post-hoc negative prompting",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "historical_resolution",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "historical_resolution",
+      "operation": "append",
+      "text": " Resolve historical incompatibilities before composition; do not rely on a final negative prompt to undo anachronistic objects."
+    }
+  ],
+  "preserved_dimensions": [
+    "subject",
+    "environment",
+    "lighting",
+    "aspect ratio",
+    "identity unless factor explicitly tests it"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "historical_resolution"
+  ],
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "prompt-targeted-constraints"
+  ]
+}

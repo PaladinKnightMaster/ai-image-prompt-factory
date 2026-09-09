@@ -1,0 +1,97 @@
+{
+  "id": "wuxia",
+  "name": "Wuxia",
+  "pack_type": "genre_overlay",
+  "period": "Not an era; literary/cinematic martial-hero genre",
+  "region": "Must bind to a historical or fictional base setting",
+  "summary": "Human-scale martial-hero storytelling overlay. It adds narrative/action grammar, not historical evidence.",
+  "social_roles": [
+    {
+      "text": "wandering swordsman/swordswoman",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    },
+    {
+      "text": "escort/bodyguard",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    },
+    {
+      "text": "sect disciple",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "roadside encounter",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    },
+    {
+      "text": "inn/courtyard standoff",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    },
+    {
+      "text": "mountain pass travel",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [],
+  "textiles_materials": [],
+  "hairstyle_headwear": [],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [],
+  "interior_furniture": [],
+  "food_drink_tableware": [],
+  "musical_instruments": [],
+  "weapons_tools": [
+    {
+      "text": "one or two physically traceable weapons; practical carry/sheath/contact logic",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [
+    {
+      "text": "walking, horse, boat depending on base era",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "writing_calligraphy": [],
+  "ritual_custom": [],
+  "lighting_technology": [],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "genre tension through stance, gaze, environment and implied story rather than magical particles",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "using wuxia as a dynasty name",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "unmotivated xianxia magic in grounded wuxia",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "overlay": "Add restrained martial narrative: alert weight distribution, believable hand-to-weapon relationship, travel-worn but era-compatible clothing, environmental story and tension. Keep action physically plausible unless a stronger fantasy overlay is explicit."
+  },
+  "sources": [],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "A base era or explicit fictional world is mandatory.",
+  "version": "1.0.0"
+}

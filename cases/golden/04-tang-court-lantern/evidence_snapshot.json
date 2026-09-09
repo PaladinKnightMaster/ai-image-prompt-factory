@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "tang-court-leisure-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "source_ids": [
+        "met-tang-court-lady-75765"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "met-tang-court-lady-75765",
+      "title": "Seated court lady",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/art/collection/search/75765",
+      "evidence_quality": "primary"
+    }
+  ],
+  "claim_relationships": [],
+  "snapshot_sha256": "3df526a8859cbce7416bd950828a1dd65beb8f7bed213260602ba6e804bd9727"
+}

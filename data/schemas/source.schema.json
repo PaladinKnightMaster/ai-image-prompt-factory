@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF V3.1 Evidence Source",
+  "type": "object",
+  "required": [
+    "source_id",
+    "title",
+    "source_type",
+    "url",
+    "evidence_quality",
+    "accessed_date"
+  ],
+  "properties": {
+    "source_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "author": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "institution": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publication_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "type": "string"
+    },
+    "accessed_date": {
+      "type": "string"
+    },
+    "source_type": {
+      "enum": [
+        "museum",
+        "academic_paper",
+        "academic_book",
+        "archaeological_report",
+        "university",
+        "heritage_institution",
+        "primary_artifact",
+        "historical_text",
+        "specialist_publication",
+        "secondary_reference",
+        "community_example",
+        "official_model_documentation"
+      ]
+    },
+    "evidence_quality": {
+      "enum": [
+        "primary",
+        "high",
+        "medium",
+        "contextual",
+        "community_only"
+      ]
+    },
+    "geographic_relevance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "chronological_relevance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "license_copyright_notes": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

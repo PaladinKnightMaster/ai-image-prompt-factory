@@ -1,0 +1,1367 @@
+{
+  "schema_version": "1.0",
+  "version": "3.2.0",
+  "patterns": [
+    {
+      "pattern_id": "pose-explicit-weight-distribution",
+      "version": "1.0.0",
+      "name": "Explicit weight-bearing mechanics",
+      "category": "pose_mechanics",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Describe the weight-bearing leg, relaxed leg, pelvis response, and shoulder counterbalance instead of relying on a generic dynamic-pose adjective.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "LCC-P0010"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "weight",
+        "standing",
+        "pose"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "historical_portrait",
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "pose-one-knee-active-sit",
+      "version": "1.0.0",
+      "name": "One-knee active sitting",
+      "category": "pose_mechanics",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Seat the subject with one knee raised, the opposite leg relaxed, and the torso subtly leaning into the supported side so the pose reads as balanced rather than staged.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0008"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "one knee",
+        "sitting"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "new_generation"
+        ]
+      }
+    },
+    {
+      "pattern_id": "pose-shallow-chair-sit",
+      "version": "1.0.0",
+      "name": "Shallow chair sitting",
+      "category": "pose_mechanics",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "Place the pelvis near the chair edge, keep the spine naturally lengthened, angle the joined or parallel legs, and give at least one hand a believable support point.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "chair",
+        "sitting"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "fashion"
+        ]
+      }
+    },
+    {
+      "pattern_id": "pose-over-shoulder-turn",
+      "version": "1.0.0",
+      "name": "Over-the-shoulder turn",
+      "category": "pose_mechanics",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Turn the torso away first, then return the head and gaze toward the camera while keeping the neck and shoulder relationship anatomically plausible.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0010",
+          "GAC-P0010",
+          "GAC-P0011",
+          "GAC-P0022",
+          "LCC-P0009",
+          "LCC-P0022",
+          "LCC-P0043",
+          "LCC-P0046",
+          "LAC-P0006"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "over shoulder",
+        "looking back"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "pose-forward-lean-support",
+      "version": "1.0.0",
+      "name": "Forward lean with support",
+      "category": "pose_mechanics",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "When leaning forward, specify the support point through hands, thighs, chair, rail, or counter so the torso does not float without load-bearing logic.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "GAC-P0002",
+          "GAC-P0005",
+          "LCC-P0032",
+          "LAC-P0003",
+          "LAC-P0005",
+          "LAC-P0007",
+          "LAC-P0008",
+          "LAC-P0034",
+          "LAC-P0037"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "leaning forward"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "fashion"
+        ]
+      }
+    },
+    {
+      "pattern_id": "interaction-hand-hair",
+      "version": "1.0.0",
+      "name": "Hand-to-hair interaction",
+      "category": "interaction",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Make the fingers contact a specific hair section near the ear, cheek, ponytail, or windblown strand instead of hovering vaguely beside the head.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "LCC-P0074",
+          "LAC-P0009",
+          "LAC-P0016"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "hair",
+        "hand"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "fashion"
+        ]
+      }
+    },
+    {
+      "pattern_id": "composition-layered-depth",
+      "version": "1.0.0",
+      "name": "Foreground / midground / background depth",
+      "category": "composition",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Build explicit foreground, midground, and background roles so depth comes from spatial storytelling rather than a generic cinematic adjective.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0002",
+          "APC-P0003",
+          "APC-P0004",
+          "APC-P0005",
+          "APC-P0015",
+          "FSC-P0001",
+          "FSC-P0002",
+          "FSC-P0003",
+          "FSC-P0004",
+          "FSC-P0005",
+          "FSC-P0006",
+          "FSC-P0009"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation",
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "foreground",
+        "background",
+        "depth"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": true,
+        "routes": [
+          "new_generation",
+          "historical_portrait",
+          "reference_transform",
+          "design_layout"
+        ]
+      }
+    },
+    {
+      "pattern_id": "composition-negative-space",
+      "version": "1.0.0",
+      "name": "Purposeful negative space",
+      "category": "composition",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Reserve intentional negative space around the subject or title area instead of filling every region with decorative detail.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0002",
+          "APC-P0003",
+          "APC-P0004",
+          "APC-P0005",
+          "APC-P0006",
+          "GAC-P0006",
+          "LCC-P0016",
+          "LCC-P0017",
+          "LCC-P0039",
+          "LCC-P0042",
+          "LCC-P0047",
+          "LCC-P0048"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "negative space",
+        "poster",
+        "editorial"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "new_generation",
+          "design_layout"
+        ]
+      }
+    },
+    {
+      "pattern_id": "composition-asymmetric-editorial",
+      "version": "1.0.0",
+      "name": "Asymmetric editorial balance",
+      "category": "composition",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Offset the subject from dead center and use architecture, props, or directional lines to counterbalance the frame.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0002",
+          "APC-P0003",
+          "APC-P0004",
+          "APC-P0005",
+          "FSC-P0006",
+          "FSC-P0007",
+          "LCC-P0038",
+          "LCC-P0046",
+          "LCC-P0047",
+          "LCC-P0076",
+          "LAC-P0033"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "editorial",
+        "asymmetry"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "new_generation"
+        ]
+      }
+    },
+    {
+      "pattern_id": "composition-centered-artifact",
+      "version": "1.0.0",
+      "name": "Centered artifact authority",
+      "category": "composition",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "For a single artifact study, center the object with stable silhouette readability and let secondary context support rather than compete with it.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "artifact",
+        "museum",
+        "statue"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "artifact_transform",
+          "art_style_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "composition-full-body-environment",
+      "version": "1.0.0",
+      "name": "Full-body environment integration",
+      "category": "composition",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "Keep feet or support surface visible and let the environment explain the subject’s scale, action, and spatial relationship.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "full body",
+        "environment"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "historical_portrait",
+          "new_generation"
+        ]
+      }
+    },
+    {
+      "pattern_id": "composition-storyboard-consistency",
+      "version": "1.0.0",
+      "name": "Storyboard continuity anchors",
+      "category": "layout",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "Across a grid or storyboard, hold identity, costume, environment, and lens family stable while changing only the intended action/camera node.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "storyboard",
+        "grid",
+        "panel"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "storyboard_or_grid",
+          "design_layout"
+        ]
+      }
+    },
+    {
+      "pattern_id": "lighting-window-side",
+      "version": "1.0.0",
+      "name": "Motivated window side light",
+      "category": "lighting",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Use a visible or implied window as the key source, preserving a coherent lit side, shadow side, catchlight direction, and background falloff.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0006",
+          "APC-P0017",
+          "LCC-P0002",
+          "LCC-P0003",
+          "LCC-P0007",
+          "LCC-P0008",
+          "LCC-P0009",
+          "LCC-P0010",
+          "LCC-P0029",
+          "LCC-P0031",
+          "LCC-P0036",
+          "LCC-P0040"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "window light",
+        "window"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "lighting-soft-directional",
+      "version": "1.0.0",
+      "name": "Soft directional studio light",
+      "category": "lighting",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Use a broad directional source that still creates shape; preserve a readable light direction instead of flattening the face with omnidirectional softness.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0005"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "studio light",
+        "soft directional"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "new_generation"
+        ]
+      }
+    },
+    {
+      "pattern_id": "lighting-warm-cool-environment",
+      "version": "1.0.0",
+      "name": "Warm/cool environmental contrast",
+      "category": "lighting",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "Separate warm practical or sunlit accents from cooler ambient fill so color contrast follows believable environmental sources.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "warm",
+        "cool",
+        "light"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "new_generation",
+          "historical_portrait"
+        ]
+      }
+    },
+    {
+      "pattern_id": "lighting-material-specular",
+      "version": "1.0.0",
+      "name": "Material-specific specular control",
+      "category": "lighting",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "Shape highlights according to the material: broad soft sheen for satin, tight metallic reflections for bronze, restrained glaze highlights for porcelain, and diffuse stone response for marble.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "material",
+        "highlight"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "artifact_transform",
+          "art_style_transform",
+          "portrait"
+        ]
+      }
+    },
+    {
+      "pattern_id": "material-satin-fold-response",
+      "version": "1.0.0",
+      "name": "Satin fold and highlight logic",
+      "category": "material_cues",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Describe satin through smooth drape, tension folds, and directional specular ribbons that follow the cloth geometry.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0006",
+          "FSC-P0006",
+          "FSC-P0012",
+          "FSC-P0013",
+          "GAC-P0001",
+          "GAC-P0002",
+          "LCC-P0002",
+          "LCC-P0003",
+          "LCC-P0004",
+          "LCC-P0008",
+          "LCC-P0024",
+          "LCC-P0025"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "satin"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "fashion"
+        ]
+      }
+    },
+    {
+      "pattern_id": "material-bronze-cast-patina",
+      "version": "1.0.0",
+      "name": "Bronze casting and patina logic",
+      "category": "material_cues",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "Describe bronze as cast metal with chased or finished details, metallic edge response, oxidation/patina variation, and state-dependent wear rather than as brown stone.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "bronze",
+        "patina"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "artifact_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "material-marble-carving-weathering",
+      "version": "1.0.0",
+      "name": "Marble carving and weathering logic",
+      "category": "material_cues",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Describe carved crystalline stone, tool-softened transitions, chips or weathering only when state requires them, and avoid treating surviving bare marble as proof of original colorlessness.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "FSC-P0013",
+          "GAC-P0003",
+          "GAC-P0025",
+          "LAC-P0029",
+          "LAC-P0032",
+          "LAC-P0034"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "marble"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "artifact_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "material-watercolor-edge-behavior",
+      "version": "1.0.0",
+      "name": "Watercolor wash and edge behavior",
+      "category": "material_cues",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Use transparent washes, reserved paper light, pigment pooling, wet-on-wet blooms, and selective dry edges instead of merely requesting pastel softness.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "LCC-P0016",
+          "LCC-P0017",
+          "LCC-P0027",
+          "LCC-P0028",
+          "LCC-P0042",
+          "LCC-P0043",
+          "LCC-P0044",
+          "LCC-P0045",
+          "LCC-P0046",
+          "LCC-P0047",
+          "LCC-P0054",
+          "LCC-P0055"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "watercolor"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "art_style_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "material-porcelain-glaze-underglaze",
+      "version": "1.0.0",
+      "name": "Porcelain glaze and underglaze logic",
+      "category": "material_cues",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Separate ceramic body, cobalt underglaze decoration, glaze depth, firing softness, and curved-surface distortion instead of describing porcelain as generic blue ceramic.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "FSC-P0008",
+          "GAC-P0008",
+          "GAC-P0009",
+          "GAC-P0010",
+          "GAC-P0011",
+          "GAC-P0012",
+          "GAC-P0013",
+          "GAC-P0014",
+          "GAC-P0015",
+          "GAC-P0016",
+          "GAC-P0017",
+          "GAC-P0019"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "porcelain",
+        "ceramic"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "artifact_transform",
+          "art_style_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "material-textile-lace-detail",
+      "version": "1.0.0",
+      "name": "Textile construction visibility",
+      "category": "material_cues",
+      "validation_status": "hypothesis",
+      "mechanism": {
+        "instruction": "Describe weave, lace edge, seam, translucency, layered construction, and tension where the garment interacts with the body.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": []
+      },
+      "confidence": {
+        "level": "hypothesis",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "lace",
+        "fabric"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "portrait",
+          "fashion"
+        ]
+      }
+    },
+    {
+      "pattern_id": "narrative-micro-action",
+      "version": "1.0.0",
+      "name": "Micro-action instead of static posing",
+      "category": "storytelling",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Give the subject a small ongoing action—turning, adjusting, reaching, pausing, reading, lifting, or reacting—so the frame captures an event rather than a mannequin pose.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0002",
+          "APC-P0006",
+          "APC-P0010",
+          "GAC-P0001",
+          "GAC-P0002",
+          "GAC-P0005",
+          "GAC-P0006",
+          "LCC-P0002",
+          "LCC-P0005",
+          "LCC-P0006",
+          "LCC-P0020",
+          "LCC-P0032"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "moment",
+        "action"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "new_generation",
+          "historical_portrait",
+          "portrait"
+        ]
+      }
+    },
+    {
+      "pattern_id": "interaction-explicit-prop",
+      "version": "1.0.0",
+      "name": "Explicit hand-object interaction",
+      "category": "storytelling",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Specify which hand contacts which part of the prop, how it bears or guides the object, and what the fingers are doing.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0002",
+          "APC-P0005",
+          "APC-P0006",
+          "APC-P0007",
+          "APC-P0008",
+          "APC-P0015",
+          "APC-P0016",
+          "FSC-P0008",
+          "FSC-P0011",
+          "GAC-P0002",
+          "GAC-P0004",
+          "GAC-P0008"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation",
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "holding",
+        "prop",
+        "lantern"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": true,
+        "routes": [
+          "historical_portrait",
+          "new_generation",
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "story-environmental-detail",
+      "version": "1.0.0",
+      "name": "Environment carries story evidence",
+      "category": "storytelling",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Choose a few environment details that reveal place, activity, and social context rather than filling the background with unrelated decoration.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0002",
+          "APC-P0003",
+          "APC-P0004",
+          "APC-P0005",
+          "APC-P0006",
+          "FSC-P0008",
+          "GAC-P0001",
+          "LCC-P0003",
+          "LCC-P0005",
+          "LCC-P0008",
+          "LCC-P0010",
+          "LCC-P0014"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "scene",
+        "environment"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "new_generation",
+          "historical_portrait"
+        ]
+      }
+    },
+    {
+      "pattern_id": "reference-identity-isolation",
+      "version": "1.0.0",
+      "name": "Identity reference isolation",
+      "category": "reference_control",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Use the identity reference only for recognizable facial/identity features unless another role is explicitly assigned.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": [
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "identity",
+        "reference"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": false,
+        "routes": [
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "reference-outfit-isolation",
+      "version": "1.0.0",
+      "name": "Outfit reference isolation",
+      "category": "reference_control",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Borrow garment construction, palette, and materials from an outfit reference without importing its face, body, pose, or environment.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": [
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "outfit",
+        "reference"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": false,
+        "routes": [
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "reference-pose-isolation",
+      "version": "1.0.0",
+      "name": "Pose reference isolation",
+      "category": "reference_control",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Borrow joint arrangement, support, and weight distribution from a pose reference without importing identity or wardrobe.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": [
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "pose",
+        "reference"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": false,
+        "routes": [
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "reference-style-isolation",
+      "version": "1.0.0",
+      "name": "Style reference isolation",
+      "category": "reference_control",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Borrow mark-making, rendering, palette behavior, and surface treatment from a style reference without importing unrelated objects or characters.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": [
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "style",
+        "reference"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": false,
+        "routes": [
+          "reference_transform",
+          "art_style_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "reference-layout-isolation",
+      "version": "1.0.0",
+      "name": "Layout reference isolation",
+      "category": "reference_control",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Borrow spatial hierarchy, margins, panel geometry, and subject placement from a layout reference without changing identity or content roles.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [],
+        "experiments": [],
+        "validation_basis": [
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "layout",
+        "reference"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": false,
+        "routes": [
+          "reference_transform",
+          "design_layout"
+        ]
+      }
+    },
+    {
+      "pattern_id": "prompt-structure-then-emotion",
+      "version": "1.0.0",
+      "name": "Structure first, emotion second",
+      "category": "prompt_methods",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Lock subject, medium, composition, lighting, and materials first, then add one precise emotional line instead of stacking vague mood adjectives.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0001",
+          "APC-P0002",
+          "APC-P0003",
+          "APC-P0004",
+          "APC-P0005",
+          "APC-P0006",
+          "FSC-P0002",
+          "FSC-P0003",
+          "FSC-P0004",
+          "FSC-P0005",
+          "FSC-P0016",
+          "GAC-P0027"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "mood",
+        "composition"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "new_generation",
+          "historical_portrait",
+          "reference_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "prompt-targeted-constraints",
+      "version": "1.0.0",
+      "name": "Targeted constraints over giant negatives",
+      "category": "prompt_methods",
+      "validation_status": "supported",
+      "mechanism": {
+        "instruction": "Constrain only likely failure modes and explicit prohibitions instead of appending a long generic negative-prompt inventory.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "APC-P0002",
+          "APC-P0003",
+          "APC-P0005",
+          "APC-P0006",
+          "FSC-P0001",
+          "FSC-P0002",
+          "FSC-P0004",
+          "FSC-P0005",
+          "FSC-P0007",
+          "GAC-P0002",
+          "GAC-P0006",
+          "GAC-P0010"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation",
+          "human_curated_project_rule",
+          "v3.1_regression_or_compiler_rule"
+        ]
+      },
+      "confidence": {
+        "level": "supported",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "avoid",
+        "constraint"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": true,
+        "director_gate": false,
+        "routes": [
+          "new_generation",
+          "historical_portrait",
+          "reference_transform",
+          "artifact_transform"
+        ]
+      }
+    },
+    {
+      "pattern_id": "prompt-medium-anchor",
+      "version": "1.0.0",
+      "name": "Medium behavior as an anchor",
+      "category": "prompt_methods",
+      "validation_status": "observed",
+      "mechanism": {
+        "instruction": "Describe what the chosen medium physically does—surface, edges, marks, color, fabrication—rather than using the medium name as a decorative style tag.",
+        "expected_effects": []
+      },
+      "evidence": {
+        "source_examples": [
+          "FSC-P0006",
+          "FSC-P0008",
+          "GAC-P0008",
+          "GAC-P0009",
+          "GAC-P0010",
+          "GAC-P0011",
+          "GAC-P0012",
+          "GAC-P0013",
+          "GAC-P0014",
+          "GAC-P0015",
+          "GAC-P0016",
+          "GAC-P0017"
+        ],
+        "experiments": [],
+        "validation_basis": [
+          "internal_source_corpus_observation"
+        ]
+      },
+      "confidence": {
+        "level": "observed",
+        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+      },
+      "failure_modes": [],
+      "retrieval_terms": [
+        "medium",
+        "material"
+      ],
+      "compiler_usage": {
+        "compiler_eligible": false,
+        "director_gate": false,
+        "routes": [
+          "art_style_transform",
+          "artifact_transform"
+        ]
+      }
+    }
+  ]
+}

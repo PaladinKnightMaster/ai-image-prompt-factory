@@ -1,0 +1,27 @@
+{
+  "strictness": "period_drama",
+  "summary": {
+    "accepted": 1,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "ming-wuxia-overlay-001",
+      "claim_version": "1.0.0",
+      "subject": "genre_overlay",
+      "compatibility": "interpretive",
+      "confidence": 0.98,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "Use Ming material anchors with grounded wuxia dramatization and no unrequested magic.",
+      "source_ids": [
+        "met-ming-essay"
+      ],
+      "survival_bias": null
+    }
+  ],
+  "claim_relationships": []
+}

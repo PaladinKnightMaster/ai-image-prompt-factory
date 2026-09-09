@@ -1,0 +1,108 @@
+{
+  "id": "hellenistic_greek",
+  "name": "Hellenistic Greek",
+  "pack_type": "historical_era",
+  "period": "323–31 BCE",
+  "region": "Hellenistic Mediterranean and successor kingdoms",
+  "summary": "Expanded geographic world and artistic vocabulary with greater interest in dramatic movement, varied ages/types, emotional intensity and complex spatial composition.",
+  "social_roles": [
+    {
+      "text": "ruler/elite portrait subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "athlete/warrior",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "mythic/divine figure as art subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "monumental civic/sanctuary display",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "portrait display",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "Greek drapery with regional/court variation",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [],
+  "hairstyle_headwear": [],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [
+    {
+      "text": "monumental urban/sanctuary settings depending on kingdom",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [],
+  "food_drink_tableware": [],
+  "musical_instruments": [],
+  "weapons_tools": [
+    {
+      "text": "Hellenistic military equipment requires regional/date specificity",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [],
+  "writing_calligraphy": [],
+  "ritual_custom": [],
+  "lighting_technology": [],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "dynamic sculpture with torque, deep drapery and heightened emotion",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "marble/bronze with possible polychromy",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Roman imperial toga portrait used as generic Hellenistic Greek",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "sculpture": "Permit more torque, directional movement and emotional specificity than the Classical default, while retaining physical weight, support and material construction."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/toah/hd/haht/hd_haht.htm",
+      "type": "museum",
+      "supports": "Hellenistic art overview"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should identify kingdom/region, approximate date and object type.",
+  "version": "1.1.0",
+  "evidence_claims": [
+    "hellenistic-diverse-subjects-001",
+    "hellenistic-copy-survival-bias-001"
+  ]
+}

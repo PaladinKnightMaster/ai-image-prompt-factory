@@ -1,0 +1,43 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 2,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "edo-ukiyoe-blocks-001",
+      "claim_version": "1.0.0",
+      "subject": "print_material",
+      "compatibility": "well_attested",
+      "confidence": 0.95,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "Let contours show carved-line discipline; let colors read as layered hand-printed impressions with subtle registration/pressure variation and paper absorption.",
+      "source_ids": [
+        "met-ukiyoe-process",
+        "britishmuseum-ukiyoe-process-2025"
+      ],
+      "survival_bias": null
+    },
+    {
+      "claim_id": "edo-ukiyoe-collaboration-001",
+      "claim_version": "1.0.0",
+      "subject": "print_process",
+      "compatibility": "canonical",
+      "confidence": 0.97,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "Use carved keyline logic, separate color impressions, registration-aware edges, absorbent paper, and hand-printed tonal variation.",
+      "source_ids": [
+        "met-ukiyoe-process",
+        "britishmuseum-ukiyoe-process-2025"
+      ],
+      "survival_bias": null
+    }
+  ],
+  "claim_relationships": []
+}

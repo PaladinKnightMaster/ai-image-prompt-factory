@@ -1,0 +1,68 @@
+{
+  "id": "manuscript_miniature",
+  "name": "Manuscript miniature",
+  "family": "painting_on_parchment",
+  "material": "tempera/ink and often gold on parchment or vellum; exact conventions vary by manuscript culture and century",
+  "fabrication_process": [
+    "prepare and rule parchment",
+    "write or reserve text zones",
+    "draw underdrawing",
+    "prepare grounds for gilding when used",
+    "apply gold",
+    "paint tempera layers and details",
+    "integrate borders/initials/page hierarchy"
+  ],
+  "visible_production_marks": [
+    "fine brush detail",
+    "opaque tempera fields",
+    "burnished or matte gold",
+    "visible page ruling/margins when appropriate"
+  ],
+  "edge_behavior": "Fine controlled edges and ornament; page boundaries and text-image relationships matter more than photographic depth.",
+  "mark_making": [
+    "fine brush detail",
+    "opaque tempera fields",
+    "burnished or matte gold",
+    "visible page ruling/margins when appropriate"
+  ],
+  "color_behavior": "Rich local colors with gold accents; parchment warmth remains visible; spatial modeling varies by school and period.",
+  "surface_behavior": "Parchment has fine skin texture/translucency and can cockle; gold reflects sharply and differently from paint.",
+  "composition_behavior": "Compose for a page: miniature field, margins, initials/borders and text blocks form one designed object.",
+  "structural_limitations": [
+    "do not use generic “medieval” conventions across Byzantine/French/Italian/etc. without culture",
+    "gold should behave metallically",
+    "text must be verified or kept decorative/non-readable by design"
+  ],
+  "aging_weathering": [
+    "abrasion, pigment loss, trimmed edges, handling grime and gold wear are state-specific"
+  ],
+  "artifact_compatibility": [
+    "book_page",
+    "album_leaf"
+  ],
+  "prompt_fragments": {
+    "core": "Design a real manuscript page: bounded miniature field, parchment margins, controlled tempera detail and physically reflective gold, with text/border hierarchy planned before ornament."
+  },
+  "typical_generation_failures": [
+    "fantasy digital painting pasted on parchment",
+    "gold rendered as flat yellow",
+    "nonsense readable text",
+    "modern poster typography",
+    "no page/margin logic"
+  ],
+  "evaluation_criteria": [
+    "page object is believable",
+    "gold and paint respond differently",
+    "layout hierarchy is manuscript-like",
+    "cultural/period convention is specified when historical"
+  ],
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/461161",
+      "type": "museum",
+      "supports": "tempera and gold leaf on parchment and miniature/page layout"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.0.0"
+}

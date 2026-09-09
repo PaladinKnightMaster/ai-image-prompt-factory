@@ -1,0 +1,67 @@
+{
+  "id": "watercolor",
+  "name": "Watercolor",
+  "family": "painting",
+  "material": "water-soluble pigment traditionally bound with gum arabic and applied in transparent or semi-transparent washes, commonly on paper",
+  "fabrication_process": [
+    "reserve paper light",
+    "apply transparent washes from light to dark",
+    "allow wet-on-wet diffusion or controlled wet-on-dry edges",
+    "layer/glaze selectively",
+    "use dry brush or lifting sparingly"
+  ],
+  "visible_production_marks": [
+    "granulation",
+    "cauliflower/bloom where water pools",
+    "dry-brush texture",
+    "visible paper between strokes"
+  ],
+  "edge_behavior": "Mixture of crisp dry edges and soft capillary diffusion; edges should vary with water load instead of all being airbrushed.",
+  "mark_making": [
+    "granulation",
+    "cauliflower/bloom where water pools",
+    "dry-brush texture",
+    "visible paper between strokes"
+  ],
+  "color_behavior": "Light is often the paper showing through washes; mixtures can become subdued when repeatedly layered.",
+  "surface_behavior": "Paper tooth, buckling/absorption cues and transparent pigment deposits; no thick plastic paint film by default.",
+  "composition_behavior": "Simplify and select; let lost-and-found edges and reserved whites carry atmosphere rather than reproducing every photographic pixel.",
+  "structural_limitations": [
+    "pure white highlights usually come from reserved/lifted paper unless opaque additions are intentionally specified",
+    "heavy impasto is not default watercolor behavior"
+  ],
+  "aging_weathering": [
+    "paper yellowing, tide marks, fading or foxing only when state requires it"
+  ],
+  "artifact_compatibility": [
+    "scroll",
+    "album_leaf",
+    "book_page",
+    "folding_screen"
+  ],
+  "prompt_fragments": {
+    "core": "Translate the reference into transparent layered washes on visible paper: reserve light, vary wet and dry edges, let pigment granulate and pool naturally, and simplify detail into confident strokes."
+  },
+  "typical_generation_failures": [
+    "soft pastel digital painting mislabeled watercolor",
+    "opaque airbrush everywhere",
+    "no paper texture",
+    "uniform blurred edges",
+    "photoreal face pasted over painted body"
+  ],
+  "evaluation_criteria": [
+    "paper participates in highlights",
+    "wash transparency is visible",
+    "edge variety follows water behavior",
+    "detail is selectively painted"
+  ],
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/perspectives/materials-and-techniques-drawing-watercolor",
+      "type": "museum",
+      "supports": "water-based transparent medium, pigment/binder/paper behavior"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.0.0"
+}

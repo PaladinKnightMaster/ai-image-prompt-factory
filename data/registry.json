@@ -1,0 +1,47 @@
+{
+  "version": "3.2.0",
+  "core": {
+    "precedence": "references/core/precedence.json",
+    "reference_roles": "references/core/reference_roles.json",
+    "identity_modes": "references/core/identity_modes.json",
+    "body_modes": "references/core/body_modes.json",
+    "historical_strictness": "references/core/historical_strictness.json",
+    "adapter": "references/core/gpt_image_2_adapter.json",
+    "task_classifier": "references/core/task_classifier.json",
+    "parameter_locks": "references/core/parameter_locks.json",
+    "director_gate": "references/core/director_gate.json",
+    "conflict_resolution": "references/core/conflict_resolution.json"
+  },
+  "routes": "references/routes/registry.json",
+  "eras": "references/eras/registry.json",
+  "art_methods": "references/art-methods/registry.json",
+  "artifacts": {
+    "forms": "references/artifacts/forms.json",
+    "states": "references/artifacts/states.json"
+  },
+  "compatibility": "compatibility/compatibility_rules.json",
+  "evaluation": "evaluation/failure_taxonomy.json",
+  "schemas": {
+    "request": "data/schemas/request.schema.json",
+    "era": "data/schemas/era_pack.schema.json",
+    "art_method": "data/schemas/art_method.schema.json",
+    "evaluation": "data/schemas/evaluation.schema.json",
+    "source": "data/schemas/source.schema.json",
+    "claim": "data/schemas/evidence_claim.schema.json",
+    "case": "data/schemas/case.schema.json",
+    "corpus_asset": "data/schemas/corpus_asset.schema.json",
+    "evidence_conflict": "data/schemas/evidence_conflict.schema.json",
+    "generation_metadata": "data/schemas/generation_metadata.schema.json",
+    "visual_pattern": "data/schemas/visual_pattern.schema.json",
+    "experiment": "data/schemas/experiment.schema.json",
+    "benchmark": "data/schemas/benchmark.schema.json",
+    "prompt_record": "data/schemas/prompt_record.schema.json"
+  },
+  "evidence": "evidence/registry.json",
+  "corpus": "corpus/README.md",
+  "regression": "regression/README.md",
+  "evidence_conflicts": "evidence/conflicts/registry.json",
+  "visual_patterns": "visual-patterns/registry.json",
+  "experiments": "experiments/README.md",
+  "benchmarks": "benchmarks/README.md"
+}

@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "BENCH-016",
+  "version": "1.0.0",
+  "category": "historical",
+  "request": "Roman bronze bust",
+  "status": "candidate",
+  "semantic_spec_path": "benchmarks/specs/BENCH-016.json",
+  "related_experiments": [],
+  "generation": {
+    "status": "not_generated",
+    "output_image": null,
+    "provider": null,
+    "model": null
+  },
+  "human_approved": false,
+  "compiled_prompt_path": "benchmarks/compiled/BENCH-016.md",
+  "pattern_trace": [],
+  "evidence_snapshot_sha256": "46d57ffeaea73c2c8044889de0a16cb03637d44342b99387556aadcec21af59b",
+  "compiler_version": "3.2.0",
+  "skill_version": "3.2.0",
+  "model_target": "gpt-image-2",
+  "model_snapshot": "gpt-image-2-2026-04-21"
+}

@@ -1,0 +1,44 @@
+{
+  "routes": [
+    {
+      "id": "new_generation",
+      "path": "references/routes/new_generation.json",
+      "description": "New image from text or loosely specified concept"
+    },
+    {
+      "id": "reference_transform",
+      "path": "references/routes/reference_transform.json",
+      "description": "Transform a person/object/photo while preserving assigned reference roles"
+    },
+    {
+      "id": "historical_portrait",
+      "path": "references/routes/historical_portrait.json",
+      "description": "Living person or fictional subject depicted in bounded historical context"
+    },
+    {
+      "id": "artifact_transform",
+      "path": "references/routes/artifact_transform.json",
+      "description": "Translate subject into a physical artifact"
+    },
+    {
+      "id": "art_style_transform",
+      "path": "references/routes/art_style_transform.json",
+      "description": "Translate a source into a pictorial/craft method without requiring an era"
+    },
+    {
+      "id": "storyboard_or_grid",
+      "path": "references/routes/storyboard_or_grid.json",
+      "description": "Multi-panel narrative or pose/action board"
+    },
+    {
+      "id": "design_layout",
+      "path": "references/routes/design_layout.json",
+      "description": "Poster, infographic, calendar, catalog or other text/layout-led image"
+    },
+    {
+      "id": "evaluation_revision",
+      "path": "references/routes/evaluation_revision.json",
+      "description": "Evaluate an output and produce a minimal revision"
+    }
+  ]
+}

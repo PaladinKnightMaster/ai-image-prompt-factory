@@ -1,0 +1,18 @@
+{
+  "id": "body-modes-v3",
+  "modes": {
+    "preserve": "Preserve apparent anatomy/body characteristics; changes may come only from pose, clothing, lens, and light.",
+    "presentation_only": "No anatomy change; permit pose, camera presentation, styling, garment shaping, and posture changes.",
+    "creative_transformation": "Permit explicitly requested adult body changes without assuming one universal ideal.",
+    "plausible_fitness_projection": "Permit a realistic, non-guaranteed projection of fitness-related changes while keeping skeletal character plausible.",
+    "artistic_stylization": "Permit medium-driven proportion or form stylization when clearly artistic rather than presented as literal anatomy."
+  },
+  "separate_axes": [
+    "anatomy_change",
+    "pose_change",
+    "camera_presentation",
+    "garment_shaping",
+    "artistic_stylization"
+  ],
+  "default": "preserve"
+}

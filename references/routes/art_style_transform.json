@@ -1,0 +1,8 @@
+{
+  "id": "art_style_transform",
+  "description": "Translate a source into a pictorial/craft method without requiring an era",
+  "loads": [
+    "reference_roles"
+  ],
+  "logic": "Load one art-method module; retain style-reference boundaries."
+}

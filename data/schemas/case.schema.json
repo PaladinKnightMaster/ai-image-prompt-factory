@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF V3.1 Case Record",
+  "allOf": [
+    {
+      "$ref": "request.schema.json"
+    }
+  ],
+  "properties": {
+    "case_record": {
+      "type": "object",
+      "properties": {
+        "original_simple_request": {
+          "type": "string"
+        },
+        "compiled_prompt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "output_image": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_snapshot": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "compatibility_audit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evaluation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "historical_audit": {
+          "type": "array"
+        },
+        "material_art_audit": {
+          "type": "array"
+        },
+        "revision_history": {
+          "type": "array"
+        },
+        "model_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model_snapshot": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "compiler_version": {
+          "type": "string"
+        },
+        "skill_version": {
+          "type": "string"
+        },
+        "source_versions": {
+          "type": "object"
+        },
+        "regression_baseline": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "generation_metadata": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "output_sha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "output_publication_status": {
+          "enum": [
+            "private_only",
+            "publishable",
+            "first_party",
+            "generated_by_project",
+            null
+          ]
+        },
+        "redistribution_status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "regression_expectations": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

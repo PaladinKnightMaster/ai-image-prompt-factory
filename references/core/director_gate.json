@@ -1,0 +1,29 @@
+{
+  "id": "director-gate-v3",
+  "required_dimensions": [
+    "moment",
+    "action",
+    "gaze",
+    "body_weight",
+    "hand_logic",
+    "fabric_response",
+    "prop_interaction",
+    "foreground",
+    "midground",
+    "background",
+    "camera",
+    "light_source",
+    "material_response",
+    "micro_story"
+  ],
+  "principles": [
+    "Choose an exact visual moment, not a static adjective bundle.",
+    "Every visible hand needs a physically traceable job or relaxed resting state.",
+    "Body weight/support must agree with pose and environment.",
+    "Fabric and loose materials react to movement, gravity, wind/water and artifact medium.",
+    "Light must come from motivated scene sources and produce medium-specific response.",
+    "Foreground/midground/background should carry narrative information without clutter.",
+    "The micro-story should be visible through attention/action/relationship, not written exposition."
+  ],
+  "anti_pattern": "beautiful subject + location + cinematic + masterpiece + 8K without causal visual direction"
+}

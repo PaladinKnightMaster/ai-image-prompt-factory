@@ -1,0 +1,23 @@
+{
+  "id": "task-classifier-v3",
+  "primary_routes": [
+    "new_generation",
+    "reference_transform",
+    "historical_portrait",
+    "artifact_transform",
+    "art_style_transform",
+    "storyboard_or_grid",
+    "design_layout",
+    "evaluation_revision"
+  ],
+  "decision_order": [
+    "If the user asks to evaluate/revise an existing output, choose evaluation_revision.",
+    "If the requested final thing is a physical artifact (statue, bust, relief, vessel, tile, embroidered object), choose artifact_transform.",
+    "If the dominant challenge is multi-panel/layout/text hierarchy, choose storyboard_or_grid or design_layout.",
+    "If a living subject is being placed in a bounded historical period, choose historical_portrait.",
+    "If a reference image is being changed while remaining an image/photo/illustration, choose reference_transform.",
+    "If a pictorial/craft method is the main transformation and no stronger route applies, choose art_style_transform.",
+    "Otherwise choose new_generation."
+  ],
+  "rule": "Choose one primary route. Era/site/genre and art-method modules are context, not competing primary routes."
+}

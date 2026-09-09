@@ -1,0 +1,43 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 2,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "edo-arita-porcelain-001",
+      "claim_version": "1.0.0",
+      "subject": "ceramic_production",
+      "compatibility": "canonical",
+      "confidence": 0.96,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For an Edo blue-and-white artifact, use Arita/Hizen porcelain logic: cobalt underglaze, clear glaze, kiln-fired white porcelain body, and period-appropriate Japanese decorative handling.",
+      "source_ids": [
+        "met-edo-porcelain-essay",
+        "met-arita-dishes-63588"
+      ],
+      "survival_bias": null
+    },
+    {
+      "claim_id": "edo-ceramic-not-print-001",
+      "claim_version": "1.0.0",
+      "subject": "medium_boundary",
+      "compatibility": "well_attested",
+      "confidence": 0.92,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For ceramic transformation, express brush-painted cobalt under clear glaze following the curved vessel surface; do not add paper fibers, key-block outlines, or print-registration artifacts.",
+      "source_ids": [
+        "met-edo-porcelain-essay",
+        "met-ukiyoe-process"
+      ],
+      "survival_bias": null
+    }
+  ],
+  "claim_relationships": []
+}

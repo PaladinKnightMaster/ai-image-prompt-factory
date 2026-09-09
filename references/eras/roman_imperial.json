@@ -1,0 +1,165 @@
+{
+  "id": "roman_imperial",
+  "name": "Roman Imperial",
+  "pack_type": "historical_era",
+  "period": "27 BCE–late 5th century CE in western framing; vary by region and century",
+  "region": "Roman Empire; Italy and provincial contexts",
+  "summary": "Imperial-period portraiture ranges from idealized dynastic images to highly individualized likenesses; architecture, dress and hairstyle change substantially across centuries.",
+  "social_roles": [
+    {
+      "text": "private citizen/elite portrait subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "military officer",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "imperial subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "domestic/display portrait",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "public honorific monument",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "funerary commemoration",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "toga/stola/tunic/armor only when role and context justify them",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [],
+  "hairstyle_headwear": [
+    {
+      "text": "portrait hairstyle is highly date-sensitive and useful for narrowing chronology",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [
+    {
+      "text": "forum, basilica, domus/villa, baths, streets or provincial settings by context",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [
+    {
+      "text": "marble/painted plaster/mosaic and wooden furnishings by status/context",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "food_drink_tableware": [
+    {
+      "text": "ceramic, glass and metal vessels",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "musical_instruments": [],
+  "weapons_tools": [
+    {
+      "text": "military equipment requires century/unit/context specificity",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [
+    {
+      "text": "walking, horse, cart/chariot, ship depending on role",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "writing_calligraphy": [
+    {
+      "text": "Latin/Greek inscriptions when verified; avoid pseudo-Latin filler if text is meant to be read",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [],
+  "lighting_technology": [
+    {
+      "text": "oil lamps and daylight in interiors",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "marble and bronze portrait busts/statues",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "wall painting and mosaic",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Renaissance neoclassical costume presented as Roman evidence",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "Classical Greek nudity rules copied blindly into Roman portrait context",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "bust": "Build a materially credible Roman portrait bust: intentional truncation and support, period-sensitive hair, modeled flesh/hair contrast, and either idealized or individualized likeness chosen from the narrative—not both accidentally."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/toah/hd/ropo/hd_ropo.htm",
+      "type": "museum",
+      "supports": "Roman portrait traditions"
+    },
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/248751",
+      "type": "museum",
+      "supports": "Roman bronze bust, date-sensitive hair/toga, individual characterization"
+    },
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/248852",
+      "type": "museum",
+      "supports": "bronze as a valued Roman honorific portrait medium and fidelity to nature"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should narrow century/reign, province, status, and portrait convention.",
+  "version": "1.1.0",
+  "evidence_claims": [
+    "roman-bronze-portrait-001",
+    "roman-bronze-inlay-001",
+    "roman-portrait-hair-date-001"
+  ]
+}

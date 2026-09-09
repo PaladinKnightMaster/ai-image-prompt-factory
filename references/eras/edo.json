@@ -1,0 +1,161 @@
+{
+  "id": "edo",
+  "name": "Edo period",
+  "pack_type": "historical_era",
+  "period": "1603/1615–1868 CE",
+  "region": "Japan; Edo, Kyoto, Osaka and regional contexts",
+  "summary": "Urban commercial culture, theater, pleasure quarters, travel imagery, print culture and diverse ceramic/textile traditions; social class and occupation matter.",
+  "social_roles": [
+    {
+      "text": "townsperson/merchant",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "samurai",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "kabuki actor as represented subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "courtesan/beauty-print subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "urban street or entertainment district",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "travel/view scene",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "domestic interior",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "kimono and obi arrangements vary greatly by gender, class, occupation and century",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [],
+  "hairstyle_headwear": [
+    {
+      "text": "elaborate coiffures vary sharply by role and era; never use one “Edo hairstyle” default",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [
+    {
+      "text": "wooden urban architecture, shops, bridges, inns and domestic interiors",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [],
+  "food_drink_tableware": [
+    {
+      "text": "ceramic/lacquer tableware and urban food culture",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "musical_instruments": [],
+  "weapons_tools": [
+    {
+      "text": "swords for appropriate samurai status; avoid assigning them to every subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [
+    {
+      "text": "walking, palanquin, horse and boats depending on context",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "writing_calligraphy": [
+    {
+      "text": "print labels/signage and calligraphy can appear; generated text should be verified",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [],
+  "lighting_technology": [
+    {
+      "text": "lanterns and oil lamps for night interiors/streets",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "ukiyo-e woodblock print production",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "Hizen/Arita/Imari ceramic traditions for appropriate ceramic cases",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Heian multilayer court dress used for ordinary Edo townswoman",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    },
+    {
+      "text": "modern school-uniform styling in strict reconstruction",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "ukiyoe": "Use print logic rather than a digital cartoon filter: carved contour hierarchy, flat color areas, paper absorbency, registration, selective bokashi and composition built for the page.",
+    "ceramic": "For Edo blue-and-white, use an Edo Japanese ceramic reference family rather than silently importing Ming Jingdezhen court motifs."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/essays/woodblock-prints-in-the-ukiyo-e-style",
+      "type": "museum",
+      "supports": "ukiyo-e collaborative production, cherry blocks, mulberry paper and multi-block color printing"
+    },
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/46509",
+      "type": "museum",
+      "supports": "Edo porcelain image showing retrospective Heian court-woman convention"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should narrow city/region, decade, class/occupation and source family (print, garment, ceramic, architecture).",
+  "version": "1.1.0",
+  "evidence_claims": [
+    "edo-arita-porcelain-001",
+    "edo-ukiyoe-collaboration-001",
+    "edo-ukiyoe-blocks-001",
+    "edo-ceramic-not-print-001"
+  ]
+}

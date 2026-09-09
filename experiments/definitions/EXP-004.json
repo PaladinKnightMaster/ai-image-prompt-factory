@@ -1,0 +1,38 @@
+{
+  "experiment_id": "EXP-004",
+  "version": "1.0.0",
+  "hypothesis": "Explicit hand-object mechanics outperform generic holding",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "hand_prop",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "hand_prop",
+      "operation": "replace_literal",
+      "old": "holding a ceramic vase",
+      "new": "supporting the ceramic vase with the left palm under its base while the right fingers steady the neck without covering the decoration"
+    }
+  ],
+  "preserved_dimensions": [
+    "subject",
+    "environment",
+    "lighting",
+    "aspect ratio",
+    "identity unless factor explicitly tests it"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "hand_prop"
+  ],
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "interaction-explicit-prop"
+  ]
+}

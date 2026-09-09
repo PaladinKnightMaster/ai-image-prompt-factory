@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "domain": "hellenistic_greek",
+  "claims": [
+    {
+      "claim_id": "hellenistic-diverse-subjects-001",
+      "version": "1.0.0",
+      "subject": "visual_arts",
+      "value": "Hellenistic art widened subject matter and supported multiple expressive/idealizing modes rather than one uniform “Greek” look.",
+      "context": {
+        "pack_ids": [
+          "hellenistic_greek"
+        ],
+        "subperiods": [
+          "Hellenistic"
+        ],
+        "regions": [
+          "Mediterranean"
+        ],
+        "social_roles": [],
+        "occasions": [],
+        "art_methods": [],
+        "artifact_states": []
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.9,
+      "confidence_reason": "Museum synthesis describes expanded subject matter, patronage and stylistic diversity across the Hellenistic world.",
+      "source_ids": [
+        "met-hellenistic-age-essay"
+      ],
+      "interpretation": "Do not compile Hellenistic as merely Classical Greek plus more drama; choose subject/region/context deliberately.",
+      "prompt_implications": [
+        "Treat Hellenistic visual direction as context-specific and capable of stronger movement, individualized subjects or royal/luxury contexts without forcing a single exaggerated formula."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "Hellenistic",
+        "Hellenistic Greek",
+        "Ptolemaic",
+        "Seleucid"
+      ],
+      "always_for_context": true,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "hellenistic-copy-survival-bias-001",
+      "version": "1.0.0",
+      "subject": "survival_bias",
+      "value": "Many Hellenistic sculptures are lost or known through Roman copies; securely dated originals are uneven and stylistic chronology can be uncertain.",
+      "context": {
+        "pack_ids": [
+          "hellenistic_greek"
+        ],
+        "subperiods": [
+          "Hellenistic"
+        ],
+        "regions": [
+          "Mediterranean"
+        ],
+        "social_roles": [],
+        "occasions": [],
+        "art_methods": [
+          "marble_sculpture",
+          "bronze_sculpture"
+        ],
+        "artifact_states": [
+          "newly_created",
+          "in_period",
+          "aged",
+          "damaged",
+          "excavated",
+          "partially_restored",
+          "museum_conserved",
+          "modern_reconstruction",
+          "replica"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "confidence_reason": "Met specialist publication explicitly discusses lost statuary, sparse bronze survival, Roman-copy dependence and chronology/style uncertainty.",
+      "source_ids": [
+        "met-hellenistic-sculpture-trends"
+      ],
+      "interpretation": "A surviving Roman copy or fragment should not be treated as transparent evidence for every aspect of a lost Hellenistic original.",
+      "prompt_implications": [
+        "Keep reconstructed Hellenistic originals distinct from later Roman copies and present uncertain reconstruction details as interpretive rather than canonical."
+      ],
+      "safer_alternatives": [
+        "Frame the result as a Hellenistic-inspired reconstruction when exact original form is not securely recoverable."
+      ],
+      "trigger_keywords": [
+        "Hellenistic sculpture",
+        "Roman copy",
+        "marble",
+        "bronze",
+        "reconstruction"
+      ],
+      "always_for_context": false,
+      "survival_bias": "The surviving record is selective: bronzes were frequently melted down and some Hellenistic works are known principally through Roman copies, so surviving material can distort original prevalence and appearance.",
+      "mode_actions": {
+        "strict_reconstruction": {
+          "status": "qualify",
+          "instruction": "Do not infer undocumented details from a Roman copy or fragment as certain features of a lost Hellenistic original."
+        },
+        "historically_informed": {
+          "status": "qualify",
+          "instruction": "Use surviving/copy evidence as a bounded reconstruction anchor and label uncertain original details interpretively."
+        },
+        "period_drama": {
+          "status": "qualify",
+          "instruction": "Allow coherent Hellenistic visual conventions while avoiding claims that a later copy proves the exact lost original."
+        },
+        "fantasy_hybrid": {
+          "status": "allow_hybrid",
+          "instruction": "Historical reconstruction uncertainty may be stylized deliberately, but keep the hybrid status explicit."
+        }
+      }
+    }
+  ]
+}

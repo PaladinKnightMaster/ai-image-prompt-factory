@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Image Prompt Factory"
+  short_description: "Compile simple image ideas into production-grade GPT Image 2 prompts."
+  default_prompt: "Use AI Image Prompt Factory V3.2 to interpret this image request, preserve explicit locks and reference roles, retrieve relevant evidence and validated visual mechanisms, resolve historical/art compatibility, and return the compiled GPT Image 2 production prompt before any optional generation."

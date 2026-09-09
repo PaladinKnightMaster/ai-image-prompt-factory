@@ -1,0 +1,31 @@
+{
+  "name": "ai-image-prompt-factory",
+  "version": "3.2.0",
+  "category": "Image Prompt Engineering / Visual Direction",
+  "description": "Evidence-backed GPT Image 2 prompt compiler with internal visual intelligence lab, prompt-mechanism decomposition, VisualPatterns, controlled experiments, and regression testing.",
+  "primary_output": "prompt",
+  "primary_adapter": "gpt-image-2",
+  "license": "MIT",
+  "compat": [
+    "chatgpt",
+    "codex",
+    "claude-code",
+    "cursor",
+    "gemini-cli",
+    "opencode",
+    "python-cli"
+  ],
+  "entrypoints": {
+    "skill": "SKILL.md",
+    "cli": "aipf",
+    "validator": "python scripts/validate_repo.py",
+    "gallery": "python website/generate_gallery.py",
+    "regression": "aipf regress",
+    "ingest": "aipf ingest",
+    "evidence": "aipf evidence",
+    "patterns": "aipf patterns",
+    "experiments": "aipf experiment-inventory",
+    "benchmarks": "aipf benchmark-report",
+    "internal_gallery": "python internal-gallery/generate_gallery.py"
+  }
+}

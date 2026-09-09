@@ -1,0 +1,27 @@
+{
+  "source_name": "Image Library",
+  "source_sha256": null,
+  "image_assets": 606,
+  "text_documents": 36,
+  "unique_hashes": 587,
+  "exact_duplicate_groups": 19,
+  "exact_duplicate_extra_files": 19,
+  "collections": {
+    "APC": 100,
+    "FSC": 24,
+    "GAC": 33,
+    "LAC": 71,
+    "LCC": 378
+  },
+  "prompt_records": 191,
+  "image_prompt_associations": {
+    "exact_section": 463,
+    "probable_section": 0,
+    "unknown": 143
+  },
+  "verified_provenance_assets": 606,
+  "internal_only_assets": 606,
+  "public_gallery_eligible": 0,
+  "pattern_observation_types": 21,
+  "policy": "Collected source assets are internal development material. Public release packaging excludes the raw source corpus and internal gallery output."
+}

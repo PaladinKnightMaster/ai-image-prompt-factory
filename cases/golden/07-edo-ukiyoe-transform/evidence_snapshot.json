@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "edo-ukiyoe-blocks-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.95,
+      "source_ids": [
+        "met-ukiyoe-process",
+        "britishmuseum-ukiyoe-process-2025"
+      ]
+    },
+    {
+      "claim_id": "edo-ukiyoe-collaboration-001",
+      "version": "1.0.0",
+      "compatibility": "canonical",
+      "confidence": 0.97,
+      "source_ids": [
+        "met-ukiyoe-process",
+        "britishmuseum-ukiyoe-process-2025"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "met-ukiyoe-process",
+      "title": "Woodblock Prints in the Ukiyo-e Style",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/essays/woodblock-prints-in-the-ukiyo-e-style",
+      "evidence_quality": "high"
+    },
+    {
+      "source_id": "britishmuseum-ukiyoe-process-2025",
+      "title": "How to make a woodblock print like Hiroshige",
+      "institution": "The British Museum",
+      "url": "https://www.britishmuseum.org/blog/how-make-woodblock-print-hiroshige",
+      "evidence_quality": "high"
+    }
+  ],
+  "claim_relationships": [],
+  "snapshot_sha256": "cf94c7a4086b0c50a4c42fa0b0e5d01aef07620172211d498f772fb95dd293d9"
+}

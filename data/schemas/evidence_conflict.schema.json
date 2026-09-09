@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF V3.1 Evidence Relationship / Conflict",
+  "type": "object",
+  "required": ["conflict_id","version","type","claim_ids","summary","resolution_policy"],
+  "properties": {
+    "conflict_id": {"type":"string"},
+    "version": {"type":"string"},
+    "type": {"enum":["disagreement","chronological_variation","regional_variation","interpretive_tension"]},
+    "claim_ids": {"type":"array","items":{"type":"string"},"minItems":2,"uniqueItems":true},
+    "summary": {"type":"string"},
+    "resolution_policy": {"type":"string"},
+    "user_facing_note": {"type":["string","null"]}
+  }
+}

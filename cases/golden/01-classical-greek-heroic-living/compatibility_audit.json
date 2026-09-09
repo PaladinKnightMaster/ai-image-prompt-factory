@@ -1,0 +1,27 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 1,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "greek-bronze-survival-001",
+      "claim_version": "1.0.0",
+      "subject": "survival_bias",
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "When reconstructing a living ancient sculptural environment, do not default every Greek statue to white marble merely because more marble copies survive.",
+      "source_ids": [
+        "met-greek-bronze-technique"
+      ],
+      "survival_bias": "Survival is selective: bronze was recyclable and often lost, while marble copies survived differently."
+    }
+  ],
+  "claim_relationships": []
+}

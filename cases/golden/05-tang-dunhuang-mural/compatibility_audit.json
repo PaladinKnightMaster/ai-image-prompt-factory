@@ -1,0 +1,83 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 5,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "mogao-pigment-variation-001",
+      "claim_version": "1.0.0",
+      "subject": "mural_material",
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "Tie pigment palette and mural-making details to the selected cave/subperiod when possible.",
+      "source_ids": [
+        "dha-pigments-2022"
+      ],
+      "survival_bias": null
+    },
+    {
+      "claim_id": "mogao-multicentury-001",
+      "claim_version": "1.0.0",
+      "subject": "site_chronology",
+      "compatibility": "canonical",
+      "confidence": 0.99,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For strict or research-facing work, anchor the mural to a cave, dynasty/subperiod, or tightly bounded evidence family.",
+      "source_ids": [
+        "unesco-mogao-440"
+      ],
+      "survival_bias": null
+    },
+    {
+      "claim_id": "mogao-discoloration-001",
+      "claim_version": "1.0.0",
+      "subject": "artifact_state",
+      "compatibility": "well_attested",
+      "confidence": 0.95,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For aged, damaged, excavated, or museum-conserved mural states, include fading, discoloration, loss, and conservation selectively; for in-period reconstruction, do not copy every modern deterioration artifact.",
+      "source_ids": [
+        "dha-lead-pigments-2026"
+      ],
+      "survival_bias": "The colors visible today are not a transparent record of original saturation; discoloration and conservation state can materially alter appearance."
+    },
+    {
+      "claim_id": "mogao-cave55-layering-001",
+      "claim_version": "1.0.0",
+      "subject": "mural_fabrication",
+      "compatibility": "well_attested",
+      "confidence": 0.93,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "When the selected evidence family matches Cave 55, express mural depth through plaster ground, mineral paint layers, localized gilding, and organic-binder behavior rather than a flat digital “mural filter.”",
+      "source_ids": [
+        "dha-cave55-2023"
+      ],
+      "survival_bias": null
+    },
+    {
+      "claim_id": "tang-court-leisure-001",
+      "claim_version": "1.0.0",
+      "subject": "court_life",
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For an 8th-century court scene, use layered elite dress and a materially grounded court setting; do not copy one tomb figure as a universal costume.",
+      "source_ids": [
+        "met-tang-court-lady-75765"
+      ],
+      "survival_bias": null
+    }
+  ],
+  "claim_relationships": []
+}

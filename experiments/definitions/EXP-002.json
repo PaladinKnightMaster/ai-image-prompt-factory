@@ -1,0 +1,38 @@
+{
+  "experiment_id": "EXP-002",
+  "version": "1.0.0",
+  "hypothesis": "Material physics outperforms material-name-only",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "material_physics",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "material_physics",
+      "operation": "replace_literal",
+      "old": "satin outfit",
+      "new": "satin outfit with smooth drape, tension folds, and directional specular highlights that follow the cloth geometry"
+    }
+  ],
+  "preserved_dimensions": [
+    "subject",
+    "environment",
+    "lighting",
+    "aspect ratio",
+    "identity unless factor explicitly tests it"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "material_physics"
+  ],
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "material-satin-fold-response"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "methods": [
+    {
+      "id": "marble_sculpture",
+      "path": "references/art-methods/marble_sculpture.json"
+    },
+    {
+      "id": "bronze_sculpture",
+      "path": "references/art-methods/bronze_sculpture.json"
+    },
+    {
+      "id": "carved_stone_relief",
+      "path": "references/art-methods/carved_stone_relief.json"
+    },
+    {
+      "id": "chinese_ink_painting",
+      "path": "references/art-methods/chinese_ink_painting.json"
+    },
+    {
+      "id": "gongbi_painting",
+      "path": "references/art-methods/gongbi_painting.json"
+    },
+    {
+      "id": "mineral_pigment_mural",
+      "path": "references/art-methods/mineral_pigment_mural.json"
+    },
+    {
+      "id": "watercolor",
+      "path": "references/art-methods/watercolor.json"
+    },
+    {
+      "id": "japanese_woodblock_print",
+      "path": "references/art-methods/japanese_woodblock_print.json"
+    },
+    {
+      "id": "blue_white_ceramic",
+      "path": "references/art-methods/blue_white_ceramic.json"
+    },
+    {
+      "id": "manuscript_miniature",
+      "path": "references/art-methods/manuscript_miniature.json"
+    },
+    {
+      "id": "paper_cut_layered",
+      "path": "references/art-methods/paper_cut_layered.json"
+    },
+    {
+      "id": "embroidery_textile",
+      "path": "references/art-methods/embroidery_textile.json"
+    }
+  ]
+}

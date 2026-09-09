@@ -1,0 +1,12 @@
+{
+  "id": "conflict-resolution-v3",
+  "precedence_ref": "references/core/precedence.json",
+  "conflicts": {
+    "explicit_vs_history": "If strict reconstruction conflicts with an explicit object/outfit, do not secretly replace it. Offer or internally select an intentional-hybrid interpretation only when the user has permitted adaptation.",
+    "identity_vs_style": "Translate rendering/material while preserving identity according to the selected identity mode; style cannot silently redesign ancestry or face geometry.",
+    "reference_role_overlap": "If one reference has multiple explicit roles, only those roles may transfer. If multiple references claim the same role, use user priority/weight or ask only when the outcome materially depends on it.",
+    "art_method_vs_form": "The art method controls fabrication/material; the artifact form controls geometry. If incompatible, choose neither silently—flag the conflict.",
+    "era_vs_overlay": "Historical era/site is the evidence base; Wuxia/Xianxia are overlays. Overlay narrative cannot be reclassified as historical evidence.",
+    "director_vs_material": "Director choices must respect physical material limits; spectacular pose/lighting cannot require impossible fabrication."
+  }
+}

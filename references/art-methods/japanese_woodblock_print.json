@@ -1,0 +1,73 @@
+{
+  "id": "japanese_woodblock_print",
+  "name": "Japanese woodblock print",
+  "family": "printmaking",
+  "material": "relief-printed woodblocks, ink/pigment and absorbent paper; Edo ukiyo-e commonly uses separate blocks for colors",
+  "fabrication_process": [
+    "designer creates image",
+    "design transferred to block",
+    "carver cuts relief key and color blocks",
+    "printer inks blocks and rubs paper with baren",
+    "registration aligns repeated impressions",
+    "optional bokashi creates gradation"
+  ],
+  "visible_production_marks": [
+    "carved keyline quality",
+    "flat printed color",
+    "slight paper/ink variation",
+    "registration logic",
+    "bokashi gradients where intentional"
+  ],
+  "edge_behavior": "Edges are carved/printed: crisp graphic contour with occasional organic print variation, not anti-aliased vector perfection.",
+  "mark_making": [
+    "carved keyline quality",
+    "flat printed color",
+    "slight paper/ink variation",
+    "registration logic",
+    "bokashi gradients where intentional"
+  ],
+  "color_behavior": "Flat color regions with limited layered overprinting and selective gradients; paper tone remains present.",
+  "surface_behavior": "Mulberry-type paper absorbency and slight emboss/pressure cues; ink sits as a print, not glossy digital paint.",
+  "composition_behavior": "Use bold cropping, diagonals, patterned negative space and page-aware composition; perspective may be stylized but internally coherent.",
+  "structural_limitations": [
+    "each extra color implies another block/printing pass",
+    "fine gradients should look printed, not airbrushed",
+    "photographic bokeh is foreign unless deliberately hybridized"
+  ],
+  "aging_weathering": [
+    "fading, edge wear and paper discoloration depend on artifact state; do not force antique damage for a newly printed work"
+  ],
+  "artifact_compatibility": [
+    "book_page",
+    "album_leaf",
+    "scroll",
+    "folding_screen"
+  ],
+  "prompt_fragments": {
+    "core": "Rebuild the scene as a carved-and-printed image: authoritative keyline, flat color blocks, visible paper, precise registration with subtle hand-print variation, and selective bokashi rather than digital gradients."
+  },
+  "typical_generation_failures": [
+    "anime screenshot with paper texture",
+    "smooth vector outlines",
+    "3D photoreal shading",
+    "fake halftone dots",
+    "misregistered colors everywhere",
+    "random Japanese text"
+  ],
+  "evaluation_criteria": [
+    "keyline reads as carved print line",
+    "color regions behave as block impressions",
+    "paper is visible",
+    "gradation looks like bokashi when used",
+    "composition feels designed for a sheet"
+  ],
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/essays/woodblock-prints-in-the-ukiyo-e-style",
+      "type": "museum",
+      "supports": "designer/carver/printer/publisher workflow, cherry blocks, mulberry paper, separate color blocks"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.1.0"
+}

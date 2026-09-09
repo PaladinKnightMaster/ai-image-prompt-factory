@@ -1,0 +1,38 @@
+{
+  "id": "core-makeup-v3",
+  "migration_origin": "Curated from V2.1; removes ancestry-based face templates and universal beauty defaults.",
+  "profiles": [
+    {
+      "id": "natural_realism",
+      "controls": [
+        "skin texture retention",
+        "brow grooming",
+        "subtle lip/cheek color",
+        "no automatic face reshaping"
+      ]
+    },
+    {
+      "id": "editorial_polished",
+      "controls": [
+        "intentional eye/lip emphasis",
+        "controlled highlight",
+        "still retain skin texture"
+      ]
+    },
+    {
+      "id": "historical_contextual",
+      "controls": [
+        "era-specific cosmetic evidence",
+        "rank/occasion",
+        "confidence label"
+      ]
+    },
+    {
+      "id": "artifact_translation",
+      "controls": [
+        "translate makeup into material/paint marks",
+        "do not preserve living cosmetic gloss"
+      ]
+    }
+  ]
+}

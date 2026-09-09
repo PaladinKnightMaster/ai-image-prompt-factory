@@ -1,0 +1,94 @@
+{
+  "version": "3.1",
+  "id": "reg-greek-living-not-artifact",
+  "title": "Greek living hero",
+  "status": "regression_spec",
+  "request": "Show me as a living Classical Greek heroic figure, not a statue.",
+  "route": "historical_portrait",
+  "locks": {
+    "adult_subject": true,
+    "primary_subject": "same adult subject across transformations",
+    "do_not_silently_add_rank_or_sacred_status": true
+  },
+  "references": [],
+  "identity": {
+    "mode": "recognizable_identity",
+    "locked_features": [
+      "recognizable facial structure"
+    ]
+  },
+  "body_transformation": {
+    "mode": "presentation_only",
+    "anatomy_change": "none unless explicitly stated in request",
+    "pose_change": "allowed as director choice",
+    "camera_presentation": "allowed",
+    "garment_shaping": "allowed when route requires it",
+    "artistic_stylization": "only when selected by body mode/art method"
+  },
+  "historical": {
+    "strictness": "historically_informed",
+    "packs": [
+      "classical_greek"
+    ],
+    "subperiod": "late 5th to early 4th century BCE impression",
+    "region": null,
+    "role": "heroic citizen/warrior-inspired living subject",
+    "occasion": "quiet pre-action sanctuary moment",
+    "intentional_hybrids": []
+  },
+  "art": {
+    "method": null,
+    "artifact_form": null,
+    "artifact_state": null,
+    "variant": null
+  },
+  "requested_elements": [],
+  "director": {
+    "moment": "a breath before stepping down from the sanctuary terrace",
+    "action": "standing in controlled contrapposto-like balance, cloak caught by a light breeze",
+    "gaze": "past the camera toward an implied approach",
+    "body_weight": "one leg bears weight, the free leg relaxed but ready",
+    "hand_logic": "one hand gathers the cloak; the other rests near a sheathed sword without drawing it",
+    "foreground": "worn stone step edge",
+    "midground": "subject and restrained votive architecture",
+    "background": "sunlit sanctuary columns and distant dry landscape",
+    "camera": "eye-to-slightly-low three-quarter full portrait",
+    "light_source": "low dawn sun from one side, reflected fill from pale stone",
+    "micro_story": "a civic hero before action, dignified rather than theatrical"
+  },
+  "output": {
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "text_in_image": [],
+    "generation_requested": false
+  },
+  "case_record": {
+    "original_simple_request": "Show me as a living Classical Greek heroic figure, not a statue.",
+    "compiled_prompt": "compiled_prompt.md",
+    "output_image": null,
+    "evidence_snapshot": "evidence_snapshot.json",
+    "compatibility_audit": "compatibility_audit.json",
+    "evaluation": null,
+    "historical_audit": [],
+    "material_art_audit": [],
+    "revision_history": [],
+    "model_version": "gpt-image-2",
+    "model_snapshot": "gpt-image-2-2026-04-21",
+    "compiler_version": "3.1.0",
+    "skill_version": "3.1.0",
+    "source_versions": {
+      "evidence_registry": "1.0.0"
+    },
+    "regression_baseline": null
+  },
+  "regression_expectations": {
+    "prompt_not_contains": [
+      "Art/craft method — Marble sculpture",
+      "Artifact state —"
+    ],
+    "prompt_contains": [
+      "Classical Greek"
+    ],
+    "max_loaded_claim_files": 2
+  }
+}

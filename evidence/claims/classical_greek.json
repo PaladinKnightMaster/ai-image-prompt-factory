@@ -1,0 +1,104 @@
+{
+  "version": "1.0.0",
+  "pack_id": "classical_greek",
+  "claims": [
+    {
+      "claim_id": "greek-marble-polychromy-001",
+      "version": "1.0.0",
+      "subject": "sculptural_surface",
+      "value": "Classical Greek architectural and marble sculpture could be painted; surviving bare white marble does not prove an originally unpainted surface.",
+      "context": {
+        "pack_ids": [
+          "classical_greek"
+        ],
+        "art_methods": [
+          "marble_sculpture"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.96,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "britishmuseum-parthenon-polychromy"
+      ],
+      "interpretation": "Treat white-marble museum appearance as an artifact-state outcome, not an automatic in-period truth.",
+      "prompt_implications": [
+        "For newly created or in-period Classical marble, allow evidence-aware polychromy or pigment details when appropriate. For conserved/excavated states, largely bare marble with surviving pigment traces can be plausible while preserving the distinction from original appearance."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "marble",
+        "statue",
+        "sculpture",
+        "hero"
+      ],
+      "always_for_context": true,
+      "survival_bias": "Weathering, cleaning, burial, and conservation can remove or reduce ancient paint; present white marble is not identical to original surface intent.",
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "greek-bronze-lostwax-001",
+      "version": "1.0.0",
+      "subject": "bronze_fabrication",
+      "value": "Large ancient Greek bronzes were commonly produced through hollow lost-wax casting, often in separately cast sections joined and cold-worked.",
+      "context": {
+        "pack_ids": [
+          "classical_greek"
+        ],
+        "art_methods": [
+          "bronze_sculpture"
+        ]
+      },
+      "compatibility": "canonical",
+      "confidence": 0.98,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-greek-bronze-technique"
+      ],
+      "interpretation": "This is a fabrication system, not merely a bronze color.",
+      "prompt_implications": [
+        "For bronze sculpture, show cast metal logic: plausible joins, chased/cold-worked details, controlled wall/thickness implications, metal inlays where appropriate, and metallic surface response."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "bronze",
+        "statue",
+        "sculpture"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "greek-bronze-survival-001",
+      "version": "1.0.0",
+      "subject": "survival_bias",
+      "value": "Few large ancient bronzes survive because valuable metal was often melted down; Roman marble copies can dominate modern visual memory of Greek sculptural types.",
+      "context": {
+        "pack_ids": [
+          "classical_greek"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-greek-bronze-technique"
+      ],
+      "interpretation": "Do not infer original material prevalence from surviving museum counts alone.",
+      "prompt_implications": [
+        "When reconstructing a living ancient sculptural environment, do not default every Greek statue to white marble merely because more marble copies survive."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "sculpture",
+        "statue",
+        "bronze",
+        "marble"
+      ],
+      "always_for_context": true,
+      "survival_bias": "Survival is selective: bronze was recyclable and often lost, while marble copies survived differently.",
+      "mode_actions": {}
+    }
+  ]
+}

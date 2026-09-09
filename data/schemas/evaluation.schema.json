@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF V3.1 Evaluation",
+  "type": "object",
+  "required": [
+    "case_id",
+    "scores",
+    "failures"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string"
+    },
+    "scores": {
+      "type": "object",
+      "required": [
+        "semantic_compliance",
+        "aesthetic_quality",
+        "historical_cultural_integrity",
+        "art_material_fidelity",
+        "identity_fidelity",
+        "technical_defects"
+      ],
+      "additionalProperties": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "minimum": 0,
+        "maximum": 5
+      }
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "class",
+          "observation"
+        ],
+        "properties": {
+          "class": {
+            "type": "string"
+          },
+          "observation": {
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "minor",
+              "moderate",
+              "major"
+            ]
+          }
+        }
+      }
+    },
+    "preserve": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "subscores": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ]
+      }
+    },
+    "model_metadata": {
+      "type": "object"
+    },
+    "evidence_snapshot_sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "failure_classes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "change": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      }
+    },
+    "revision_instruction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

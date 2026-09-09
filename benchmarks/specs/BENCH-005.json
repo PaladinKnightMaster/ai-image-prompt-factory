@@ -1,0 +1,73 @@
+{
+  "version": "3.2",
+  "id": "bench-005",
+  "request": "Use one reference for layout only in a historically informed Ming portrait.",
+  "route": "historical_portrait",
+  "locks": {
+    "adult_subject": true,
+    "primary_subject": "same adult subject across transformations",
+    "do_not_silently_add_rank_or_sacred_status": true
+  },
+  "references": [
+    {
+      "id": "reference-1",
+      "roles": [
+        "layout"
+      ],
+      "notes": "layout only"
+    }
+  ],
+  "identity": {
+    "mode": "identity_unlocked",
+    "locked_features": []
+  },
+  "body_transformation": {
+    "mode": "presentation_only",
+    "anatomy_change": "none unless explicitly stated in request",
+    "pose_change": "allowed as director choice",
+    "camera_presentation": "allowed",
+    "garment_shaping": "allowed when route requires it",
+    "artistic_stylization": "only when selected by body mode/art method"
+  },
+  "historical": {
+    "strictness": "historically_informed",
+    "packs": [
+      "ming",
+      "wuxia"
+    ],
+    "subperiod": "late Ming-inspired",
+    "region": "Jiangnan-inspired fictional travel setting",
+    "role": "adult traveling swordswoman",
+    "occasion": "tense pause outside an inn after rain",
+    "intentional_hybrids": [
+      "wuxia genre overlay on Ming material setting"
+    ]
+  },
+  "art": {
+    "method": null,
+    "artifact_form": null,
+    "artifact_state": null,
+    "variant": null
+  },
+  "requested_elements": [],
+  "director": {
+    "moment": "a heartbeat after she hears movement from the upper balcony",
+    "action": "half-turn from walking, one hand near sword guard but blade still sheathed",
+    "gaze": "upward past camera toward the sound",
+    "body_weight": "rear leg brakes movement while front foot pivots",
+    "hand_logic": "weapon hand near guard; free hand controls travel cloak, not a second prop",
+    "fabric_response": "damp outer layer hangs heavier; hem moves from the stopped turn",
+    "foreground": "wet stone threshold and rain drip",
+    "midground": "subject beside timber inn post",
+    "background": "dim upper balcony, stable lantern, one indistinct patron",
+    "camera": "slightly low three-quarter medium-full shot",
+    "light_source": "warm inn lantern against cool overcast/rain ambient",
+    "micro_story": "danger is inferred from attention and posture rather than VFX"
+  },
+  "output": {
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "text_in_image": [],
+    "generation_requested": false
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "id": "dunhuang",
+  "name": "Dunhuang / Mogao visual tradition",
+  "pack_type": "site_tradition",
+  "period": "4th–14th centuries CE; many dynastic phases",
+  "region": "Mogao Caves near Dunhuang, Gansu, China",
+  "summary": "A multi-century cave-temple tradition shaped by Buddhism and Silk Road exchange. “Dunhuang style” is too broad for strict reconstruction.",
+  "social_roles": [
+    {
+      "text": "Buddhist donor/attendant figure",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "celestial musician/dancer as iconographic subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "modern sitter translated into mural language",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "Buddhist devotional mural program",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "donor portrait zone",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "modern artistic transformation",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "garment/iconography must follow chosen cave/subperiod and role; do not mix deity, donor and court costume casually",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [
+    {
+      "text": "painted cave-wall surface with layered preparation and mineral/earth pigments as a visual-material abstraction",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "hairstyle_headwear": [
+    {
+      "text": "iconographic hair/headwear varies widely by subject and period",
+      "compatibility": "unknown",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [
+    {
+      "text": "rock-cut cave-temple interior and painted architectural illusion",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [],
+  "food_drink_tableware": [],
+  "musical_instruments": [
+    {
+      "text": "celestial/musical imagery is strongly represented but instrument choice should follow the chosen mural source family",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "weapons_tools": [],
+  "transportation": [],
+  "writing_calligraphy": [
+    {
+      "text": "inscriptions and sutra context exist; never invent pseudo-script when readable text is expected",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [
+    {
+      "text": "Buddhist devotional/iconographic context is central; avoid casually turning a living subject into a sacred figure without explicit intent",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "lighting_technology": [
+    {
+      "text": "generated “golden divine light” is an interpretive visual device, not evidence of original cave illumination",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "large mural cycles and painted sculpture",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "Silk Road cultural exchange visible across centuries",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "a single timeless “Dunhuang dynasty outfit”",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "random modern fantasy runes",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "fully intact saturated surface labeled excavated/aged without conservation rationale",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "mural": "Translate the subject into a wall-bound painted figure: flattened but graceful contour logic, mineral/earth pigment behavior, plaster/cave-wall texture, period-specific iconographic restraint, and physically plausible age state."
+  },
+  "sources": [
+    {
+      "url": "https://whc.unesco.org/en/list/440",
+      "type": "unesco",
+      "supports": "Mogao scope, murals, chronology and cultural exchange"
+    },
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/44785",
+      "type": "museum",
+      "supports": "workshop transfer/pouncing evidence for a Dunhuang mural fragment"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode requires a specific cave/subperiod or a tightly defined evidence family. Do not treat “Dunhuang” as a single era.",
+  "version": "1.1.0",
+  "evidence_claims": [
+    "mogao-multicentury-001",
+    "mogao-pigment-variation-001",
+    "mogao-cave55-layering-001",
+    "mogao-discoloration-001"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 3,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "roman-bronze-portrait-001",
+      "claim_version": "1.0.0",
+      "subject": "portrait_medium",
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For a Roman bronze bust, preserve modeled portrait specificity, metallic depth, cast-and-finished surface behavior, and any inlay logic supported by the chosen example/context.",
+      "source_ids": [
+        "met-roman-bronze-248852"
+      ],
+      "survival_bias": null
+    },
+    {
+      "claim_id": "roman-bronze-inlay-001",
+      "claim_version": "1.0.0",
+      "subject": "bronze_detail",
+      "compatibility": "well_attested",
+      "confidence": 0.93,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "If visible and appropriate, use restrained contrasting metal/stone inlays to support lifelike eyes or details; do not turn them into fantasy glow.",
+      "source_ids": [
+        "met-roman-bronze-boy-255215",
+        "met-greek-bronze-technique"
+      ],
+      "survival_bias": null
+    },
+    {
+      "claim_id": "roman-portrait-hair-date-001",
+      "claim_version": "1.0.0",
+      "subject": "hairstyle",
+      "compatibility": "well_attested",
+      "confidence": 0.91,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "Use a date-sensitive Roman coiffure tied to the selected century/reign; if the date is broad, keep hair restrained and avoid overclaiming specificity.",
+      "source_ids": [
+        "met-roman-bronze-boy-255215"
+      ],
+      "survival_bias": null
+    }
+  ],
+  "claim_relationships": []
+}

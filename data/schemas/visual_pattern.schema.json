@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.2/visual_pattern.schema.json",
+  "type": "object",
+  "required": [
+    "pattern_id",
+    "version",
+    "name",
+    "category",
+    "validation_status",
+    "mechanism",
+    "evidence",
+    "compiler_usage"
+  ],
+  "properties": {
+    "pattern_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "validation_status": {
+      "enum": [
+        "hypothesis",
+        "observed",
+        "provisional",
+        "supported",
+        "strongly_supported",
+        "mixed",
+        "rejected"
+      ]
+    },
+    "mechanism": {
+      "type": "object",
+      "required": [
+        "instruction"
+      ],
+      "properties": {
+        "instruction": {
+          "type": "string"
+        },
+        "expected_effects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "source_examples": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "experiments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation_basis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "confidence": {
+      "type": "object"
+    },
+    "failure_modes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "retrieval_terms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "compiler_usage": {
+      "type": "object",
+      "required": [
+        "compiler_eligible",
+        "routes"
+      ],
+      "properties": {
+        "compiler_eligible": {
+          "type": "boolean"
+        },
+        "director_gate": {
+          "type": "boolean"
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "BENCH-008",
+  "version": "1.0.0",
+  "category": "historical",
+  "request": "Tang lantern festival portrait",
+  "status": "candidate",
+  "semantic_spec_path": "benchmarks/specs/BENCH-008.json",
+  "related_experiments": [],
+  "generation": {
+    "status": "not_generated",
+    "output_image": null,
+    "provider": null,
+    "model": null
+  },
+  "human_approved": false,
+  "compiled_prompt_path": "benchmarks/compiled/BENCH-008.md",
+  "pattern_trace": [],
+  "evidence_snapshot_sha256": "3df526a8859cbce7416bd950828a1dd65beb8f7bed213260602ba6e804bd9727",
+  "compiler_version": "3.2.0",
+  "skill_version": "3.2.0",
+  "model_target": "gpt-image-2",
+  "model_snapshot": "gpt-image-2-2026-04-21"
+}

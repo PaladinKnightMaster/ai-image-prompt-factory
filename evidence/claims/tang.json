@@ -1,0 +1,178 @@
+{
+  "version": "1.0.0",
+  "pack_id": "tang",
+  "claims": [
+    {
+      "claim_id": "tang-court-leisure-001",
+      "version": "1.0.0",
+      "subject": "court_life",
+      "value": "8th-century Tang elite women are represented in layered dress in court-leisure contexts; imported furniture forms also appear.",
+      "context": {
+        "pack_ids": [
+          "tang"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-tang-court-lady-75765"
+      ],
+      "interpretation": "Use as an 8th-century court anchor, not a dynasty-wide uniform.",
+      "prompt_implications": [
+        "For an 8th-century court scene, use layered elite dress and a materially grounded court setting; do not copy one tomb figure as a universal costume."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "princess",
+        "court",
+        "court woman",
+        "lantern",
+        "banquet"
+      ],
+      "always_for_context": true,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "tang-sancai-001",
+      "version": "1.0.0",
+      "subject": "ceramic",
+      "value": "Sancai glazed earthenware is a strong Tang ceramic anchor.",
+      "context": {
+        "pack_ids": [
+          "tang"
+        ]
+      },
+      "compatibility": "canonical",
+      "confidence": 0.95,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-tang-court-lady-75765"
+      ],
+      "interpretation": "Sancai is safer as a strongly recognizable Tang ceramic cue than later mature Jingdezhen blue-and-white porcelain.",
+      "prompt_implications": [
+        "When a generic Tang ceramic prop is needed, prefer period-appropriate glazed earthenware or another specifically evidenced Tang ceramic rather than defaulting to later blue-and-white porcelain."
+      ],
+      "safer_alternatives": [
+        "Tang glazed earthenware / sancai where appropriate",
+        "plain or period-specific Tang ceramic vessel"
+      ],
+      "trigger_keywords": [
+        "sancai",
+        "three-color glaze",
+        "Tang glazed earthenware"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "tang-cobalt-rare-001",
+      "version": "1.0.0",
+      "subject": "ceramic_decoration",
+      "value": "Cobalt decoration and Tang blue-and-white experiments existed, but they do not justify treating the later mature Jingdezhen blue-and-white porcelain tradition as standard Tang material culture.",
+      "context": {
+        "pack_ids": [
+          "tang"
+        ]
+      },
+      "compatibility": "rare",
+      "confidence": 0.86,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-chinese-ceramics-2012",
+        "freer-tang-blue-white-krahl"
+      ],
+      "interpretation": "Distinguish early/rare Tang cobalt-decorated wares from the later Yuan/Ming blue-and-white porcelain system.",
+      "prompt_implications": [
+        "If blue/cobalt decoration is retained in a Tang scene, make it a narrowly evidenced, exceptional Tang ceramic interpretation—not a familiar Ming-style blue-and-white vase."
+      ],
+      "safer_alternatives": [
+        "narrowly evidenced Tang cobalt-decorated ceramic with uncertainty noted",
+        "Tang glazed earthenware"
+      ],
+      "trigger_keywords": [
+        "blue-and-white",
+        "blue and white",
+        "cobalt",
+        "porcelain",
+        "jingdezhen"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {
+        "strict_reconstruction": {
+          "status": "adapt",
+          "instruction": "Do not render a mature Jingdezhen-style blue-and-white porcelain vase. Replace it with a strongly evidenced Tang ceramic, or use a narrowly evidenced Tang cobalt-decorated ware only if the case is explicitly framed as exceptional and uncertain."
+        },
+        "historically_informed": {
+          "status": "adapt",
+          "instruction": "Preserve the user’s blue-and-white intent only as a restrained Tang cobalt-decorated ceramic interpretation; avoid later standardized Yuan/Ming shapes and decoration."
+        },
+        "period_drama": {
+          "status": "qualify",
+          "instruction": "A familiar blue-and-white visual convention may be used for readability, but mark it internally as a later-inspired period-drama adaptation rather than documentary Tang evidence."
+        },
+        "fantasy_hybrid": {
+          "status": "allow_hybrid",
+          "instruction": "Allow the blue-and-white porcelain deliberately as a fantasy/hybrid object and do not describe it as historically authentic Tang material culture."
+        }
+      }
+    },
+    {
+      "claim_id": "yuan-bluewhite-flowering-001",
+      "version": "1.0.0",
+      "subject": "ceramic_chronology",
+      "value": "Mature underglaze-cobalt blue-and-white porcelain became a major Jingdezhen development in the Yuan/fourteenth-century context and flourished later.",
+      "context": {
+        "pack_ids": [
+          "tang"
+        ]
+      },
+      "compatibility": "anachronistic",
+      "confidence": 0.96,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-yuan-blue-white-42494",
+        "met-chinese-ceramics-2012",
+        "met-ming-essay"
+      ],
+      "interpretation": "This claim is specifically about importing the mature later blue-and-white porcelain visual system into Tang reconstruction.",
+      "prompt_implications": [
+        "Avoid familiar Yuan/Ming Jingdezhen blue-and-white porcelain motifs, vessel profiles, and production finish in strict Tang reconstruction."
+      ],
+      "safer_alternatives": [
+        "Tang glazed ceramic",
+        "exceptional Tang cobalt-decorated ware with uncertainty"
+      ],
+      "trigger_keywords": [
+        "mature blue-and-white",
+        "ming blue-and-white",
+        "jingdezhen blue-and-white",
+        "blue-and-white porcelain",
+        "blue and white porcelain"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {
+        "strict_reconstruction": {
+          "status": "adapt",
+          "instruction": "Replace mature later blue-and-white porcelain with a period-compatible Tang ceramic solution."
+        },
+        "historically_informed": {
+          "status": "adapt",
+          "instruction": "Translate the color idea into an exceptional Tang cobalt-decorated ceramic while avoiding later Jingdezhen conventions."
+        },
+        "period_drama": {
+          "status": "qualify",
+          "instruction": "Permit mature later-style blue-and-white only as an explicit later-inspired cinematic convention, not as documentary Tang evidence."
+        },
+        "fantasy_hybrid": {
+          "status": "allow_hybrid",
+          "instruction": "Permit mature later-style blue-and-white as an intentional cross-period hybrid, not as historically authentic Tang material culture."
+        }
+      }
+    }
+  ]
+}

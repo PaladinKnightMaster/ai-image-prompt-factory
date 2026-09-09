@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "roman-bronze-portrait-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "source_ids": [
+        "met-roman-bronze-248852"
+      ]
+    },
+    {
+      "claim_id": "roman-bronze-inlay-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.93,
+      "source_ids": [
+        "met-roman-bronze-boy-255215",
+        "met-greek-bronze-technique"
+      ]
+    },
+    {
+      "claim_id": "roman-portrait-hair-date-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.91,
+      "source_ids": [
+        "met-roman-bronze-boy-255215"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "met-roman-bronze-248852",
+      "title": "Bronze portrait bust of a man",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/art/collection/search/248852",
+      "evidence_quality": "primary"
+    },
+    {
+      "source_id": "met-roman-bronze-boy-255215",
+      "title": "Bronze portrait bust of a young boy",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/art/collection/search/255215",
+      "evidence_quality": "primary"
+    },
+    {
+      "source_id": "met-greek-bronze-technique",
+      "title": "The Technique of Bronze Statuary in Ancient Greece",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/essays/the-technique-of-bronze-statuary-in-ancient-greece",
+      "evidence_quality": "high"
+    }
+  ],
+  "claim_relationships": [],
+  "snapshot_sha256": "46d57ffeaea73c2c8044889de0a16cb03637d44342b99387556aadcec21af59b"
+}

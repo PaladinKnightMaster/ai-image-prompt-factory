@@ -1,0 +1,57 @@
+{
+  "packs": [
+    {
+      "id": "han",
+      "path": "references/eras/han.json"
+    },
+    {
+      "id": "tang",
+      "path": "references/eras/tang.json"
+    },
+    {
+      "id": "song",
+      "path": "references/eras/song.json"
+    },
+    {
+      "id": "ming",
+      "path": "references/eras/ming.json"
+    },
+    {
+      "id": "qing",
+      "path": "references/eras/qing.json"
+    },
+    {
+      "id": "dunhuang",
+      "path": "references/eras/dunhuang.json"
+    },
+    {
+      "id": "wuxia",
+      "path": "references/eras/wuxia.json"
+    },
+    {
+      "id": "xianxia",
+      "path": "references/eras/xianxia.json"
+    },
+    {
+      "id": "heian",
+      "path": "references/eras/heian.json"
+    },
+    {
+      "id": "edo",
+      "path": "references/eras/edo.json"
+    },
+    {
+      "id": "classical_greek",
+      "path": "references/eras/classical_greek.json"
+    },
+    {
+      "id": "hellenistic_greek",
+      "path": "references/eras/hellenistic_greek.json"
+    },
+    {
+      "id": "roman_imperial",
+      "path": "references/eras/roman_imperial.json"
+    }
+  ],
+  "note": "wuxia/xianxia are overlays; dunhuang is a site/tradition, not a dynasty."
+}

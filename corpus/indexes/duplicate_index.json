@@ -1,0 +1,156 @@
+{
+  "groups": [
+    {
+      "sha256": "87ded9ae7bbf763cc4cf881a3a516edaabf0c2c2f9b05c89df8170f570c2b613",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/FSC/FSC_0002.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/FSC/FSC_0010_01.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "7b31ab7642219e509d6e3daf5d6f94970ae9eab004475062af4fb7a190daded3",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/GAC/GAC_0001.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LAC/LAC_0036_01.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "4718436c82a008bd1e463c29255c4e2152196006f5c029f7d6449f71a8c02230",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/GAC/GAC_0002.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LAC/LAC_0037_01.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "4b3249939731516bfa27fa000773b07cc4394b53f017eddf95b99b442699923c",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0002_01.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0003_01.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "32c2ad1a049f073d9ef3887977713711dc2970ff3d20d054fc03c6aefcef25df",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0002_02.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0003_02.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "846c6f89931ac2e54ae30b8f2121a40c85341c9f93315cefd923cae4afe1c8fc",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0002_03.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0003_03.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "6ed2020d9d20ab2c5e1abc535b8cb09f2089eab961f512874d6776e98a3ad1b6",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0002_04.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0003_04.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "86084e6c3a841b1598906ce9bf4f888fef473cf9dc4db93a671b76708942c324",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0026_01.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0043_01.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "60c02d1a51e829a25190bb31f73e93f83917fb35d044f448dc8253327e81b6fe",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0026_02.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0043_02.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "0739d6867556cde3f2e5ff18f88873f7c2bbf66765d4ab01931b5b291cfedc22",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0026_03.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0043_03.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "7e22828226ec6c873f7b49103087af8197ccb185a8b898763001941d2233d53b",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0026_04.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0043_04.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "ecaf3e520ec17ef886702a62118bbf7692545ed1c55dc9f67eadae2682deed43",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0036_01.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0073_04.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "3bd6f98c272860cffd4f2363799a4083119d7355d36822f7370b655ee5ffa3ac",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0036_02.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0073_03.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "0cbb972af5a7dc1a682c07c94949b7bd2a0080f4b2b465e9fcc35371832e6a80",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0036_03.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0073_02.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "51cd74f8ae5701cf80f5474a5d9017e81a02dd8d58684c7f14d57bde52fae657",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0036_04.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0073_01.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "aa1ab256feba906d2b2709475d886a4b531f01382627d6e8f40da29bf25c1b4b",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0037_01.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0074_04.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "efee6e213655925a1deaf39f8eee7f2a0af6eb106bae11ad7c7a46d0b92f5f72",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0037_02.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0074_03.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "d69cf345b0f2157c097e6ba5e9f9976ee7496ea4621ef76c317bef99b7d56df6",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0037_03.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0074_02.jpg"
+      ],
+      "count": 2
+    },
+    {
+      "sha256": "9d987558ba3d19dcb6795de2f8b3baca328b6614cb447c6e0f6784017d941004",
+      "paths": [
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0037_04.jpg",
+        "Image-Kit/SAMPLE_OUTPUT/LCC/LCC_0074_01.jpg"
+      ],
+      "count": 2
+    }
+  ]
+}

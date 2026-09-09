@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "ming-wuxia-overlay-001",
+      "version": "1.0.0",
+      "compatibility": "interpretive",
+      "confidence": 0.98,
+      "source_ids": [
+        "met-ming-essay"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "met-ming-essay",
+      "title": "Ming Dynasty (1368–1644)",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/essays/ming-dynasty-1368-1644",
+      "evidence_quality": "high"
+    }
+  ],
+  "claim_relationships": [],
+  "snapshot_sha256": "c08176be88eba4801931aac33b4db0eb0b712b0b13d77a53e82b70905b77837d"
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "greek-bronze-survival-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "source_ids": [
+        "met-greek-bronze-technique"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "met-greek-bronze-technique",
+      "title": "The Technique of Bronze Statuary in Ancient Greece",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/essays/the-technique-of-bronze-statuary-in-ancient-greece",
+      "evidence_quality": "high"
+    }
+  ],
+  "claim_relationships": [],
+  "snapshot_sha256": "0a4e348768216876980b75c2a5f5d739ee0bba7839216979734c6fd4fb27c02f"
+}

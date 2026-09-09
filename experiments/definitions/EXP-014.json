@@ -1,0 +1,39 @@
+{
+  "experiment_id": "EXP-014",
+  "version": "1.0.0",
+  "hypothesis": "Explicit reference-role declarations reduce cross-reference leakage",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "reference_roles",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "reference_roles",
+      "operation": "append",
+      "text": " Reference 1 controls identity only; Reference 2 controls outfit only; Reference 3 controls pose only."
+    }
+  ],
+  "preserved_dimensions": [
+    "subject",
+    "environment",
+    "lighting",
+    "aspect ratio",
+    "identity unless factor explicitly tests it"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "reference_roles"
+  ],
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "reference-identity-isolation",
+    "reference-outfit-isolation",
+    "reference-pose-isolation"
+  ]
+}

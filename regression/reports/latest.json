@@ -1,0 +1,691 @@
+{
+  "ok": true,
+  "cases": 19,
+  "passed": 19,
+  "failed": 0,
+  "results": [
+    {
+      "id": "reg-dunhuang-strict-unbounded",
+      "ok": true,
+      "findings": [
+        {
+          "level": "error",
+          "code": "dunhuang_strict_narrowing",
+          "message": "Strict Dunhuang reconstruction requires a cave/subperiod or tightly bounded evidence family."
+        },
+        {
+          "level": "warning",
+          "code": "strict_hybrid_conflict",
+          "message": "Intentional hybrid declared under strict_reconstruction; consider historically_informed/period_drama/fantasy_hybrid."
+        }
+      ],
+      "failures": [],
+      "compile_error": "Cannot compile invalid spec: Strict Dunhuang reconstruction requires a cave/subperiod or tightly bounded evidence family."
+    },
+    {
+      "id": "reg-edo-ceramic-no-print-leak",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "f2419d90995b3c83b1b6c849483130c5a262d07b78e2c853c85ca6d750c8228f",
+      "evidence_snapshot_sha256": "4da78d14455f5449c9eeaccfa10041ed791efaf553a96a80404d100050466364",
+      "evidence_claim_ids": [
+        "edo-arita-porcelain-001",
+        "edo-ceramic-not-print-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 2,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "edo-arita-porcelain-001",
+          "status": "accept",
+          "compatibility": "canonical"
+        },
+        {
+          "claim_id": "edo-ceramic-not-print-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-edo-ukiyoe-process",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "c9311cfb60c1818d1540a8f88a754199e53c693b31707021c7772a3ca93bea7d",
+      "evidence_snapshot_sha256": "cf94c7a4086b0c50a4c42fa0b0e5d01aef07620172211d498f772fb95dd293d9",
+      "evidence_claim_ids": [
+        "edo-ukiyoe-blocks-001",
+        "edo-ukiyoe-collaboration-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 2,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "edo-ukiyoe-blocks-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "edo-ukiyoe-collaboration-001",
+          "status": "accept",
+          "compatibility": "canonical"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-greek-living-not-artifact",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "6b7b78c62a679361fcfec407ead19ac63fb3b8fdce407cb54ab9242f6365cd42",
+      "evidence_snapshot_sha256": "0a4e348768216876980b75c2a5f5d739ee0bba7839216979734c6fd4fb27c02f",
+      "evidence_claim_ids": [
+        "greek-bronze-survival-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 1,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "greek-bronze-survival-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-greek-marble-excavated",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "7d92b1667a47f06c1f63885ce89d043449c60089fea912a0e8297feeabb2f286",
+      "evidence_snapshot_sha256": "c7d4e540956e88ed08cfa4f61221768b7ce030b1115cad0331f58101f31ffe1a",
+      "evidence_claim_ids": [
+        "greek-marble-polychromy-001",
+        "greek-bronze-survival-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 2,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "greek-marble-polychromy-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "greek-bronze-survival-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        }
+      ],
+      "claim_relationships": [
+        {
+          "conflict_id": "greek-original-vs-surviving-surface-001",
+          "type": "interpretive_tension"
+        }
+      ]
+    },
+    {
+      "id": "reg-greek-marble-museum-conserved",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "83ba0fcae18cf9fba06b7afa6fba2d84ddd695bf03ef5fe52e9dd73375db182f",
+      "evidence_snapshot_sha256": "c7d4e540956e88ed08cfa4f61221768b7ce030b1115cad0331f58101f31ffe1a",
+      "evidence_claim_ids": [
+        "greek-marble-polychromy-001",
+        "greek-bronze-survival-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 2,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "greek-marble-polychromy-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "greek-bronze-survival-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        }
+      ],
+      "claim_relationships": [
+        {
+          "conflict_id": "greek-original-vs-surviving-surface-001",
+          "type": "interpretive_tension"
+        }
+      ]
+    },
+    {
+      "id": "reg-greek-marble-newly-created",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "67de27b6d1d6e4d22e1b85fddd67c1b26e7b34f4528230c60714856427506b42",
+      "evidence_snapshot_sha256": "c7d4e540956e88ed08cfa4f61221768b7ce030b1115cad0331f58101f31ffe1a",
+      "evidence_claim_ids": [
+        "greek-marble-polychromy-001",
+        "greek-bronze-survival-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 2,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "greek-marble-polychromy-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "greek-bronze-survival-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        }
+      ],
+      "claim_relationships": [
+        {
+          "conflict_id": "greek-original-vs-surviving-surface-001",
+          "type": "interpretive_tension"
+        }
+      ]
+    },
+    {
+      "id": "reg-hellenistic-copy-survival-bias",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "080f797f625ad0d1176772ad813dc1c87da3dbad417c7dd49997307dcbf7be1b",
+      "evidence_snapshot_sha256": "1fbabd1ed5db510ed84851a379d1fe09df9bf1f253b4f05e71e742ca16289e9d",
+      "evidence_claim_ids": [
+        "hellenistic-copy-survival-bias-001",
+        "hellenistic-diverse-subjects-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 1,
+        "qualified": 1,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "hellenistic-copy-survival-bias-001",
+          "status": "qualify",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "hellenistic-diverse-subjects-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-layout-no-identity-leak",
+      "ok": true,
+      "findings": [
+        {
+          "level": "info",
+          "code": "historical_evidence_qualification",
+          "message": "ming-wuxia-overlay-001: Use Ming material anchors while keeping wuxia conventions visibly interpretive."
+        }
+      ],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "e4fae1570ed00a44144772d373cc26d782f37767d19481b2198706c434c17e76",
+      "evidence_snapshot_sha256": "c08176be88eba4801931aac33b4db0eb0b712b0b13d77a53e82b70905b77837d",
+      "evidence_claim_ids": [
+        "ming-wuxia-overlay-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 0,
+        "qualified": 1,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "ming-wuxia-overlay-001",
+          "status": "qualify",
+          "compatibility": "interpretive"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-ming-wuxia-overlay",
+      "ok": true,
+      "findings": [
+        {
+          "level": "info",
+          "code": "historical_evidence_qualification",
+          "message": "ming-wuxia-overlay-001: Use Ming material anchors while keeping wuxia conventions visibly interpretive."
+        }
+      ],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "0acd2ad3f39467bbe8ec59bb5c4bdd68ca0567f445d3cb92ba93f0098dc2f8dd",
+      "evidence_snapshot_sha256": "c08176be88eba4801931aac33b4db0eb0b712b0b13d77a53e82b70905b77837d",
+      "evidence_claim_ids": [
+        "ming-wuxia-overlay-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 0,
+        "qualified": 1,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "ming-wuxia-overlay-001",
+          "status": "qualify",
+          "compatibility": "interpretive"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-ming-xianxia-hybrid",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "6646566095f277d3ea3d8e089255eb9fd615d033248323c871d223a0030ab2c9",
+      "evidence_snapshot_sha256": "c08176be88eba4801931aac33b4db0eb0b712b0b13d77a53e82b70905b77837d",
+      "evidence_claim_ids": [
+        "ming-wuxia-overlay-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 0,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 1
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "ming-wuxia-overlay-001",
+          "status": "allow_hybrid",
+          "compatibility": "interpretive"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-reference-five-role-isolation",
+      "ok": true,
+      "findings": [
+        {
+          "level": "info",
+          "code": "historical_evidence_qualification",
+          "message": "ming-wuxia-overlay-001: Use Ming material anchors while keeping wuxia conventions visibly interpretive."
+        }
+      ],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "3faf0a25b4ed56db4694c80a0c89bf6157fe53ae4d1b6ff9b4f36cd8b2334d3b",
+      "evidence_snapshot_sha256": "c08176be88eba4801931aac33b4db0eb0b712b0b13d77a53e82b70905b77837d",
+      "evidence_claim_ids": [
+        "ming-wuxia-overlay-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 0,
+        "qualified": 1,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "ming-wuxia-overlay-001",
+          "status": "qualify",
+          "compatibility": "interpretive"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-roman-bronze-material",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "589c161ae022449dbc3caa7b9fdc10d27ac55fd9138adeec2a0ad5506213f9e5",
+      "evidence_snapshot_sha256": "46d57ffeaea73c2c8044889de0a16cb03637d44342b99387556aadcec21af59b",
+      "evidence_claim_ids": [
+        "roman-bronze-portrait-001",
+        "roman-bronze-inlay-001",
+        "roman-portrait-hair-date-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 3,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "roman-bronze-portrait-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "roman-bronze-inlay-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "roman-portrait-hair-date-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-style-no-object-leak",
+      "ok": true,
+      "findings": [
+        {
+          "level": "info",
+          "code": "historical_evidence_qualification",
+          "message": "ming-wuxia-overlay-001: Use Ming material anchors while keeping wuxia conventions visibly interpretive."
+        }
+      ],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "369db27d56ada227f6fe78ad79f6c00d70f81d4616e46ff33ac8e836613472db",
+      "evidence_snapshot_sha256": "c08176be88eba4801931aac33b4db0eb0b712b0b13d77a53e82b70905b77837d",
+      "evidence_claim_ids": [
+        "ming-wuxia-overlay-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 0,
+        "qualified": 1,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "ming-wuxia-overlay-001",
+          "status": "qualify",
+          "compatibility": "interpretive"
+        }
+      ],
+      "claim_relationships": []
+    },
+    {
+      "id": "reg-tang-bluewhite-fantasy-hybrid",
+      "ok": true,
+      "findings": [],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "3f5226301434b9001d1222265894b9423a0e7c7efce5e77e362992a96399a250",
+      "evidence_snapshot_sha256": "9b271d508672be1093f788c1a50dd64533ff5f26ab4ad47973d99a4a4e59078b",
+      "evidence_claim_ids": [
+        "tang-court-leisure-001",
+        "yuan-bluewhite-flowering-001",
+        "tang-cobalt-rare-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 1,
+        "qualified": 0,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 2
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "tang-court-leisure-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "yuan-bluewhite-flowering-001",
+          "status": "allow_hybrid",
+          "compatibility": "anachronistic"
+        },
+        {
+          "claim_id": "tang-cobalt-rare-001",
+          "status": "allow_hybrid",
+          "compatibility": "rare"
+        }
+      ],
+      "claim_relationships": [
+        {
+          "conflict_id": "tang-bluewhite-chronology-scope-001",
+          "type": "chronological_variation"
+        }
+      ]
+    },
+    {
+      "id": "reg-tang-bluewhite-historically-informed",
+      "ok": true,
+      "findings": [
+        {
+          "level": "warning",
+          "code": "historical_evidence_conflict",
+          "message": "yuan-bluewhite-flowering-001: Translate the color idea into an exceptional Tang cobalt-decorated ceramic while avoiding later Jingdezhen conventions."
+        },
+        {
+          "level": "warning",
+          "code": "historical_evidence_conflict",
+          "message": "tang-cobalt-rare-001: Preserve the user’s blue-and-white intent only as a restrained Tang cobalt-decorated ceramic interpretation; avoid later standardized Yuan/Ming shapes and decoration."
+        }
+      ],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "7e89efa99a053c85b75474e0c7be823f123f1b7500f5a71867fc6e5533d7c31a",
+      "evidence_snapshot_sha256": "9b271d508672be1093f788c1a50dd64533ff5f26ab4ad47973d99a4a4e59078b",
+      "evidence_claim_ids": [
+        "tang-court-leisure-001",
+        "yuan-bluewhite-flowering-001",
+        "tang-cobalt-rare-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 1,
+        "qualified": 0,
+        "adapted": 2,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "tang-court-leisure-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "yuan-bluewhite-flowering-001",
+          "status": "adapt",
+          "compatibility": "anachronistic"
+        },
+        {
+          "claim_id": "tang-cobalt-rare-001",
+          "status": "adapt",
+          "compatibility": "rare"
+        }
+      ],
+      "claim_relationships": [
+        {
+          "conflict_id": "tang-bluewhite-chronology-scope-001",
+          "type": "chronological_variation"
+        }
+      ]
+    },
+    {
+      "id": "reg-tang-bluewhite-period-drama",
+      "ok": true,
+      "findings": [
+        {
+          "level": "info",
+          "code": "historical_evidence_qualification",
+          "message": "yuan-bluewhite-flowering-001: Permit mature later-style blue-and-white only as an explicit later-inspired cinematic convention, not as documentary Tang evidence."
+        },
+        {
+          "level": "info",
+          "code": "historical_evidence_qualification",
+          "message": "tang-cobalt-rare-001: A familiar blue-and-white visual convention may be used for readability, but mark it internally as a later-inspired period-drama adaptation rather than documentary Tang evidence."
+        }
+      ],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "0ff323f14f550211822f7712812bd4c1d599d109cb55fa39053fd20fd0f73352",
+      "evidence_snapshot_sha256": "9b271d508672be1093f788c1a50dd64533ff5f26ab4ad47973d99a4a4e59078b",
+      "evidence_claim_ids": [
+        "tang-court-leisure-001",
+        "yuan-bluewhite-flowering-001",
+        "tang-cobalt-rare-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 1,
+        "qualified": 2,
+        "adapted": 0,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "tang-court-leisure-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "yuan-bluewhite-flowering-001",
+          "status": "qualify",
+          "compatibility": "anachronistic"
+        },
+        {
+          "claim_id": "tang-cobalt-rare-001",
+          "status": "qualify",
+          "compatibility": "rare"
+        }
+      ],
+      "claim_relationships": [
+        {
+          "conflict_id": "tang-bluewhite-chronology-scope-001",
+          "type": "chronological_variation"
+        }
+      ]
+    },
+    {
+      "id": "reg-tang-bluewhite-strict-reconstruction",
+      "ok": true,
+      "findings": [
+        {
+          "level": "warning",
+          "code": "historical_evidence_conflict",
+          "message": "yuan-bluewhite-flowering-001: Replace mature later blue-and-white porcelain with a period-compatible Tang ceramic solution."
+        },
+        {
+          "level": "warning",
+          "code": "historical_evidence_conflict",
+          "message": "tang-cobalt-rare-001: Do not render a mature Jingdezhen-style blue-and-white porcelain vase. Replace it with a strongly evidenced Tang ceramic, or use a narrowly evidenced Tang cobalt-decorated ware only if the case is explicitly framed as exceptional and uncertain."
+        }
+      ],
+      "failures": [],
+      "compile_error": null,
+      "prompt_sha256": "286437cbb76156d0fe72c09d720850b30923022ad21c555f88889593b2f42b7e",
+      "evidence_snapshot_sha256": "9b271d508672be1093f788c1a50dd64533ff5f26ab4ad47973d99a4a4e59078b",
+      "evidence_claim_ids": [
+        "tang-court-leisure-001",
+        "yuan-bluewhite-flowering-001",
+        "tang-cobalt-rare-001"
+      ],
+      "compatibility_summary": {
+        "accepted": 1,
+        "qualified": 0,
+        "adapted": 2,
+        "rejected": 0,
+        "hybrids": 0
+      },
+      "compatibility_decisions": [
+        {
+          "claim_id": "tang-court-leisure-001",
+          "status": "accept",
+          "compatibility": "well_attested"
+        },
+        {
+          "claim_id": "yuan-bluewhite-flowering-001",
+          "status": "adapt",
+          "compatibility": "anachronistic"
+        },
+        {
+          "claim_id": "tang-cobalt-rare-001",
+          "status": "adapt",
+          "compatibility": "rare"
+        }
+      ],
+      "claim_relationships": [
+        {
+          "conflict_id": "tang-bluewhite-chronology-scope-001",
+          "type": "chronological_variation"
+        }
+      ]
+    },
+    {
+      "id": "reg-wuxia-no-base",
+      "ok": true,
+      "findings": [
+        {
+          "level": "error",
+          "code": "genre_as_era",
+          "message": "Wuxia is an overlay, not a historical era; add a base setting or explicit fictional world."
+        },
+        {
+          "level": "error",
+          "code": "genre_as_era",
+          "message": "Wuxia needs a historical base pack or an explicit fictional setting."
+        }
+      ],
+      "failures": [],
+      "compile_error": "Cannot compile invalid spec: Wuxia is an overlay, not a historical era; add a base setting or explicit fictional world.; Wuxia needs a historical base pack or an explicit fictional setting."
+    }
+  ]
+}

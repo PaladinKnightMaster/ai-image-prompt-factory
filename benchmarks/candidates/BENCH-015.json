@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "BENCH-015",
+  "version": "1.0.0",
+  "category": "historical",
+  "request": "Greek marble artifact states",
+  "status": "candidate",
+  "semantic_spec_path": "benchmarks/specs/BENCH-015.json",
+  "related_experiments": [],
+  "generation": {
+    "status": "not_generated",
+    "output_image": null,
+    "provider": null,
+    "model": null
+  },
+  "human_approved": false,
+  "compiled_prompt_path": "benchmarks/compiled/BENCH-015.md",
+  "pattern_trace": [],
+  "evidence_snapshot_sha256": "c7d4e540956e88ed08cfa4f61221768b7ce030b1115cad0331f58101f31ffe1a",
+  "compiler_version": "3.2.0",
+  "skill_version": "3.2.0",
+  "model_target": "gpt-image-2",
+  "model_snapshot": "gpt-image-2-2026-04-21"
+}

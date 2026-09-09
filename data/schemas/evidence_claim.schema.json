@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF V3.1 Evidence Claim",
+  "type": "object",
+  "required": [
+    "claim_id",
+    "version",
+    "subject",
+    "value",
+    "context",
+    "compatibility",
+    "confidence",
+    "source_ids",
+    "interpretation",
+    "prompt_implications"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "pack_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subperiods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "regions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "social_roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "occasions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "art_methods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "artifact_states": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "compatibility": {
+      "enum": [
+        "canonical",
+        "well_attested",
+        "plausible",
+        "interpretive",
+        "rare",
+        "anachronistic",
+        "incompatible",
+        "unknown"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confidence_reason": {
+      "type": "string"
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "interpretation": {
+      "type": "string"
+    },
+    "prompt_implications": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "safer_alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "trigger_keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "always_for_context": {
+      "type": "boolean"
+    },
+    "survival_bias": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mode_actions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "accept",
+              "qualify",
+              "adapt",
+              "reject",
+              "allow_hybrid"
+            ]
+          },
+          "instruction": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

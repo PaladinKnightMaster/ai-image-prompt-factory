@@ -1,0 +1,69 @@
+{
+  "id": "artifact-forms-v3",
+  "forms": {
+    "bowl": {
+      "family": "ceramic",
+      "geometry": "concave interior and exterior wall; decoration must respect rim, well and curvature"
+    },
+    "plate": {
+      "family": "ceramic",
+      "geometry": "broad planar field with rim/border hierarchy"
+    },
+    "vase": {
+      "family": "ceramic",
+      "geometry": "continuous rotational body; motif scale changes across neck, shoulder and belly"
+    },
+    "jar": {
+      "family": "ceramic",
+      "geometry": "volumetric lidded/open vessel; broad shoulder and belly fields"
+    },
+    "tile": {
+      "family": "ceramic",
+      "geometry": "flat architectural or decorative surface; edge/chip logic matters"
+    },
+    "figurine": {
+      "family": "ceramic",
+      "geometry": "three-dimensional modeled figure; glaze/pigment follows modeled volume"
+    },
+    "bust": {
+      "family": "sculpture",
+      "geometry": "head, neck and upper torso; terminate deliberately at chest/shoulders or pedestal"
+    },
+    "free_standing_statue": {
+      "family": "sculpture",
+      "geometry": "360-degree figure with load-bearing stance, base/contact logic and silhouette"
+    },
+    "relief": {
+      "family": "sculpture",
+      "geometry": "figures project from a backing plane; depth is compressed and undercuts are limited by relief type"
+    },
+    "funerary_stele": {
+      "family": "sculpture",
+      "geometry": "upright slab or marker combining carved/inscribed zones and architectural edge logic"
+    },
+    "architectural_frieze": {
+      "family": "sculpture",
+      "geometry": "horizontal narrative/decorative band designed for architectural viewing"
+    },
+    "scroll": {
+      "family": "paper_or_textile",
+      "geometry": "elongated sequential viewing surface with mounting/border logic"
+    },
+    "album_leaf": {
+      "family": "paper",
+      "geometry": "bounded intimate picture field, often square/rectangular"
+    },
+    "book_page": {
+      "family": "paper",
+      "geometry": "page edges, margins, text/image hierarchy, binding relationship"
+    },
+    "folding_screen": {
+      "family": "paper_or_textile",
+      "geometry": "image spans hinged panels; folds interrupt and rhythmically segment the scene"
+    },
+    "popup_diorama": {
+      "family": "paper",
+      "geometry": "layered cut/fold elements rise from a base; hinges/tabs and cast shadows are visible"
+    }
+  }
+}

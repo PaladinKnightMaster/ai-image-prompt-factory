@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-09-07",
+  "scope": "internal_dev",
+  "rules": {
+    "source_corpus": "never promoted directly to public benchmark by ingestion",
+    "first_party_benchmark": "requires project-generated output, generation metadata, evaluation, and human approval"
+  },
+  "collections": [
+    {
+      "collection": "APC",
+      "asset_count": 100,
+      "status": "internal_research_only",
+      "provenance": "verified_by_project_owner",
+      "public_release": "excluded"
+    },
+    {
+      "collection": "FSC",
+      "asset_count": 24,
+      "status": "internal_research_only",
+      "provenance": "verified_by_project_owner",
+      "public_release": "excluded"
+    },
+    {
+      "collection": "GAC",
+      "asset_count": 33,
+      "status": "internal_research_only",
+      "provenance": "verified_by_project_owner",
+      "public_release": "excluded"
+    },
+    {
+      "collection": "LAC",
+      "asset_count": 71,
+      "status": "internal_research_only",
+      "provenance": "verified_by_project_owner",
+      "public_release": "excluded"
+    },
+    {
+      "collection": "LCC",
+      "asset_count": 378,
+      "status": "internal_research_only",
+      "provenance": "verified_by_project_owner",
+      "public_release": "excluded"
+    }
+  ]
+}

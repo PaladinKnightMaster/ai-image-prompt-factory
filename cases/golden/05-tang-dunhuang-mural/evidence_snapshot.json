@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "mogao-pigment-variation-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "source_ids": [
+        "dha-pigments-2022"
+      ]
+    },
+    {
+      "claim_id": "mogao-multicentury-001",
+      "version": "1.0.0",
+      "compatibility": "canonical",
+      "confidence": 0.99,
+      "source_ids": [
+        "unesco-mogao-440"
+      ]
+    },
+    {
+      "claim_id": "mogao-discoloration-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.95,
+      "source_ids": [
+        "dha-lead-pigments-2026"
+      ]
+    },
+    {
+      "claim_id": "mogao-cave55-layering-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.93,
+      "source_ids": [
+        "dha-cave55-2023"
+      ]
+    },
+    {
+      "claim_id": "tang-court-leisure-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "source_ids": [
+        "met-tang-court-lady-75765"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "dha-pigments-2022",
+      "title": "Research Progress on Pigments and Analysis Technology of Murals in Dunhuang Mogao Grottoes",
+      "institution": "Dunhuang Academy",
+      "url": "https://skytyz.dha.ac.cn/EN/Y2022/V1/I1/47",
+      "evidence_quality": "high"
+    },
+    {
+      "source_id": "unesco-mogao-440",
+      "title": "Mogao Caves",
+      "institution": "UNESCO World Heritage Centre",
+      "url": "https://whc.unesco.org/en/list/440/",
+      "evidence_quality": "high"
+    },
+    {
+      "source_id": "dha-lead-pigments-2026",
+      "title": "A Study on the Painting Techniques and Discoloration of Lead-Based Pigments in the Murals of Dunhuang",
+      "institution": "Dunhuang Academy",
+      "url": "https://skytyz.dha.ac.cn/EN/Y2026/V5/I2",
+      "evidence_quality": "high"
+    },
+    {
+      "source_id": "dha-cave55-2023",
+      "title": "Analysis of the Mural-Making Materials and Techniques in Mogao Cave 55",
+      "institution": "Dunhuang Academy",
+      "url": "https://skytyz.dha.ac.cn/EN/Y2023/V2/I2/68",
+      "evidence_quality": "high"
+    },
+    {
+      "source_id": "met-tang-court-lady-75765",
+      "title": "Seated court lady",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/art/collection/search/75765",
+      "evidence_quality": "primary"
+    }
+  ],
+  "claim_relationships": [],
+  "snapshot_sha256": "06afe90693702a85d7f666573b0d7c0cd9082c58b8d8a445ff84731f8f92ac8e"
+}

@@ -1,0 +1,72 @@
+{
+  "id": "paper_cut_layered",
+  "name": "Paper-cut / layered paper",
+  "family": "paper_craft",
+  "material": "cut, folded and/or layered paper assembled into flat or shallow three-dimensional compositions",
+  "fabrication_process": [
+    "choose paper weights/colors",
+    "fold for symmetry when relevant",
+    "cut positive/negative shapes",
+    "unfold or separate layers",
+    "paste/hinge layers",
+    "build spacing for cast shadows in layered work"
+  ],
+  "visible_production_marks": [
+    "scissor/knife cut edges",
+    "paper fiber at close edges",
+    "overlapping seams",
+    "fold memory",
+    "glue joins or tabs where visible"
+  ],
+  "edge_behavior": "Silhouette edges are crisp cut paper with tiny fiber irregularity; interior detail must be physically cut, drawn or layered—not infinitely fine floating linework.",
+  "mark_making": [
+    "scissor/knife cut edges",
+    "paper fiber at close edges",
+    "overlapping seams",
+    "fold memory",
+    "glue joins or tabs where visible"
+  ],
+  "color_behavior": "Color comes from paper stocks, paint/ink on paper, or light through layers; no inherent glossy plastic gradient.",
+  "surface_behavior": "Matte fibrous surface; layers cast real shadows and reveal thickness; curled edges occur sparingly.",
+  "composition_behavior": "Favor silhouette, negative space and layer depth. In pop-up/diorama mode, establish foreground/midground/background by physical spacing.",
+  "structural_limitations": [
+    "every detached island needs a bridge/tab/support or must be a separate glued layer",
+    "paper cannot make infinitely thin unsupported hair strands",
+    "deep 3D volume requires folds/layers rather than smooth sculpting"
+  ],
+  "aging_weathering": [
+    "faded paper, edge fray, creases or stains only per state",
+    "new craft should remain clean and sharp"
+  ],
+  "artifact_compatibility": [
+    "book_page",
+    "popup_diorama",
+    "folding_screen",
+    "album_leaf"
+  ],
+  "prompt_fragments": {
+    "core": "Build the image from physically cut paper shapes and layered depth: visible paper thickness, crisp cut silhouettes, tabs/joins or glued overlaps, real cast shadows and negative-space design."
+  },
+  "typical_generation_failures": [
+    "3D plastic toy look",
+    "smooth CGI surfaces",
+    "floating unsupported paper islands",
+    "printed photo instead of cut structure",
+    "uniform fake drop shadows"
+  ],
+  "evaluation_criteria": [
+    "layers are physically intelligible",
+    "cut edges and paper fibers read correctly",
+    "depth comes from spacing/folds",
+    "negative space is designed"
+  ],
+  "sources": [
+    {
+      "url": "https://www.britishmuseum.org/collection/object/A_1919-0101-0-230-2",
+      "type": "museum",
+      "supports": "historic layered, folded, cut, painted and pasted paper construction"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.0.0"
+}

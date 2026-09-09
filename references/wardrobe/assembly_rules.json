@@ -1,0 +1,22 @@
+{
+  "id": "wardrobe-assembly-v3",
+  "migration_origin": "Curated from V2.1 outfit ontology and Image Library outfit systems.",
+  "layers": [
+    "base garment",
+    "primary silhouette",
+    "outer layer",
+    "waist/closure",
+    "sleeve logic",
+    "hem/train",
+    "footwear",
+    "jewelry/accessories",
+    "carried props"
+  ],
+  "rules": [
+    "Describe construction and layering before decorative adjectives.",
+    "Keep garment shaping separate from anatomy changes.",
+    "When history is active, era/role/occasion compatibility outranks generic fashion defaults.",
+    "When an outfit reference is active, preserve its silhouette/material logic but do not import the reference person's face or body.",
+    "Limit handheld props so each hand has a physically traceable job."
+  ]
+}

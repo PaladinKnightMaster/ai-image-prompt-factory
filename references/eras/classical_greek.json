@@ -1,0 +1,132 @@
+{
+  "id": "classical_greek",
+  "name": "Classical Greek",
+  "pack_type": "historical_era",
+  "period": "ca. 480–323 BCE",
+  "region": "Greek world; narrow polis/region when strict",
+  "summary": "Classical visual culture favors balanced human form, controlled movement and idealized naturalism, but actual Greek sculpture could be painted and should not default to “pure white timeless marble.”",
+  "social_roles": [
+    {
+      "text": "citizen/athlete/warrior depending on context",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "mythic hero as artistic subject",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "sanctuary/votive context",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "athletic or civic context",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "draped garments such as chiton/himation in appropriate contexts; armor for warriors",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [],
+  "hairstyle_headwear": [],
+  "makeup_grooming": [],
+  "jewelry": [
+    {
+      "text": "restrained role-specific metal jewelry",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "architecture": [
+    {
+      "text": "stone temple/stoa/agora vocabulary must be site and date aware",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [],
+  "food_drink_tableware": [],
+  "musical_instruments": [],
+  "weapons_tools": [
+    {
+      "text": "spear, shield, sword for appropriate martial context",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [],
+  "writing_calligraphy": [
+    {
+      "text": "Greek inscriptions only when verified; avoid pseudo-Greek decorative text",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [],
+  "lighting_technology": [],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "marble and bronze sculpture",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "contrapposto and balanced weight shift in free-standing figures",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "polychromy may be appropriate to sculpture",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Roman imperial cuirass portrait conventions labeled Classical Greek",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    },
+    {
+      "text": "pure-white marble asserted as original universal appearance",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "living": "Create a living adult figure with Classical balance and material culture, not a marble statue unless the requested art method is sculpture.",
+    "sculpture": "Use a coherent load-bearing stance, intentional contrapposto when appropriate, carved/cast surface logic and restrained evidence-aware color state."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/toah/hd/gods/hd_gods.htm",
+      "type": "museum",
+      "supports": "Greek visual culture background"
+    },
+    {
+      "url": "https://www.metmuseum.org/perspectives/articles/2022/7/chroma-ancient-sculpture-in-color",
+      "type": "museum",
+      "supports": "ancient sculpture polychromy"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should narrow city/region, date, civic/mythic role and archaeological/artwork evidence family.",
+  "version": "1.1.0",
+  "evidence_claims": [
+    "greek-marble-polychromy-001",
+    "greek-bronze-lostwax-001",
+    "greek-bronze-survival-001"
+  ]
+}

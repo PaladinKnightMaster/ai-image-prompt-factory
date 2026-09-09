@@ -1,0 +1,167 @@
+{
+  "id": "qing",
+  "name": "Qing dynasty",
+  "pack_type": "historical_era",
+  "period": "1644–1911 CE",
+  "region": "China under Qing rule; Manchu/Han and regional/status distinctions matter",
+  "summary": "Court dress and visual culture are highly regulated in elite contexts; rank, gender, ethnicity, century and occasion materially change correct clothing.",
+  "social_roles": [
+    {
+      "text": "imperial court elite",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "official",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "urban civilian",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "formal audience/rite",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "festival/banquet",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "informal domestic setting",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "chaofu and festival robes for appropriate formal court ranks",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "narrow sleeves and horse-hoof cuffs in formal Manchu-derived court dress",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [
+    {
+      "text": "silk satin, brocade, kesi tapestry and metallic-thread embroidery",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    }
+  ],
+  "hairstyle_headwear": [
+    {
+      "text": "hair/headwear must be sex, ethnicity, rank and century specific; never infer a queue merely from “Chinese”",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [],
+  "jewelry": [
+    {
+      "text": "rank/occasion-specific court accessories",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "architecture": [
+    {
+      "text": "palace/courtyard or urban settings by role",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [
+    {
+      "text": "screens, hardwood furniture, court furnishings as role-appropriate",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "food_drink_tableware": [
+    {
+      "text": "porcelain, lacquer and metal service objects",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "musical_instruments": [],
+  "weapons_tools": [],
+  "transportation": [],
+  "writing_calligraphy": [
+    {
+      "text": "Chinese and Manchu written contexts exist; visible text must be verified",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [
+    {
+      "text": "formal court robe iconography/rank is regulated and should not be assigned casually",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    }
+  ],
+  "lighting_technology": [
+    {
+      "text": "lamps, candles, lanterns; late-period scenes may require more specific research",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "court painting and portraiture",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "porcelain/enamel/lacquer/textiles",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "imperial five-clawed dragon symbols on an ordinary subject",
+      "compatibility": "incompatible",
+      "confidence": "high",
+      "note": "Reserved/regulated iconography in court contexts."
+    },
+    {
+      "text": "Ming hairstyle copied into strict Qing court portrait",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "court": "Treat rank markers as evidence-bearing choices, not decorative fantasy. If rank is unspecified, use non-imperial styling rather than borrowing imperial symbols."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/68295",
+      "type": "museum",
+      "supports": "chaofu form, Manchu adaptations and 1759 regulation"
+    },
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/69066",
+      "type": "museum",
+      "supports": "festival robe and reserved imperial symbols"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict court reconstruction requires date/reign, rank, gender, Manchu/Han context and occasion.",
+  "version": "1.0.0"
+}

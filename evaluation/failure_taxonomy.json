@@ -1,0 +1,78 @@
+{
+  "id": "failure-taxonomy-v3",
+  "classes": {
+    "wrong_route": {
+      "revision_strategy": "Reclassify the task and recompile; preserve explicit user locks."
+    },
+    "lost_parameter_lock": {
+      "revision_strategy": "Restate only the missing lock near the top and preservation section."
+    },
+    "identity_drift": {
+      "revision_strategy": "Strengthen identity role/mode; remove style language that implicitly redesigns the face."
+    },
+    "reference_role_leakage": {
+      "revision_strategy": "Explicitly forbid imported attributes outside each reference role."
+    },
+    "historical_anachronism": {
+      "revision_strategy": "Replace only the offending element with a compatible alternative or relabel the result as an intentional hybrid."
+    },
+    "mixed_culture": {
+      "revision_strategy": "Select one primary cultural system and keep any cross-cultural element explicit and localized."
+    },
+    "art_method_failure": {
+      "revision_strategy": "Add fabrication/mark-making/edge behavior; remove generic style adjectives."
+    },
+    "material_failure": {
+      "revision_strategy": "Specify physical surface/light/fracture/patina/glaze/thread behavior tied to the material."
+    },
+    "pose_mechanics_failure": {
+      "revision_strategy": "Simplify limb assignments and restate support/weight/hand contact."
+    },
+    "lighting_conflict": {
+      "revision_strategy": "Choose one motivated key source and subordinate fills/effects."
+    },
+    "composition_failure": {
+      "revision_strategy": "Preserve subject/style; restate spatial layers, camera position and negative space."
+    },
+    "over_constrained_prompt": {
+      "revision_strategy": "Delete low-signal duplicate constraints and keep only causal visual anchors."
+    },
+    "under_constrained_prompt": {
+      "revision_strategy": "Add missing subject/composition/material/context anchors."
+    },
+    "image_model_limitation": {
+      "revision_strategy": "Reduce complexity, split into stages, or use edit iterations instead of adding prose."
+    },
+    "artifact_form_failure": {
+      "revision_strategy": "Restate object geometry and medium-specific structural constraints without changing unrelated style."
+    },
+    "artifact_state_failure": {
+      "revision_strategy": "Change only age/conservation/damage cues so the surface matches the requested lifecycle state."
+    },
+    "hand_prop_interaction_failure": {
+      "revision_strategy": "Restate which hand contacts which object and how weight/contact forces work; simplify if needed."
+    },
+    "unsupported_historical_certainty": {
+      "revision_strategy": "Downgrade wording to plausible/interpretive/unknown or replace with stronger evidence; do not call it authentic."
+    },
+    "survival_bias_confusion": {
+      "revision_strategy": "Separate reconstructed in-period appearance from surviving, excavated, weathered, or conserved appearance."
+    },
+    "evidence_retrieval_failure": {
+      "revision_strategy": "Repair routing/indexing so the relevant claim set is loaded before changing prompt prose."
+    },
+    "source_conflict": {
+      "revision_strategy": "Preserve competing interpretations and choose a bounded visual option explicitly; do not silently merge them."
+    },
+    "weak_evidence_promoted_to_canonical": {
+      "revision_strategy": "Restore the claim’s actual confidence/compatibility label and qualify the compiled wording."
+    },
+    "gallery_metadata_failure": {
+      "revision_strategy": "Repair case/asset provenance metadata before publishing; do not infer missing license rights."
+    },
+    "regression_baseline_drift": {
+      "revision_strategy": "Inspect semantic/evidence/prompt diffs and accept a new baseline only after the behavior change is intentional and reviewed."
+    }
+  },
+  "version": "3.1.0"
+}

@@ -1,0 +1,67 @@
+{
+  "id": "carved_stone_relief",
+  "name": "Carved stone relief",
+  "family": "sculpture",
+  "material": "limestone, marble, sandstone or other carveable stone on a retained backing plane",
+  "fabrication_process": [
+    "lay out design on slab",
+    "block major depth levels",
+    "carve contours and overlapping planes",
+    "refine selective details",
+    "finish or pigment as context requires"
+  ],
+  "visible_production_marks": [
+    "tool facets in background/recesses",
+    "depth steps and compressed overlap",
+    "occasional drilling/undercutting where supported"
+  ],
+  "edge_behavior": "Contour edges remain tied to a backing plane; silhouettes do not become fully free-standing except in very high relief.",
+  "mark_making": [
+    "tool facets in background/recesses",
+    "depth steps and compressed overlap",
+    "occasional drilling/undercutting where supported"
+  ],
+  "color_behavior": "Stone color/pigment depends on material/period; depth is communicated by relief and directional light more than painterly gradients.",
+  "surface_behavior": "Backing plane, carved recesses, worn protrusions and deposits share continuous stone behavior.",
+  "composition_behavior": "Favor profile/three-quarter narrative overlap, readable depth hierarchy and raking light that reveals carving.",
+  "structural_limitations": [
+    "no detached floating limbs",
+    "no fully round statue masquerading as relief",
+    "depth cannot ignore backing plane"
+  ],
+  "aging_weathering": [
+    "high points wear first",
+    "edges soften",
+    "cracks/losses cross relief and backing material coherently"
+  ],
+  "artifact_compatibility": [
+    "relief",
+    "funerary_stele",
+    "architectural_frieze",
+    "tile"
+  ],
+  "prompt_fragments": {
+    "core": "Compress the scene into a carved depth hierarchy attached to a stone backing plane; use raking light to reveal chisel facets, raised contours and worn high points."
+  },
+  "typical_generation_failures": [
+    "looks like a grayscale photograph embossed by a filter",
+    "figures detach from slab",
+    "painted shadows replace carved depth",
+    "uniform random stone noise"
+  ],
+  "evaluation_criteria": [
+    "backing plane is unmistakable",
+    "depth hierarchy readable",
+    "tool/wear follows relief geometry",
+    "light reveals physical carving rather than fake bump map"
+  ],
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/322374",
+      "type": "museum",
+      "supports": "limestone relief, carved modeled details, pigment traces, wear/damage behavior"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.0.0"
+}

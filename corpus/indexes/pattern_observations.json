@@ -1,0 +1,238 @@
+{
+  "schema_version": "1.0",
+  "observations": {
+    "pose-explicit-weight-distribution": [
+      "LCC-P0010"
+    ],
+    "pose-one-knee-active-sit": [
+      "APC-P0008"
+    ],
+    "pose-over-shoulder-turn": [
+      "APC-P0010",
+      "GAC-P0010",
+      "GAC-P0011",
+      "GAC-P0022",
+      "LCC-P0009",
+      "LCC-P0022",
+      "LCC-P0043",
+      "LCC-P0046",
+      "LAC-P0006"
+    ],
+    "pose-forward-lean-support": [
+      "GAC-P0002",
+      "GAC-P0005",
+      "LCC-P0032",
+      "LAC-P0003",
+      "LAC-P0005",
+      "LAC-P0007",
+      "LAC-P0008",
+      "LAC-P0034",
+      "LAC-P0037"
+    ],
+    "interaction-hand-hair": [
+      "LCC-P0074",
+      "LAC-P0009",
+      "LAC-P0016"
+    ],
+    "composition-layered-depth": [
+      "APC-P0002",
+      "APC-P0003",
+      "APC-P0004",
+      "APC-P0005",
+      "APC-P0015",
+      "FSC-P0001",
+      "FSC-P0002",
+      "FSC-P0003",
+      "FSC-P0004",
+      "FSC-P0005",
+      "FSC-P0006",
+      "FSC-P0009"
+    ],
+    "composition-negative-space": [
+      "APC-P0002",
+      "APC-P0003",
+      "APC-P0004",
+      "APC-P0005",
+      "APC-P0006",
+      "GAC-P0006",
+      "GAC-P0007",
+      "LCC-P0016",
+      "LCC-P0017",
+      "LCC-P0039",
+      "LCC-P0042",
+      "LCC-P0047"
+    ],
+    "composition-asymmetric-editorial": [
+      "APC-P0002",
+      "APC-P0003",
+      "APC-P0004",
+      "APC-P0005",
+      "FSC-P0006",
+      "FSC-P0007",
+      "LCC-P0038",
+      "LCC-P0046",
+      "LCC-P0047",
+      "LCC-P0076",
+      "LAC-P0033"
+    ],
+    "lighting-window-side": [
+      "APC-P0006",
+      "APC-P0017",
+      "LCC-P0002",
+      "LCC-P0003",
+      "LCC-P0007",
+      "LCC-P0008",
+      "LCC-P0009",
+      "LCC-P0010",
+      "LCC-P0029",
+      "LCC-P0031",
+      "LCC-P0036",
+      "LCC-P0040"
+    ],
+    "lighting-soft-directional": [
+      "APC-P0005"
+    ],
+    "material-satin-fold-response": [
+      "APC-P0006",
+      "FSC-P0006",
+      "FSC-P0012",
+      "FSC-P0013",
+      "GAC-P0001",
+      "GAC-P0002",
+      "LCC-P0002",
+      "LCC-P0003",
+      "LCC-P0004",
+      "LCC-P0008",
+      "LCC-P0024",
+      "LCC-P0025"
+    ],
+    "material-marble-carving-weathering": [
+      "FSC-P0013",
+      "GAC-P0003",
+      "GAC-P0025",
+      "LAC-P0029",
+      "LAC-P0032",
+      "LAC-P0034"
+    ],
+    "material-watercolor-edge-behavior": [
+      "LCC-P0016",
+      "LCC-P0017",
+      "LCC-P0027",
+      "LCC-P0028",
+      "LCC-P0042",
+      "LCC-P0043",
+      "LCC-P0044",
+      "LCC-P0045",
+      "LCC-P0046",
+      "LCC-P0047",
+      "LCC-P0054",
+      "LCC-P0055"
+    ],
+    "material-porcelain-glaze-underglaze": [
+      "FSC-P0008",
+      "GAC-P0008",
+      "GAC-P0009",
+      "GAC-P0010",
+      "GAC-P0011",
+      "GAC-P0012",
+      "GAC-P0013",
+      "GAC-P0014",
+      "GAC-P0015",
+      "GAC-P0016",
+      "GAC-P0017",
+      "GAC-P0019"
+    ],
+    "narrative-micro-action": [
+      "APC-P0002",
+      "APC-P0006",
+      "APC-P0010",
+      "GAC-P0001",
+      "GAC-P0002",
+      "GAC-P0005",
+      "GAC-P0006",
+      "LCC-P0002",
+      "LCC-P0005",
+      "LCC-P0006",
+      "LCC-P0020",
+      "LCC-P0032"
+    ],
+    "interaction-explicit-prop": [
+      "APC-P0002",
+      "APC-P0005",
+      "APC-P0006",
+      "APC-P0007",
+      "APC-P0008",
+      "APC-P0015",
+      "APC-P0016",
+      "FSC-P0008",
+      "FSC-P0011",
+      "GAC-P0002",
+      "GAC-P0004",
+      "GAC-P0008"
+    ],
+    "story-environmental-detail": [
+      "APC-P0002",
+      "APC-P0003",
+      "APC-P0004",
+      "APC-P0005",
+      "APC-P0006",
+      "FSC-P0008",
+      "GAC-P0001",
+      "LCC-P0003",
+      "LCC-P0005",
+      "LCC-P0008",
+      "LCC-P0010",
+      "LCC-P0014"
+    ],
+    "prompt-structure-then-emotion": [
+      "APC-P0001",
+      "APC-P0002",
+      "APC-P0003",
+      "APC-P0004",
+      "APC-P0005",
+      "APC-P0006",
+      "FSC-P0002",
+      "FSC-P0003",
+      "FSC-P0004",
+      "FSC-P0005",
+      "FSC-P0016",
+      "GAC-P0007"
+    ],
+    "prompt-targeted-constraints": [
+      "APC-P0002",
+      "APC-P0003",
+      "APC-P0005",
+      "APC-P0006",
+      "FSC-P0001",
+      "FSC-P0002",
+      "FSC-P0004",
+      "FSC-P0005",
+      "FSC-P0007",
+      "GAC-P0002",
+      "GAC-P0006",
+      "GAC-P0007"
+    ],
+    "prompt-medium-anchor": [
+      "FSC-P0006",
+      "FSC-P0008",
+      "GAC-P0008",
+      "GAC-P0009",
+      "GAC-P0010",
+      "GAC-P0011",
+      "GAC-P0012",
+      "GAC-P0013",
+      "GAC-P0014",
+      "GAC-P0015",
+      "GAC-P0016",
+      "GAC-P0017"
+    ],
+    "reference-role-explicit": [
+      "FSC-P0001",
+      "FSC-P0003",
+      "FSC-P0007",
+      "FSC-P0010",
+      "LCC-P0025",
+      "LCC-P0026"
+    ]
+  }
+}

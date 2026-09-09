@@ -1,0 +1,76 @@
+{
+  "id": "marble_sculpture",
+  "name": "Marble sculpture",
+  "family": "sculpture",
+  "material": "carved stone, typically marble; crystalline/translucent behavior depends on stone and finish",
+  "fabrication_process": [
+    "select a stone block",
+    "rough out mass",
+    "progressively carve forms and undercuts",
+    "refine with abrasives/polishing where appropriate",
+    "optionally apply historically supported pigment/gilding"
+  ],
+  "visible_production_marks": [
+    "chisel/rasp traces may survive in unfinished or recessed zones",
+    "polished high points contrast with tooth/abrasion texture",
+    "small chips follow brittle stone fracture"
+  ],
+  "edge_behavior": "Edges range from crisp carved ridges to softened polished transitions; thin unsupported projections are risky and often require supports.",
+  "mark_making": [
+    "chisel/rasp traces may survive in unfinished or recessed zones",
+    "polished high points contrast with tooth/abrasion texture",
+    "small chips follow brittle stone fracture"
+  ],
+  "color_behavior": "Base stone is not automatically pure white; ancient polychromy is possible and must be chosen by era/state rather than erased by a “white marble” stereotype.",
+  "surface_behavior": "Crystalline stone, subtle subsurface light at thin edges, matte-to-polished variation; never waxy skin.",
+  "composition_behavior": "Design around gravity, support points, stone block continuity and 360-degree silhouette for statues; busts need intentional truncation/support.",
+  "structural_limitations": [
+    "no impossible floating strands or paper-thin unsupported fingers",
+    "deep undercuts limited by fracture risk",
+    "surface detail must remain carved into stone rather than painted photoreal skin"
+  ],
+  "aging_weathering": [
+    "aged marble may show softened edges, mineral staining, small chips, weathering or loss",
+    "museum-conserved state should be cleaner/stabilized and not uniformly dirty"
+  ],
+  "artifact_compatibility": [
+    "bust",
+    "free_standing_statue",
+    "relief",
+    "funerary_stele",
+    "architectural_frieze"
+  ],
+  "prompt_fragments": {
+    "core": "Translate flesh, hair and cloth into carved stone masses: readable planar transitions, intentional chisel-to-polish hierarchy, weight-bearing support and stone-continuous details.",
+    "artifact": "Make the object visibly fabricated from one or joined stone masses; define base, truncation or backing plane rather than leaving a floating human-shaped render."
+  },
+  "typical_generation_failures": [
+    "living skin patches",
+    "plastic/resin gloss",
+    "floating hair strands",
+    "uniform white without stone texture",
+    "random cracks painted on top",
+    "statue standing without load-bearing support"
+  ],
+  "evaluation_criteria": [
+    "reads as stone before it reads as a filtered person",
+    "support and mass are physically plausible",
+    "tool/finish hierarchy visible",
+    "state-specific weathering follows stone behavior",
+    "period color treatment is intentional"
+  ],
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/perspectives/articles/2022/7/chroma-ancient-sculpture-in-color",
+      "type": "museum",
+      "supports": "ancient sculpture polychromy"
+    },
+    {
+      "url": "https://resources.metmuseum.org/resources/metpublications/pdf/Greek_Art_From_Prehistoric_to_Classical.pdf",
+      "type": "museum publication",
+      "supports": "Greek marble quarrying, picks/chisels/drills, polishing and painted surfaces"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.1.0"
+}

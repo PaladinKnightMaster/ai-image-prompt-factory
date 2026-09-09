@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "material",
+    "fabrication_process",
+    "visible_production_marks",
+    "edge_behavior",
+    "color_behavior",
+    "surface_behavior",
+    "composition_behavior",
+    "structural_limitations",
+    "aging_weathering",
+    "artifact_compatibility",
+    "prompt_fragments",
+    "typical_generation_failures",
+    "evaluation_criteria"
+  ]
+}

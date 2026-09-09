@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "pack_type",
+    "period",
+    "region",
+    "incompatible_or_anachronistic",
+    "prompt_fragments",
+    "sources"
+  ]
+}

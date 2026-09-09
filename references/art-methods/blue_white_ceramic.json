@@ -1,0 +1,71 @@
+{
+  "id": "blue_white_ceramic",
+  "name": "Blue-and-white ceramic / porcelain decoration",
+  "family": "ceramic_decoration",
+  "material": "ceramic body decorated with cobalt pigment, generally under a transparent glaze; body/firing technology varies by culture and period",
+  "fabrication_process": [
+    "form vessel/object first",
+    "paint cobalt decoration on prepared body",
+    "apply transparent glaze",
+    "fire so decoration and glaze become materially integrated"
+  ],
+  "visible_production_marks": [
+    "brush-loaded cobalt lines vary in width/density",
+    "bleeding or pooling can occur through body/glaze interaction",
+    "motifs stretch with curved surface"
+  ],
+  "edge_behavior": "Painted edges are brush-made and slightly integrated into glaze/body; decoration must wrap geometry rather than float as a 2D decal.",
+  "mark_making": [
+    "brush-loaded cobalt lines vary in width/density",
+    "bleeding or pooling can occur through body/glaze interaction",
+    "motifs stretch with curved surface"
+  ],
+  "color_behavior": "Restricted blue/white logic with cobalt density variation; firing may shift intensity; reserve white is active negative space.",
+  "surface_behavior": "Glazed ceramic has hard specular highlights over painted underglaze; foot/rim may reveal body and firing evidence.",
+  "composition_behavior": "Design motifs around object zones—rim, neck, shoulder, belly, foot, well—and use rotational/radial balance appropriate to form.",
+  "structural_limitations": [
+    "cannot ignore vessel curvature",
+    "do not render decoration above glaze like vinyl stickers",
+    "not every blue-and-white tradition equals Ming Jingdezhen"
+  ],
+  "aging_weathering": [
+    "chips expose ceramic body",
+    "glaze crazing/staining only when state supports it",
+    "kiln/firing imperfections may be subtle",
+    "museum conservation is restrained"
+  ],
+  "artifact_compatibility": [
+    "bowl",
+    "plate",
+    "vase",
+    "jar",
+    "tile",
+    "figurine"
+  ],
+  "prompt_fragments": {
+    "core": "Treat the image as cobalt brush decoration fused beneath a transparent glaze: blue density varies with brush load, motifs follow the ceramic curvature, glaze reflections sit above the painting, and object zones structure the composition."
+  },
+  "typical_generation_failures": [
+    "photo printed as blue decal",
+    "blue paint floats above glaze",
+    "flat poster shaped like a vase",
+    "Ming motifs automatically imported into Edo case",
+    "plastic 3D gloss",
+    "no foot/rim/form logic"
+  ],
+  "evaluation_criteria": [
+    "decoration wraps the object",
+    "cobalt has brush/firing character",
+    "glaze and ceramic body remain distinct layers",
+    "cultural motif family matches requested context"
+  ],
+  "sources": [
+    {
+      "url": "https://www.vam.ac.uk/articles/chinese-blue-and-white-ceramics",
+      "type": "museum",
+      "supports": "cobalt-blue pigment on white body, brush application under transparent glaze, Jingdezhen history"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.1.0"
+}

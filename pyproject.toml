@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-image-prompt-factory"
+version = "3.2.0"
+description = "Agentic prompt compiler and visual-direction skill for GPT Image 2"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "AI Image Prompt Factory contributors"}]
+dependencies = [
+    "jsonschema>=4.20",
+    "python-dotenv>=1.0"
+]
+
+[project.optional-dependencies]
+api = ["openai>=2.0"]
+dev = ["pytest>=8.0"]
+gallery = ["Pillow>=10.0"]
+
+[project.scripts]
+aipf = "aipf.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "--basetemp=.pytest_tmp"

@@ -1,0 +1,70 @@
+{
+  "id": "core-hair-v3",
+  "migration_origin": "Curated taxonomy from V2.1 and Image Library hairstyle catalogs; no long prompts migrated.",
+  "families": [
+    {
+      "id": "straight_long",
+      "controls": [
+        "length",
+        "part/bangs",
+        "density",
+        "surface shine",
+        "movement"
+      ]
+    },
+    {
+      "id": "soft_waves",
+      "controls": [
+        "wave scale",
+        "volume",
+        "part/bangs",
+        "humidity/motion"
+      ]
+    },
+    {
+      "id": "bob",
+      "controls": [
+        "jaw/neck length",
+        "A-line vs blunt",
+        "part/bangs",
+        "inward/outward edge"
+      ]
+    },
+    {
+      "id": "high_ponytail",
+      "controls": [
+        "anchor height",
+        "tension",
+        "face-framing strands",
+        "motion"
+      ]
+    },
+    {
+      "id": "low_ponytail",
+      "controls": [
+        "nape anchor",
+        "sleek vs loose",
+        "face-framing strands"
+      ]
+    },
+    {
+      "id": "braid",
+      "controls": [
+        "braid family",
+        "placement",
+        "tightness",
+        "ornament"
+      ]
+    },
+    {
+      "id": "updo",
+      "controls": [
+        "historical vs modern construction",
+        "height",
+        "pins/ornaments",
+        "loose strands"
+      ]
+    }
+  ],
+  "rule": "Historical hairstyle must be resolved from the era pack before modern hairstyle defaults. A hairstyle reference imports arrangement only, not identity."
+}

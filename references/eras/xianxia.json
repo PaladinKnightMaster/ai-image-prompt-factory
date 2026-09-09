@@ -1,0 +1,82 @@
+{
+  "id": "xianxia",
+  "name": "Xianxia",
+  "pack_type": "fantasy_overlay",
+  "period": "Not historical; fantasy cultivation genre",
+  "region": "Chinese-inspired fictional cosmologies; must be labeled fantasy",
+  "summary": "Supernatural cultivation/fantasy overlay that may borrow historical visual anchors while explicitly departing from history.",
+  "social_roles": [
+    {
+      "text": "cultivator / immortal hero",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    },
+    {
+      "text": "sect disciple/master",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "sect gate / mountain-cloud encounter",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    },
+    {
+      "text": "ritual or duel with supernatural elements",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [],
+  "textiles_materials": [],
+  "hairstyle_headwear": [],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [],
+  "interior_furniture": [],
+  "food_drink_tableware": [],
+  "musical_instruments": [],
+  "weapons_tools": [
+    {
+      "text": "flying sword / talisman / spiritual artifact",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [
+    {
+      "text": "supernatural movement or flying artifacts",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "writing_calligraphy": [],
+  "ritual_custom": [],
+  "lighting_technology": [],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "mist, spiritual light and impossible environments are fantasy signifiers, not history",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "claiming supernatural xianxia elements are historically attested",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "overlay": "Keep the base culture visually coherent, then make supernatural departures explicit: spiritual light should interact with surfaces, magical objects should have readable spatial logic, and fantasy should not erase clothing/material construction."
+  },
+  "sources": [],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Do not score xianxia fantasy elements as historical inaccuracies when the requested strictness is fantasy_hybrid.",
+  "version": "1.0.0"
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.2/benchmark.schema.json",
+  "type": "object",
+  "required": [
+    "benchmark_id",
+    "version",
+    "category",
+    "request",
+    "status",
+    "generation"
+  ],
+  "properties": {
+    "benchmark_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "request": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "golden",
+        "rejected"
+      ]
+    },
+    "semantic_spec_path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "related_experiments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "generation": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not_generated",
+            "generated",
+            "reviewed"
+          ]
+        },
+        "output_image": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "provider": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "human_approved": {
+      "type": "boolean"
+    }
+  }
+}

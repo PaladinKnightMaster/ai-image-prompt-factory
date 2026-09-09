@@ -1,0 +1,95 @@
+{
+  "version": "3.1",
+  "id": "07-edo-ukiyoe-transform",
+  "title": "Edo ukiyo-e transformation",
+  "status": "spec_only",
+  "request": "Turn this portrait into an Edo-period ukiyo-e woodblock print while preserving my recognizable face.",
+  "route": "reference_transform",
+  "locks": {
+    "adult_subject": true,
+    "primary_subject": "same adult subject across transformations",
+    "do_not_silently_add_rank_or_sacred_status": true
+  },
+  "references": [
+    {
+      "id": "ref-identity-01",
+      "roles": [
+        "identity"
+      ],
+      "notes": "Example placeholder identity reference; replace with actual asset ID/path."
+    }
+  ],
+  "identity": {
+    "mode": "recognizable_identity",
+    "locked_features": [
+      "recognizable facial structure"
+    ]
+  },
+  "body_transformation": {
+    "mode": "artistic_stylization",
+    "anatomy_change": "none unless explicitly stated in request",
+    "pose_change": "allowed as director choice",
+    "camera_presentation": "allowed",
+    "garment_shaping": "allowed when route requires it",
+    "artistic_stylization": "only when selected by body mode/art method"
+  },
+  "historical": {
+    "strictness": "historically_informed",
+    "packs": [
+      "edo"
+    ],
+    "subperiod": "late 18th-century full-color print-inspired",
+    "region": "Edo",
+    "role": "urban adult portrait subject",
+    "occasion": "beauty/fashion print-inspired portrait without assigning courtesan status",
+    "intentional_hybrids": [
+      "modern sitter identity in Edo print grammar"
+    ]
+  },
+  "art": {
+    "method": "japanese_woodblock_print",
+    "artifact_form": "album_leaf",
+    "artifact_state": "newly_created",
+    "variant": "polychrome nishiki-e-inspired production logic"
+  },
+  "requested_elements": [],
+  "director": {
+    "moment": "fresh impression pulled from the blocks",
+    "action": "three-quarter bust with one hand adjusting an outer sleeve",
+    "gaze": "quiet direct gaze",
+    "body_weight": "implied through shoulder angle rather than photoreal pose depth",
+    "hand_logic": "single visible hand with simplified carved contour",
+    "foreground": "none; page field kept clear",
+    "midground": "subject with patterned garment",
+    "background": "one flat architectural/seasonal motif zone",
+    "camera": "print composition, not lens simulation",
+    "light_source": "represented as graphic value/color, not cinematic spotlight",
+    "material_response": "mulberry-type paper, carved keyline, flat color blocks, selective bokashi",
+    "micro_story": "a contemporary identity translated into a plausible Edo commercial print object"
+  },
+  "output": {
+    "profile": "standard",
+    "aspect_ratio": "3:4",
+    "text_in_image": [],
+    "generation_requested": false
+  },
+  "case_record": {
+    "original_simple_request": "Turn this portrait into an Edo-period ukiyo-e woodblock print while preserving my recognizable face.",
+    "compiled_prompt": "compiled_prompt.md",
+    "output_image": null,
+    "evaluation": null,
+    "historical_audit": [],
+    "material_art_audit": [],
+    "revision_history": [],
+    "model_version": "gpt-image-2",
+    "skill_version": "3.1.0",
+    "evidence_snapshot": "evidence_snapshot.json",
+    "compatibility_audit": "compatibility_audit.json",
+    "compiler_version": "3.1.0",
+    "model_snapshot": "gpt-image-2-2026-04-21",
+    "source_versions": {
+      "evidence_registry": "1.0.0"
+    },
+    "regression_baseline": "regression/baselines/golden_baselines.json"
+  }
+}

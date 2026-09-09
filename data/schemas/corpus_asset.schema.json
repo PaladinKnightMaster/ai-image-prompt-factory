@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF V3.1 Corpus Asset",
+  "type": "object",
+  "required": [
+    "asset_id",
+    "sha256",
+    "relative_path",
+    "bytes",
+    "source_collection",
+    "license_status",
+    "redistribution_status"
+  ],
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "sha256": {
+      "type": "string"
+    },
+    "relative_path": {
+      "type": "string"
+    },
+    "bytes": {
+      "type": "integer"
+    },
+    "format": {
+      "type": "string"
+    },
+    "dimensions": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        }
+      }
+    },
+    "source_collection": {
+      "type": "string"
+    },
+    "associated_prompt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creator": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "license_status": {
+      "enum": [
+        "redistributable",
+        "metadata_only",
+        "private_reference",
+        "unknown_license",
+        "first_party",
+        "generated_by_project"
+      ]
+    },
+    "redistribution_status": {
+      "enum": [
+        "publishable",
+        "metadata_only",
+        "private_only"
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "promotion_status": {
+      "enum": [
+        "unreviewed",
+        "candidate",
+        "public",
+        "golden",
+        "regression",
+        "rejected"
+      ]
+    },
+    "source_document": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "association_level": {
+      "enum": [
+        "collection_level",
+        "exact_prompt",
+        "unknown"
+      ]
+    },
+    "source_archive": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,308 @@
+{
+  "prompt_records": 191,
+  "category_clause_counts": {
+    "other": 1883,
+    "color": 1327,
+    "identity": 716,
+    "constraint": 701,
+    "lighting": 660,
+    "emotion": 635,
+    "text_layout": 618,
+    "environment": 564,
+    "composition": 557,
+    "wardrobe": 483,
+    "camera": 406,
+    "material": 368,
+    "hair": 341,
+    "pose": 252,
+    "hand_logic": 219,
+    "makeup": 179,
+    "narrative": 78,
+    "fabric_physics": 51,
+    "artifact_form": 46,
+    "reference_role": 41,
+    "quality_low_signal": 35,
+    "body_mechanics": 10
+  },
+  "prompt_method_counts": {
+    "structure": 181,
+    "emotion": 138,
+    "medium": 131,
+    "design_system": 119,
+    "result": 113,
+    "constraint": 111,
+    "variable_template": 86,
+    "narrative": 27,
+    "reference": 20,
+    "process": 19
+  },
+  "prompts_with_quality_audit_findings": 144,
+  "sample_quality_findings": [
+    {
+      "prompt_id": "APC-P0001",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0002",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "technical_specificity_audit",
+          "severity": "info",
+          "message": "Technical specificity and low-signal terms coexist; verify that each camera/quality clause controls a visible outcome."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0003",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        },
+        {
+          "code": "technical_specificity_audit",
+          "severity": "info",
+          "message": "Technical specificity and low-signal terms coexist; verify that each camera/quality clause controls a visible outcome."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0004",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "technical_specificity_audit",
+          "severity": "info",
+          "message": "Technical specificity and low-signal terms coexist; verify that each camera/quality clause controls a visible outcome."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0005",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        },
+        {
+          "code": "technical_specificity_audit",
+          "severity": "info",
+          "message": "Technical specificity and low-signal terms coexist; verify that each camera/quality clause controls a visible outcome."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0006",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "technical_specificity_audit",
+          "severity": "info",
+          "message": "Technical specificity and low-signal terms coexist; verify that each camera/quality clause controls a visible outcome."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0007",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0008",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0009",
+      "issues": [
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0010",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0011",
+      "issues": [
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0012",
+      "issues": [
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0013",
+      "issues": [
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0014",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0015",
+      "issues": [
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0016",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        },
+        {
+          "code": "wardrobe_material_vague",
+          "severity": "info",
+          "message": "Wardrobe is present without a visible material cue."
+        }
+      ]
+    },
+    {
+      "prompt_id": "APC-P0017",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        }
+      ]
+    },
+    {
+      "prompt_id": "FSC-P0001",
+      "issues": [
+        {
+          "code": "constraint_density",
+          "severity": "warning",
+          "message": "Constraint density is high; prefer targeted likely failure modes."
+        }
+      ]
+    },
+    {
+      "prompt_id": "FSC-P0002",
+      "issues": [
+        {
+          "code": "constraint_density",
+          "severity": "warning",
+          "message": "Constraint density is high; prefer targeted likely failure modes."
+        }
+      ]
+    },
+    {
+      "prompt_id": "FSC-P0003",
+      "issues": [
+        {
+          "code": "pose_without_mechanics",
+          "severity": "info",
+          "message": "Pose is described without explicit support/weight mechanics."
+        }
+      ]
+    }
+  ],
+  "pattern_observation_types": 21
+}

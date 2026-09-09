@@ -1,0 +1,60 @@
+{
+  "id": "gongbi_painting",
+  "name": "Gongbi painting",
+  "family": "painting",
+  "material": "fine-line Chinese painting using controlled outlines and layered color on silk or prepared paper",
+  "fabrication_process": [
+    "draw precise fine contours",
+    "build flat/translucent color layers within forms",
+    "develop textile, face, flora and ornament detail with controlled brushwork",
+    "finish with restrained line/color integration"
+  ],
+  "visible_production_marks": [
+    "fine even contour lines",
+    "layered transparent-to-opaque color",
+    "minute pattern/detail without photographic pores"
+  ],
+  "edge_behavior": "Edges are deliberate and controlled; outlines separate forms more clearly than spontaneous ink-wash traditions.",
+  "mark_making": [
+    "fine even contour lines",
+    "layered transparent-to-opaque color",
+    "minute pattern/detail without photographic pores"
+  ],
+  "color_behavior": "Colors can be refined and layered with mineral/vegetal pigments depending on context; avoid generic neon saturation.",
+  "surface_behavior": "Smooth prepared silk/paper field with visible brush-built color rather than photographic surface gloss.",
+  "composition_behavior": "Favor ordered figure/flower/bird detail, clear silhouette, patterned textiles and elegant negative space.",
+  "structural_limitations": [
+    "not freehand xieyi splash painting",
+    "not photoreal airbrush",
+    "avoid mixing heavy oil impasto"
+  ],
+  "aging_weathering": [
+    "fading and silk/paper aging depend on artifact state",
+    "paint losses should follow support/paint-layer behavior"
+  ],
+  "artifact_compatibility": [
+    "scroll",
+    "album_leaf",
+    "folding_screen",
+    "book_page"
+  ],
+  "prompt_fragments": {
+    "core": "Use precise fine contour drawing and patient layered color: controlled garment folds, hair ornaments and facial planes, with crisp but organic brush edges on silk/paper."
+  },
+  "typical_generation_failures": [
+    "looks like anime cel shading",
+    "no visible brush/line hierarchy",
+    "hyperreal skin pores",
+    "random gold glitter",
+    "ink-wash looseness overwhelming fine-line structure"
+  ],
+  "evaluation_criteria": [
+    "fine-line contour discipline",
+    "layered color remains integrated with substrate",
+    "detail supports hierarchy rather than noise",
+    "faces remain painted, not photographic"
+  ],
+  "sources": [],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.0.0"
+}

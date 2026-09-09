@@ -1,0 +1,12 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 0,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [],
+  "claim_relationships": []
+}

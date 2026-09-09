@@ -1,0 +1,8 @@
+{
+  "id": "storyboard_or_grid",
+  "description": "Multi-panel narrative or pose/action board",
+  "loads": [
+    "layout"
+  ],
+  "logic": "Lock panel count, continuity, per-panel action and camera progression."
+}

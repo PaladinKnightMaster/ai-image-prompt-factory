@@ -1,0 +1,50 @@
+{
+  "id": "core-environments-v3",
+  "migration_origin": "Curated from V2.1 scene libraries and Image Library scene patterns.",
+  "scene_stack": [
+    "place",
+    "time/weather",
+    "foreground anchor",
+    "midground action zone",
+    "background context",
+    "motivated light source",
+    "atmosphere",
+    "micro-story evidence"
+  ],
+  "presets": [
+    {
+      "id": "museum_gallery",
+      "anchors": [
+        "neutral conservation-minded display",
+        "controlled spot/ambient light",
+        "labels/barriers used sparingly",
+        "visitor circulation"
+      ]
+    },
+    {
+      "id": "palace_courtyard_night",
+      "anchors": [
+        "architecture appropriate to era",
+        "practical lantern/flame sources",
+        "layered human scale",
+        "no fantasy glow unless requested"
+      ]
+    },
+    {
+      "id": "scholar_garden",
+      "anchors": [
+        "garden architecture",
+        "plants/rocks/water by region",
+        "writing/reading object logic"
+      ]
+    },
+    {
+      "id": "studio_clean",
+      "anchors": [
+        "seamless/background plane",
+        "single readable lighting scheme",
+        "negative space"
+      ]
+    }
+  ]
+}

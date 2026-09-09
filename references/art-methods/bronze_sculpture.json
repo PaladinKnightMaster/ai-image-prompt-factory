@@ -1,0 +1,74 @@
+{
+  "id": "bronze_sculpture",
+  "name": "Bronze sculpture",
+  "family": "sculpture",
+  "material": "copper-alloy casting, often hollow for larger works; surface may be chased, joined, polished, patinated, gilded or inlaid",
+  "fabrication_process": [
+    "model original form",
+    "create mold and wax model for lost-wax workflow",
+    "establish core and casting channels for hollow work",
+    "cast metal",
+    "remove channels and join sections",
+    "chase/file/polish surface",
+    "apply or develop patina as appropriate"
+  ],
+  "visible_production_marks": [
+    "casting seams or repaired joins may be subtly visible",
+    "chasing/file marks in close view",
+    "thin edges remain metallic, not stone-like"
+  ],
+  "edge_behavior": "Cast edges can be crisp but transition through modeled volumes; thin projections require casting/support logic rather than carved-stone mass.",
+  "mark_making": [
+    "casting seams or repaired joins may be subtly visible",
+    "chasing/file marks in close view",
+    "thin edges remain metallic, not stone-like"
+  ],
+  "color_behavior": "Metallic base color varies with alloy and patina; highlights are specular and directional, not uniform orange “bronze paint.”",
+  "surface_behavior": "Metal reflects environment; aged patina may be brown/black/green in varied layers, with rubbed high points and localized corrosion.",
+  "composition_behavior": "Use hollow-cast object logic, stable center of mass, deliberate base or bust support, and joined-element plausibility.",
+  "structural_limitations": [
+    "avoid marble fracture logic",
+    "avoid transparent skin",
+    "avoid random neon-green patina",
+    "large thin unsupported metal sheets need structural logic"
+  ],
+  "aging_weathering": [
+    "fresh: warm metallic surface with finishing variation",
+    "aged: layered oxidation/patina, rubbed edges, localized corrosion",
+    "excavated: mineral accretions may be uneven",
+    "museum-conserved: stabilized patina, controlled sheen"
+  ],
+  "artifact_compatibility": [
+    "bust",
+    "free_standing_statue",
+    "relief",
+    "architectural_frieze"
+  ],
+  "prompt_fragments": {
+    "core": "Render a cast copper-alloy object with true metallic reflection, chased surface detail, plausible joins and state-specific patina; model hair/cloth as cast masses, not living strands.",
+    "portrait": "For a bust, use intentional shoulder/chest termination and a stable mount; let fine chasing define hair and pupils rather than photoreal pores."
+  },
+  "typical_generation_failures": [
+    "orange plastic surface",
+    "stone-like diffuse shading",
+    "uniform green corrosion",
+    "living eyes/skin inside metal",
+    "missing mount",
+    "impossible casting seams"
+  ],
+  "evaluation_criteria": [
+    "metal response changes with light/view angle",
+    "patina is layered/local rather than flat color",
+    "casting/join/support logic is plausible",
+    "represented subject is fully translated into metal"
+  ],
+  "sources": [
+    {
+      "url": "https://www.getty.edu/publications/bronze-guidelines/visual-atlas/013/",
+      "type": "museum/conservation",
+      "supports": "technical examination and fabrication features of bronze sculpture"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.1.0"
+}

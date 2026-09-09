@@ -1,0 +1,10 @@
+{
+  "id": "identity-modes-v3",
+  "modes": {
+    "strict_identity": "Preserve the reference person's recognizable identity as the highest visual lock; avoid voluntary face redesign.",
+    "recognizable_identity": "Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.",
+    "identity_inspired": "Retain selected distinctive cues without requiring a faithful likeness.",
+    "identity_unlocked": "No identity preservation requirement."
+  },
+  "default": "recognizable_identity"
+}

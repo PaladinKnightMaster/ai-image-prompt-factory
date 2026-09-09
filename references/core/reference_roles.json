@@ -1,0 +1,123 @@
+{
+  "id": "reference-roles-v3",
+  "roles": {
+    "identity": {
+      "imports": [
+        "face identity",
+        "distinctive stable features",
+        "age presentation when explicit"
+      ],
+      "must_not_import": [
+        "outfit",
+        "pose",
+        "environment",
+        "layout",
+        "style unless also assigned"
+      ]
+    },
+    "pose": {
+      "imports": [
+        "body orientation",
+        "limb arrangement",
+        "weight distribution",
+        "gesture"
+      ],
+      "must_not_import": [
+        "identity",
+        "body shape",
+        "outfit"
+      ]
+    },
+    "outfit": {
+      "imports": [
+        "garment silhouette",
+        "construction",
+        "layering",
+        "material cues",
+        "ornament"
+      ],
+      "must_not_import": [
+        "identity",
+        "body anatomy",
+        "pose"
+      ]
+    },
+    "hairstyle": {
+      "imports": [
+        "hair arrangement",
+        "parting",
+        "length logic",
+        "ornament placement"
+      ],
+      "must_not_import": [
+        "identity",
+        "face geometry",
+        "outfit"
+      ]
+    },
+    "artifact": {
+      "imports": [
+        "object form",
+        "construction",
+        "surface condition",
+        "decorative mapping"
+      ],
+      "must_not_import": [
+        "identity unless person is explicitly depicted",
+        "unrelated scene objects"
+      ]
+    },
+    "style": {
+      "imports": [
+        "rendering grammar",
+        "mark-making",
+        "surface treatment",
+        "color logic",
+        "composition tendencies"
+      ],
+      "must_not_import": [
+        "unrelated people",
+        "unrelated props",
+        "unrequested iconography"
+      ]
+    },
+    "environment": {
+      "imports": [
+        "space type",
+        "architecture",
+        "landscape",
+        "spatial mood"
+      ],
+      "must_not_import": [
+        "identity",
+        "outfit",
+        "pose"
+      ]
+    },
+    "layout": {
+      "imports": [
+        "hierarchy",
+        "panel geometry",
+        "placement",
+        "negative-space logic"
+      ],
+      "must_not_import": [
+        "identity",
+        "objects",
+        "style unless also assigned"
+      ]
+    },
+    "palette": {
+      "imports": [
+        "dominant hues",
+        "accent hues",
+        "value/contrast relationship"
+      ],
+      "must_not_import": [
+        "style",
+        "objects",
+        "identity"
+      ]
+    }
+  }
+}

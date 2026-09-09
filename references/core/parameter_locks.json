@@ -1,0 +1,24 @@
+{
+  "id": "parameter-locks-v3",
+  "hard_lock_examples": [
+    "named person/reference identity role",
+    "explicit age/adult status",
+    "requested era or culture",
+    "historical strictness",
+    "requested art method",
+    "artifact form/state",
+    "pose/action",
+    "outfit/hair",
+    "environment",
+    "layout/text",
+    "palette",
+    "aspect ratio"
+  ],
+  "rules": [
+    "Explicit facts are copied into the semantic spec before defaults are considered.",
+    "A hard lock may be changed only for safety, impossibility, or an explicit user revision.",
+    "When two hard locks conflict, surface the conflict and preserve both until precedence or a user choice resolves it; never silently drop one.",
+    "Do not convert a body-presentation request into an anatomy change.",
+    "Do not assign social rank, sacred role, ethnicity, religion, or personality from appearance."
+  ]
+}

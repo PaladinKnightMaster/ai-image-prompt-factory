@@ -1,0 +1,35 @@
+# Compiled Prompt
+
+Create a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: Show a modern person encountering an ancient Roman bronze bust that resembles them in a museum, as if meeting a historical echo. Use a 3:2 composition.
+
+Reference discipline: ref-identity-01 supplies identity only. Do not import unassigned identity, body, clothing, objects, layout, or style across references; also do not import unassigned palette, hairstyle, or environment.
+
+Identity: Keep the person clearly recognizable while allowing moderate styling, age-neutral grooming, and medium translation.
+
+Body/presentation: Preserve apparent anatomy/body characteristics; changes may come only from pose, clothing, lens, and light.
+
+Historical/cultural direction (historically_informed): Roman Imperial. subperiod: 2nd-century-inspired portrait bust; region: Roman Mediterranean + modern museum; role: modern visitor and historical portrait artifact; occasion: museum encounter.
+
+Use Roman Imperial anchors selectively: toga/stola/tunic/armor only when role and context justify them; portrait hairstyle is highly date-sensitive and useful for narrowing chronology; forum, basilica, domus/villa, baths, streets or provincial settings by context; oil lamps and daylight in interiors.
+
+Build a materially credible Roman portrait bust: intentional truncation and support, period-sensitive hair, modeled flesh/hair contrast, and either idealized or individualized likeness chosen from the narrative—not both accidentally.
+
+Intentional adaptation (do not present as documentary fact): modern present and ancient artifact intentionally coexist in one scene.
+
+Historical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. For a Roman bronze bust, preserve modeled portrait specificity, metallic depth, cast-and-finished surface behavior, and any inlay logic supported by the chosen example/context. If visible and appropriate, use restrained contrasting metal/stone inlays to support lifelike eyes or details; do not turn them into fantasy glow. Use a date-sensitive Roman coiffure tied to the selected century/reign; if the date is broad, keep hair restrained and avoid overclaiming specificity.
+
+Art/craft method — Bronze sculpture: Render a cast copper-alloy object with true metallic reflection, chased surface detail, plausible joins and state-specific patina; model hair/cloth as cast masses, not living strands.
+
+Artifact form — bust: head, neck and upper torso; terminate deliberately at chest/shoulders or pedestal.
+
+Artifact state — museum conserved: Stabilized, cleaned and supported with restrained conservation evidence; displayed with museum-appropriate mounts/light if in scene.
+
+Method variant: artifact only; modern visitor remains living/photographic.
+
+Material behavior: Metal reflects environment; aged patina may be brown/black/green in varied layers, with rubbed high points and localized corrosion. Cast edges can be crisp but transition through modeled volumes; thin projections require casting/support logic rather than carved-stone mass.
+
+Moment: the visitor stops in profile when the resemblance becomes obvious. Action: visitor leans slightly toward the display while keeping respectful distance. Gaze: visitor studies the bust; bust faces slightly away, creating an uncanny near-match. Body weight/support: visitor weight shifted to front foot but behind barrier. Hands: hands relaxed, not touching display glass or sculpture. Foreground: soft museum rail or case edge. Midground: visitor and bust in visual dialogue. Background: quiet gallery with one distant doorway. Camera/framing: eye-level two-subject composition, visitor and bust both legible. Motivated light: cool ambient gallery light plus warm focused light on bronze. Material response: living skin/fabric and cast bronze remain unmistakably different materials. Emotional micro-story: a private recognition across two thousand years.
+
+Avoid only these likely drift modes: Renaissance neoclassical costume presented as Roman evidence.
+
+Material failure checks: avoid orange plastic surface; stone-like diffuse shading; uniform green corrosion.

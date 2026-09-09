@@ -1,0 +1,64 @@
+{
+  "id": "gpt-image-2-adapter",
+  "model": "gpt-image-2",
+  "primary_output": "prompt",
+  "profiles": {
+    "compact": {
+      "target_words": [
+        80,
+        180
+      ],
+      "use": "simple subject/style transformations and fast iterations"
+    },
+    "standard": {
+      "target_words": [
+        180,
+        450
+      ],
+      "use": "default production brief with locks, scene direction, and constraints"
+    },
+    "extended": {
+      "target_words": [
+        450,
+        900
+      ],
+      "use": "complex reference-role, historical, artifact, layout, or typography tasks only"
+    }
+  },
+  "prompt_order": [
+    "task_and_subject",
+    "locks_and_reference_roles",
+    "historical_or_cultural_context",
+    "art_method_and_artifact",
+    "director_gate",
+    "composition_and_light",
+    "material_surface_behavior",
+    "text_or_layout_if_any",
+    "preservation_and_failure_constraints"
+  ],
+  "guidance": [
+    "Write natural production-brief prose, not a comma-only keyword list.",
+    "Prefer visible outcomes over camera-brand fetishism; include lens/light terminology only when it changes perspective, depth, motion, or surface response.",
+    "Repeat only the highest-value locks when editing/reference fidelity is fragile.",
+    "Use short failure-focused constraints rather than a giant negative prompt.",
+    "For editing, state both what must remain unchanged and what is allowed to change.",
+    "For text-heavy layouts, quote exact text and keep hierarchy explicit."
+  ],
+  "execution": {
+    "prompt_only": true,
+    "host_native": "Compile prompt and pass it to the host image tool only when image generation/editing is requested.",
+    "direct_api": "Use scripts/generate_api.py; execution requires --execute and configured credentials.",
+    "editing": "Use the same semantic locks, with reference roles and preserve/change boundaries made explicit.",
+    "evaluation": "Evaluate the produced image independently from prompt compilation."
+  },
+  "research_note": "OpenAI currently lists GPT Image 2 as the state-of-the-art image generation/editing model, with flexible image sizes, high-fidelity image inputs, and a dated snapshot gpt-image-2-2026-04-21 for reproducibility. V3.2 records the model alias and snapshot separately and does not invent unsupported seed controls.",
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-image-2",
+      "type": "official",
+      "accessed": "2026-09-07"
+    }
+  ],
+  "version": "1.1.0",
+  "recommended_snapshot_for_regression": "gpt-image-2-2026-04-21"
+}

@@ -1,0 +1,123 @@
+{
+  "id": "heian",
+  "name": "Heian period",
+  "pack_type": "historical_era",
+  "period": "794–1185 CE",
+  "region": "Japan; court context especially Heian-kyō (Kyoto)",
+  "summary": "Court culture is a major visual/literary anchor; later images often idealize Heian figures, so strict work must distinguish contemporary evidence from later retrospective convention.",
+  "social_roles": [
+    {
+      "text": "court woman / poet",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "court noble",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "court interior / literary scene",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "poetry or letter-writing",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "multilayered court clothing with elaborate color/pattern relationships for elite women",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [
+    {
+      "text": "silk textiles",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "hairstyle_headwear": [
+    {
+      "text": "long flowing hair as a strong convention for Heian court women",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [
+    {
+      "text": "specific cosmetic conventions are often known through textual/later depictions; mark them interpretive unless tightly sourced",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "jewelry": [],
+  "architecture": [],
+  "interior_furniture": [
+    {
+      "text": "screened court interiors, mats and low writing/reading arrangements",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "food_drink_tableware": [],
+  "musical_instruments": [],
+  "weapons_tools": [],
+  "transportation": [],
+  "writing_calligraphy": [
+    {
+      "text": "kana literary/calligraphic culture; visible text should be verified",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [],
+  "lighting_technology": [
+    {
+      "text": "oil lamps / natural daylight appropriate to interior context",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "yamato-e / narrative handscroll context becomes important but varies within/after period",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Edo geisha styling as Heian court dress",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "modern kimono silhouette as direct Heian reconstruction",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "court": "Favor layered textile rhythm, long hair, screened interior space and quiet literary action; do not flatten Heian court dress into a modern kimono costume."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/art/collection/search/46509",
+      "type": "museum",
+      "supports": "long flowing hair and multilayered clothing as Heian court-woman conventions"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should distinguish contemporary Heian evidence from later Edo/modern idealizations of Heian court women.",
+  "version": "1.0.0"
+}

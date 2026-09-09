@@ -1,0 +1,201 @@
+{
+  "id": "ming",
+  "name": "Ming dynasty",
+  "pack_type": "historical_era",
+  "period": "1368–1644 CE",
+  "region": "China; regional variation, with Jingdezhen specifically for porcelain contexts",
+  "summary": "Long dynasty with strong court, scholar-painting, furniture, textile and ceramic evidence; the late Ming visual world differs materially from the early Ming.",
+  "social_roles": [
+    {
+      "text": "scholar/official",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "court elite",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "urban commoner/merchant",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "martial traveler for grounded fiction",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "scholarly gathering",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "garden leisure",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "travel/escort/martial encounter",
+      "compatibility": "interpretive",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "role-specific Ming robes and civilian garments; do not default to theatrical wuxia robes",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [
+    {
+      "text": "silk and metallic-thread embroidery",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "huanghuali hardwood furniture",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "Jingdezhen porcelain with underglaze cobalt",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    }
+  ],
+  "hairstyle_headwear": [
+    {
+      "text": "select adult hairstyle/headwear by sex/status and subperiod; avoid Qing queue",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [
+    {
+      "text": "courtyard/garden/town contexts with timber construction and masonry surfaces",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [
+    {
+      "text": "hardwood tables, chairs, cabinets and screens in affluent settings",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "food_drink_tableware": [
+    {
+      "text": "porcelain and ceramic dining/tea wares",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "musical_instruments": [
+    {
+      "text": "pipa and qin contexts",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "weapons_tools": [
+    {
+      "text": "jian/dao and practical martial equipment in appropriate roles",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [
+    {
+      "text": "horse, sedan chair, boat depending on region/status",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "writing_calligraphy": [
+    {
+      "text": "scholar calligraphy/painting contexts; exact visible text should be verified",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [],
+  "lighting_technology": [
+    {
+      "text": "lamps/candles/lanterns for interiors and night scenes",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "scholar painting in ink on paper",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "court painting in ink/color on silk",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "blue-and-white Jingdezhen porcelain",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "silk embroidery",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Qing horse-hoof cuffs / queue hairstyle",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "fantasy flying sword as historical martial practice",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "Tang court styling as generic Ming",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "wuxia": "Ground the wuxia fiction in Ming material life first: plausible travel clothing, practical footwear, a single traceable weapon, timber/masonry setting, and human-scale action; then add genre tension without supernatural effects."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/essays/ming-dynasty-1368-1644",
+      "type": "museum",
+      "supports": "Ming art/material examples including painting, embroidery, porcelain and furniture"
+    },
+    {
+      "url": "https://www.vam.ac.uk/articles/chinese-blue-and-white-ceramics",
+      "type": "museum",
+      "supports": "cobalt underglaze and Jingdezhen blue-and-white process/history"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should narrow early/middle/late Ming, region, role/status, and exact object/garment evidence.",
+  "version": "1.1.0",
+  "evidence_claims": [
+    "ming-bluewhite-001",
+    "ming-wuxia-overlay-001"
+  ]
+}

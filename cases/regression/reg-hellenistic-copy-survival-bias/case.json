@@ -1,0 +1,96 @@
+{
+  "version": "3.1",
+  "id": "reg-hellenistic-copy-survival-bias",
+  "title": "Hellenistic reconstruction from later copy",
+  "status": "regression_spec",
+  "request": "Reconstruct a lost Hellenistic Greek marble ruler statue from a later Roman copy, historically informed.",
+  "route": "artifact_transform",
+  "locks": {
+    "adult_subject": true,
+    "primary_subject": "same adult subject across transformations",
+    "do_not_silently_add_rank_or_sacred_status": true
+  },
+  "references": [],
+  "identity": {
+    "mode": "identity_unlocked",
+    "locked_features": []
+  },
+  "body_transformation": {
+    "mode": "artistic_stylization",
+    "anatomy_change": "none unless explicitly stated in request",
+    "pose_change": "allowed as director choice",
+    "camera_presentation": "allowed",
+    "garment_shaping": "allowed when route requires it",
+    "artistic_stylization": "only when selected by body mode/art method"
+  },
+  "historical": {
+    "strictness": "historically_informed",
+    "packs": [
+      "hellenistic_greek"
+    ],
+    "subperiod": "Hellenistic, broadly 3rd–1st century BCE",
+    "region": "Mediterranean; exact original center unknown",
+    "role": "ruler portrait reconstruction",
+    "occasion": "scholarly visual reconstruction",
+    "intentional_hybrids": [
+      "modern reconstruction using later-copy evidence while preserving uncertainty about the lost original"
+    ]
+  },
+  "art": {
+    "method": "marble_sculpture",
+    "artifact_form": "free_standing_statue",
+    "artifact_state": "modern_reconstruction",
+    "variant": "reconstruction should distinguish secure copy evidence from uncertain original details"
+  },
+  "requested_elements": [],
+  "director": {
+    "moment": "neutral study view of a modern reconstruction informed by surviving copy evidence",
+    "action": "full standing ruler portrait with restrained gesture; do not invent missing attributes without evidence",
+    "gaze": "composed ruler portrait focus",
+    "body_weight": "stable contrapposto only if supported by the source type",
+    "hand_logic": "hands simplified into stone-safe gestures; no unsupported thin fingers",
+    "foreground": "simple reconstruction plinth",
+    "midground": "full reconstructed statue",
+    "background": "neutral conservation/research gallery",
+    "camera": "clear three-quarter documentation view",
+    "light_source": "neutral museum-study lighting",
+    "material_response": "newly carved reconstruction marble with no fake archaeological weathering",
+    "micro_story": "the image communicates a proposed reconstruction, not a magically recovered original"
+  },
+  "output": {
+    "profile": "standard",
+    "aspect_ratio": "4:5",
+    "text_in_image": [],
+    "generation_requested": false
+  },
+  "case_record": {
+    "original_simple_request": "Reconstruct a lost Hellenistic Greek marble ruler statue from a later Roman copy, historically informed.",
+    "compiled_prompt": "compiled_prompt.md",
+    "output_image": null,
+    "evidence_snapshot": "evidence_snapshot.json",
+    "compatibility_audit": "compatibility_audit.json",
+    "evaluation": null,
+    "historical_audit": [],
+    "material_art_audit": [],
+    "revision_history": [],
+    "model_version": "gpt-image-2",
+    "model_snapshot": "gpt-image-2-2026-04-21",
+    "compiler_version": "3.1.0",
+    "skill_version": "3.1.0",
+    "source_versions": {
+      "evidence_registry": "1.0.0"
+    },
+    "regression_baseline": null
+  },
+  "regression_expectations": {
+    "prompt_contains": [
+      "Roman copy",
+      "uncertain",
+      "Original-vs-surviving appearance"
+    ],
+    "decision_status": {
+      "hellenistic-copy-survival-bias-001": "qualify"
+    },
+    "max_loaded_claim_files": 4
+  }
+}

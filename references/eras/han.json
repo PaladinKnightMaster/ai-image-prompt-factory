@@ -1,0 +1,199 @@
+{
+  "id": "han",
+  "name": "Han dynasty",
+  "pack_type": "historical_era",
+  "period": "206 BCE–220 CE; Western Han 206 BCE–9 CE, Eastern Han 25–220 CE",
+  "region": "China; narrow by capital/region when strict",
+  "summary": "Imperial-era foundation with strong tomb-art, lacquer, bronze, silk, ceramic and expanding trans-Eurasian exchange evidence.",
+  "social_roles": [
+    {
+      "text": "court official / educated elite",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "court attendant or dancer",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "soldier/cavalry role",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "merchant/traveler",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "court or domestic leisure",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "funerary/tomb representation",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "market or travel scene",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "layered wrapped robes with belted silhouettes; exact cut varies by date, region and rank",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [
+    {
+      "text": "silk textiles",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "lacquered wood",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "bronze",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "earthenware with pigment or lead glaze",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    }
+  ],
+  "hairstyle_headwear": [
+    {
+      "text": "hair and headwear should be selected from dated visual/tomb evidence rather than generic “ancient Chinese” defaults",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [
+    {
+      "text": "Chang’an / Luoyang palace and warded urban context for capital scenes",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [
+    {
+      "text": "low furnishings and modeled architectural/tomb objects as evidence families",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "food_drink_tableware": [
+    {
+      "text": "lacquer and ceramic vessels; regional and class variation matters",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "musical_instruments": [
+    {
+      "text": "court/tomb ensembles including bells, drums and string/wind instruments",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "weapons_tools": [
+    {
+      "text": "swords, crossbows and military equipment appropriate to Han contexts",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "transportation": [
+    {
+      "text": "horse, cavalry and chariot/carriage contexts",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "writing_calligraphy": [
+    {
+      "text": "seal/clerical-script context; do not invent decorative pseudo-Chinese text",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [
+    {
+      "text": "funerary mingqi and tomb programs are major surviving evidence but should not be treated as ordinary daily-life photographs",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    }
+  ],
+  "lighting_technology": [
+    {
+      "text": "oil lamps / flame lighting in interiors",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "painted earthenware tomb figures",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "lacquerware",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "bronze and jade objects",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "later imperial dragon-robe conventions",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    },
+    {
+      "text": "Ming/Qing porcelain motifs presented as Han",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    },
+    {
+      "text": "modern wuxia costume treated as documentary Han",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "wardrobe": "Use a restrained Han-period wrapped and belted silhouette tied to the selected role; avoid generic later-dynasty costume vocabulary.",
+    "environment": "Anchor architecture/material culture to Western Han Chang’an or Eastern Han Luoyang only when the chosen date supports it."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/essays/han-dynasty-206-b-c-220-a-d",
+      "type": "museum",
+      "supports": "period split, capitals, exchange, material-culture examples"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode should narrow Western vs Eastern Han, location, social role, and source family.",
+  "version": "1.0.0"
+}

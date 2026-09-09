@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF V3.1 Generation Metadata",
+  "type": "object",
+  "required": ["schema_version","provider","model","generation_date_utc","mode","prompt_sha256","skill_version","dry_run"],
+  "properties": {
+    "schema_version":{"type":"string"},
+    "provider":{"type":"string"},
+    "model":{"type":"string"},
+    "model_snapshot":{"type":["string","null"]},
+    "generation_date_utc":{"type":"string"},
+    "mode":{"enum":["generate","edit"]},
+    "prompt_profile":{"enum":["compact","standard","extended"]},
+    "prompt_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "input_references":{"type":"array","items":{"type":"object","required":["path","sha256"],"properties":{"path":{"type":"string"},"sha256":{"type":["string","null"]}}}},
+    "size":{"type":"string"},
+    "quality":{"type":"string"},
+    "background":{"type":["string","null"]},
+    "compiler_version":{"type":"string"},
+    "skill_version":{"type":"string"},
+    "seed":{"type":"null"},
+    "dry_run":{"type":"boolean"},
+    "result":{"type":"object"}
+  }
+}

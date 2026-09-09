@@ -1,0 +1,22 @@
+{
+  "id": "historical-strictness-v3",
+  "modes": {
+    "strict_reconstruction": {
+      "description": "Favor strongly evidenced period/region/role combinations; unknowns remain unknown; ask only when a missing detail changes the reconstruction materially.",
+      "minimum_compatibility": "well_attested"
+    },
+    "historically_informed": {
+      "description": "Use evidence-backed anchors, allow plausible interpolation, and label interpretive details internally.",
+      "minimum_compatibility": "plausible"
+    },
+    "period_drama": {
+      "description": "Maintain a coherent period impression while allowing tasteful dramatic simplification or idealization.",
+      "minimum_compatibility": "interpretive"
+    },
+    "fantasy_hybrid": {
+      "description": "Historical anchors may combine with explicit fantasy/genre overlays; never present invented elements as historical fact.",
+      "minimum_compatibility": "unknown"
+    }
+  },
+  "default": "historically_informed"
+}

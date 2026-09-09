@@ -1,0 +1,165 @@
+{
+  "id": "song",
+  "name": "Song dynasty",
+  "pack_type": "historical_era",
+  "period": "960–1279 CE; Northern Song 960–1127, Southern Song 1127–1279",
+  "region": "China; Kaifeng/Hangzhou and regional contexts",
+  "summary": "Period with major developments in painting, calligraphy, urban life and ceramics; literati and court pictorial traditions should not be conflated.",
+  "social_roles": [
+    {
+      "text": "scholar-official/literati",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "court woman",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    },
+    {
+      "text": "urban artisan/merchant",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "gender_presentation": [],
+  "occasions": [
+    {
+      "text": "scholarly gathering",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "garden viewing or travel",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "urban market scene",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "wardrobe": [
+    {
+      "text": "restrained layered robes; exact silhouette and headwear depend on gender/status/subperiod",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "textiles_materials": [
+    {
+      "text": "silk",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "high-fired stoneware/porcelain traditions including celadon and monochrome wares",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "hairstyle_headwear": [
+    {
+      "text": "official/scholar headwear and women’s hair should be selected from dated works rather than Tang/Ming defaults",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "makeup_grooming": [],
+  "jewelry": [],
+  "architecture": [
+    {
+      "text": "timber halls, gardens, urban river/canal contexts depending on region",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "interior_furniture": [
+    {
+      "text": "tables, chairs, screens and scholar furnishings in elite contexts",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "food_drink_tableware": [
+    {
+      "text": "refined ceramic tea and dining vessels",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "musical_instruments": [
+    {
+      "text": "qin and other literati/court instruments",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "weapons_tools": [],
+  "transportation": [],
+  "writing_calligraphy": [
+    {
+      "text": "calligraphy as a core elite art; use real or intentionally omitted text",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "ritual_custom": [],
+  "lighting_technology": [
+    {
+      "text": "lamps/candles in interiors; daylight dominant in painting-derived transformations",
+      "compatibility": "plausible",
+      "confidence": "medium"
+    }
+  ],
+  "flora_season": [],
+  "visual_arts": [
+    {
+      "text": "ink and color on silk/paper",
+      "compatibility": "canonical",
+      "confidence": "medium"
+    },
+    {
+      "text": "monochrome ink traditions",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    },
+    {
+      "text": "ceramics with refined glaze effects",
+      "compatibility": "well_attested",
+      "confidence": "medium"
+    }
+  ],
+  "incompatible_or_anachronistic": [
+    {
+      "text": "Tang high-waisted court styling copied wholesale",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    },
+    {
+      "text": "Qing queue hairstyle",
+      "compatibility": "incompatible",
+      "confidence": "medium"
+    },
+    {
+      "text": "blue-and-white porcelain as a generic Song signature",
+      "compatibility": "anachronistic",
+      "confidence": "medium"
+    }
+  ],
+  "prompt_fragments": {
+    "ink": "For a Song-oriented ink transformation, let brush line, ink density, blank paper/silk and spatial rhythm carry the image; do not simulate a photograph with an ink filter."
+  },
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/toah/hd/song/hd_song.htm",
+      "type": "museum",
+      "supports": "period overview"
+    }
+  ],
+  "default_confidence": "medium",
+  "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "strict_reconstruction_note": "Strict mode must choose Northern/Southern Song, region, role, and pictorial/object evidence family.",
+  "version": "1.0.0"
+}

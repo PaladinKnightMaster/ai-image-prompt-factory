@@ -1,0 +1,123 @@
+{
+  "id": "compatibility-rules-v3.1",
+  "values": [
+    "canonical",
+    "well_attested",
+    "plausible",
+    "interpretive",
+    "rare",
+    "anachronistic",
+    "incompatible",
+    "unknown"
+  ],
+  "severity": {
+    "canonical": 0,
+    "well_attested": 0,
+    "plausible": 0,
+    "interpretive": 1,
+    "rare": 1,
+    "unknown": 1,
+    "anachronistic": 2,
+    "incompatible": 3
+  },
+  "strictness_policy": {
+    "strict_reconstruction": {
+      "allow": [
+        "canonical",
+        "well_attested"
+      ],
+      "warn": [
+        "plausible",
+        "rare",
+        "unknown"
+      ],
+      "block_or_resolve": [
+        "interpretive",
+        "anachronistic",
+        "incompatible"
+      ]
+    },
+    "historically_informed": {
+      "allow": [
+        "canonical",
+        "well_attested",
+        "plausible"
+      ],
+      "warn": [
+        "interpretive",
+        "rare",
+        "unknown"
+      ],
+      "block_or_resolve": [
+        "anachronistic",
+        "incompatible"
+      ]
+    },
+    "period_drama": {
+      "allow": [
+        "canonical",
+        "well_attested",
+        "plausible",
+        "interpretive",
+        "rare"
+      ],
+      "warn": [
+        "unknown",
+        "anachronistic"
+      ],
+      "block_or_resolve": [
+        "incompatible"
+      ]
+    },
+    "fantasy_hybrid": {
+      "allow": [
+        "canonical",
+        "well_attested",
+        "plausible",
+        "interpretive",
+        "rare",
+        "unknown",
+        "anachronistic"
+      ],
+      "warn": [
+        "anachronistic"
+      ],
+      "block_or_resolve": [
+        "incompatible"
+      ]
+    }
+  },
+  "global_rules": [
+    {
+      "id": "genre_as_era",
+      "when": "pack_type == genre_overlay and no base era/site context",
+      "level": "error",
+      "message": "Wuxia/Xianxia cannot substitute for a historical era. Select a base context or mark the world fictional."
+    },
+    {
+      "id": "dunhuang_strict_narrowing",
+      "when": "era == dunhuang and strict_reconstruction and no subperiod/site",
+      "level": "error",
+      "message": "Strict Dunhuang reconstruction requires a narrower cave/subperiod or evidence family."
+    },
+    {
+      "id": "explicit_hybrid_preserved",
+      "when": "user explicitly requests conflicting period/culture elements",
+      "level": "warning",
+      "message": "Preserve the requested hybrid but label it intentional; do not call it strict reconstruction."
+    },
+    {
+      "id": "reference_role_isolation",
+      "when": "a reference imports attributes outside assigned roles",
+      "level": "error",
+      "message": "Reference-role leakage detected."
+    }
+  ],
+  "version": "1.1.0",
+  "evidence_behavior": {
+    "source_conflict": "preserve competing interpretations; never silently collapse to certainty",
+    "survival_bias": "distinguish original appearance from surviving/conserved state",
+    "weak_evidence": "never promote rare/unknown evidence to canonical by wording",
+    "explicit_user_vs_strictness": "when explicit requested element conflicts with explicit strict reconstruction, preserve user intent as a visible conflict and adapt/propose a safer substitute rather than silently claiming authenticity"
+  }
+}

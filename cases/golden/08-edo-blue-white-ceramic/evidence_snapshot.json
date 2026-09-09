@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "edo-arita-porcelain-001",
+      "version": "1.0.0",
+      "compatibility": "canonical",
+      "confidence": 0.96,
+      "source_ids": [
+        "met-edo-porcelain-essay",
+        "met-arita-dishes-63588"
+      ]
+    },
+    {
+      "claim_id": "edo-ceramic-not-print-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.92,
+      "source_ids": [
+        "met-edo-porcelain-essay",
+        "met-ukiyoe-process"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "met-edo-porcelain-essay",
+      "title": "Edo-Period Japanese Porcelain",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/essays/edo-period-japanese-porcelain",
+      "evidence_quality": "high"
+    },
+    {
+      "source_id": "met-arita-dishes-63588",
+      "title": "Set of Five Small Dishes with Flowering Plum and Warbler",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/art/collection/search/63588",
+      "evidence_quality": "primary"
+    },
+    {
+      "source_id": "met-ukiyoe-process",
+      "title": "Woodblock Prints in the Ukiyo-e Style",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/essays/woodblock-prints-in-the-ukiyo-e-style",
+      "evidence_quality": "high"
+    }
+  ],
+  "claim_relationships": [],
+  "snapshot_sha256": "4da78d14455f5449c9eeaccfa10041ed791efaf553a96a80404d100050466364"
+}

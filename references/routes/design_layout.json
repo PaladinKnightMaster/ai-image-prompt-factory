@@ -1,0 +1,8 @@
+{
+  "id": "design_layout",
+  "description": "Poster, infographic, calendar, catalog or other text/layout-led image",
+  "loads": [
+    "layout"
+  ],
+  "logic": "Treat layout hierarchy and exact text as first-class locks."
+}

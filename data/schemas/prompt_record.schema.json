@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.2/prompt_record.schema.json",
+  "type": "object",
+  "required": [
+    "prompt_id",
+    "source_collection",
+    "source_document",
+    "prompt_text",
+    "decomposition",
+    "scope"
+  ],
+  "properties": {
+    "prompt_id": {
+      "type": "string"
+    },
+    "source_collection": {
+      "type": "string"
+    },
+    "source_document": {
+      "type": "string"
+    },
+    "prompt_text": {
+      "type": "string"
+    },
+    "decomposition": {
+      "type": "object"
+    },
+    "scope": {
+      "enum": [
+        "internal_source",
+        "first_party"
+      ]
+    }
+  }
+}

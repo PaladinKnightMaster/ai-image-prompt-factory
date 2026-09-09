@@ -1,0 +1,10 @@
+{
+  "id": "reference_transform",
+  "description": "Transform a person/object/photo while preserving assigned reference roles",
+  "loads": [
+    "reference_roles",
+    "identity_modes",
+    "body_modes"
+  ],
+  "logic": "State preserve/change boundaries before style or scene translation."
+}

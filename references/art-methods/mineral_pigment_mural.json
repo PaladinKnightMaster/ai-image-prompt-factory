@@ -1,0 +1,68 @@
+{
+  "id": "mineral_pigment_mural",
+  "name": "Mineral-pigment mural / cave mural",
+  "family": "painting_on_wall",
+  "material": "pigments bound on prepared earthen/plaster wall; exact pigments, binders and layer sequence vary by site and period",
+  "fabrication_process": [
+    "prepare wall/plaster ground",
+    "transfer or draw composition",
+    "establish contours and color fields",
+    "layer pigments/details",
+    "allow wall and paint layers to age together"
+  ],
+  "visible_production_marks": [
+    "brush contour remains integrated with matte wall",
+    "granular/mineral color character",
+    "transfer/pouncing traces may appear only when evidence supports them"
+  ],
+  "edge_behavior": "Paint edges are brush-defined but physically interrupted by plaster grain, cracks and loss; no floating digital vector edge.",
+  "mark_making": [
+    "brush contour remains integrated with matte wall",
+    "granular/mineral color character",
+    "transfer/pouncing traces may appear only when evidence supports them"
+  ],
+  "color_behavior": "Matte mineral/earth palette, local fading and darkening; saturation depends on conservation and period, not a universal sepia wash.",
+  "surface_behavior": "Pigment film sits on/within a mineral wall ground; cracks, abrasions and losses cross painted forms physically.",
+  "composition_behavior": "Composition is wall-bound and often hierarchical/serial; respect architecture and iconographic zones instead of treating it as a framed canvas.",
+  "structural_limitations": [
+    "surface cannot bend like paper",
+    "avoid glossy varnish",
+    "do not invent one universal “Dunhuang palette” across centuries"
+  ],
+  "aging_weathering": [
+    "aged: localized pigment loss, cracks, soot/dust or abrasion according to environment",
+    "museum-conserved: stabilized surface with readable losses",
+    "modern reconstruction: clean pigments and wall without fake ancient damage"
+  ],
+  "artifact_compatibility": [
+    "architectural_frieze",
+    "relief",
+    "tile"
+  ],
+  "prompt_fragments": {
+    "core": "Make the image inseparable from a prepared wall: matte pigment, brush contours interrupted by plaster grain, localized loss and aging, and composition designed for architectural surface rather than a floating poster."
+  },
+  "typical_generation_failures": [
+    "digital fresco filter",
+    "uniform cracked overlay",
+    "neon pigments",
+    "glossy wet wall",
+    "living skin pasted into mural",
+    "fake Sanskrit/Chinese text"
+  ],
+  "evaluation_criteria": [
+    "wall substrate and paint layer interact",
+    "loss/cracks follow material",
+    "palette is period/site aware",
+    "figures obey mural composition rather than photographic depth"
+  ],
+  "sources": [
+    {
+      "url": "https://whc.unesco.org/en/list/440",
+      "type": "unesco",
+      "supports": "Mogao mural/cave scope"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.1.0"
+}

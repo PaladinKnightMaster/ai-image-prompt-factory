@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "BENCH-019",
+  "version": "1.0.0",
+  "category": "art_method",
+  "request": "Layered paper artifact transformation",
+  "status": "candidate",
+  "semantic_spec_path": "benchmarks/specs/BENCH-019.json",
+  "related_experiments": [],
+  "generation": {
+    "status": "not_generated",
+    "output_image": null,
+    "provider": null,
+    "model": null
+  },
+  "human_approved": false,
+  "compiled_prompt_path": "benchmarks/compiled/BENCH-019.md",
+  "pattern_trace": [],
+  "evidence_snapshot_sha256": "e92b4423939cd47b7edb3fdff1719b5442785fc20900bbd8fcda106fb6a41403",
+  "compiler_version": "3.2.0",
+  "skill_version": "3.2.0",
+  "model_target": "gpt-image-2",
+  "model_snapshot": "gpt-image-2-2026-04-21"
+}

@@ -1,0 +1,105 @@
+{
+  "version": "1.0.0",
+  "pack_id": "roman_imperial",
+  "claims": [
+    {
+      "claim_id": "roman-bronze-portrait-001",
+      "version": "1.0.0",
+      "subject": "portrait_medium",
+      "value": "Bronze was a prestigious Roman medium for honorific portraiture and could support highly naturalistic characterization.",
+      "context": {
+        "pack_ids": [
+          "roman_imperial"
+        ],
+        "art_methods": [
+          "bronze_sculpture"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-roman-bronze-248852"
+      ],
+      "interpretation": "Use bronze portrait behavior rather than applying marble bust treatment with a color swap.",
+      "prompt_implications": [
+        "For a Roman bronze bust, preserve modeled portrait specificity, metallic depth, cast-and-finished surface behavior, and any inlay logic supported by the chosen example/context."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "bronze",
+        "bust",
+        "portrait"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "roman-bronze-inlay-001",
+      "version": "1.0.0",
+      "subject": "bronze_detail",
+      "value": "Roman bronze portraits could use contrasting inlays such as silver/copper for eyes or other details.",
+      "context": {
+        "pack_ids": [
+          "roman_imperial"
+        ],
+        "art_methods": [
+          "bronze_sculpture"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.93,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-roman-bronze-boy-255215",
+        "met-greek-bronze-technique"
+      ],
+      "interpretation": "Inlays are optional, context-sensitive details—not a mandatory decorative effect.",
+      "prompt_implications": [
+        "If visible and appropriate, use restrained contrasting metal/stone inlays to support lifelike eyes or details; do not turn them into fantasy glow."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "bronze",
+        "bust",
+        "eyes",
+        "inlay"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "roman-portrait-hair-date-001",
+      "version": "1.0.0",
+      "subject": "hairstyle",
+      "value": "Roman portrait hairstyles can be strongly date-sensitive and should not be treated as generic “Roman hair.”",
+      "context": {
+        "pack_ids": [
+          "roman_imperial"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.91,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-roman-bronze-boy-255215"
+      ],
+      "interpretation": "Strict reconstruction should narrow reign/century before asserting a specific coiffure as canonical.",
+      "prompt_implications": [
+        "Use a date-sensitive Roman coiffure tied to the selected century/reign; if the date is broad, keep hair restrained and avoid overclaiming specificity."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "hairstyle",
+        "hair",
+        "bust",
+        "portrait"
+      ],
+      "always_for_context": true,
+      "survival_bias": null,
+      "mode_actions": {}
+    }
+  ]
+}

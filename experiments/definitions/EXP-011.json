@@ -1,0 +1,38 @@
+{
+  "experiment_id": "EXP-011",
+  "version": "1.0.0",
+  "hypothesis": "Detailed garment construction improves wardrobe fidelity",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "garment_construction",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "garment_construction",
+      "operation": "replace_literal",
+      "old": "satin outfit",
+      "new": "bias-cut satin dress with narrow straps, shaped waist seams, clean neckline construction, and a softly weighted hem"
+    }
+  ],
+  "preserved_dimensions": [
+    "subject",
+    "environment",
+    "lighting",
+    "aspect ratio",
+    "identity unless factor explicitly tests it"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "garment_construction"
+  ],
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "material-satin-fold-response"
+  ]
+}

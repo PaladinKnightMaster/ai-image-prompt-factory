@@ -1,0 +1,132 @@
+{
+  "version": "1.0.0",
+  "pack_id": "dunhuang",
+  "claims": [
+    {
+      "claim_id": "mogao-multicentury-001",
+      "version": "1.0.0",
+      "subject": "site_chronology",
+      "value": "Mogao is a multi-century cave complex whose surviving murals and painted sculpture span roughly the 4th–14th centuries.",
+      "context": {
+        "pack_ids": [
+          "dunhuang"
+        ]
+      },
+      "compatibility": "canonical",
+      "confidence": 0.99,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "unesco-mogao-440"
+      ],
+      "interpretation": "“Dunhuang style” is not one timeless visual period.",
+      "prompt_implications": [
+        "For strict or research-facing work, anchor the mural to a cave, dynasty/subperiod, or tightly bounded evidence family."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "dunhuang",
+        "mogao",
+        "cave mural"
+      ],
+      "always_for_context": true,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "mogao-pigment-variation-001",
+      "version": "1.0.0",
+      "subject": "mural_material",
+      "value": "Pigments and painting techniques vary across periods and caves at Mogao.",
+      "context": {
+        "pack_ids": [
+          "dunhuang"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.94,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "dha-pigments-2022"
+      ],
+      "interpretation": "Do not universalize one cave’s palette or stratigraphy across the whole site.",
+      "prompt_implications": [
+        "Tie pigment palette and mural-making details to the selected cave/subperiod when possible."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "pigment",
+        "mineral pigment",
+        "mural",
+        "cave"
+      ],
+      "always_for_context": true,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "mogao-cave55-layering-001",
+      "version": "1.0.0",
+      "subject": "mural_fabrication",
+      "value": "Cave 55 analyses identify layered plaster/paint construction with fiber reinforcement, pigments, animal glue, and surface gilding in that specific Song/Western Xia context.",
+      "context": {
+        "pack_ids": [
+          "dunhuang"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.93,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "dha-cave55-2023"
+      ],
+      "interpretation": "Use only when Cave 55 or a comparable bounded context is intentionally selected; this is not a universal Mogao recipe.",
+      "prompt_implications": [
+        "When the selected evidence family matches Cave 55, express mural depth through plaster ground, mineral paint layers, localized gilding, and organic-binder behavior rather than a flat digital “mural filter.”"
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "cave 55",
+        "song dunhuang",
+        "western xia",
+        "plaster",
+        "gilding"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "mogao-discoloration-001",
+      "version": "1.0.0",
+      "subject": "artifact_state",
+      "value": "Surviving Dunhuang mural colors can differ materially from original appearance because pigments discolor and surfaces deteriorate.",
+      "context": {
+        "pack_ids": [
+          "dunhuang"
+        ]
+      },
+      "compatibility": "well_attested",
+      "confidence": 0.95,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "dha-lead-pigments-2026"
+      ],
+      "interpretation": "Artifact state must distinguish in-period appearance from surviving/conserved appearance.",
+      "prompt_implications": [
+        "For aged, damaged, excavated, or museum-conserved mural states, include fading, discoloration, loss, and conservation selectively; for in-period reconstruction, do not copy every modern deterioration artifact."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "aged",
+        "damaged",
+        "excavated",
+        "conserved",
+        "mural",
+        "dunhuang"
+      ],
+      "always_for_context": true,
+      "survival_bias": "The colors visible today are not a transparent record of original saturation; discoloration and conservation state can materially alter appearance.",
+      "mode_actions": {}
+    }
+  ]
+}

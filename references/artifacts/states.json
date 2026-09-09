@@ -1,0 +1,15 @@
+{
+  "id": "artifact-states-v3",
+  "states": {
+    "newly_created": "Fresh fabrication: crisp tool/brush marks, clean joins, minimal dirt or oxidation unless process-native.",
+    "in_period": "Used within its historical life: modest handling wear, soot/polish/abrasion appropriate to function; no archaeological damage by default.",
+    "aged": "Long-term aging with restrained discoloration, surface wear, patina or abrasion appropriate to material and environment.",
+    "damaged": "Visible losses, cracks, dents, chips or abrasion; damage follows material fracture behavior rather than random grunge.",
+    "excavated": "Earth/mineral accretions and context-specific burial effects may remain; avoid generic mud coating every surface.",
+    "partially_restored": "Original and repaired zones remain visibly distinguishable but coherent; avoid perfect invisible restoration unless specified.",
+    "museum_conserved": "Stabilized, cleaned and supported with restrained conservation evidence; displayed with museum-appropriate mounts/light if in scene.",
+    "modern_reconstruction": "Newly fabricated scholarly reconstruction using modern conservation/display assumptions; do not fake archaeological age.",
+    "replica": "Modern reproduction of an older form; material and manufacturing may be clean/new unless the user requests artificial aging.",
+    "fantasy_artifact": "Physical artifact logic remains coherent even when iconography/material is fantastical."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "historical_portrait",
+  "description": "Living person or fictional subject depicted in bounded historical context",
+  "loads": [
+    "historical_strictness"
+  ],
+  "logic": "Resolve period/region/role/occasion before wardrobe and hair."
+}

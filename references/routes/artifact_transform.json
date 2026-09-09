@@ -1,0 +1,10 @@
+{
+  "id": "artifact_transform",
+  "description": "Translate subject into a physical artifact",
+  "loads": [
+    "reference_roles",
+    "artifact_forms",
+    "artifact_states"
+  ],
+  "logic": "Separate represented subject from material, fabrication, form, and object state."
+}

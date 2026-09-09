@@ -1,0 +1,54 @@
+{
+  "strictness": "historically_informed",
+  "summary": {
+    "accepted": 2,
+    "qualified": 0,
+    "adapted": 0,
+    "rejected": 0,
+    "hybrids": 0
+  },
+  "decisions": [
+    {
+      "claim_id": "greek-marble-polychromy-001",
+      "claim_version": "1.0.0",
+      "subject": "sculptural_surface",
+      "compatibility": "well_attested",
+      "confidence": 0.96,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "For newly created or in-period Classical marble, allow evidence-aware polychromy or pigment details when appropriate. For conserved/excavated states, largely bare marble with surviving pigment traces can be plausible while preserving the distinction from original appearance.",
+      "source_ids": [
+        "britishmuseum-parthenon-polychromy"
+      ],
+      "survival_bias": "Weathering, cleaning, burial, and conservation can remove or reduce ancient paint; present white marble is not identical to original surface intent."
+    },
+    {
+      "claim_id": "greek-bronze-survival-001",
+      "claim_version": "1.0.0",
+      "subject": "survival_bias",
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "policy_bucket": "allow",
+      "status": "accept",
+      "instruction": "When reconstructing a living ancient sculptural environment, do not default every Greek statue to white marble merely because more marble copies survive.",
+      "source_ids": [
+        "met-greek-bronze-technique"
+      ],
+      "survival_bias": "Survival is selective: bronze was recyclable and often lost, while marble copies survived differently."
+    }
+  ],
+  "claim_relationships": [
+    {
+      "conflict_id": "greek-original-vs-surviving-surface-001",
+      "version": "1.0.0",
+      "type": "interpretive_tension",
+      "claim_ids": [
+        "greek-marble-polychromy-001",
+        "greek-bronze-survival-001"
+      ],
+      "summary": "The surviving corpus and current museum surface are selective evidence for original ancient visual experience.",
+      "resolution_policy": "Separate original/in-period reconstruction from excavated/conserved appearance and preserve survival bias in the prompt/audit.",
+      "user_facing_note": "Present-day white marble and the surviving material mix are not neutral proxies for original appearance/prevalence."
+    }
+  ]
+}

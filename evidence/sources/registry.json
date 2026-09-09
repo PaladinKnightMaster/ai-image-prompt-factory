@@ -1,0 +1,414 @@
+{
+  "version": "1.0.0",
+  "sources": [
+    {
+      "source_id": "openai-gpt-image-2-model",
+      "title": "GPT-Image-2 Model",
+      "author": null,
+      "institution": "OpenAI",
+      "publication_date": null,
+      "url": "https://developers.openai.com/api/docs/models/gpt-image-2",
+      "accessed_date": "2026-09-07",
+      "source_type": "official_model_documentation",
+      "evidence_quality": "high",
+      "geographic_relevance": [],
+      "chronological_relevance": [
+        "2026"
+      ],
+      "license_copyright_notes": "Documentation metadata only; no copied documentation bundled.",
+      "notes": "Confirms gpt-image-2, image generation/editing, flexible sizes, high-fidelity image inputs, and snapshot gpt-image-2-2026-04-21."
+    },
+    {
+      "source_id": "met-tang-court-lady-75765",
+      "title": "Seated court lady",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": null,
+      "url": "https://www.metmuseum.org/art/collection/search/75765",
+      "accessed_date": "2026-09-07",
+      "source_type": "primary_artifact",
+      "evidence_quality": "primary",
+      "geographic_relevance": [
+        "China"
+      ],
+      "chronological_relevance": [
+        "Tang dynasty",
+        "8th century"
+      ],
+      "license_copyright_notes": "Met object record; object image marked Public Domain. V3.1 stores metadata only.",
+      "notes": "Supports Tang court leisure, layered dress, sancai, and cosmopolitan furniture exchange."
+    },
+    {
+      "source_id": "met-chinese-ceramics-2012",
+      "title": "Evolution of Chinese Ceramics and Their Global Influence",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": "2012",
+      "url": "https://www.metmuseum.org/press-releases/chinese-ceramics-on-great-hall-balcony-2012-exhibitions",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "China"
+      ],
+      "chronological_relevance": [
+        "Tang dynasty",
+        "Yuan dynasty",
+        "Ming dynasty"
+      ],
+      "license_copyright_notes": "Metadata/paraphrase only.",
+      "notes": "Notes cobalt use in China by the eighth century but flowering of porcelain painted with cobalt blue in the fourteenth century under Yuan."
+    },
+    {
+      "source_id": "met-yuan-blue-white-42494",
+      "title": "Stem bowl with lotus pattern",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": null,
+      "url": "https://www.metmuseum.org/art/collection/search/42494",
+      "accessed_date": "2026-09-07",
+      "source_type": "primary_artifact",
+      "evidence_quality": "primary",
+      "geographic_relevance": [
+        "China",
+        "Jingdezhen"
+      ],
+      "chronological_relevance": [
+        "Yuan dynasty",
+        "mid-14th century"
+      ],
+      "license_copyright_notes": "Met object record; public-domain object image. Metadata only in V3.1.",
+      "notes": "Direct example of Jingdezhen porcelain painted in underglaze cobalt blue."
+    },
+    {
+      "source_id": "met-ming-essay",
+      "title": "Ming Dynasty (1368–1644)",
+      "author": "Department of Asian Art",
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": "2002",
+      "url": "https://www.metmuseum.org/essays/ming-dynasty-1368-1644",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "China"
+      ],
+      "chronological_relevance": [
+        "Ming dynasty"
+      ],
+      "license_copyright_notes": "Metadata/paraphrase only.",
+      "notes": "Supports fourteenth-century development of blue-and-white and Ming decorative-arts context."
+    },
+    {
+      "source_id": "unesco-mogao-440",
+      "title": "Mogao Caves",
+      "author": null,
+      "institution": "UNESCO World Heritage Centre",
+      "publication_date": null,
+      "url": "https://whc.unesco.org/en/list/440/",
+      "accessed_date": "2026-09-07",
+      "source_type": "heritage_institution",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Dunhuang",
+        "Gansu",
+        "China"
+      ],
+      "chronological_relevance": [
+        "4th–14th century"
+      ],
+      "license_copyright_notes": "UNESCO page notes CC-BY-SA IGO 3.0 for description; V3.1 stores source metadata and paraphrased claims.",
+      "notes": "Establishes Mogao as 492 caves with murals/sculptures spanning roughly 1,000 years; supports cave/date narrowing."
+    },
+    {
+      "source_id": "dha-pigments-2022",
+      "title": "Research Progress on Pigments and Analysis Technology of Murals in Dunhuang Mogao Grottoes",
+      "author": "SU Bomin",
+      "institution": "Dunhuang Academy",
+      "publication_date": "2022-03-28",
+      "url": "https://skytyz.dha.ac.cn/EN/Y2022/V1/I1/47",
+      "accessed_date": "2026-09-07",
+      "source_type": "academic_paper",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Dunhuang",
+        "Mogao"
+      ],
+      "chronological_relevance": [
+        "4th–14th century"
+      ],
+      "license_copyright_notes": "Citation/metadata and paraphrase only.",
+      "notes": "Supports period-specific pigment and painting-technique analysis across Mogao."
+    },
+    {
+      "source_id": "dha-cave55-2023",
+      "title": "Analysis of the Mural-Making Materials and Techniques in Mogao Cave 55",
+      "author": null,
+      "institution": "Dunhuang Academy",
+      "publication_date": "2023-06-28",
+      "url": "https://skytyz.dha.ac.cn/EN/Y2023/V2/I2/68",
+      "accessed_date": "2026-09-07",
+      "source_type": "academic_paper",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Dunhuang",
+        "Mogao Cave 55"
+      ],
+      "chronological_relevance": [
+        "Song dynasty",
+        "Western Xia"
+      ],
+      "license_copyright_notes": "Citation/metadata and paraphrase only.",
+      "notes": "Supports layered plaster/paint construction, reinforcement fibers, pigments, animal glue, and gilding for a specific cave context."
+    },
+    {
+      "source_id": "dha-lead-pigments-2026",
+      "title": "A Study on the Painting Techniques and Discoloration of Lead-Based Pigments in the Murals of Dunhuang",
+      "author": "WANG Simeng et al.",
+      "institution": "Dunhuang Academy",
+      "publication_date": "2026-06-28",
+      "url": "https://skytyz.dha.ac.cn/EN/Y2026/V5/I2",
+      "accessed_date": "2026-09-07",
+      "source_type": "academic_paper",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Dunhuang"
+      ],
+      "chronological_relevance": [
+        "historic murals",
+        "conservation present"
+      ],
+      "license_copyright_notes": "Citation/metadata and paraphrase only.",
+      "notes": "Supports pigment discoloration as a major reason surviving mural colors differ from original appearance."
+    },
+    {
+      "source_id": "britishmuseum-parthenon-polychromy",
+      "title": "Paint and the Parthenon: conservation of ancient Greek sculpture",
+      "author": null,
+      "institution": "The British Museum",
+      "publication_date": "2018",
+      "url": "https://www.britishmuseum.org/blog/paint-and-parthenon-conservation-ancient-greek-sculpture",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Classical Greece"
+      ],
+      "chronological_relevance": [
+        "5th century BCE",
+        "modern conservation"
+      ],
+      "license_copyright_notes": "Metadata/paraphrase only.",
+      "notes": "Supports original painting/polychromy of Parthenon architectural sculpture and surviving pigment traces."
+    },
+    {
+      "source_id": "met-greek-bronze-technique",
+      "title": "The Technique of Bronze Statuary in Ancient Greece",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": "2003",
+      "url": "https://www.metmuseum.org/essays/the-technique-of-bronze-statuary-in-ancient-greece",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Ancient Greece",
+        "Roman world"
+      ],
+      "chronological_relevance": [
+        "Late Archaic",
+        "Classical",
+        "Hellenistic",
+        "Roman"
+      ],
+      "license_copyright_notes": "Metadata/paraphrase only.",
+      "notes": "Supports lost-wax casting, piece casting, joins, cold-working, inlays, and bronze survival bias."
+    },
+    {
+      "source_id": "met-roman-bronze-248852",
+      "title": "Bronze portrait bust of a man",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": null,
+      "url": "https://www.metmuseum.org/art/collection/search/248852",
+      "accessed_date": "2026-09-07",
+      "source_type": "primary_artifact",
+      "evidence_quality": "primary",
+      "geographic_relevance": [
+        "Roman world"
+      ],
+      "chronological_relevance": [
+        "Late Republican",
+        "Early Imperial"
+      ],
+      "license_copyright_notes": "Met object record; public-domain object image. Metadata only in V3.1.",
+      "notes": "Supports bronze as a valued Roman honorific portrait medium and naturalistic fidelity."
+    },
+    {
+      "source_id": "met-roman-bronze-boy-255215",
+      "title": "Bronze portrait bust of a young boy",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": null,
+      "url": "https://www.metmuseum.org/art/collection/search/255215",
+      "accessed_date": "2026-09-07",
+      "source_type": "primary_artifact",
+      "evidence_quality": "primary",
+      "geographic_relevance": [
+        "Roman world"
+      ],
+      "chronological_relevance": [
+        "Julio-Claudian",
+        "ca. 50–68 CE"
+      ],
+      "license_copyright_notes": "Met object record; public-domain object image. Metadata only in V3.1.",
+      "notes": "Supports costly bronze portraiture and contrasting metal inlays for eyes."
+    },
+    {
+      "source_id": "met-edo-porcelain-essay",
+      "title": "Edo-Period Japanese Porcelain",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": "2011",
+      "url": "https://www.metmuseum.org/essays/edo-period-japanese-porcelain",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Japan",
+        "Hizen",
+        "Arita"
+      ],
+      "chronological_relevance": [
+        "Edo period",
+        "17th century"
+      ],
+      "license_copyright_notes": "Metadata/paraphrase only.",
+      "notes": "Supports Hizen/Arita emergence of Japanese porcelain and early Imari cobalt-blue underglaze on white ground."
+    },
+    {
+      "source_id": "met-arita-dishes-63588",
+      "title": "Set of Five Small Dishes with Flowering Plum and Warbler",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": null,
+      "url": "https://www.metmuseum.org/art/collection/search/63588",
+      "accessed_date": "2026-09-07",
+      "source_type": "primary_artifact",
+      "evidence_quality": "primary",
+      "geographic_relevance": [
+        "Japan",
+        "Arita",
+        "Hizen"
+      ],
+      "chronological_relevance": [
+        "Edo period",
+        "ca. 1640s"
+      ],
+      "license_copyright_notes": "Met object record; public-domain object image. Metadata only in V3.1.",
+      "notes": "Direct early Arita blue-and-white porcelain example."
+    },
+    {
+      "source_id": "met-ukiyoe-process",
+      "title": "Woodblock Prints in the Ukiyo-e Style",
+      "author": null,
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": "2003",
+      "url": "https://www.metmuseum.org/essays/woodblock-prints-in-the-ukiyo-e-style",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Japan",
+        "Edo"
+      ],
+      "chronological_relevance": [
+        "Edo period",
+        "18th–19th century"
+      ],
+      "license_copyright_notes": "Metadata/paraphrase only.",
+      "notes": "Supports collaborative artist/engraver/printer/publisher workflow, separate blocks per color, cherry wood, registration, mulberry paper."
+    },
+    {
+      "source_id": "britishmuseum-ukiyoe-process-2025",
+      "title": "How to make a woodblock print like Hiroshige",
+      "author": null,
+      "institution": "The British Museum",
+      "publication_date": "2025",
+      "url": "https://www.britishmuseum.org/blog/how-make-woodblock-print-hiroshige",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Japan",
+        "Edo"
+      ],
+      "chronological_relevance": [
+        "Edo period",
+        "Hiroshige"
+      ],
+      "license_copyright_notes": "Metadata/paraphrase only.",
+      "notes": "Supports publisher-led production, cherrywood blocks, kentō registration, baren printing, separate color blocks, bokashi."
+    },
+    {
+      "source_id": "freer-tang-blue-white-krahl",
+      "title": "Tang Blue-and-White",
+      "author": "Regina Krahl",
+      "institution": "Smithsonian National Museum of Asian Art / Shipwrecked publication archive",
+      "publication_date": "2010",
+      "url": "https://archive.asia.si.edu/Shipwrecked/downloads/15Krahl.pdf",
+      "accessed_date": "2026-09-07",
+      "source_type": "specialist_publication",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "China",
+        "Tang dynasty"
+      ],
+      "chronological_relevance": [
+        "Tang dynasty",
+        "Yuan dynasty"
+      ],
+      "license_copyright_notes": "Citation/metadata and paraphrase only; PDF not redistributed.",
+      "notes": "Supports existence of Tang cobalt-decorated blue-and-white ceramics while distinguishing later Yuan/Jingdezhen florescence."
+    },
+    {
+      "source_id": "met-hellenistic-age-essay",
+      "title": "Art of the Hellenistic Age and the Hellenistic Tradition",
+      "author": "Colette Hemingway and Seán Hemingway",
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": "2007-04-01",
+      "url": "https://www.metmuseum.org/essays/art-of-the-hellenistic-age-and-the-hellenistic-tradition",
+      "accessed_date": "2026-09-07",
+      "source_type": "museum",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Hellenistic Mediterranean",
+        "Greek world"
+      ],
+      "chronological_relevance": [
+        "323–31 BCE"
+      ],
+      "license_copyright_notes": "Use source as provenance; do not mirror copyrighted page text/images.",
+      "notes": "Supports Hellenistic chronology, expanded subject matter, royal patronage, cultural exchange and stylistic diversity."
+    },
+    {
+      "source_id": "met-hellenistic-sculpture-trends",
+      "title": "Pergamon and the Hellenistic Kingdoms of the Ancient World — Trends in Hellenistic Sculpture",
+      "author": "Kiki Karoglou",
+      "institution": "The Metropolitan Museum of Art",
+      "publication_date": "2016",
+      "url": "https://resources.metmuseum.org/resources/metpublications/pdf/Pergamon_and_the_Hellenistic_Kingdoms_of_the_Ancient_World.pdf",
+      "accessed_date": "2026-09-07",
+      "source_type": "specialist_publication",
+      "evidence_quality": "high",
+      "geographic_relevance": [
+        "Hellenistic Mediterranean"
+      ],
+      "chronological_relevance": [
+        "323–30 BCE"
+      ],
+      "license_copyright_notes": "Citation/provenance only unless specific publication permissions are verified.",
+      "notes": "Supports survival/copy bias, chronology uncertainty, stylistic eclecticism and regional attribution cautions."
+    }
+  ]
+}

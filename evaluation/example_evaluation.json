@@ -1,0 +1,88 @@
+{
+  "case_id": "03-roman-bronze-bust",
+  "schema_version": "3.1",
+  "scores": {
+    "semantic_compliance": 4.5,
+    "aesthetic_quality": 4.0,
+    "historical_cultural_integrity": 4.0,
+    "art_material_fidelity": 2.5,
+    "identity_fidelity": 4.0,
+    "technical_defects": 4.5
+  },
+  "subscores": {
+    "semantic_compliance": {
+      "subject": null,
+      "action": null,
+      "reference_roles": null,
+      "explicit_locks": null,
+      "requested_text": null
+    },
+    "aesthetic_quality": {
+      "visual_hierarchy": null,
+      "coherence": null,
+      "story_moment": null,
+      "light": null,
+      "composition": null
+    },
+    "historical_cultural_integrity": {
+      "wardrobe": null,
+      "hair_headwear": null,
+      "makeup_grooming": null,
+      "props": null,
+      "architecture_furniture": null,
+      "technology_writing": null,
+      "cross_cultural_contamination": null,
+      "evidence_confidence": null
+    },
+    "art_material_fidelity": {
+      "material_identity": 2.0,
+      "fabrication_marks": 2.5,
+      "surface_response": 2.0,
+      "color_behavior": 2.5,
+      "structural_behavior": 4.0,
+      "artifact_form": 4.0,
+      "artifact_state": 2.5,
+      "aging_weathering": 2.0
+    },
+    "identity_fidelity": {
+      "face_identity": null,
+      "age_presentation": null,
+      "distinctive_features": null,
+      "reference_role_isolation": null
+    },
+    "technical_defects": {
+      "anatomy": null,
+      "hands": null,
+      "object_geometry": null,
+      "text_rendering": null,
+      "edge_artifacts": null,
+      "unwanted_duplication": null
+    }
+  },
+  "observations": [
+    "Identity, crop and museum-neutral presentation are working; bronze material response is the primary failure."
+  ],
+  "failures": [
+    {
+      "class": "material_failure",
+      "severity": "major",
+      "observation": "The bust reads as brown-painted resin; highlights are diffuse and the patina is a uniform green overlay."
+    }
+  ],
+  "failure_classes": [
+    "material_failure"
+  ],
+  "preserve": [
+    "face likeness",
+    "bust crop",
+    "museum-neutral background"
+  ],
+  "change": [
+    "bronze metallic reflection",
+    "localized patina distribution",
+    "cast/chased surface evidence"
+  ],
+  "revision_instruction": "Correct bronze material behavior without changing the sitter, bust crop, or neutral museum setting.",
+  "model_metadata": {},
+  "evidence_snapshot_sha256": null
+}

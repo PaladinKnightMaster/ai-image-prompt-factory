@@ -1,0 +1,88 @@
+{
+  "version": "1.0.0",
+  "pack_id": "ming",
+  "claims": [
+    {
+      "claim_id": "ming-bluewhite-001",
+      "version": "1.0.0",
+      "subject": "ceramic_chronology",
+      "value": "Blue-and-white porcelain became a dominant and highly developed Ming ceramic tradition building on Yuan innovations.",
+      "context": {
+        "pack_ids": [
+          "ming"
+        ]
+      },
+      "compatibility": "canonical",
+      "confidence": 0.96,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-ming-essay",
+        "met-yuan-blue-white-42494"
+      ],
+      "interpretation": "Ming is a much stronger default historical context for familiar mature Chinese blue-and-white porcelain than Tang.",
+      "prompt_implications": [
+        "In a Ming setting, mature Jingdezhen blue-and-white porcelain can be used when role/status/context supports the object."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "blue-and-white",
+        "blue and white",
+        "porcelain",
+        "jingdezhen"
+      ],
+      "always_for_context": false,
+      "survival_bias": null,
+      "mode_actions": {}
+    },
+    {
+      "claim_id": "ming-wuxia-overlay-001",
+      "version": "1.0.0",
+      "subject": "genre_overlay",
+      "value": "Wuxia is a narrative/genre overlay, not a historical dynasty or evidence category.",
+      "context": {
+        "pack_ids": [
+          "ming",
+          "wuxia"
+        ]
+      },
+      "compatibility": "interpretive",
+      "confidence": 0.98,
+      "confidence_reason": "Supported by cited museum/heritage/specialist evidence at the stated scope.",
+      "source_ids": [
+        "met-ming-essay"
+      ],
+      "interpretation": "A grounded Ming-wuxia image should use Ming material culture as the base and apply wuxia through action, narrative tension, mobility, and martial competence rather than magic.",
+      "prompt_implications": [
+        "Keep Ming as the material-historical base; express wuxia through restrained weapon logic, travel context, social tension, and cinematic narrative—not supernatural glow."
+      ],
+      "safer_alternatives": [],
+      "trigger_keywords": [
+        "wuxia",
+        "swordswoman",
+        "swordsman",
+        "martial",
+        "inn"
+      ],
+      "always_for_context": true,
+      "survival_bias": null,
+      "mode_actions": {
+        "strict_reconstruction": {
+          "status": "reject",
+          "instruction": "Remove the genre overlay or explicitly reframe as a modern fictional reconstruction; strict historical reconstruction cannot treat wuxia conventions as direct evidence."
+        },
+        "historically_informed": {
+          "status": "qualify",
+          "instruction": "Use Ming material anchors while keeping wuxia conventions visibly interpretive."
+        },
+        "period_drama": {
+          "status": "accept",
+          "instruction": "Use Ming material anchors with grounded wuxia dramatization and no unrequested magic."
+        },
+        "fantasy_hybrid": {
+          "status": "allow_hybrid",
+          "instruction": "Allow explicit genre invention while keeping historical anchors legible."
+        }
+      }
+    }
+  ]
+}

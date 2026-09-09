@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "3.2.0",
+  "claims": [
+    {
+      "claim_id": "greek-marble-polychromy-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.96,
+      "source_ids": [
+        "britishmuseum-parthenon-polychromy"
+      ]
+    },
+    {
+      "claim_id": "greek-bronze-survival-001",
+      "version": "1.0.0",
+      "compatibility": "well_attested",
+      "confidence": 0.97,
+      "source_ids": [
+        "met-greek-bronze-technique"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "britishmuseum-parthenon-polychromy",
+      "title": "Paint and the Parthenon: conservation of ancient Greek sculpture",
+      "institution": "The British Museum",
+      "url": "https://www.britishmuseum.org/blog/paint-and-parthenon-conservation-ancient-greek-sculpture",
+      "evidence_quality": "high"
+    },
+    {
+      "source_id": "met-greek-bronze-technique",
+      "title": "The Technique of Bronze Statuary in Ancient Greece",
+      "institution": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/essays/the-technique-of-bronze-statuary-in-ancient-greece",
+      "evidence_quality": "high"
+    }
+  ],
+  "claim_relationships": [
+    {
+      "conflict_id": "greek-original-vs-surviving-surface-001",
+      "version": "1.0.0",
+      "type": "interpretive_tension",
+      "claim_ids": [
+        "greek-marble-polychromy-001",
+        "greek-bronze-survival-001"
+      ]
+    }
+  ],
+  "snapshot_sha256": "c7d4e540956e88ed08cfa4f61221768b7ce030b1115cad0331f58101f31ffe1a"
+}

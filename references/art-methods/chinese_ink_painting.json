@@ -1,0 +1,73 @@
+{
+  "id": "chinese_ink_painting",
+  "name": "Chinese ink painting",
+  "family": "painting",
+  "material": "carbon-based ink on absorbent paper or silk; may be monochrome or combined with restrained color",
+  "fabrication_process": [
+    "prepare paper/silk and ink",
+    "load brush with controlled water/ink concentration",
+    "build calligraphic lines, washes, texture strokes and blank-space relationships",
+    "mount work as appropriate"
+  ],
+  "visible_production_marks": [
+    "brush-tip taper",
+    "dry-brush drag",
+    "wet wash bloom/feathering",
+    "tonal density from pale gray to saturated black"
+  ],
+  "edge_behavior": "Edges vary by brush speed, moisture and absorbency: decisive calligraphic contours can coexist with dissolved wash edges.",
+  "mark_making": [
+    "brush-tip taper",
+    "dry-brush drag",
+    "wet wash bloom/feathering",
+    "tonal density from pale gray to saturated black"
+  ],
+  "color_behavior": "Value comes from ink concentration and water; blank substrate is an active light/color field.",
+  "surface_behavior": "Absorbent fibers/silk weave subtly affect stroke edges; no thick acrylic impasto.",
+  "composition_behavior": "Use spatial rhythm, void, directional brushwork and selective detail instead of photographic depth-of-field simulation.",
+  "structural_limitations": [
+    "do not render every surface with equal microdetail",
+    "avoid opaque digital-black fills",
+    "avoid Western watercolor blooms as the only ink behavior"
+  ],
+  "aging_weathering": [
+    "paper may fox/yellow/crease depending on state",
+    "mounting wear and seals/inscriptions only when appropriate and verified"
+  ],
+  "artifact_compatibility": [
+    "scroll",
+    "album_leaf",
+    "folding_screen",
+    "book_page"
+  ],
+  "prompt_fragments": {
+    "core": "Reconstruct the subject with calligraphic brush line, controlled ink dilution, dry/wet stroke contrast and meaningful untouched paper/silk; let brush rhythm describe form rather than tracing a photo under a filter."
+  },
+  "typical_generation_failures": [
+    "photograph with black watercolor overlay",
+    "uniform gray wash",
+    "airbrushed gradients",
+    "fake calligraphy",
+    "every hair rendered individually"
+  ],
+  "evaluation_criteria": [
+    "brushwork has directional intention",
+    "ink density/water behavior are visible",
+    "blank substrate contributes composition",
+    "detail hierarchy follows painting logic"
+  ],
+  "sources": [
+    {
+      "url": "https://www.metmuseum.org/exhibitions/listings/2020/chinese-painting-calligraphy",
+      "type": "museum",
+      "supports": "ink tone, saturation, line, brushwork and texture as critical distinctions"
+    },
+    {
+      "url": "https://www.metmuseum.org/essays/chinese-painting",
+      "type": "museum",
+      "supports": "calligraphic brush line and ink-on-paper scholar painting traditions"
+    }
+  ],
+  "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "version": "1.0.0"
+}

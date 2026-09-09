@@ -1,0 +1,23 @@
+{
+  "benchmark_id": "BENCH-009",
+  "version": "1.0.0",
+  "category": "historical",
+  "request": "Dunhuang mural transformation",
+  "status": "candidate",
+  "semantic_spec_path": "benchmarks/specs/BENCH-009.json",
+  "related_experiments": [],
+  "generation": {
+    "status": "not_generated",
+    "output_image": null,
+    "provider": null,
+    "model": null
+  },
+  "human_approved": false,
+  "compiled_prompt_path": "benchmarks/compiled/BENCH-009.md",
+  "pattern_trace": [],
+  "evidence_snapshot_sha256": "06afe90693702a85d7f666573b0d7c0cd9082c58b8d8a445ff84731f8f92ac8e",
+  "compiler_version": "3.2.0",
+  "skill_version": "3.2.0",
+  "model_target": "gpt-image-2",
+  "model_snapshot": "gpt-image-2-2026-04-21"
+}
