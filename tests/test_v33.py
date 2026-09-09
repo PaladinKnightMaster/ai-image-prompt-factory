@@ -243,3 +243,68 @@ def test_v33_duplicate_blind_ids_are_rejected():
 
     with pytest.raises(ValueError, match="unique"):
         validate_blind_ids(run)
+
+def test_exp001_pose_treatment_is_grammatical():
+    run = create_run_plan(
+        "EXP-001",
+        replicates=1,
+    )
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    treatment = prompts["variant"]
+
+    assert (
+        "stands in a dynamic but physically grounded pose, "
+        "with most body weight on the rear leg"
+        in treatment
+    )
+
+    assert "stands in a most body weight" not in treatment
+
+
+def test_exp001_factors_distinguish_control_and_treatment():
+    run = create_run_plan(
+        "EXP-001",
+        replicates=1,
+    )
+
+    factors = {
+        variant["variant_id"]: variant["factor"]
+        for variant in run["variants"]
+    }
+
+    assert factors["control"] == "generic_pose"
+
+    assert (
+        factors["variant"]
+        == "explicit_pose_mechanics"
+    )
+
+
+def test_exp001_only_replaces_pose_language():
+    run = create_run_plan(
+        "EXP-001",
+        replicates=1,
+    )
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    expected = prompts["control"].replace(
+        "dynamic elegant pose",
+        (
+            "dynamic but physically grounded pose, "
+            "with most body weight on the rear leg, "
+            "front leg relaxed, pelvis subtly shifted, "
+            "shoulders counterbalanced, "
+            "and one hand supported naturally"
+        ),
+    )
+
+    assert prompts["variant"] == expected

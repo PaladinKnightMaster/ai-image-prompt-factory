@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-001",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "hypothesis": "Explicit posture mechanics outperform generic pose language",
   "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
   "variants": [
@@ -11,10 +11,10 @@
     },
     {
       "id": "variant",
-      "factor": "generic_pose",
+      "factor": "explicit_pose_mechanics",
       "operation": "replace_literal",
       "old": "dynamic elegant pose",
-      "new": "most body weight on the rear leg, front leg relaxed, pelvis subtly shifted, shoulders counterbalanced, one hand supported naturally"
+      "new": "dynamic but physically grounded pose, with most body weight on the rear leg, front leg relaxed, pelvis subtly shifted, shoulders counterbalanced, and one hand supported naturally"
     }
   ],
   "preserved_dimensions": [
@@ -22,13 +22,18 @@
     "environment",
     "lighting",
     "aspect ratio",
+    "wardrobe",
+    "held object",
+    "camera language",
+    "quality language",
+    "negative constraints",
     "identity unless factor explicitly tests it"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "generic_pose"
+    "pose_mechanics"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
