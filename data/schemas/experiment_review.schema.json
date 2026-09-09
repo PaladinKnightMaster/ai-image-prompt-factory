@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.3/experiment_review.schema.json",
+  "title": "AIPF Blind Experiment Review",
+  "type": "object",
+  "required": [
+    "run_id",
+    "experiment_id",
+    "review_package_sha256",
+    "status",
+    "created_at_utc",
+    "score_scale",
+    "evaluation_dimensions",
+    "items"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "review_package_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "status": {"enum": ["open", "frozen"]},
+    "created_at_utc": {"type": "string", "minLength": 1},
+    "frozen_at_utc": {"type": ["string", "null"]},
+    "review_sha256": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    },
+    "score_scale": {
+      "type": "object",
+      "required": ["min", "max", "higher_is_better"],
+      "properties": {
+        "min": {"const": 1},
+        "max": {"const": 5},
+        "higher_is_better": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "evaluation_dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["blind_id", "scores", "notes"],
+        "properties": {
+          "blind_id": {
+            "type": "string",
+            "minLength": 4,
+            "pattern": "^[A-Z2-9]+$"
+          },
+          "scores": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {"type": "null"},
+                {"type": "number", "minimum": 1, "maximum": 5}
+              ]
+            }
+          },
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

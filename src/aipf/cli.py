@@ -22,6 +22,10 @@ from .experiment_execution import (
     import_output,
     record_failed_output,
 )
+from .experiment_review import (
+    create_review_package,
+    freeze_review,
+)
 
 
 def _load(p): return json.loads(Path(p).read_text(encoding='utf-8'))
@@ -84,6 +88,13 @@ def main():
     p.add_argument("run_file")
     p.add_argument("--limit", type=int)
     p.add_argument("--dry-run", action="store_true")
+
+    p = sub.add_parser("experiment-review-package")
+    p.add_argument("run_file")
+    p.add_argument("--output")
+
+    p = sub.add_parser("experiment-review-freeze")
+    p.add_argument("review_file")
 
     args=ap.parse_args()
     if args.cmd=='classify': print(classify(args.request,args.has_reference)); return
@@ -202,6 +213,17 @@ def main():
                 dry_run=args.dry_run,
             )
         )
+        return
+    if args.cmd == "experiment-review-package":
+        _dump(
+            create_review_package(
+                args.run_file,
+                output=args.output,
+            )
+        )
+        return
+    if args.cmd == "experiment-review-freeze":
+        _dump(freeze_review(args.review_file))
         return
 
 if __name__=='__main__': main()

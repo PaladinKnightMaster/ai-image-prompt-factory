@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -10,9 +11,14 @@ from aipf.experiment_execution import (
     import_output,
     record_failed_output,
 )
+from aipf.experiment_review import (
+    create_review_package,
+    freeze_review,
+)
 from aipf.experiment_runs import (
     create_run_plan,
     load_run_plan,
+    sha256_file,
     validate_blind_ids,
     write_run_plan,
 )
@@ -244,11 +250,10 @@ def test_v33_duplicate_blind_ids_are_rejected():
     with pytest.raises(ValueError, match="unique"):
         validate_blind_ids(run)
 
+
+
 def test_exp001_pose_treatment_is_grammatical():
-    run = create_run_plan(
-        "EXP-001",
-        replicates=1,
-    )
+    run = create_run_plan("EXP-001", replicates=1)
 
     prompts = {
         variant["variant_id"]: variant["prompt"]
@@ -262,15 +267,11 @@ def test_exp001_pose_treatment_is_grammatical():
         "with most body weight on the rear leg"
         in treatment
     )
-
     assert "stands in a most body weight" not in treatment
 
 
 def test_exp001_factors_distinguish_control_and_treatment():
-    run = create_run_plan(
-        "EXP-001",
-        replicates=1,
-    )
+    run = create_run_plan("EXP-001", replicates=1)
 
     factors = {
         variant["variant_id"]: variant["factor"]
@@ -278,18 +279,11 @@ def test_exp001_factors_distinguish_control_and_treatment():
     }
 
     assert factors["control"] == "generic_pose"
-
-    assert (
-        factors["variant"]
-        == "explicit_pose_mechanics"
-    )
+    assert factors["variant"] == "explicit_pose_mechanics"
 
 
 def test_exp001_only_replaces_pose_language():
-    run = create_run_plan(
-        "EXP-001",
-        replicates=1,
-    )
+    run = create_run_plan("EXP-001", replicates=1)
 
     prompts = {
         variant["variant_id"]: variant["prompt"]
@@ -308,3 +302,140 @@ def test_exp001_only_replaces_pose_language():
     )
 
     assert prompts["variant"] == expected
+
+
+def test_host_export_preserves_prompt_exactly(tmp_path):
+    run = create_run_plan("EXP-001", replicates=1)
+    run_file = write_run_plan(run, tmp_path / "runs")
+
+    result = export_host_package(run_file)
+    manifest = json.loads(
+        Path(result["manifest"]).read_text(encoding="utf-8")
+    )
+
+    expected = {
+        output["blind_id"]: variant["prompt"]
+        for variant in run["variants"]
+        for output in variant["outputs"]
+    }
+
+    for task in manifest["tasks"]:
+        assert task["prompt"] == expected[task["blind_id"]]
+
+
+def test_host_export_hash_matches_prompt(tmp_path):
+    run = create_run_plan("EXP-001", replicates=1)
+    run_file = write_run_plan(run, tmp_path / "runs")
+
+    result = export_host_package(run_file)
+    manifest = json.loads(
+        Path(result["manifest"]).read_text(encoding="utf-8")
+    )
+
+    for task in manifest["tasks"]:
+        actual = hashlib.sha256(
+            task["prompt"].encode("utf-8")
+        ).hexdigest()
+        assert actual == task["prompt_sha256"]
+
+
+def _complete_test_run(tmp_path, replicates=1):
+    run = create_run_plan("EXP-001", replicates=replicates)
+    run_file = write_run_plan(run, tmp_path / "runs")
+
+    for index, output in enumerate(_all_outputs(run), start=1):
+        image = tmp_path / f"review-source-{index}.png"
+        image.write_bytes(f"review-image-{index}".encode("utf-8"))
+        import_output(
+            run_file,
+            blind_id=output["blind_id"],
+            image=image,
+        )
+
+    return run_file
+
+
+def test_v33_review_package_requires_completed_run(tmp_path):
+    run = create_run_plan("EXP-001", replicates=1)
+    run_file = write_run_plan(run, tmp_path / "runs")
+
+    with pytest.raises(ValueError, match="completed run"):
+        create_review_package(run_file)
+
+
+def test_v33_review_package_is_blind_safe(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=2)
+    result = create_review_package(run_file)
+
+    manifest_path = Path(result["manifest"])
+    manifest_text = manifest_path.read_text(encoding="utf-8").lower()
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+    assert result["review_count"] == 4
+    assert manifest["review_count"] == 4
+    assert '"variant_id"' not in manifest_text
+    assert '"factor"' not in manifest_text
+    assert '"prompt"' not in manifest_text
+    assert '"prompt_sha256"' not in manifest_text
+    assert '"replicate"' not in manifest_text
+    assert "control" not in manifest_text
+    assert "variant" not in manifest_text
+
+    for item in manifest["items"]:
+        image = manifest_path.parent / item["image"]
+        assert image.exists()
+        assert sha256_file(image) == item["image_sha256"]
+
+
+def test_v33_review_schema_accepts_open_template(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    result = create_review_package(run_file)
+
+    review = json.loads(
+        Path(result["review"]).read_text(encoding="utf-8")
+    )
+    schema = json.loads(
+        (
+            repo_root()
+            / "data"
+            / "schemas"
+            / "experiment_review.schema.json"
+        ).read_text(encoding="utf-8")
+    )
+
+    errors = list(Draft202012Validator(schema).iter_errors(review))
+    assert errors == []
+
+
+def test_v33_freeze_review_requires_all_scores(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    result = create_review_package(run_file)
+
+    with pytest.raises(ValueError, match="must be a number"):
+        freeze_review(result["review"])
+
+
+def test_v33_freeze_review_writes_hashed_snapshot(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    result = create_review_package(run_file)
+    review_path = Path(result["review"])
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+
+    for item in review["items"]:
+        for dimension in review["evaluation_dimensions"]:
+            item["scores"][dimension] = 4
+        item["notes"] = "blind review note"
+
+    review_path.write_text(
+        json.dumps(review, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    frozen_result = freeze_review(review_path)
+    frozen_path = Path(frozen_result["review"])
+    frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+
+    assert frozen["status"] == "frozen"
+    assert frozen["frozen_at_utc"]
+    assert len(frozen["review_sha256"]) == 64
+    assert frozen_result["review_sha256"] == frozen["review_sha256"]
