@@ -181,11 +181,13 @@ def create_review_package(
                     f"copied image hash mismatch for review_id {review_id}"
                 )
 
+            # Reviewer-facing package deliberately omits the image hash.
+            # The same hash is retained only in the private mapping below so
+            # integrity can still be verified after the review is frozen.
             items.append(
                 {
                     "review_id": review_id,
                     "image": review_name,
-                    "image_sha256": copied_hash,
                 }
             )
             mapping_entries.append(

@@ -26,12 +26,17 @@ After a completed run, `aipf experiment-review-package <run.json>` assigns a
 fresh independent review ID to every image and copies only those re-aliased
 images into `blind-review/`. The reviewer-facing manifest and review template do
 not contain generation blind IDs, variant IDs, factors, prompts, prompt hashes,
-or replicate numbers.
+replicate numbers, or image SHA-256 values. Image hashes are intentionally kept
+out of reviewer-facing files because a hash exposed earlier in the generation
+workflow could otherwise be used to correlate a review ID back to a generation
+ID.
 
 The review-ID-to-treatment mapping is stored separately under
-`.review-private/mapping.json`. A SHA-256 commitment to that mapping is embedded
-in the reviewer package before scoring. This prevents the mapping from being
-silently changed after review.
+`.review-private/mapping.json`. Private mapping entries retain the image SHA-256
+values for integrity verification after the review is frozen. A SHA-256
+commitment to that mapping is embedded in the reviewer package before scoring.
+This prevents the mapping from being silently changed after review while keeping
+the correlation key out of the reviewer context.
 
 A review must be fully scored and frozen with
 `aipf experiment-review-freeze <blind-review/review.json>` before

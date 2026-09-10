@@ -392,6 +392,7 @@ def test_v33_review_package_is_blind_safe(tmp_path):
         "prompt",
         "prompt_sha256",
         "replicate",
+        "image_sha256",
     }
 
     def walk_keys(value):
@@ -415,14 +416,29 @@ def test_v33_review_package_is_blind_safe(tmp_path):
     for item in manifest["items"]:
         image = manifest_path.parent / item["image"]
         assert image.exists()
-        assert sha256_file(image) == item["image_sha256"]
         assert image.stem == item["review_id"]
+        assert set(item) == {"review_id", "image"}
 
-    mapping = (
+    review_path = Path(result["review"])
+    review_text = review_path.read_text(encoding="utf-8")
+    assert "image_sha256" not in review_text
+
+    mapping_path = (
         Path(run_file).parent / ".review-private" / "mapping.json"
     )
-    assert mapping.exists()
-    assert mapping.parent != manifest_path.parent
+    assert mapping_path.exists()
+    assert mapping_path.parent != manifest_path.parent
+
+    mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+    mapping_by_review_id = {
+        entry["review_id"]: entry for entry in mapping["entries"]
+    }
+    assert set(mapping_by_review_id) == review_ids
+
+    for item in manifest["items"]:
+        image = manifest_path.parent / item["image"]
+        private_entry = mapping_by_review_id[item["review_id"]]
+        assert private_entry["image_sha256"] == sha256_file(image)
 
 
 def test_v33_review_schema_accepts_open_template(tmp_path):
