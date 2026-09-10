@@ -584,3 +584,53 @@ def test_v33_tampered_frozen_review_cannot_reveal(tmp_path):
 
     with pytest.raises(ValueError, match="hash verification"):
         reveal_review(run_file)
+
+def test_exp002_factors_distinguish_control_and_treatment():
+    run = create_run_plan("EXP-002", replicates=1)
+
+    factors = {
+        variant["variant_id"]: variant["factor"]
+        for variant in run["variants"]
+    }
+
+    assert factors["control"] == "material_name_only"
+    assert factors["variant"] == "material_physics"
+
+
+def test_exp002_material_treatment_is_grammatical():
+    run = create_run_plan("EXP-002", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    treatment = prompts["variant"]
+
+    assert (
+        "geometry-following specular reflections under the existing "
+        "window light, while holding a ceramic vase"
+        in treatment
+    )
+
+    assert "cloth geometry and holding" not in treatment
+
+
+def test_exp002_only_replaces_material_language():
+    run = create_run_plan("EXP-002", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    expected = prompts["control"].replace(
+        "wearing a satin outfit and holding a ceramic vase",
+        (
+            "wearing a satin outfit whose fabric shows smooth drape, "
+            "tension folds, and geometry-following specular reflections "
+            "under the existing window light, while holding a ceramic vase"
+        ),
+    )
+
+    assert prompts["variant"] == expected
