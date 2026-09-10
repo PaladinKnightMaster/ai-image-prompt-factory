@@ -1,26 +1,30 @@
 {
   "experiment_id": "EXP-004",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "hypothesis": "Explicit hand-object mechanics outperform generic holding",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase with both hands. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
   "variants": [
     {
       "id": "control",
-      "factor": "hand_prop",
+      "factor": "generic_holding",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "hand_prop",
+      "factor": "explicit_hand_object_mechanics",
       "operation": "replace_literal",
-      "old": "holding a ceramic vase",
-      "new": "supporting the ceramic vase with the left palm under its base while the right fingers steady the neck without covering the decoration"
+      "old": "holding a ceramic vase with both hands",
+      "new": "supporting a ceramic vase with the left palm beneath its base while the right hand steadies the neck, with the fingers conforming to the vase surface and the wrists aligned with the load"
     }
   ],
   "preserved_dimensions": [
     "subject",
+    "overall body pose",
+    "wardrobe",
+    "object",
     "environment",
     "lighting",
+    "composition",
     "aspect ratio",
     "identity unless factor explicitly tests it"
   ],
@@ -28,7 +32,7 @@
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "hand_prop"
+    "hand_object_interaction"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",

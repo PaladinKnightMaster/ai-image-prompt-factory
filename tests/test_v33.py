@@ -634,3 +634,61 @@ def test_exp002_only_replaces_material_language():
     )
 
     assert prompts["variant"] == expected
+
+def test_exp004_factors_distinguish_control_and_treatment():
+    run = create_run_plan("EXP-004", replicates=1)
+
+    factors = {
+        variant["variant_id"]: variant["factor"]
+        for variant in run["variants"]
+    }
+
+    assert factors["control"] == "generic_holding"
+    assert factors["variant"] == "explicit_hand_object_mechanics"
+
+
+def test_exp004_controls_two_hand_usage():
+    run = create_run_plan("EXP-004", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    assert "holding a ceramic vase with both hands" in prompts["control"]
+    assert "left palm beneath its base" in prompts["variant"]
+    assert "right hand steadies the neck" in prompts["variant"]
+
+
+def test_exp004_treatment_avoids_artifact_visibility_confound():
+    run = create_run_plan("EXP-004", replicates=1)
+
+    treatment = next(
+        variant["prompt"]
+        for variant in run["variants"]
+        if variant["variant_id"] == "variant"
+    )
+
+    assert "without covering the decoration" not in treatment
+    assert "fingers conforming to the vase surface" in treatment
+    assert "wrists aligned with the load" in treatment
+
+
+def test_exp004_only_replaces_interaction_mechanics():
+    run = create_run_plan("EXP-004", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    expected = prompts["control"].replace(
+        "holding a ceramic vase with both hands",
+        (
+            "supporting a ceramic vase with the left palm beneath its base "
+            "while the right hand steadies the neck, with the fingers "
+            "conforming to the vase surface and the wrists aligned with the load"
+        ),
+    )
+
+    assert prompts["variant"] == expected
