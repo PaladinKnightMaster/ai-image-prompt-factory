@@ -649,10 +649,10 @@
     },
     {
       "pattern_id": "material-satin-fold-response",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "name": "Satin fold and highlight logic",
       "category": "material_cues",
-      "validation_status": "observed",
+      "validation_status": "mixed",
       "mechanism": {
         "instruction": "Describe satin through smooth drape, tension folds, and directional specular ribbons that follow the cloth geometry.",
         "expected_effects": []
@@ -672,16 +672,21 @@
           "LCC-P0024",
           "LCC-P0025"
         ],
-        "experiments": [],
+        "experiments": [
+          "EXP-002-1.0.1-20260910T181605Z-2GVM"
+        ],
         "validation_basis": [
-          "internal_source_corpus_observation"
+          "internal_source_corpus_observation",
+          "controlled_blind_experiment"
         ]
       },
       "confidence": {
-        "level": "observed",
-        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+        "level": "mixed",
+        "note": "Internal corpus observations suggest a plausible satin-fold mechanism, but EXP-002 v1.0.1 contradicted the superiority claim in one small-N blinded portrait run: explicit material-physics wording scored lower on the primary material_physics dimension than material-name-only prompting. Keep non-compiler-eligible pending replication across prompts, materials, lighting, and routes."
       },
-      "failure_modes": [],
+      "failure_modes": [
+        "Explicit material-physics wording may overconstrain or fail to improve perceived fabric behavior when the model already renders a strongly recognized material such as satin."
+      ],
       "retrieval_terms": [
         "satin"
       ],

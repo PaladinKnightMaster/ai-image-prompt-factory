@@ -8,3 +8,8 @@ AIPF stores completed empirical experiment findings in **both JSON and Markdown*
 When the two representations disagree, the JSON record is authoritative and the Markdown report must be regenerated or corrected.
 
 Results must preserve the run ID, experiment version, review hash, mapping commitment, aggregate scores, evidence classification, limitations, and raw revealed score mapping. Small-N experiments must use evidence language such as `supports`, `weakly_supports`, `inconclusive`, `weakly_contradicts`, or `contradicts`; they must not claim statistical significance without an appropriate statistical design.
+
+## Recorded V3.3 results
+
+- `EXP-001-1.0.1-20260910T132045Z-DEQ4` - explicit pose mechanics vs generic pose language; **weakly_contradicts**.
+- `EXP-002-1.0.1-20260910T181605Z-2GVM` - explicit material physics vs material-name-only; **contradicts**.

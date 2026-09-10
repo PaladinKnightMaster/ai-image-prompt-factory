@@ -31,8 +31,9 @@
     "material_physics"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "material-satin-fold-response"
-  ]
+  ],
+  "latest_result": "experiments/results/EXP-002/EXP-002-1.0.1-20260910T181605Z-2GVM.result.json"
 }

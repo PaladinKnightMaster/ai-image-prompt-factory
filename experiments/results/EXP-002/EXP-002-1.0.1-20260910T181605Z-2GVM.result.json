@@ -1,0 +1,187 @@
+{
+  "result_id": "EXP-002-1.0.1-20260910T181605Z-2GVM",
+  "experiment_id": "EXP-002",
+  "experiment_version": "1.0.1",
+  "run_id": "EXP-002-1.0.1-20260910T181605Z-2GVM",
+  "status": "revealed",
+  "hypothesis": "Material physics outperforms material-name-only",
+  "primary_dimension": "material_physics",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "e4d1bc2b577537226ba0bb6a6fae9406c4ddd410cd7e01f0fd55f1bd2692a3fb",
+    "mapping_commitment_sha256": "bc875daf2235c9f3b3a5c129f6efe2bfe8ebdba667d258739006d488293f5515",
+    "frozen_at_utc": "2026-09-10T20:12:35.967381+00:00",
+    "revealed_at_utc": "2026-09-10T20:16:48.623803+00:00"
+  },
+  "variants": {
+    "control": {
+      "factor": "material_name_only",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 5.0,
+        "material_physics": 4.75,
+        "overall": 4.875
+      },
+      "overall_sample_sd": 0.1443
+    },
+    "variant": {
+      "factor": "material_physics",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "material_physics": 4.0,
+        "overall": 4.75
+      },
+      "overall_sample_sd": 0.2041
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.25,
+    "technical_defects": 0.0,
+    "material_physics": -0.75,
+    "overall": -0.125
+  },
+  "evidence_classification": "contradicts",
+  "interpretation": "In this satin-portrait prompt context, explicitly describing smooth drape, tension folds, and geometry-following specular reflections did not improve perceived material physics over naming satin alone. The material-physics variant scored 0.75 lower on the primary material_physics dimension and 0.125 lower overall, despite a 0.25 gain in aesthetic quality. This single small-N run contradicts the tested superiority hypothesis in this context, but it does not establish that explicit material-physics language is generally harmful. Replication across prompts, materials, lighting conditions, and routes is required before changing any general compiler rule.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "The review contains one frozen score set, so inter-rater reliability was not measured.",
+    "Semantic compliance and technical-defect scores were at the ceiling for every image, limiting discrimination on those dimensions.",
+    "The host exposed the model family as gpt-image-2 but not an exact model snapshot.",
+    "The finding is specific to satin in this portrait-and-window-light context and should not be generalized to other materials or routes without replication."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "material-satin-fold-response",
+      "recommended_validation_status": "mixed",
+      "compiler_eligible": false,
+      "reason": "Internal corpus observations suggest a plausible satin-fold mechanism, but the first controlled blinded EXP-002 run contradicted the claim that this explicit material-physics wording outperforms material-name-only prompting in the tested portrait context."
+    }
+  ],
+  "raw_scores": [
+    {
+      "review_id": "R8BGSQPK",
+      "blind_id": "RNTFRK",
+      "variant_id": "control",
+      "factor": "material_name_only",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "material_physics": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RF2GZ2KM",
+      "blind_id": "9727ZL",
+      "variant_id": "control",
+      "factor": "material_name_only",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "material_physics": 5
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RZXK76BF",
+      "blind_id": "3PKSRL",
+      "variant_id": "control",
+      "factor": "material_name_only",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "material_physics": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R8FH8HVQ",
+      "blind_id": "MD5BAY",
+      "variant_id": "control",
+      "factor": "material_name_only",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "material_physics": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RQ2SVD49",
+      "blind_id": "M9HEFT",
+      "variant_id": "variant",
+      "factor": "material_physics",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "material_physics": 3
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RW4HY5W3",
+      "blind_id": "L6CEBV",
+      "variant_id": "variant",
+      "factor": "material_physics",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "material_physics": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "R38SHPUS",
+      "blind_id": "CDGE5W",
+      "variant_id": "variant",
+      "factor": "material_physics",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "material_physics": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RTNPQFHY",
+      "blind_id": "AFQF4V",
+      "variant_id": "variant",
+      "factor": "material_physics",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "material_physics": 4
+      },
+      "overall": 4.75
+    }
+  ]
+}
