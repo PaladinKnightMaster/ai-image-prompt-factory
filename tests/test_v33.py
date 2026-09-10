@@ -7,6 +7,7 @@ from jsonschema import Draft202012Validator
 
 from aipf.experiment_execution import (
     execute_run,
+    experiment_status,
     export_host_package,
     import_output,
     record_failed_output,
@@ -14,6 +15,7 @@ from aipf.experiment_execution import (
 from aipf.experiment_review import (
     create_review_package,
     freeze_review,
+    reveal_review,
 )
 from aipf.experiment_runs import (
     create_run_plan,
@@ -176,6 +178,9 @@ def test_v33_import_output_updates_private_run(tmp_path):
     assert imported["image_sha256"]
     assert imported["metadata"] == f"{first_blind}.json"
     assert loaded["status"] == "partial"
+    assert Path(result["image"]).parent.name == "outputs"
+    assert "control" not in result["image"].lower()
+    assert "variant" not in result["image"].lower()
 
 
 def test_v33_import_all_outputs_completes_run(tmp_path):
@@ -365,26 +370,59 @@ def test_v33_review_package_requires_completed_run(tmp_path):
 
 def test_v33_review_package_is_blind_safe(tmp_path):
     run_file = _complete_test_run(tmp_path, replicates=2)
-    result = create_review_package(run_file)
+    run = load_run_plan(run_file)
+    generation_ids = {
+        output["blind_id"]
+        for output in _all_outputs(run)
+    }
 
+    result = create_review_package(run_file)
     manifest_path = Path(result["manifest"])
-    manifest_text = manifest_path.read_text(encoding="utf-8").lower()
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest_text = manifest_path.read_text(encoding="utf-8")
+    manifest = json.loads(manifest_text)
 
     assert result["review_count"] == 4
     assert manifest["review_count"] == 4
-    assert '"variant_id"' not in manifest_text
-    assert '"factor"' not in manifest_text
-    assert '"prompt"' not in manifest_text
-    assert '"prompt_sha256"' not in manifest_text
-    assert '"replicate"' not in manifest_text
-    assert "control" not in manifest_text
-    assert "variant" not in manifest_text
+    assert result["mapping_commitment_sha256"]
+
+    forbidden_keys = {
+        "blind_id",
+        "variant_id",
+        "factor",
+        "prompt",
+        "prompt_sha256",
+        "replicate",
+    }
+
+    def walk_keys(value):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                yield key
+                yield from walk_keys(child)
+        elif isinstance(value, list):
+            for child in value:
+                yield from walk_keys(child)
+
+    assert forbidden_keys.isdisjoint(set(walk_keys(manifest)))
+
+    review_ids = {item["review_id"] for item in manifest["items"]}
+    assert len(review_ids) == 4
+    assert review_ids.isdisjoint(generation_ids)
+
+    for generation_id in generation_ids:
+        assert generation_id not in manifest_text
 
     for item in manifest["items"]:
         image = manifest_path.parent / item["image"]
         assert image.exists()
         assert sha256_file(image) == item["image_sha256"]
+        assert image.stem == item["review_id"]
+
+    mapping = (
+        Path(run_file).parent / ".review-private" / "mapping.json"
+    )
+    assert mapping.exists()
+    assert mapping.parent != manifest_path.parent
 
 
 def test_v33_review_schema_accepts_open_template(tmp_path):
@@ -439,3 +477,94 @@ def test_v33_freeze_review_writes_hashed_snapshot(tmp_path):
     assert frozen["frozen_at_utc"]
     assert len(frozen["review_sha256"]) == 64
     assert frozen_result["review_sha256"] == frozen["review_sha256"]
+
+
+def _fill_review_scores(review_path: Path, score=4):
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    for item in review["items"]:
+        for dimension in review["evaluation_dimensions"]:
+            item["scores"][dimension] = score
+    review_path.write_text(
+        json.dumps(review, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def test_v33_status_is_treatment_blind(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    status = experiment_status(run_file)
+    text = json.dumps(status).lower()
+
+    assert status["status"] == "completed"
+    assert status["total"] == 2
+    assert status["generated"] == 2
+    assert "variant_id" not in text
+    assert "factor" not in text
+    assert "generic_pose" not in text
+    assert "explicit_pose_mechanics" not in text
+
+
+def test_v33_review_ids_are_independent_from_generation_ids(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=2)
+    run = load_run_plan(run_file)
+    generation_ids = {
+        output["blind_id"] for output in _all_outputs(run)
+    }
+
+    result = create_review_package(run_file)
+    manifest = json.loads(
+        Path(result["manifest"]).read_text(encoding="utf-8")
+    )
+    review_ids = {item["review_id"] for item in manifest["items"]}
+
+    assert len(review_ids) == len(generation_ids)
+    assert review_ids.isdisjoint(generation_ids)
+
+
+def test_v33_review_reveal_requires_frozen_review(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    create_review_package(run_file)
+
+    with pytest.raises(ValueError, match="frozen"):
+        reveal_review(run_file)
+
+
+def test_v33_review_reveal_succeeds_after_freeze(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=2)
+    result = create_review_package(run_file)
+    review_path = Path(result["review"])
+    _fill_review_scores(review_path)
+    freeze_review(review_path)
+
+    revealed = reveal_review(run_file)
+    reveal_path = Path(revealed["reveal"])
+    payload = json.loads(reveal_path.read_text(encoding="utf-8"))
+
+    assert revealed["status"] == "revealed"
+    assert revealed["item_count"] == 4
+    assert len(payload["items"]) == 4
+    assert all("review_id" in item for item in payload["items"])
+    assert all("blind_id" in item for item in payload["items"])
+    assert all("variant_id" in item for item in payload["items"])
+    assert all("factor" in item for item in payload["items"])
+
+
+def test_v33_tampered_frozen_review_cannot_reveal(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    result = create_review_package(run_file)
+    review_path = Path(result["review"])
+    _fill_review_scores(review_path)
+    frozen_result = freeze_review(review_path)
+    frozen_path = Path(frozen_result["review"])
+
+    frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+    frozen["items"][0]["scores"][
+        frozen["evaluation_dimensions"][0]
+    ] = 1
+    frozen_path.write_text(
+        json.dumps(frozen, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="hash verification"):
+        reveal_review(run_file)

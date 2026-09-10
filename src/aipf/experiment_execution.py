@@ -12,6 +12,7 @@ from .experiment_runs import sha256_file, validate_blind_ids
 
 
 HOST_PACKAGE_DIRNAME = "host-package"
+OUTPUTS_DIRNAME = "outputs"
 
 
 def _utc_now() -> str:
@@ -213,13 +214,13 @@ def import_output(
         )
 
     suffix = source.suffix.lower() or ".png"
-    variant_dir = path.parent / variant["variant_id"]
-    variant_dir.mkdir(parents=True, exist_ok=True)
+    outputs_dir = path.parent / OUTPUTS_DIRNAME
+    outputs_dir.mkdir(parents=True, exist_ok=True)
 
     image_name = f"{output['blind_id']}{suffix}"
     metadata_name = f"{output['blind_id']}.json"
-    image_path = variant_dir / image_name
-    metadata_path = variant_dir / metadata_name
+    image_path = outputs_dir / image_name
+    metadata_path = outputs_dir / metadata_name
 
     shutil.copy2(source, image_path)
     image_hash = sha256_file(image_path)
@@ -300,6 +301,40 @@ def record_failed_output(
     }
 
 
+
+def experiment_status(run_file: str | Path) -> dict:
+    """Return a reviewer-safe run summary without treatment mapping."""
+    _path, run = load_run(run_file)
+    outputs = [
+        output
+        for variant in run.get("variants", [])
+        for output in variant.get("outputs", [])
+    ]
+
+    counts = {
+        state: sum(output.get("status") == state for output in outputs)
+        for state in ("planned", "generated", "failed")
+    }
+
+    return {
+        "run_id": run["run_id"],
+        "experiment_id": run["experiment_id"],
+        "status": run.get("status", "planned"),
+        "generation_mode": run.get("generation_mode"),
+        "total": len(outputs),
+        **counts,
+        "outputs": [
+            {
+                "blind_id": output["blind_id"],
+                "status": output.get("status", "planned"),
+                "image": output.get("image"),
+                "image_sha256": output.get("image_sha256"),
+            }
+            for output in sorted(outputs, key=lambda item: item["blind_id"])
+        ],
+    }
+
+
 def execute_run(
     run_file: str | Path,
     *,
@@ -352,6 +387,8 @@ def execute_run(
 
     client = OpenAI()
     root = path.parent
+    outputs_dir = root / OUTPUTS_DIRNAME
+    outputs_dir.mkdir(parents=True, exist_ok=True)
     generated = 0
     failed = 0
     skipped = 0
@@ -360,9 +397,6 @@ def execute_run(
     _write_json_atomic(path, run)
 
     for variant in run["variants"]:
-        variant_dir = root / variant["variant_id"]
-        variant_dir.mkdir(parents=True, exist_ok=True)
-
         for output in variant["outputs"]:
             if output["status"] != "planned":
                 skipped += 1
@@ -383,8 +417,8 @@ def execute_run(
             blind_id = output["blind_id"]
             image_name = f"{blind_id}.png"
             metadata_name = f"{blind_id}.json"
-            image_path = variant_dir / image_name
-            metadata_path = variant_dir / metadata_name
+            image_path = outputs_dir / image_name
+            metadata_path = outputs_dir / metadata_name
 
             try:
                 response = client.images.generate(

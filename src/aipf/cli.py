@@ -18,6 +18,7 @@ from .prompt_mechanisms import quality_audit
 from .experiment_runs import create_run_plan, write_run_plan
 from .experiment_execution import (
     execute_run,
+    experiment_status,
     export_host_package,
     import_output,
     record_failed_output,
@@ -25,6 +26,7 @@ from .experiment_execution import (
 from .experiment_review import (
     create_review_package,
     freeze_review,
+    reveal_review,
 )
 
 
@@ -95,6 +97,12 @@ def main():
 
     p = sub.add_parser("experiment-review-freeze")
     p.add_argument("review_file")
+
+    p = sub.add_parser("experiment-review-reveal")
+    p.add_argument("run_file")
+
+    p = sub.add_parser("experiment-status")
+    p.add_argument("run_file")
 
     args=ap.parse_args()
     if args.cmd=='classify': print(classify(args.request,args.has_reference)); return
@@ -224,6 +232,12 @@ def main():
         return
     if args.cmd == "experiment-review-freeze":
         _dump(freeze_review(args.review_file))
+        return
+    if args.cmd == "experiment-review-reveal":
+        _dump(reveal_review(args.run_file))
+        return
+    if args.cmd == "experiment-status":
+        _dump(experiment_status(args.run_file))
         return
 
 if __name__=='__main__': main()

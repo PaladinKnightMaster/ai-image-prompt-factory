@@ -7,6 +7,7 @@
     "run_id",
     "experiment_id",
     "review_package_sha256",
+    "mapping_commitment_sha256",
     "status",
     "created_at_utc",
     "score_scale",
@@ -17,6 +18,10 @@
     "run_id": {"type": "string", "minLength": 1},
     "experiment_id": {"type": "string", "minLength": 1},
     "review_package_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "mapping_commitment_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
@@ -50,12 +55,12 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["blind_id", "scores", "notes"],
+        "required": ["review_id", "scores", "notes"],
         "properties": {
-          "blind_id": {
+          "review_id": {
             "type": "string",
             "minLength": 4,
-            "pattern": "^[A-Z2-9]+$"
+            "pattern": "^R[A-HJ-NP-Z2-9]+$"
           },
           "scores": {
             "type": "object",
