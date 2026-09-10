@@ -1,0 +1,10 @@
+# Experiment Results
+
+AIPF stores completed empirical experiment findings in **both JSON and Markdown**.
+
+- `*.result.json` is the canonical machine-readable source of truth used for validation, aggregation, confidence updates, and future tooling.
+- `*.RESULT.md` is the human-readable report used for code review, research discussion, release notes, and the website.
+
+When the two representations disagree, the JSON record is authoritative and the Markdown report must be regenerated or corrected.
+
+Results must preserve the run ID, experiment version, review hash, mapping commitment, aggregate scores, evidence classification, limitations, and raw revealed score mapping. Small-N experiments must use evidence language such as `supports`, `weakly_supports`, `inconclusive`, `weakly_contradicts`, or `contradicts`; they must not claim statistical significance without an appropriate statistical design.

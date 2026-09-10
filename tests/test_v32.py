@@ -52,8 +52,14 @@ def test_supported_pattern_can_be_explicitly_used():
     assert any(x['pattern_id']=='interaction-explicit-prop' for x in r['pattern_trace'])
     assert 'Validated visual mechanisms:' in r['prompt']
 
-def test_experiments_are_planned_not_faked():
-    inv=experiment_inventory(); assert inv['count']>=10 and inv['executed']==0
+def test_experiment_inventory_tracks_real_execution_state():
+    inv=experiment_inventory()
+    assert inv['count']>=10
+    assert inv['executed']>=1
+    assert any(
+        item['experiment_id']=='EXP-001' and item['status']=='executed'
+        for item in inv['experiments']
+    )
     assert all(not x['single_factor_errors'] for x in inv['experiments'])
 
 def test_ablation_changes_only_declared_factor_mechanically():

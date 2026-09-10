@@ -44,3 +44,26 @@ For a genuinely blind human study, reviewers must not inspect `run.json`,
 review is frozen. Runs whose treatment mapping was exposed to the reviewer
 before scoring should be retained as pilot or pipeline-validation runs, not as
 fully blinded evidence.
+
+## V3.3 scoring anchors
+
+The 1-5 scale is intentionally stricter than a simple good/bad rating so high-quality model outputs do not collapse at the ceiling:
+
+- **5 — exceptional/clean:** fully satisfies the dimension with no meaningful visible weakness.
+- **4 — strong:** clearly successful, but at least one noticeable weakness remains.
+- **3 — acceptable/mixed:** usable result with material strengths and weaknesses.
+- **2 — poor:** major weakness substantially harms the requested dimension.
+- **1 — failed/severe:** the dimension is badly broken or not meaningfully satisfied.
+
+For `technical_defects`, the direction stays the same: 5 means clean/no meaningful defects and 1 means severe visible defects. Reviewers should avoid using 5 as the default for merely good results.
+
+## V3.3 result records
+
+Completed and revealed experiments are persisted under `experiments/results/`. Each evidentiary run uses two representations:
+
+- `*.result.json` — canonical machine-readable evidence record.
+- `*.RESULT.md` — human-readable research report derived from that record.
+
+The JSON record is authoritative if the two disagree. Small-N runs use evidence classifications `supports`, `weakly_supports`, `inconclusive`, `weakly_contradicts`, or `contradicts`; they do not claim statistical significance unless the experiment was designed and analyzed for that purpose.
+
+EXP-001 v1.0.1 is the first recorded V3.3 empirical run. It weakly contradicted the hypothesis that explicit posture mechanics generally outperform generic pose language in the tested portrait context. The related VisualPattern therefore remains non-compiler-eligible and is marked `mixed` pending replication.

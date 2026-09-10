@@ -4,10 +4,10 @@
   "patterns": [
     {
       "pattern_id": "pose-explicit-weight-distribution",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "name": "Explicit weight-bearing mechanics",
       "category": "pose_mechanics",
-      "validation_status": "observed",
+      "validation_status": "mixed",
       "mechanism": {
         "instruction": "Describe the weight-bearing leg, relaxed leg, pelvis response, and shoulder counterbalance instead of relying on a generic dynamic-pose adjective.",
         "expected_effects": []
@@ -16,16 +16,21 @@
         "source_examples": [
           "LCC-P0010"
         ],
-        "experiments": [],
+        "experiments": [
+          "EXP-001-1.0.1-20260910T132045Z-DEQ4"
+        ],
         "validation_basis": [
-          "internal_source_corpus_observation"
+          "internal_source_corpus_observation",
+          "controlled_blind_experiment"
         ]
       },
       "confidence": {
-        "level": "observed",
-        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+        "level": "mixed",
+        "note": "Internal corpus observation suggests a plausible mechanism, but EXP-001 v1.0.1 weakly contradicted a general superiority claim in one small-N blinded portrait run. Keep non-compiler-eligible pending replication across prompts and routes."
       },
-      "failure_modes": [],
+      "failure_modes": [
+        "Explicit mechanics may add constraint without improving pose quality when the baseline prompt already produces strong poses."
+      ],
       "retrieval_terms": [
         "weight",
         "standing",

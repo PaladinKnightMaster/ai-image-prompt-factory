@@ -1,0 +1,147 @@
+{
+  "result_id": "EXP-001-1.0.1-20260910T132045Z-DEQ4",
+  "experiment_id": "EXP-001",
+  "experiment_version": "1.0.1",
+  "run_id": "EXP-001-1.0.1-20260910T132045Z-DEQ4",
+  "status": "revealed",
+  "hypothesis": "Explicit posture mechanics outperform generic pose language",
+  "primary_dimension": "pose_mechanics",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "4108f43ecb745f4216e5adf24aed7ef0d93972341981f488ed6d34330d174abc",
+    "mapping_commitment_sha256": "e97e93d6f8222ce1024927dd8b34dd40e900da2f7b9e8542a8366fadc0b9c70f",
+    "frozen_at_utc": "2026-09-10T16:09:59.069027+00:00",
+    "revealed_at_utc": "2026-09-10T16:10:20.226355+00:00"
+  },
+  "variants": {
+    "control": {
+      "factor": "generic_pose",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 4.75,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 4.5,
+        "pose_mechanics": 4.75,
+        "overall": 4.75
+      },
+      "overall_sample_sd": 0.2041
+    },
+    "variant": {
+      "factor": "explicit_pose_mechanics",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 4.75,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 4.5,
+        "pose_mechanics": 4.5,
+        "overall": 4.625
+      },
+      "overall_sample_sd": 0.4330
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": -0.25,
+    "technical_defects": 0.0,
+    "pose_mechanics": -0.25,
+    "overall": -0.125
+  },
+  "evidence_classification": "weakly_contradicts",
+  "interpretation": "In this prompt context, explicit posture mechanics did not improve average pose quality over generic pose language. The explicit variant scored 0.25 lower on the primary pose_mechanics dimension and 0.125 lower overall, while also showing greater run-to-run variability. This single small-N run does not establish that explicit pose mechanics are generally harmful; it weakly contradicts the claimed general superiority and supports keeping the pattern non-compiler-eligible pending additional experiments.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "The review contains one frozen score set, so inter-rater reliability was not measured.",
+    "Scores are concentrated near the top of the 1-5 scale, creating a ceiling effect.",
+    "The host exposed the model family as gpt-image-2 but not an exact model snapshot.",
+    "The finding is specific to this portrait prompt and should not be generalized across routes or compositions without replication."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "pose-explicit-weight-distribution",
+      "recommended_validation_status": "mixed",
+      "compiler_eligible": false,
+      "reason": "One controlled blinded run weakly contradicted the general superiority claim; retain the mechanism as a context-dependent hypothesis rather than a validated compiler rule."
+    }
+  ],
+  "raw_scores": [
+    {
+      "review_id": "RRW2DVS6",
+      "blind_id": "JQE9MS",
+      "variant_id": "control",
+      "factor": "generic_pose",
+      "replicate": 1,
+      "scores": {"semantic_compliance": 4, "aesthetic_quality": 5, "technical_defects": 5, "pose_mechanics": 5},
+      "overall": 4.75
+    },
+    {
+      "review_id": "R52RHLSY",
+      "blind_id": "QNN7ZG",
+      "variant_id": "control",
+      "factor": "generic_pose",
+      "replicate": 2,
+      "scores": {"semantic_compliance": 5, "aesthetic_quality": 5, "technical_defects": 5, "pose_mechanics": 5},
+      "overall": 5.0
+    },
+    {
+      "review_id": "RNP6JGQG",
+      "blind_id": "JDUKF6",
+      "variant_id": "control",
+      "factor": "generic_pose",
+      "replicate": 3,
+      "scores": {"semantic_compliance": 5, "aesthetic_quality": 5, "technical_defects": 4, "pose_mechanics": 4},
+      "overall": 4.5
+    },
+    {
+      "review_id": "RDUFPE6Q",
+      "blind_id": "G77RQK",
+      "variant_id": "control",
+      "factor": "generic_pose",
+      "replicate": 4,
+      "scores": {"semantic_compliance": 5, "aesthetic_quality": 5, "technical_defects": 4, "pose_mechanics": 5},
+      "overall": 4.75
+    },
+    {
+      "review_id": "R2PJ8YLN",
+      "blind_id": "QZL47H",
+      "variant_id": "variant",
+      "factor": "explicit_pose_mechanics",
+      "replicate": 1,
+      "scores": {"semantic_compliance": 5, "aesthetic_quality": 5, "technical_defects": 5, "pose_mechanics": 5},
+      "overall": 5.0
+    },
+    {
+      "review_id": "RECYSM9Q",
+      "blind_id": "ZFG9HB",
+      "variant_id": "variant",
+      "factor": "explicit_pose_mechanics",
+      "replicate": 2,
+      "scores": {"semantic_compliance": 5, "aesthetic_quality": 4, "technical_defects": 4, "pose_mechanics": 4},
+      "overall": 4.25
+    },
+    {
+      "review_id": "RYU3UHWT",
+      "blind_id": "YJC3BU",
+      "variant_id": "variant",
+      "factor": "explicit_pose_mechanics",
+      "replicate": 3,
+      "scores": {"semantic_compliance": 5, "aesthetic_quality": 5, "technical_defects": 5, "pose_mechanics": 5},
+      "overall": 5.0
+    },
+    {
+      "review_id": "RFBGS5P5",
+      "blind_id": "HAC3CS",
+      "variant_id": "variant",
+      "factor": "explicit_pose_mechanics",
+      "replicate": 4,
+      "scores": {"semantic_compliance": 4, "aesthetic_quality": 5, "technical_defects": 4, "pose_mechanics": 4},
+      "overall": 4.25
+    }
+  ]
+}

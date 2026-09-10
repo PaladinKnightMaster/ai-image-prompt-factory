@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.3/experiment_result.schema.json",
+  "type": "object",
+  "required": [
+    "result_id",
+    "experiment_id",
+    "experiment_version",
+    "run_id",
+    "status",
+    "hypothesis",
+    "primary_dimension",
+    "generation",
+    "review",
+    "variants",
+    "deltas_variant_minus_control",
+    "evidence_classification",
+    "interpretation",
+    "limitations",
+    "raw_scores"
+  ],
+  "properties": {
+    "result_id": {"type": "string"},
+    "experiment_id": {"type": "string"},
+    "experiment_version": {"type": "string"},
+    "run_id": {"type": "string"},
+    "status": {"enum": ["completed", "revealed"]},
+    "hypothesis": {"type": "string"},
+    "primary_dimension": {"type": "string"},
+    "generation": {
+      "type": "object",
+      "required": ["mode", "model", "model_snapshot", "replicates_per_variant"],
+      "properties": {
+        "mode": {"type": "string"},
+        "model": {"type": "string"},
+        "model_snapshot": {"type": "string"},
+        "replicates_per_variant": {"type": "integer", "minimum": 1}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["protocol", "review_set_count", "review_sha256", "mapping_commitment_sha256", "frozen_at_utc", "revealed_at_utc"],
+      "properties": {
+        "protocol": {"type": "string"},
+        "review_set_count": {"type": "integer", "minimum": 1},
+        "review_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "mapping_commitment_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "frozen_at_utc": {"type": "string"},
+        "revealed_at_utc": {"type": "string"}
+      }
+    },
+    "variants": {"type": "object"},
+    "deltas_variant_minus_control": {"type": "object"},
+    "evidence_classification": {
+      "enum": [
+        "supports",
+        "weakly_supports",
+        "inconclusive",
+        "weakly_contradicts",
+        "contradicts"
+      ]
+    },
+    "interpretation": {"type": "string"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "pattern_implications": {"type": "array", "items": {"type": "object"}},
+    "raw_scores": {"type": "array", "minItems": 1, "items": {"type": "object"}}
+  }
+}

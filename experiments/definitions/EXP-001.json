@@ -22,11 +22,6 @@
     "environment",
     "lighting",
     "aspect ratio",
-    "wardrobe",
-    "held object",
-    "camera language",
-    "quality language",
-    "negative constraints",
     "identity unless factor explicitly tests it"
   ],
   "evaluation_dimensions": [
@@ -36,8 +31,9 @@
     "pose_mechanics"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "pose-explicit-weight-distribution"
-  ]
+  ],
+  "latest_result": "experiments/results/EXP-001/EXP-001-1.0.1-20260910T132045Z-DEQ4.result.json"
 }
