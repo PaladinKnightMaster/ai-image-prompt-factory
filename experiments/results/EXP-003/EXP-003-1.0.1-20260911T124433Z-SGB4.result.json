@@ -1,0 +1,187 @@
+{
+  "result_id": "EXP-003-1.0.1-20260911T124433Z-SGB4",
+  "experiment_id": "EXP-003",
+  "experiment_version": "1.0.1",
+  "run_id": "EXP-003-1.0.1-20260911T124433Z-SGB4",
+  "status": "revealed",
+  "hypothesis": "A director micro-story improves visual event coherence",
+  "primary_dimension": "visual_event_coherence",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "a10c010a22f5f68609dd7fe3169f7f461b9977e9dfd08bc23c759ee0d9a63fad",
+    "mapping_commitment_sha256": "358e0d96030352a9b86ce59b5a48a8fee03135685f3e4ac91123a9a6b023fa06",
+    "frozen_at_utc": "2026-09-11T17:13:39.765245+00:00",
+    "revealed_at_utc": "2026-09-11T17:13:47.261494+00:00"
+  },
+  "variants": {
+    "control": {
+      "factor": "static_description",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.25,
+        "technical_defects": 4.75,
+        "visual_event_coherence": 3.25,
+        "overall": 4.3125
+      },
+      "overall_sample_sd": 0.3146
+    },
+    "variant": {
+      "factor": "director_micro_story",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 4.5,
+        "visual_event_coherence": 4.75,
+        "overall": 4.8125
+      },
+      "overall_sample_sd": 0.125
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.75,
+    "technical_defects": -0.25,
+    "visual_event_coherence": 1.5,
+    "overall": 0.5
+  },
+  "evidence_classification": "supports",
+  "interpretation": "In this refined-interior portrait context, director micro-story framing improved the primary visual_event_coherence score by 1.50 over a semantically matched static description. Aesthetic quality improved by 0.75 and the overall mean improved by 0.50, while semantic compliance was unchanged and technical-defect cleanliness decreased by 0.25. The micro-story group also showed lower across-replicate variability. This single small-N run supports the tested hypothesis in this context, but it does not establish universal superiority. Replication across actions, environments, subjects, props, and routes is required before broader generalization.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "The review contains one frozen score set, so inter-rater reliability was not measured.",
+    "Semantic compliance was at the ceiling for both conditions, limiting discrimination on that dimension.",
+    "The host exposed the model family as gpt-image-2 but not an exact model snapshot or reproducible generation seed.",
+    "The finding is specific to one refined-interior portrait scenario with a window-directed reaction and ceramic vase; replication across other actions, environments, subjects, props, and routes is required."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "narrative-micro-action",
+      "recommended_validation_status": "supported",
+      "compiler_eligible": true,
+      "reason": "The pattern already had repeated internal-corpus observations. EXP-003 adds controlled blinded empirical evidence in which temporal-causal micro-story framing improved the primary visual_event_coherence dimension by 1.50 and the overall mean by 0.50 relative to a semantically matched static description. Promote the pattern to supported and enable it at the Director Gate for its existing routes, while treating the finding as context-specific pending replication."
+    }
+  ],
+  "raw_scores": [
+    {
+      "review_id": "R8VRCV4T",
+      "blind_id": "VB6237",
+      "variant_id": "control",
+      "factor": "static_description",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "visual_event_coherence": 3
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "RRMKYBNY",
+      "blind_id": "E6HHJ2",
+      "variant_id": "control",
+      "factor": "static_description",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "visual_event_coherence": 3
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "R5AUTSTR",
+      "blind_id": "5S7RJ5",
+      "variant_id": "control",
+      "factor": "static_description",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "visual_event_coherence": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RQFXLE3W",
+      "blind_id": "X6E46L",
+      "variant_id": "control",
+      "factor": "static_description",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "visual_event_coherence": 3
+      },
+      "overall": 4.0
+    },
+    {
+      "review_id": "RX3JR596",
+      "blind_id": "W4NYDL",
+      "variant_id": "variant",
+      "factor": "director_micro_story",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "visual_event_coherence": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "R5D6ZY89",
+      "blind_id": "9Y9LQL",
+      "variant_id": "variant",
+      "factor": "director_micro_story",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "visual_event_coherence": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RS7PH3XL",
+      "blind_id": "VP3LCR",
+      "variant_id": "variant",
+      "factor": "director_micro_story",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "visual_event_coherence": 5
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RA9R2JQD",
+      "blind_id": "WTA865",
+      "variant_id": "variant",
+      "factor": "director_micro_story",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "visual_event_coherence": 5
+      },
+      "overall": 4.75
+    }
+  ]
+}

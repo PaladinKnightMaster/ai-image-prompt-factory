@@ -38,8 +38,9 @@
     "visual_event_coherence"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "narrative-micro-action"
-  ]
+  ],
+  "latest_result": "experiments/results/EXP-003/EXP-003-1.0.1-20260911T124433Z-SGB4.result.json"
 }

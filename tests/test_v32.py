@@ -55,13 +55,17 @@ def test_supported_pattern_can_be_explicitly_used():
 def test_experiment_inventory_tracks_real_execution_state():
     inv=experiment_inventory()
     assert inv['count']>=10
-    assert inv['executed']>=3
+    assert inv['executed']>=4
     assert any(
         item['experiment_id']=='EXP-001' and item['status']=='executed'
         for item in inv['experiments']
     )
     assert any(
         item['experiment_id']=='EXP-002' and item['status']=='executed'
+        for item in inv['experiments']
+    )
+    assert any(
+        item['experiment_id']=='EXP-003' and item['status']=='executed'
         for item in inv['experiments']
     )
     assert any(

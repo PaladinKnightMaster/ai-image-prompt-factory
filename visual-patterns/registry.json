@@ -903,7 +903,7 @@
       "version": "1.0.0",
       "name": "Micro-action instead of static posing",
       "category": "storytelling",
-      "validation_status": "observed",
+      "validation_status": "supported",
       "mechanism": {
         "instruction": "Give the subject a small ongoing action—turning, adjusting, reaching, pausing, reading, lifting, or reacting—so the frame captures an event rather than a mannequin pose.",
         "expected_effects": []
@@ -923,14 +923,17 @@
           "LCC-P0020",
           "LCC-P0032"
         ],
-        "experiments": [],
+        "experiments": [
+          "EXP-003-1.0.1-20260911T124433Z-SGB4"
+        ],
         "validation_basis": [
-          "internal_source_corpus_observation"
+          "internal_source_corpus_observation",
+          "controlled_blind_experiment"
         ]
       },
       "confidence": {
-        "level": "observed",
-        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+        "level": "supported",
+        "note": "Repeated corpus observations are now reinforced by EXP-003 v1.0.1, where director micro-story framing improved visual_event_coherence by 1.50 and the overall mean by 0.50 relative to a semantically matched static description in one small-N second-layer blind portrait run. Enable the mechanism at the Director Gate for its existing routes, but treat the empirical result as context-specific pending replication across actions, environments, subjects, props, and routes."
       },
       "failure_modes": [],
       "retrieval_terms": [
@@ -938,8 +941,8 @@
         "action"
       ],
       "compiler_usage": {
-        "compiler_eligible": false,
-        "director_gate": false,
+        "compiler_eligible": true,
+        "director_gate": true,
         "routes": [
           "new_generation",
           "historical_portrait",
