@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-007",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "hypothesis": "Removing the phrase '8K masterpiece' does not materially reduce visible photographic rendering quality in a production-like editorial fashion prompt.",
   "baseline_prompt": "Create a full-length editorial fashion portrait of an unmistakably adult model moving through a quiet modern gallery corridor. She is caught mid-turn beside a pale stone bench, wearing a deep teal satin evening dress and carrying a small structured clutch. One hand lightly steadies the clutch while the other hangs naturally after the turn. Tall side windows provide soft directional daylight; a dark doorway occupies the near foreground, the model remains in the midground, and framed architectural details recede into the background. Keep the face natural, the hands fully visible, the garment silhouette readable, and the polished stone floor subtly reflective. Use an 85mm portrait perspective with restrained depth of field and realistic photographic rendering. 8K masterpiece, ultra-detailed.",
   "variants": [
@@ -13,8 +13,8 @@
       "id": "variant",
       "factor": "quality_hype_removed",
       "operation": "replace_literal",
-      "old": " 8K masterpiece, ultra-detailed.",
-      "new": " ultra-detailed."
+      "old": "8K masterpiece, ultra-detailed.",
+      "new": "Ultra-detailed."
     }
   ],
   "preserved_dimensions": [

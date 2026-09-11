@@ -83,11 +83,16 @@ def test_transfer_mapping_matches_archetype_and_experiment_versions():
         for item in _archetypes()
     }
 
+    expected_versions = {
+        "EXP-007": "1.1.1",
+        **{f"EXP-{i:03d}": "1.1.0" for i in range(8, 16)},
+    }
+
     for item in mapping["mappings"]:
         definition = _load(item["definition_path"])
         assert definition["experiment_id"] == item["experiment_id"]
         assert definition["version"] == item["experiment_version"]
-        assert definition["version"] == "1.1.0"
+        assert definition["version"] == expected_versions[item["experiment_id"]]
         assert definition["transfer_benchmark"]["layer"] == "transfer"
         assert definition["transfer_benchmark"]["archetype_id"] == item["archetype_id"]
         assert (
@@ -107,14 +112,15 @@ def test_exp007_transfer_ablation_only_removes_8k_masterpiece():
     run = create_run_plan("EXP-007", replicates=1)
     prompts = {item["variant_id"]: item["prompt"] for item in run["variants"]}
 
-    assert "8K masterpiece" in prompts["control"]
+    assert "8K masterpiece, ultra-detailed." in prompts["control"]
     assert "8K masterpiece" not in prompts["variant"]
-    assert "ultra-detailed" in prompts["control"]
-    assert "ultra-detailed" in prompts["variant"]
-    assert prompts["variant"] == prompts["control"].replace(
-        " 8K masterpiece, ultra-detailed.",
-        " ultra-detailed.",
+    assert "Ultra-detailed." in prompts["variant"]
+
+    expected = prompts["control"].replace(
+        "8K masterpiece, ultra-detailed.",
+        "Ultra-detailed.",
     )
+    assert prompts["variant"] == expected
 
 
 def test_exp008_transfer_changes_only_constraint_scope():
