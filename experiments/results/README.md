@@ -15,3 +15,4 @@ Results must preserve the run ID, experiment version, review hash, mapping commi
 - `EXP-002-1.0.1-20260910T181605Z-2GVM` - explicit material physics vs material-name-only; **contradicts**.
 - `EXP-004-1.0.1-20260910T221621Z-EK6M` - explicit hand-object mechanics vs generic holding; **supports**.
 - `EXP-003-1.0.1-20260911T124433Z-SGB4` - director micro-story vs semantically matched static description; **supports**.
+- `EXP-005-1.0.1-20260911T175641Z-U8ZL` - explicit layered spatial roles vs generic cinematic depth; **weakly_supports**.

@@ -38,8 +38,9 @@
     "spatial_depth_coherence"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "composition-layered-depth"
-  ]
+  ],
+  "latest_result": "experiments/results/EXP-005/EXP-005-1.0.1-20260911T175641Z-U8ZL.result.json"
 }

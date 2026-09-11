@@ -269,16 +269,19 @@
           "FSC-P0006",
           "FSC-P0009"
         ],
-        "experiments": [],
+        "experiments": [
+          "EXP-005-1.0.1-20260911T175641Z-U8ZL"
+        ],
         "validation_basis": [
           "internal_source_corpus_observation",
           "human_curated_project_rule",
-          "v3.1_regression_or_compiler_rule"
+          "v3.1_regression_or_compiler_rule",
+          "controlled_blind_experiment"
         ]
       },
       "confidence": {
         "level": "supported",
-        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+        "note": "Repeated corpus observations plus project-rule and compiler/regression support are now supplemented by EXP-005 v1.0.1, where explicit foreground/midground/background role assignment improved the primary spatial_depth_coherence score by 0.25 relative to generic cinematic-depth language in one small-N second-layer blind portrait run. Aesthetic quality decreased by 0.50, technical-defect cleanliness decreased by 0.25, and the overall mean decreased by 0.125, so the direct empirical result is weakly supportive rather than evidence of general overall-quality superiority. Keep the mechanism supported, compiler-eligible, and enabled at the Director Gate for its existing routes, pending replication across compositions, environments, subjects, focal lengths, and routes."
       },
       "failure_modes": [],
       "retrieval_terms": [
