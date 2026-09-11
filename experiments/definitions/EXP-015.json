@@ -1,37 +1,50 @@
 {
   "experiment_id": "EXP-015",
-  "version": "1.0.0",
-  "hypothesis": "Pre-compiler historical adaptation should outperform post-hoc negative prompting",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "Resolving an anachronistic object into a period-compatible positive instruction before composition improves historical-cultural coherence compared with retaining the conflicting modern object and relying on post-hoc negative prompting.",
+  "baseline_prompt": "Create a historically grounded Ming-period portrait in a scholar's study. An adult scholar stands beside a wooden writing table with paper, an inkstone, a brush rest, bound volumes, and a compact electric desk lamp. Lattice windows admit cool evening light while the table light provides a localized warm glow. The clothing is layered period-inspired woven silk in restrained indigo and earth tones, without modern tailoring cues. Keep the furniture, writing tools, and architecture mutually coherent with the historical setting. Use a full-body environmental composition with floor contact visible and a calm documentary tone. Avoid modern electrical objects and anachronistic lighting fixtures.",
   "variants": [
     {
       "id": "control",
-      "factor": "historical_resolution",
+      "factor": "post_hoc_negative_only",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "historical_resolution",
-      "operation": "append",
-      "text": " Resolve historical incompatibilities before composition; do not rely on a final negative prompt to undo anachronistic objects."
+      "factor": "pre_resolved_positive_content",
+      "operation": "replace_literal",
+      "old": "a compact electric desk lamp",
+      "new": "a ceramic oil lamp"
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
-    "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "Ming-period scholar's study",
+    "adult scholar",
+    "writing table",
+    "paper, inkstone, brush rest, bound volumes",
+    "lattice-window evening light",
+    "warm localized table light",
+    "period-inspired layered woven silk",
+    "full-body environmental composition",
+    "same final anachronism constraint",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "historical_resolution"
+    "historical_cultural_coherence"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
-  "related_patterns": [
-    "prompt-targeted-constraints"
-  ]
+  "related_patterns": [],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A03",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "aaecec96ab75a0c4654c685572b669a4e0f576adbc5c3e788bce0aa853b1a33a",
+    "mapping_version": "1.0.0",
+    "realization": "counterfactual anachronistic control derived from historically coherent archetype",
+    "execution_readiness": "ready"
+  }
 }

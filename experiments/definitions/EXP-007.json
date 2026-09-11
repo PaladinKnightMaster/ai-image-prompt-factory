@@ -1,38 +1,50 @@
 {
   "experiment_id": "EXP-007",
-  "version": "1.0.0",
-  "hypothesis": "8K/masterpiece wording contributes little to image quality",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "Removing the phrase '8K masterpiece' does not materially reduce visible photographic rendering quality in a production-like editorial fashion prompt.",
+  "baseline_prompt": "Create a full-length editorial fashion portrait of an unmistakably adult model moving through a quiet modern gallery corridor. She is caught mid-turn beside a pale stone bench, wearing a deep teal satin evening dress and carrying a small structured clutch. One hand lightly steadies the clutch while the other hangs naturally after the turn. Tall side windows provide soft directional daylight; a dark doorway occupies the near foreground, the model remains in the midground, and framed architectural details recede into the background. Keep the face natural, the hands fully visible, the garment silhouette readable, and the polished stone floor subtly reflective. Use an 85mm portrait perspective with restrained depth of field and realistic photographic rendering. 8K masterpiece, ultra-detailed.",
   "variants": [
     {
       "id": "control",
-      "factor": "quality_hype",
+      "factor": "quality_hype_present",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "quality_hype",
-      "operation": "remove_regex",
-      "pattern": "\\s*8K masterpiece,?",
-      "replacement": ""
+      "factor": "quality_hype_removed",
+      "operation": "replace_literal",
+      "old": " 8K masterpiece, ultra-detailed.",
+      "new": " ultra-detailed."
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
-    "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "adult subject",
+    "gallery corridor",
+    "mid-turn action",
+    "deep teal satin evening dress",
+    "structured clutch",
+    "side-window daylight",
+    "layered spatial composition",
+    "85mm portrait perspective",
+    "ultra-detailed wording",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "quality_hype"
+    "photographic_rendering_quality"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
-  "related_patterns": [
-    "prompt-structure-then-emotion"
-  ]
+  "related_patterns": [],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A01",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "bb1988f39afc8237fa7e451342c7ba231d8aed3d0124d4bed71a309281c7864e",
+    "mapping_version": "1.0.0",
+    "realization": "archetype baseline plus control quality-hype clause",
+    "execution_readiness": "ready"
+  }
 }

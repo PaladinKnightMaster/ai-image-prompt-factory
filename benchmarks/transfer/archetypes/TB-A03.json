@@ -1,0 +1,72 @@
+{
+  "archetype_id": "TB-A03",
+  "version": "1.0.0",
+  "name": "Historically Grounded Scholar Study",
+  "category": "historical_cultural_portrait",
+  "purpose": "Provide a positive-content historical scene where anachronism resolution can be tested before composition rather than delegated to a final negative clause.",
+  "route": "historical_portrait",
+  "first_party_baseline_prompt": "Create a historically grounded Ming-period portrait in a scholar's study. An adult scholar stands beside a wooden writing table with paper, an inkstone, a brush rest, bound volumes, and a ceramic oil lamp. Lattice windows admit cool evening light while the lamp provides a localized warm glow. The clothing is layered period-inspired woven silk in restrained indigo and earth tones, without modern tailoring cues. Keep the furniture, lighting sources, writing tools, and architecture mutually coherent with the historical setting. Use a full-body environmental composition with floor contact visible and a calm documentary tone.",
+  "source_mechanism_families": [
+    {
+      "pattern_id": "story-environmental-detail",
+      "registry_status": "observed",
+      "corpus_observation_count": 12,
+      "role": "environment_scaffold"
+    },
+    {
+      "pattern_id": "composition-full-body-environment",
+      "registry_status": "hypothesis",
+      "corpus_observation_count": 0,
+      "role": "scene_scaffold"
+    },
+    {
+      "pattern_id": "prompt-targeted-constraints",
+      "registry_status": "supported",
+      "corpus_observation_count": 12,
+      "role": "constraint_scaffold"
+    }
+  ],
+  "locked_dimensions": [
+    "Ming-period study",
+    "adult scholar",
+    "wooden writing table",
+    "paper, inkstone, brush rest, bound volumes",
+    "lattice-window evening light",
+    "full-body environmental composition"
+  ],
+  "allowed_experimental_mutation_points": [
+    {
+      "mutation_id": "historical_resolution",
+      "description": "Compare conflicting post-hoc negation with a pre-resolved period-compatible positive object while holding the scene constant.",
+      "suitable_experiments": [
+        "EXP-015"
+      ]
+    }
+  ],
+  "suitable_experiments": [
+    "EXP-015"
+  ],
+  "unsuitable_experiments": [
+    "EXP-007",
+    "EXP-010",
+    "EXP-013",
+    "EXP-014"
+  ],
+  "expected_evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "historical_cultural_coherence"
+  ],
+  "baseline_prompt_sha256": "aaecec96ab75a0c4654c685572b669a4e0f576adbc5c3e788bce0aa853b1a33a",
+  "provenance": {
+    "derivation_method": "mechanism_level_distillation",
+    "source_scope": "private_internal_corpus_indexes_and_public_visual_pattern_registry",
+    "source_prompt_text_copied": false,
+    "source_images_embedded": false,
+    "creator_specific_phrasing_retained": false,
+    "first_party_prompt": true,
+    "publication_safe": true,
+    "notes": "The prompt is newly authored for AIPF. Private source material informed mechanism selection only; source wording, prompt IDs, images, and creator-specific composition are not embedded."
+  }
+}

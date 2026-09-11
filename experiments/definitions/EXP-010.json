@@ -1,37 +1,52 @@
 {
   "experiment_id": "EXP-010",
-  "version": "1.0.0",
-  "hypothesis": "Natural-language brief should be compared against JSON-style structure",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "A readable natural-language production brief preserves multi-constraint scene fidelity at least as well as semantically equivalent JSON-style structured syntax.",
+  "baseline_prompt": "Create a polished fantasy-adventure key-art illustration showing an adult courier crossing a rain-darkened rooftop market at blue hour. She carries a folded map tube, wears a layered travel coat over practical boots, and looks toward a distant signal lantern while wind catches the coat hem. Use a three-quarter full-body view, an asymmetric composition, and clear foreground awning edges, midground character action, and background rooflines. The rendering should feel like high-end game promotional art with controlled painterly edges, selective hard highlights, coherent material separation, and a cool environment punctuated by warm lantern light. Keep the focal hierarchy clear and avoid UI, logos, captions, or decorative text.",
   "variants": [
     {
       "id": "control",
-      "factor": "prompt_format",
+      "factor": "natural_language_brief",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "prompt_format",
-      "operation": "append",
-      "text": " Keep the final instruction as a readable production brief rather than exposing internal schema syntax."
+      "factor": "json_style_structure",
+      "operation": "replace_literal",
+      "old": "Create a polished fantasy-adventure key-art illustration showing an adult courier crossing a rain-darkened rooftop market at blue hour. She carries a folded map tube, wears a layered travel coat over practical boots, and looks toward a distant signal lantern while wind catches the coat hem. Use a three-quarter full-body view, an asymmetric composition, and clear foreground awning edges, midground character action, and background rooflines. The rendering should feel like high-end game promotional art with controlled painterly edges, selective hard highlights, coherent material separation, and a cool environment punctuated by warm lantern light. Keep the focal hierarchy clear and avoid UI, logos, captions, or decorative text.",
+      "new": "{\"task\":\"create_image\",\"subject\":{\"type\":\"adult courier\",\"action\":\"crossing a rain-darkened rooftop market\",\"prop\":\"folded map tube\",\"wardrobe\":\"layered travel coat over practical boots\",\"gaze\":\"toward a distant signal lantern\",\"motion\":\"wind catches the coat hem\"},\"environment\":{\"time\":\"blue hour\",\"location\":\"rooftop market\",\"foreground\":\"awning edges\",\"midground\":\"courier action\",\"background\":\"rooflines\"},\"composition\":{\"framing\":\"three-quarter full-body\",\"balance\":\"asymmetric\",\"depth\":\"clear foreground, midground, background\"},\"rendering\":{\"style\":\"high-end fantasy-adventure game promotional key art\",\"edges\":\"controlled painterly edges\",\"highlights\":\"selective hard highlights\",\"materials\":\"coherent material separation\",\"color_light\":\"cool environment punctuated by warm lantern light\",\"focal_hierarchy\":\"clear\"},\"exclude\":[\"UI\",\"logos\",\"captions\",\"decorative text\"]}"
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
-    "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "adult courier",
+    "rain-darkened rooftop market",
+    "blue hour",
+    "map tube",
+    "layered travel coat and boots",
+    "signal lantern",
+    "wind-driven coat hem",
+    "three-quarter full-body view",
+    "asymmetric layered composition",
+    "game key-art rendering",
+    "text/UI exclusions",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "prompt_format"
+    "scene_constraint_fidelity"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
-  "related_patterns": [
-    "prompt-structure-then-emotion"
-  ]
+  "related_patterns": [],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A05",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "a9019c916afe72336a1665708a23d07ee3067b7c35d31ef96b412a9e3fa9e014",
+    "mapping_version": "1.0.0",
+    "realization": "direct archetype baseline versus semantically equivalent structured representation",
+    "execution_readiness": "ready"
+  }
 }

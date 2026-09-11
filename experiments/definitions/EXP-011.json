@@ -1,38 +1,53 @@
 {
   "experiment_id": "EXP-011",
-  "version": "1.0.0",
-  "hypothesis": "Detailed garment construction improves wardrobe fidelity",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "Detailed garment-construction language improves visible wardrobe-construction fidelity over a generic garment description in a production-like fashion portrait.",
+  "baseline_prompt": "Create a full-length editorial fashion portrait of an unmistakably adult model moving through a quiet modern gallery corridor. She is caught mid-turn beside a pale stone bench, wearing a deep teal satin evening dress and carrying a small structured clutch. One hand lightly steadies the clutch while the other hangs naturally after the turn. Tall side windows provide soft directional daylight; a dark doorway occupies the near foreground, the model remains in the midground, and framed architectural details recede into the background. Keep the face natural, the hands fully visible, the garment silhouette readable, and the polished stone floor subtly reflective. Use an 85mm portrait perspective with restrained depth of field and realistic photographic rendering.",
   "variants": [
     {
       "id": "control",
-      "factor": "garment_construction",
+      "factor": "generic_garment_description",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "garment_construction",
+      "factor": "explicit_garment_construction",
       "operation": "replace_literal",
-      "old": "satin outfit",
-      "new": "bias-cut satin dress with narrow straps, shaped waist seams, clean neckline construction, and a softly weighted hem"
+      "old": "deep teal satin evening dress",
+      "new": "bias-cut deep teal satin evening dress with narrow straps, shaped waist seams, a clean neckline, and a softly weighted ankle-length hem"
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
+    "adult subject",
+    "gallery corridor",
+    "mid-turn action",
+    "deep teal color",
+    "satin material",
+    "evening-dress category",
+    "structured clutch",
     "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "composition",
+    "85mm portrait perspective",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "garment_construction"
+    "garment_construction_fidelity"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
   "related_patterns": [
-    "material-satin-fold-response"
-  ]
+    "material-textile-lace-detail"
+  ],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A01",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "bb1988f39afc8237fa7e451342c7ba231d8aed3d0124d4bed71a309281c7864e",
+    "mapping_version": "1.0.0",
+    "realization": "direct archetype baseline with garment phrase as the treatment span",
+    "execution_readiness": "ready"
+  }
 }

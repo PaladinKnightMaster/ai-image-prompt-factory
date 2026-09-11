@@ -1,37 +1,51 @@
 {
   "experiment_id": "EXP-009",
-  "version": "1.0.0",
-  "hypothesis": "One precise emotional direction outperforms adjective stacking",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "One precise emotional direction produces more coherent visible emotional specificity than a stack of loosely overlapping adjectives when all scene facts are held constant.",
+  "baseline_prompt": "Create a realistic environmental portrait of an adult museum conservator in a quiet restoration studio at dusk. She has just paused while placing a small ceramic fragment into a padded tray, with both hands visible near the work surface. A task lamp and fading window light create a controlled warm-cool contrast. A magnifier, soft brush, blank archival tags, and storage drawers establish the work setting without clutter. Frame her slightly off center, with a shelf edge in the foreground, the conservator and tray in the midground, and tall cabinets receding behind her. Keep the scene observational rather than posed, with natural skin, believable hand-object contact, and readable separation between subject and workspace. Overall mood: quiet, tense, expectant, uncertain, restrained.",
   "variants": [
     {
       "id": "control",
-      "factor": "emotion_precision",
+      "factor": "emotion_adjective_stack",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "emotion_precision",
-      "operation": "append",
-      "text": " Overall mood: restrained anticipation, as if the room has gone quiet for one second."
+      "factor": "precise_emotional_direction",
+      "operation": "replace_literal",
+      "old": "Overall mood: quiet, tense, expectant, uncertain, restrained.",
+      "new": "Overall mood: restrained anticipation, calm on the surface with a slight sense of uncertainty."
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
+    "adult conservator",
+    "restoration studio",
+    "paused placement action",
+    "ceramic fragment and tray",
+    "hands visible",
     "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "composition",
+    "environmental details",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "emotion_precision"
+    "emotional_specificity"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
   "related_patterns": [
     "prompt-structure-then-emotion"
-  ]
+  ],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A02",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "41f5c5711f4b8c46c9852818aca700dd3ef195b3ddda4f527d58786df5bc1813",
+    "mapping_version": "1.0.0",
+    "realization": "archetype baseline plus control emotion clause",
+    "execution_readiness": "ready"
+  }
 }

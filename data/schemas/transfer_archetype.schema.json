@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.3/transfer_archetype.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "archetype_id",
+    "version",
+    "name",
+    "category",
+    "purpose",
+    "route",
+    "first_party_baseline_prompt",
+    "baseline_prompt_sha256",
+    "source_mechanism_families",
+    "locked_dimensions",
+    "allowed_experimental_mutation_points",
+    "suitable_experiments",
+    "unsuitable_experiments",
+    "expected_evaluation_dimensions",
+    "provenance"
+  ],
+  "properties": {
+    "archetype_id": {
+      "type": "string",
+      "pattern": "^TB-A\\d{2}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 4
+    },
+    "category": {
+      "type": "string",
+      "minLength": 3
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 20
+    },
+    "route": {
+      "type": "string",
+      "minLength": 3
+    },
+    "first_party_baseline_prompt": {
+      "type": "string",
+      "minLength": 100
+    },
+    "baseline_prompt_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_mechanism_families": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pattern_id",
+          "registry_status",
+          "corpus_observation_count",
+          "role"
+        ],
+        "properties": {
+          "pattern_id": {
+            "type": "string"
+          },
+          "registry_status": {
+            "enum": [
+              "hypothesis",
+              "observed",
+              "mixed",
+              "supported",
+              "rejected"
+            ]
+          },
+          "corpus_observation_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "locked_dimensions": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_experimental_mutation_points": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mutation_id",
+          "description",
+          "suitable_experiments"
+        ],
+        "properties": {
+          "mutation_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 15
+          },
+          "suitable_experiments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^EXP-\\d{3}$"
+            }
+          }
+        }
+      }
+    },
+    "suitable_experiments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^EXP-\\d{3}$"
+      }
+    },
+    "unsuitable_experiments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^EXP-\\d{3}$"
+      }
+    },
+    "expected_evaluation_dimensions": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "string"
+      }
+    },
+    "reference_fixture_policy": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "derivation_method",
+        "source_scope",
+        "source_prompt_text_copied",
+        "source_images_embedded",
+        "creator_specific_phrasing_retained",
+        "first_party_prompt",
+        "publication_safe",
+        "notes"
+      ],
+      "properties": {
+        "derivation_method": {
+          "const": "mechanism_level_distillation"
+        },
+        "source_scope": {
+          "type": "string"
+        },
+        "source_prompt_text_copied": {
+          "const": false
+        },
+        "source_images_embedded": {
+          "const": false
+        },
+        "creator_specific_phrasing_retained": {
+          "const": false
+        },
+        "first_party_prompt": {
+          "const": true
+        },
+        "publication_safe": {
+          "const": true
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 20
+        }
+      }
+    }
+  }
+}

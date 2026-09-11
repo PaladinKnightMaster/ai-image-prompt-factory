@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.3/transfer_mapping.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "benchmark_layer",
+    "version",
+    "status",
+    "design_basis",
+    "rules",
+    "mappings"
+  ],
+  "properties": {
+    "benchmark_layer": {
+      "const": "transfer"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "enum": [
+        "design_frozen",
+        "superseded"
+      ]
+    },
+    "design_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "private_prompt_records_analyzed",
+        "aggregate_category_signals",
+        "aggregate_method_signals",
+        "raw_private_content_embedded"
+      ],
+      "properties": {
+        "private_prompt_records_analyzed": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "aggregate_category_signals": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "aggregate_method_signals": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "raw_private_content_embedded": {
+          "const": false
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_factor_per_run",
+        "freeze_archetype_version_before_generation",
+        "no_pattern_auto_promotion",
+        "private_corpus_as_fixture_forbidden",
+        "first_party_reference_fixtures_only"
+      ],
+      "properties": {
+        "one_factor_per_run": {
+          "const": true
+        },
+        "freeze_archetype_version_before_generation": {
+          "const": true
+        },
+        "no_pattern_auto_promotion": {
+          "const": true
+        },
+        "private_corpus_as_fixture_forbidden": {
+          "const": true
+        },
+        "first_party_reference_fixtures_only": {
+          "const": true
+        }
+      }
+    },
+    "mappings": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "experiment_id",
+          "experiment_version",
+          "archetype_id",
+          "archetype_version",
+          "factor",
+          "primary_dimension",
+          "transfer_status",
+          "control_strategy",
+          "variant_strategy",
+          "single_factor_guard",
+          "fixture_requirements",
+          "definition_path"
+        ],
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "pattern": "^EXP-\\d{3}$"
+          },
+          "experiment_version": {
+            "type": "string"
+          },
+          "archetype_id": {
+            "type": "string",
+            "pattern": "^TB-A\\d{2}$"
+          },
+          "archetype_version": {
+            "type": "string"
+          },
+          "factor": {
+            "type": "string"
+          },
+          "primary_dimension": {
+            "type": "string"
+          },
+          "transfer_status": {
+            "enum": [
+              "ready",
+              "requires_first_party_reference_fixtures"
+            ]
+          },
+          "control_strategy": {
+            "type": "string",
+            "minLength": 10
+          },
+          "variant_strategy": {
+            "type": "string",
+            "minLength": 10
+          },
+          "single_factor_guard": {
+            "type": "string",
+            "minLength": 10
+          },
+          "fixture_requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "definition_path": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

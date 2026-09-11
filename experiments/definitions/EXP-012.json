@@ -1,37 +1,50 @@
 {
   "experiment_id": "EXP-012",
-  "version": "1.0.0",
-  "hypothesis": "Fabric response clauses improve believable motion",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "Explicit fabric-response language improves visible fabric-motion coherence in a mid-turn fashion portrait without changing the pose or garment identity.",
+  "baseline_prompt": "Create a full-length editorial fashion portrait of an unmistakably adult model moving through a quiet modern gallery corridor. She is caught mid-turn beside a pale stone bench, wearing a deep teal satin evening dress and carrying a small structured clutch. One hand lightly steadies the clutch while the other hangs naturally after the turn. Tall side windows provide soft directional daylight; a dark doorway occupies the near foreground, the model remains in the midground, and framed architectural details recede into the background. Keep the face natural, the hands fully visible, the garment silhouette readable, and the polished stone floor subtly reflective. Use an 85mm portrait perspective with restrained depth of field and realistic photographic rendering.",
   "variants": [
     {
       "id": "control",
-      "factor": "fabric_physics",
+      "factor": "fabric_physics_absent",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "fabric_physics",
+      "factor": "fabric_physics_present",
       "operation": "append",
-      "text": " The satin responds to the hip turn with delayed folds and a slight trailing hem movement."
+      "text": " The satin lags slightly behind the turn, with tension folds radiating from the waist and a modest trailing hem movement; keep the motion physically plausible."
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
+    "adult subject",
+    "gallery corridor",
+    "mid-turn action",
+    "deep teal satin evening dress",
+    "structured clutch",
     "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "composition",
+    "85mm portrait perspective",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "fabric_physics"
+    "fabric_motion_coherence"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
   "related_patterns": [
     "material-satin-fold-response"
-  ]
+  ],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A01",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "bb1988f39afc8237fa7e451342c7ba231d8aed3d0124d4bed71a309281c7864e",
+    "mapping_version": "1.0.0",
+    "realization": "direct archetype baseline plus one treatment sentence",
+    "execution_readiness": "ready"
+  }
 }

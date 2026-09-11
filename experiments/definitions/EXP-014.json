@@ -1,33 +1,38 @@
 {
   "experiment_id": "EXP-014",
-  "version": "1.0.0",
-  "hypothesis": "Explicit reference-role declarations reduce cross-reference leakage",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage compared with implicit multi-reference use when the same three fixtures are held constant.",
+  "baseline_prompt": "Use Reference 1, Reference 2, and Reference 3 to create a realistic full-body portrait while preserving the intended identity, outfit, and pose. Place the final subject in a minimalist studio with a warm-gray backdrop and soft side light. Preserve natural anatomy, a clear garment silhouette, and recognizable identity. Do not import the environment from any reference.",
   "variants": [
     {
       "id": "control",
-      "factor": "reference_roles",
+      "factor": "implicit_reference_roles",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "reference_roles",
-      "operation": "append",
-      "text": " Reference 1 controls identity only; Reference 2 controls outfit only; Reference 3 controls pose only."
+      "factor": "explicit_reference_roles",
+      "operation": "replace_literal",
+      "old": "Use Reference 1, Reference 2, and Reference 3 to create a realistic full-body portrait while preserving the intended identity, outfit, and pose.",
+      "new": "Use Reference 1 for identity only, Reference 2 for garment construction and palette only, and Reference 3 for joint arrangement and weight distribution only. Do not transfer unrelated attributes across reference roles."
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
-    "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "same three reference fixtures",
+    "reference ordering",
+    "warm-gray studio",
+    "soft side light",
+    "full-body framing",
+    "natural anatomy",
+    "garment silhouette",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "reference_roles"
+    "reference_role_fidelity",
+    "cross_reference_leakage_control"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
@@ -35,5 +40,34 @@
     "reference-identity-isolation",
     "reference-outfit-isolation",
     "reference-pose-isolation"
-  ]
+  ],
+  "requires_reference_inputs": [
+    {
+      "slot": "Reference 1",
+      "role": "identity",
+      "fixture_policy": "first_party_or_project_owned",
+      "hash_required": true
+    },
+    {
+      "slot": "Reference 2",
+      "role": "outfit",
+      "fixture_policy": "first_party_or_project_owned",
+      "hash_required": true
+    },
+    {
+      "slot": "Reference 3",
+      "role": "pose",
+      "fixture_policy": "first_party_or_project_owned",
+      "hash_required": true
+    }
+  ],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A07",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "b8b374485b633f1518204486fcb04af7cc9670d6814c24b14812ea9c2ca7c7f2",
+    "mapping_version": "1.0.0",
+    "realization": "implicit-role control derived from explicit-role archetype",
+    "execution_readiness": "requires_first_party_reference_fixtures"
+  }
 }

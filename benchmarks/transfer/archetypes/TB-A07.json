@@ -1,0 +1,82 @@
+{
+  "archetype_id": "TB-A07",
+  "version": "1.0.0",
+  "name": "Three-Role Reference Composition",
+  "category": "multi_reference_transform",
+  "purpose": "Test whether explicit role declarations reduce cross-reference leakage when identity, outfit, and pose come from separate project-owned fixtures.",
+  "route": "reference_transform",
+  "first_party_baseline_prompt": "Create a realistic full-body portrait using three project-owned references with separate semantic roles. Use the identity fixture for recognizable identity only, the outfit fixture for garment construction and palette only, and the pose fixture for joint arrangement and weight distribution only. Place the final subject in a minimalist studio with a warm-gray backdrop and soft side light. Do not import identity from the outfit or pose fixtures, wardrobe from the identity or pose fixtures, or environment from any fixture. Preserve natural anatomy, a clear garment silhouette, and recognizable identity.",
+  "source_mechanism_families": [
+    {
+      "pattern_id": "reference-identity-isolation",
+      "registry_status": "supported",
+      "corpus_observation_count": 0,
+      "role": "reference_control"
+    },
+    {
+      "pattern_id": "reference-outfit-isolation",
+      "registry_status": "supported",
+      "corpus_observation_count": 0,
+      "role": "reference_control"
+    },
+    {
+      "pattern_id": "reference-pose-isolation",
+      "registry_status": "supported",
+      "corpus_observation_count": 0,
+      "role": "reference_control"
+    },
+    {
+      "pattern_id": "prompt-targeted-constraints",
+      "registry_status": "supported",
+      "corpus_observation_count": 12,
+      "role": "constraint_scaffold"
+    }
+  ],
+  "locked_dimensions": [
+    "three project-owned fixtures",
+    "identity role",
+    "outfit role",
+    "pose role",
+    "warm-gray studio",
+    "soft side light",
+    "full-body portrait"
+  ],
+  "allowed_experimental_mutation_points": [
+    {
+      "mutation_id": "reference_roles",
+      "description": "Compare implicit multi-reference use with explicit identity, outfit, and pose role declarations.",
+      "suitable_experiments": [
+        "EXP-014"
+      ]
+    }
+  ],
+  "suitable_experiments": [
+    "EXP-014"
+  ],
+  "unsuitable_experiments": [
+    "EXP-007",
+    "EXP-008",
+    "EXP-009",
+    "EXP-010",
+    "EXP-015"
+  ],
+  "expected_evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "reference_role_fidelity",
+    "cross_reference_leakage_control"
+  ],
+  "reference_fixture_policy": "Requires three first-party or project-owned fixtures. No private corpus image may be shipped or used as a public benchmark fixture.",
+  "baseline_prompt_sha256": "b8b374485b633f1518204486fcb04af7cc9670d6814c24b14812ea9c2ca7c7f2",
+  "provenance": {
+    "derivation_method": "mechanism_level_distillation",
+    "source_scope": "private_internal_corpus_indexes_and_public_visual_pattern_registry",
+    "source_prompt_text_copied": false,
+    "source_images_embedded": false,
+    "creator_specific_phrasing_retained": false,
+    "first_party_prompt": true,
+    "publication_safe": true,
+    "notes": "The prompt is newly authored for AIPF. Private source material informed mechanism selection only; source wording, prompt IDs, images, and creator-specific composition are not embedded."
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "benchmark_layer": "transfer",
+  "version": "1.0.0",
+  "status": "design_frozen",
+  "design_basis": {
+    "private_prompt_records_analyzed": 191,
+    "aggregate_category_signals": {
+      "composition": 557,
+      "lighting": 660,
+      "wardrobe": 483,
+      "material": 368,
+      "pose": 252,
+      "hand_logic": 219,
+      "narrative": 78,
+      "fabric_physics": 51,
+      "reference_role": 41
+    },
+    "aggregate_method_signals": {
+      "structure": 181,
+      "emotion": 138,
+      "medium": 131,
+      "design_system": 119,
+      "constraint": 111,
+      "variable_template": 86,
+      "narrative": 27,
+      "reference": 20
+    },
+    "raw_private_content_embedded": false
+  },
+  "rules": {
+    "one_factor_per_run": true,
+    "freeze_archetype_version_before_generation": true,
+    "no_pattern_auto_promotion": true,
+    "private_corpus_as_fixture_forbidden": true,
+    "first_party_reference_fixtures_only": true
+  },
+  "mappings": [
+    {
+      "experiment_id": "EXP-007",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A01",
+      "archetype_version": "1.0.0",
+      "factor": "quality_hype",
+      "primary_dimension": "photographic_rendering_quality",
+      "transfer_status": "ready",
+      "control_strategy": "Use the editorial archetype with the phrase '8K masterpiece' present while holding all visible scene instructions constant.",
+      "variant_strategy": "Remove only the phrase '8K masterpiece'; retain the rest of the prompt including 'ultra-detailed' so the ablation is narrowly scoped.",
+      "single_factor_guard": "The generated control and variant prompts must differ only by the literal '8K masterpiece' phrase.",
+      "fixture_requirements": [],
+      "definition_path": "experiments/definitions/EXP-007.json"
+    },
+    {
+      "experiment_id": "EXP-008",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A02",
+      "archetype_version": "1.0.0",
+      "factor": "constraint_scope",
+      "primary_dimension": "targeted_failure_mode_control",
+      "transfer_status": "ready",
+      "control_strategy": "Append a broad generic negative stack to the narrative restoration-studio archetype.",
+      "variant_strategy": "Replace only that stack with two targeted constraints tied to visible risks: hand distortion around the tray and unintended readable text on archival tags.",
+      "single_factor_guard": "Scene content, action, lighting, composition, and positive instructions remain byte-identical outside the negative-constraint clause.",
+      "fixture_requirements": [],
+      "definition_path": "experiments/definitions/EXP-008.json"
+    },
+    {
+      "experiment_id": "EXP-009",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A02",
+      "archetype_version": "1.0.0",
+      "factor": "emotion_precision",
+      "primary_dimension": "emotional_specificity",
+      "transfer_status": "ready",
+      "control_strategy": "Append a stack of affectively similar emotion adjectives to the otherwise frozen narrative archetype.",
+      "variant_strategy": "Replace only the adjective stack with one precise emotional direction expressing restrained anticipation and uncertainty.",
+      "single_factor_guard": "No scene facts, action, camera, lighting, or environment content may change with the emotion clause.",
+      "fixture_requirements": [],
+      "definition_path": "experiments/definitions/EXP-009.json"
+    },
+    {
+      "experiment_id": "EXP-010",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A05",
+      "archetype_version": "1.0.0",
+      "factor": "prompt_format",
+      "primary_dimension": "scene_constraint_fidelity",
+      "transfer_status": "ready",
+      "control_strategy": "Use the stylized key-art archetype as a readable natural-language production brief.",
+      "variant_strategy": "Encode the same subject, action, environment, lighting, composition, rendering, and exclusions as JSON-style structured text without adding or deleting semantic requirements.",
+      "single_factor_guard": "A fixed semantic-anchor list must be present in both prompts; only representation format may differ.",
+      "fixture_requirements": [],
+      "definition_path": "experiments/definitions/EXP-010.json"
+    },
+    {
+      "experiment_id": "EXP-011",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A01",
+      "archetype_version": "1.0.0",
+      "factor": "garment_construction",
+      "primary_dimension": "garment_construction_fidelity",
+      "transfer_status": "ready",
+      "control_strategy": "Keep the fashion archetype's generic 'deep teal satin evening dress' wording.",
+      "variant_strategy": "Replace only that garment phrase with construction details while preserving dress type, color, satin material, and scene.",
+      "single_factor_guard": "The control and variant must differ only in the garment-description span.",
+      "fixture_requirements": [],
+      "definition_path": "experiments/definitions/EXP-011.json"
+    },
+    {
+      "experiment_id": "EXP-012",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A01",
+      "archetype_version": "1.0.0",
+      "factor": "fabric_physics",
+      "primary_dimension": "fabric_motion_coherence",
+      "transfer_status": "ready",
+      "control_strategy": "Use the frozen mid-turn fashion archetype without explicit fabric-response mechanics.",
+      "variant_strategy": "Append one fabric-response sentence describing lag, waist tension folds, and modest trailing hem motion.",
+      "single_factor_guard": "The only added information is how the already-present satin dress responds to the already-present turn.",
+      "fixture_requirements": [],
+      "definition_path": "experiments/definitions/EXP-012.json"
+    },
+    {
+      "experiment_id": "EXP-013",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A06",
+      "archetype_version": "1.0.0",
+      "factor": "identity_lock_repetition",
+      "primary_dimension": "identity_fidelity",
+      "transfer_status": "requires_first_party_reference_fixtures",
+      "control_strategy": "Use the same project-owned identity fixture with a deliberately redundant multi-sentence identity lock.",
+      "variant_strategy": "Replace the redundant lock block with one precise identity-only instruction while holding the fixture and all target-scene instructions constant.",
+      "single_factor_guard": "The same exact identity fixture must be attached to every replicate; only lock repetition changes.",
+      "fixture_requirements": [
+        "one project-owned identity fixture with stable provenance and a frozen file hash"
+      ],
+      "definition_path": "experiments/definitions/EXP-013.json"
+    },
+    {
+      "experiment_id": "EXP-014",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A07",
+      "archetype_version": "1.0.0",
+      "factor": "reference_roles",
+      "primary_dimension": "reference_role_fidelity",
+      "transfer_status": "requires_first_party_reference_fixtures",
+      "control_strategy": "Provide the same three project-owned references with an implicit instruction to preserve identity, outfit, and pose, but do not assign which reference controls which role.",
+      "variant_strategy": "Replace only the opening reference instruction with explicit identity-only, outfit-only, and pose-only role declarations.",
+      "single_factor_guard": "Reference files, ordering, target scene, and all non-role prompt text must remain identical.",
+      "fixture_requirements": [
+        "one project-owned identity fixture",
+        "one project-owned outfit fixture",
+        "one project-owned pose fixture",
+        "frozen file hashes and reference ordering"
+      ],
+      "definition_path": "experiments/definitions/EXP-014.json"
+    },
+    {
+      "experiment_id": "EXP-015",
+      "experiment_version": "1.1.0",
+      "archetype_id": "TB-A03",
+      "archetype_version": "1.0.0",
+      "factor": "historical_resolution",
+      "primary_dimension": "historical_cultural_coherence",
+      "transfer_status": "ready",
+      "control_strategy": "Keep one explicit modern electric desk-lamp phrase in the Ming study while also appending a post-hoc instruction to avoid modern electrical objects.",
+      "variant_strategy": "Replace only the conflicting modern object with a period-compatible ceramic oil lamp; retain the same final constraint sentence in both conditions.",
+      "single_factor_guard": "The single positive object phrase is the only textual difference; all composition, wardrobe, lighting, and negative constraints are otherwise unchanged.",
+      "fixture_requirements": [],
+      "definition_path": "experiments/definitions/EXP-015.json"
+    }
+  ]
+}

@@ -1,37 +1,58 @@
 {
   "experiment_id": "EXP-013",
-  "version": "1.0.0",
-  "hypothesis": "Repeating identity locks should be tested against a single precise lock",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "A single precise identity-only lock preserves identity at least as well as repeating redundant identity locks when the same reference fixture and target scene are held constant.",
+  "baseline_prompt": "Identity lock: use Reference 1 only for recognizable facial identity. Preserve the same recognizable identity throughout. Keep the same person in the final image. Do not change identity. Create a new realistic waist-up portrait in a sunlit botanical reading room. Do not import Reference 1 clothing, pose, camera angle, or background. Dress the subject in a charcoal knit jacket over a cream shirt, seated beside a leafy window and turning slightly toward the camera with relaxed hands resting on a closed book. Use soft daylight, natural skin texture, and restrained depth of field.",
   "variants": [
     {
       "id": "control",
-      "factor": "identity_repetition",
+      "factor": "repeated_identity_lock",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "identity_repetition",
-      "operation": "append",
-      "text": " Preserve the same recognizable identity once, clearly, without repeating the lock in every section."
+      "factor": "single_precise_identity_lock",
+      "operation": "replace_literal",
+      "old": "Identity lock: use Reference 1 only for recognizable facial identity. Preserve the same recognizable identity throughout. Keep the same person in the final image. Do not change identity.",
+      "new": "Identity lock: use Reference 1 only for recognizable facial identity."
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
-    "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "same identity reference fixture",
+    "botanical reading room",
+    "charcoal knit jacket and cream shirt",
+    "seated slight turn",
+    "closed book",
+    "soft daylight",
+    "target camera/framing",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "identity_repetition"
+    "identity_fidelity"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
   "related_patterns": [
     "reference-identity-isolation"
-  ]
+  ],
+  "requires_reference_inputs": [
+    {
+      "slot": "Reference 1",
+      "role": "identity",
+      "fixture_policy": "first_party_or_project_owned",
+      "hash_required": true
+    }
+  ],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A06",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "8d61e5ad450375bd408268f9966db60d32845e3eb5a8884fabc7d82f2ba40c8f",
+    "mapping_version": "1.0.0",
+    "realization": "counterfactual repeated-lock control derived from identity-only archetype",
+    "execution_readiness": "requires_first_party_reference_fixtures"
+  }
 }

@@ -1,38 +1,51 @@
 {
   "experiment_id": "EXP-008",
-  "version": "1.0.0",
-  "hypothesis": "Targeted constraints outperform a broad generic negative stack",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.1.0",
+  "hypothesis": "Targeted likely-failure constraints provide at least as strong visible failure-mode control as a broad generic negative stack in a complex environmental portrait.",
+  "baseline_prompt": "Create a realistic environmental portrait of an adult museum conservator in a quiet restoration studio at dusk. She has just paused while placing a small ceramic fragment into a padded tray, with both hands visible near the work surface. A task lamp and fading window light create a controlled warm-cool contrast. A magnifier, soft brush, blank archival tags, and storage drawers establish the work setting without clutter. Frame her slightly off center, with a shelf edge in the foreground, the conservator and tray in the midground, and tall cabinets receding behind her. Keep the scene observational rather than posed, with natural skin, believable hand-object contact, and readable separation between subject and workspace. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
   "variants": [
     {
       "id": "control",
-      "factor": "negative_scope",
+      "factor": "generic_negative_stack",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "negative_scope",
+      "factor": "targeted_constraints",
       "operation": "replace_literal",
-      "old": "Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo",
-      "new": "Avoid only distorted hands and unintended visible text"
+      "old": "Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+      "new": "Avoid distorted fingers around the tray and unintended readable text on the archival tags."
     }
   ],
   "preserved_dimensions": [
-    "subject",
-    "environment",
-    "lighting",
-    "aspect ratio",
-    "identity unless factor explicitly tests it"
+    "adult conservator",
+    "restoration studio",
+    "ceramic fragment and padded tray",
+    "both hands visible",
+    "archival tags",
+    "task lamp and window light",
+    "layered composition",
+    "all positive scene instructions",
+    "aspect ratio"
   ],
   "evaluation_dimensions": [
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "negative_scope"
+    "targeted_failure_mode_control"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
   "related_patterns": [
     "prompt-targeted-constraints"
-  ]
+  ],
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A02",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "41f5c5711f4b8c46c9852818aca700dd3ef195b3ddda4f527d58786df5bc1813",
+    "mapping_version": "1.0.0",
+    "realization": "archetype baseline plus broad-negative control clause",
+    "execution_readiness": "ready"
+  }
 }

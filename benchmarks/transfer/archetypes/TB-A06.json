@@ -1,0 +1,74 @@
+{
+  "archetype_id": "TB-A06",
+  "version": "1.0.0",
+  "name": "Identity-Only Reference Transfer",
+  "category": "identity_reference_transform",
+  "purpose": "Test identity-lock wording while holding the same project-owned identity fixture and a completely new wardrobe, pose, and environment.",
+  "route": "reference_transform",
+  "first_party_baseline_prompt": "Using a project-owned identity reference, create a new realistic waist-up portrait of the same adult person in a sunlit botanical reading room. Use the reference only for recognizable facial identity; do not import its original clothing, pose, camera angle, or background. Dress the subject in a charcoal knit jacket over a cream shirt, seated beside a leafy window and turning slightly toward the camera with relaxed hands resting on a closed book. Use soft daylight, natural skin texture, and restrained depth of field.",
+  "source_mechanism_families": [
+    {
+      "pattern_id": "reference-identity-isolation",
+      "registry_status": "supported",
+      "corpus_observation_count": 0,
+      "role": "reference_control"
+    },
+    {
+      "pattern_id": "lighting-window-side",
+      "registry_status": "observed",
+      "corpus_observation_count": 12,
+      "role": "lighting_scaffold"
+    },
+    {
+      "pattern_id": "prompt-targeted-constraints",
+      "registry_status": "supported",
+      "corpus_observation_count": 12,
+      "role": "constraint_scaffold"
+    }
+  ],
+  "locked_dimensions": [
+    "one project-owned identity fixture",
+    "identity-only reference role",
+    "botanical reading room",
+    "charcoal knit jacket and cream shirt",
+    "seated slight turn",
+    "closed book",
+    "soft daylight"
+  ],
+  "allowed_experimental_mutation_points": [
+    {
+      "mutation_id": "identity_lock_repetition",
+      "description": "Compare repeated redundant identity locks with one precise identity-only lock.",
+      "suitable_experiments": [
+        "EXP-013"
+      ]
+    }
+  ],
+  "suitable_experiments": [
+    "EXP-013"
+  ],
+  "unsuitable_experiments": [
+    "EXP-007",
+    "EXP-008",
+    "EXP-010",
+    "EXP-015"
+  ],
+  "expected_evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "identity_fidelity"
+  ],
+  "reference_fixture_policy": "Requires a first-party or project-owned identity fixture; private corpus images must never be used as the experimental reference fixture.",
+  "baseline_prompt_sha256": "8d61e5ad450375bd408268f9966db60d32845e3eb5a8884fabc7d82f2ba40c8f",
+  "provenance": {
+    "derivation_method": "mechanism_level_distillation",
+    "source_scope": "private_internal_corpus_indexes_and_public_visual_pattern_registry",
+    "source_prompt_text_copied": false,
+    "source_images_embedded": false,
+    "creator_specific_phrasing_retained": false,
+    "first_party_prompt": true,
+    "publication_safe": true,
+    "notes": "The prompt is newly authored for AIPF. Private source material informed mechanism selection only; source wording, prompt IDs, images, and creator-specific composition are not embedded."
+  }
+}
