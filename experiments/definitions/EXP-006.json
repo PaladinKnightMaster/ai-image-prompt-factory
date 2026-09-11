@@ -38,6 +38,7 @@
     "photographic_rendering_quality"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
-  "related_patterns": []
+  "status": "executed",
+  "related_patterns": [],
+  "latest_result": "experiments/results/EXP-006/EXP-006-1.0.1-20260911T204019Z-EPEL.result.json"
 }

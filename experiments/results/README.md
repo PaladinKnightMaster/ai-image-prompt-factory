@@ -16,3 +16,4 @@ Results must preserve the run ID, experiment version, review hash, mapping commi
 - `EXP-004-1.0.1-20260910T221621Z-EK6M` - explicit hand-object mechanics vs generic holding; **supports**.
 - `EXP-003-1.0.1-20260911T124433Z-SGB4` - director micro-story vs semantically matched static description; **supports**.
 - `EXP-005-1.0.1-20260911T175641Z-U8ZL` - explicit layered spatial roles vs generic cinematic depth; **weakly_supports**.
+- `EXP-006-1.0.1-20260911T204019Z-EPEL` - camera-brand phrase present vs removed with 85mm portrait perspective preserved; **supports** practical non-degradation.

@@ -1,0 +1,187 @@
+{
+  "result_id": "EXP-006-1.0.1-20260911T204019Z-EPEL",
+  "experiment_id": "EXP-006",
+  "experiment_version": "1.0.1",
+  "run_id": "EXP-006-1.0.1-20260911T204019Z-EPEL",
+  "status": "revealed",
+  "hypothesis": "Removing camera-brand wording does not materially reduce visible photographic rendering quality when portrait perspective and scene structure are already specified",
+  "primary_dimension": "photographic_rendering_quality",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "0979c57f5433c12223cf1a89c90861509710fd72d1de89a36c5b1d8394a09044",
+    "mapping_commitment_sha256": "1d6a214929e49e13ab353bcb3287180ffca688e77893d3cafe9968376badaf57",
+    "frozen_at_utc": "2026-09-11T21:10:09.722815+00:00",
+    "revealed_at_utc": "2026-09-11T21:10:17.956774+00:00"
+  },
+  "analysis_rule": {
+    "type": "preregistered_practical_non_degradation_threshold",
+    "primary_dimension": "photographic_rendering_quality",
+    "variant_minus_control_support_threshold": -0.25,
+    "observed_variant_minus_control": 0.25,
+    "interpretation": "The ablation hypothesis is supported when removing the camera-brand phrase changes the primary mean by no worse than -0.25 on the 1-5 scale. This is a practical decision rule for this small-N experiment, not a formal statistical non-inferiority test."
+  },
+  "variants": {
+    "control": {
+      "factor": "camera_brand_present",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.25,
+        "technical_defects": 4.25,
+        "photographic_rendering_quality": 4.25,
+        "overall": 4.4375
+      },
+      "overall_sample_sd": 0.2394
+    },
+    "variant": {
+      "factor": "camera_brand_removed",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.25,
+        "technical_defects": 4.5,
+        "photographic_rendering_quality": 4.5,
+        "overall": 4.5625
+      },
+      "overall_sample_sd": 0.375
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.0,
+    "technical_defects": 0.25,
+    "photographic_rendering_quality": 0.25,
+    "overall": 0.125
+  },
+  "evidence_classification": "supports",
+  "interpretation": "In this controlled refined-interior portrait context, removing the `Hasselblad camera` phrase did not reduce visible photographic rendering quality when an 85mm portrait perspective and the rest of the scene structure were held constant. The no-brand condition scored 0.25 higher on the primary photographic_rendering_quality dimension, 0.25 higher on technical-defect cleanliness, and 0.125 higher overall, while semantic compliance and aesthetic quality were unchanged. Under the preregistered practical non-degradation threshold of -0.25 on the primary dimension, this run supports the hypothesis that the camera-brand phrase contributed little in this context. The result does not establish that camera-brand wording is universally useless across photographic tasks.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance or formal non-inferiority claim.",
+    "The practical -0.25 non-degradation threshold was a project decision rule on a coarse 1-5 rating scale, not a confidence-interval-based statistical margin.",
+    "The review contains one frozen score set, so inter-rater reliability was not measured.",
+    "The host exposed the model family as gpt-image-2 but not an exact model snapshot or reproducible generation seed.",
+    "The finding is specific to one refined-interior portrait prompt with an 85mm portrait perspective; replication on richer editorial, environmental, product, artifact, and transfer-benchmark prompts is required."
+  ],
+  "pattern_implications": [],
+  "raw_scores": [
+    {
+      "review_id": "RUNAQW9J",
+      "blind_id": "CL8GAS",
+      "variant_id": "control",
+      "factor": "camera_brand_present",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "photographic_rendering_quality": 5
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RHFQY47Z",
+      "blind_id": "93JZXK",
+      "variant_id": "control",
+      "factor": "camera_brand_present",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "R5AYNALP",
+      "blind_id": "BNG776",
+      "variant_id": "control",
+      "factor": "camera_brand_present",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RGGAFTM2",
+      "blind_id": "YUWDTL",
+      "variant_id": "control",
+      "factor": "camera_brand_present",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "RQ2E8EGH",
+      "blind_id": "LZH4AP",
+      "variant_id": "variant",
+      "factor": "camera_brand_removed",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "RTJSR7QL",
+      "blind_id": "CJ5ADT",
+      "variant_id": "variant",
+      "factor": "camera_brand_removed",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "R7HUDM9W",
+      "blind_id": "HBHGE3",
+      "variant_id": "variant",
+      "factor": "camera_brand_removed",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "photographic_rendering_quality": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R7TURYY2",
+      "blind_id": "8ZLUGN",
+      "variant_id": "variant",
+      "factor": "camera_brand_removed",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "photographic_rendering_quality": 5
+      },
+      "overall": 4.75
+    }
+  ]
+}

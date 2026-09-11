@@ -371,3 +371,76 @@ def test_exp005_pattern_remains_supported_and_compiler_eligible():
     assert pattern["compiler_usage"]["director_gate"] is True
     assert "EXP-005-1.0.1-20260911T175641Z-U8ZL" in pattern["evidence"]["experiments"]
     assert "controlled_blind_experiment" in pattern["evidence"]["validation_basis"]
+
+EXP006_RESULT_REL = Path(
+    "experiments/results/EXP-006/"
+    "EXP-006-1.0.1-20260911T204019Z-EPEL.result.json"
+)
+
+
+def _exp006_result():
+    return json.loads((repo_root() / EXP006_RESULT_REL).read_text(encoding="utf-8"))
+
+
+def test_exp006_result_schema_validates():
+    result = _exp006_result()
+    schema = json.loads(
+        (repo_root() / "data/schemas/experiment_result.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert list(Draft202012Validator(schema).iter_errors(result)) == []
+
+
+def test_exp006_result_aggregates_match_raw_scores():
+    result = _exp006_result()
+    dimensions = [
+        "semantic_compliance",
+        "aesthetic_quality",
+        "technical_defects",
+        "photographic_rendering_quality",
+    ]
+
+    for variant_id in ("control", "variant"):
+        rows = [
+            row for row in result["raw_scores"]
+            if row["variant_id"] == variant_id
+        ]
+        assert len(rows) == 4
+
+        for dimension in dimensions:
+            mean = sum(row["scores"][dimension] for row in rows) / len(rows)
+            assert mean == result["variants"][variant_id]["means"][dimension]
+
+        overall = sum(row["overall"] for row in rows) / len(rows)
+        assert overall == result["variants"][variant_id]["means"]["overall"]
+
+
+def test_exp006_practical_non_degradation_rule_and_classification():
+    result = _exp006_result()
+    rule = result["analysis_rule"]
+    primary = result["primary_dimension"]
+    delta = result["deltas_variant_minus_control"][primary]
+
+    assert primary == "photographic_rendering_quality"
+    assert rule["type"] == "preregistered_practical_non_degradation_threshold"
+    assert rule["variant_minus_control_support_threshold"] == -0.25
+    assert delta == 0.25
+    assert delta >= rule["variant_minus_control_support_threshold"]
+    assert result["deltas_variant_minus_control"]["technical_defects"] == 0.25
+    assert result["deltas_variant_minus_control"]["aesthetic_quality"] == 0.0
+    assert result["deltas_variant_minus_control"]["overall"] == 0.125
+    assert result["evidence_classification"] == "supports"
+    assert result["pattern_implications"] == []
+
+
+def test_exp006_definition_is_marked_executed_without_pattern_link():
+    definition = json.loads(
+        (repo_root() / "experiments/definitions/EXP-006.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert definition["version"] == "1.0.1"
+    assert definition["status"] == "executed"
+    assert definition["latest_result"] == EXP006_RESULT_REL.as_posix()
+    assert definition["related_patterns"] == []
