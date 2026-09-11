@@ -756,3 +756,64 @@ def test_exp003_only_replaces_static_event_description():
     )
 
     assert prompts["variant"] == expected
+
+def test_exp005_factors_distinguish_generic_and_explicit_depth():
+    run = create_run_plan("EXP-005", replicates=1)
+
+    factors = {
+        variant["variant_id"]: variant["factor"]
+        for variant in run["variants"]
+    }
+
+    assert factors["control"] == "generic_cinematic_depth"
+    assert factors["variant"] == "explicit_layered_spatial_roles"
+
+
+def test_exp005_preserves_scene_elements_across_conditions():
+    run = create_run_plan("EXP-005", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    for prompt in prompts.values():
+        assert "doorway" in prompt
+        assert "window" in prompt
+        assert "distant furniture" in prompt
+        assert "satin outfit" in prompt
+        assert "ceramic vase" in prompt
+        assert "Soft directional window light" in prompt
+
+
+def test_exp005_variant_only_assigns_explicit_spatial_roles():
+    run = create_run_plan("EXP-005", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    expected = prompts["control"].replace(
+        "Use cinematic depth to arrange the scene",
+        (
+            "Place the doorway in the foreground, the subject in the midground, "
+            "and the window and distant furniture in the background"
+        ),
+    )
+
+    assert prompts["variant"] == expected
+
+
+def test_exp005_prompts_do_not_introduce_blur_or_spacing_conflicts():
+    run = create_run_plan("EXP-005", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    for prompt in prompts.values():
+        assert "blurred foreground" not in prompt
+        assert "text, watermark" in prompt
+        assert "text,watermark" not in prompt

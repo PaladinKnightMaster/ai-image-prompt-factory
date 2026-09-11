@@ -1,26 +1,33 @@
 {
   "experiment_id": "EXP-005",
-  "version": "1.0.0",
-  "hypothesis": "Explicit layered spatial roles outperform generic cinematic depth",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "version": "1.0.1",
+  "hypothesis": "Explicit foreground, midground, and background role assignment improves spatial depth coherence compared with a generic cinematic-depth instruction",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior with a doorway, a window, and distant furniture. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Use cinematic depth to arrange the scene. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
   "variants": [
     {
       "id": "control",
-      "factor": "layered_depth",
+      "factor": "generic_cinematic_depth",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "layered_depth",
+      "factor": "explicit_layered_spatial_roles",
       "operation": "replace_literal",
-      "old": "Foreground, midground, and background create depth",
-      "new": "A blurred foreground doorway frames her; she occupies the midground; the window and distant furniture remain readable in the background"
+      "old": "Use cinematic depth to arrange the scene",
+      "new": "Place the doorway in the foreground, the subject in the midground, and the window and distant furniture in the background"
     }
   ],
   "preserved_dimensions": [
     "subject",
+    "pose",
+    "wardrobe",
+    "object",
+    "doorway presence",
+    "window presence",
+    "distant furniture presence",
     "environment",
     "lighting",
+    "camera and lens",
     "aspect ratio",
     "identity unless factor explicitly tests it"
   ],
@@ -28,7 +35,7 @@
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "layered_depth"
+    "spatial_depth_coherence"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
