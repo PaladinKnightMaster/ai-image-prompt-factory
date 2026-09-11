@@ -13,3 +13,4 @@ Results must preserve the run ID, experiment version, review hash, mapping commi
 
 - `EXP-001-1.0.1-20260910T132045Z-DEQ4` - explicit pose mechanics vs generic pose language; **weakly_contradicts**.
 - `EXP-002-1.0.1-20260910T181605Z-2GVM` - explicit material physics vs material-name-only; **contradicts**.
+- `EXP-004-1.0.1-20260910T221621Z-EK6M` - explicit hand-object mechanics vs generic holding; **supports**.

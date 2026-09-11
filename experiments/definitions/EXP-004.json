@@ -35,8 +35,9 @@
     "hand_object_interaction"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "interaction-explicit-prop"
-  ]
+  ],
+  "latest_result": "experiments/results/EXP-004/EXP-004-1.0.1-20260910T221621Z-EK6M.result.json"
 }

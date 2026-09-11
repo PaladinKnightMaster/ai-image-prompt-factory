@@ -972,16 +972,19 @@
           "GAC-P0004",
           "GAC-P0008"
         ],
-        "experiments": [],
+        "experiments": [
+          "EXP-004-1.0.1-20260910T221621Z-EK6M"
+        ],
         "validation_basis": [
           "internal_source_corpus_observation",
           "human_curated_project_rule",
-          "v3.1_regression_or_compiler_rule"
+          "v3.1_regression_or_compiler_rule",
+          "controlled_blind_experiment"
         ]
       },
       "confidence": {
         "level": "supported",
-        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+        "note": "Corpus and project-rule evidence is now reinforced by EXP-004 v1.0.1, where explicit hand-object mechanics improved the primary hand_object_interaction score by 0.25 and the overall mean by 0.3125 in one small-N second-layer blind portrait run. Keep compiler-eligible, but treat the empirical result as context-specific pending replication across props, poses, and routes."
       },
       "failure_modes": [],
       "retrieval_terms": [

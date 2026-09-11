@@ -147,3 +147,77 @@ def test_exp002_pattern_is_mixed_and_not_compiler_eligible():
     assert pattern["validation_status"] == "mixed"
     assert pattern["compiler_usage"]["compiler_eligible"] is False
     assert "EXP-002-1.0.1-20260910T181605Z-2GVM" in pattern["evidence"]["experiments"]
+
+EXP004_RESULT_REL = Path(
+    "experiments/results/EXP-004/"
+    "EXP-004-1.0.1-20260910T221621Z-EK6M.result.json"
+)
+
+
+def _exp004_result():
+    return json.loads((repo_root() / EXP004_RESULT_REL).read_text(encoding="utf-8"))
+
+
+def test_exp004_result_schema_validates():
+    result = _exp004_result()
+    schema = json.loads(
+        (repo_root() / "data/schemas/experiment_result.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert list(Draft202012Validator(schema).iter_errors(result)) == []
+
+
+def test_exp004_result_aggregates_match_raw_scores():
+    result = _exp004_result()
+    dimensions = [
+        "semantic_compliance",
+        "aesthetic_quality",
+        "technical_defects",
+        "hand_object_interaction",
+    ]
+
+    for variant_id in ("control", "variant"):
+        rows = [
+            row for row in result["raw_scores"]
+            if row["variant_id"] == variant_id
+        ]
+        assert len(rows) == 4
+
+        for dimension in dimensions:
+            mean = sum(row["scores"][dimension] for row in rows) / len(rows)
+            assert mean == result["variants"][variant_id]["means"][dimension]
+
+        overall = sum(row["overall"] for row in rows) / len(rows)
+        assert overall == result["variants"][variant_id]["means"]["overall"]
+
+
+def test_exp004_result_delta_and_classification():
+    result = _exp004_result()
+    assert result["primary_dimension"] == "hand_object_interaction"
+    assert result["deltas_variant_minus_control"]["hand_object_interaction"] == 0.25
+    assert result["deltas_variant_minus_control"]["technical_defects"] == 0.5
+    assert result["deltas_variant_minus_control"]["overall"] == 0.3125
+    assert result["evidence_classification"] == "supports"
+
+
+def test_exp004_definition_is_marked_executed():
+    definition = json.loads(
+        (repo_root() / "experiments/definitions/EXP-004.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert definition["version"] == "1.0.1"
+    assert definition["status"] == "executed"
+    assert definition["latest_result"] == EXP004_RESULT_REL.as_posix()
+
+
+def test_exp004_pattern_remains_supported_and_compiler_eligible():
+    pattern = get_pattern("interaction-explicit-prop")
+    assert pattern is not None
+    assert pattern["validation_status"] == "supported"
+    assert pattern["confidence"]["level"] == "supported"
+    assert pattern["compiler_usage"]["compiler_eligible"] is True
+    assert pattern["compiler_usage"]["director_gate"] is True
+    assert "EXP-004-1.0.1-20260910T221621Z-EK6M" in pattern["evidence"]["experiments"]
+    assert "controlled_blind_experiment" in pattern["evidence"]["validation_basis"]

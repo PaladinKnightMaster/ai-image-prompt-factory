@@ -1,0 +1,187 @@
+{
+  "result_id": "EXP-004-1.0.1-20260910T221621Z-EK6M",
+  "experiment_id": "EXP-004",
+  "experiment_version": "1.0.1",
+  "run_id": "EXP-004-1.0.1-20260910T221621Z-EK6M",
+  "status": "revealed",
+  "hypothesis": "Explicit hand-object mechanics outperform generic holding",
+  "primary_dimension": "hand_object_interaction",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "7b289acec08b7a1adf43d4bc8b15b0ef6e1a632b4aa0341cfebd361fd3bc0e8d",
+    "mapping_commitment_sha256": "6112443ccf3df1de741f0031ebcd9020c495f6de8c0898d2f0738c2336cce2c1",
+    "frozen_at_utc": "2026-09-10T23:52:45.083144+00:00",
+    "revealed_at_utc": "2026-09-10T23:53:13.069113+00:00"
+  },
+  "variants": {
+    "control": {
+      "factor": "generic_holding",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 4.75,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 4.5,
+        "hand_object_interaction": 4.5,
+        "overall": 4.625
+      },
+      "overall_sample_sd": 0.433
+    },
+    "variant": {
+      "factor": "explicit_hand_object_mechanics",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "hand_object_interaction": 4.75,
+        "overall": 4.9375
+      },
+      "overall_sample_sd": 0.125
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.25,
+    "aesthetic_quality": 0.25,
+    "technical_defects": 0.5,
+    "hand_object_interaction": 0.25,
+    "overall": 0.3125
+  },
+  "evidence_classification": "supports",
+  "interpretation": "In this ceramic-vase portrait context, explicit hand-object mechanics improved the primary hand_object_interaction score by 0.25 over generic two-hand holding. The treatment also improved semantic compliance by 0.25, aesthetic quality by 0.25, technical-defect cleanliness by 0.50, and the overall mean by 0.3125, while showing lower across-replicate variability. This single small-N run supports the tested superiority hypothesis in this context, but it does not establish universal superiority. Replication across different props, poses, scales, hand visibility, and routes is required before strengthening the compiler rule beyond its current supported state.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "The review contains one frozen score set, so inter-rater reliability was not measured.",
+    "Most scores were near the top of the 1-5 scale, so ceiling effects limited discrimination on several dimensions.",
+    "The host exposed the model family as gpt-image-2 but not an exact model snapshot or reproducible generation seed.",
+    "The finding is specific to a ceramic-vase portrait context; stochastic outputs varied in framing and prop presentation, so replication across other interaction types and routes is required."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "interaction-explicit-prop",
+      "recommended_validation_status": "supported",
+      "compiler_eligible": true,
+      "reason": "The pattern already had corpus and project-rule support. EXP-004 adds controlled blinded empirical evidence in which explicit contact and load-bearing mechanics improved the primary hand_object_interaction dimension and all secondary aggregate dimensions relative to generic holding."
+    }
+  ],
+  "raw_scores": [
+    {
+      "review_id": "RH2ACJ44",
+      "blind_id": "G4YBRD",
+      "variant_id": "control",
+      "factor": "generic_holding",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "hand_object_interaction": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "RQENSSX3",
+      "blind_id": "XQHT3E",
+      "variant_id": "control",
+      "factor": "generic_holding",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "hand_object_interaction": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RP4TFWCS",
+      "blind_id": "6LFFA3",
+      "variant_id": "control",
+      "factor": "generic_holding",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "hand_object_interaction": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "R2FZ57HW",
+      "blind_id": "FXSDGX",
+      "variant_id": "control",
+      "factor": "generic_holding",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "hand_object_interaction": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RAPNVRPL",
+      "blind_id": "LLCEGH",
+      "variant_id": "variant",
+      "factor": "explicit_hand_object_mechanics",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "hand_object_interaction": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "R8LHS9M6",
+      "blind_id": "NJYXB3",
+      "variant_id": "variant",
+      "factor": "explicit_hand_object_mechanics",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "hand_object_interaction": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RB56456X",
+      "blind_id": "FJJG98",
+      "variant_id": "variant",
+      "factor": "explicit_hand_object_mechanics",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "hand_object_interaction": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R8Y2J6DG",
+      "blind_id": "NE4ZCL",
+      "variant_id": "variant",
+      "factor": "explicit_hand_object_mechanics",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "hand_object_interaction": 5
+      },
+      "overall": 5.0
+    }
+  ]
+}
