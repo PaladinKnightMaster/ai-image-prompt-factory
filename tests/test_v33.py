@@ -692,3 +692,67 @@ def test_exp004_only_replaces_interaction_mechanics():
     )
 
     assert prompts["variant"] == expected
+
+def test_exp003_factors_distinguish_static_and_micro_story():
+    run = create_run_plan("EXP-003", replicates=1)
+
+    factors = {
+        variant["variant_id"]: variant["factor"]
+        for variant in run["variants"]
+    }
+
+    assert factors["control"] == "static_description"
+    assert factors["variant"] == "director_micro_story"
+
+
+def test_exp003_preserves_scene_facts_across_conditions():
+    run = create_run_plan("EXP-003", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    for prompt in prompts.values():
+        assert "midway across the room" in prompt
+        assert "window" in prompt
+        assert "quiet sound" in prompt
+        assert "satin outfit" in prompt
+        assert "ceramic vase" in prompt
+
+
+def test_exp003_micro_story_uses_temporal_event_framing():
+    run = create_run_plan("EXP-003", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    assert "has just paused" not in prompts["control"]
+    assert "has just paused" in prompts["variant"]
+    assert "turning toward a quiet sound outside the window" in prompts["variant"]
+
+
+def test_exp003_only_replaces_static_event_description():
+    run = create_run_plan("EXP-003", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    expected = prompts["control"].replace(
+        (
+            "The subject stands midway across the room, turned toward the window, "
+            "wearing a satin outfit and holding a ceramic vase. "
+            "A quiet sound comes from outside the window."
+        ),
+        (
+            "The subject has just paused midway across the room, turning toward "
+            "a quiet sound outside the window, while wearing a satin outfit and "
+            "holding a ceramic vase."
+        ),
+    )
+
+    assert prompts["variant"] == expected

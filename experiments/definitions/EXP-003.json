@@ -1,25 +1,33 @@
 {
   "experiment_id": "EXP-003",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "hypothesis": "A director micro-story improves visual event coherence",
-  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands in a dynamic elegant pose, wearing a satin outfit and holding a ceramic vase. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
+  "baseline_prompt": "Create a realistic adult portrait in a refined interior. The subject stands midway across the room, turned toward the window, wearing a satin outfit and holding a ceramic vase. A quiet sound comes from outside the window. Soft directional window light shapes the face. Foreground, midground, and background create depth. Hasselblad camera, 85mm lens, 8K masterpiece, ultra-detailed. Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo.",
   "variants": [
     {
       "id": "control",
-      "factor": "micro_story",
+      "factor": "static_description",
       "operation": "identity"
     },
     {
       "id": "variant",
-      "factor": "micro_story",
-      "operation": "append",
-      "text": " She has just paused while crossing the room, turning toward a quiet sound outside the window."
+      "factor": "director_micro_story",
+      "operation": "replace_literal",
+      "old": "The subject stands midway across the room, turned toward the window, wearing a satin outfit and holding a ceramic vase. A quiet sound comes from outside the window.",
+      "new": "The subject has just paused midway across the room, turning toward a quiet sound outside the window, while wearing a satin outfit and holding a ceramic vase."
     }
   ],
   "preserved_dimensions": [
     "subject",
+    "room position",
+    "window orientation",
+    "quiet external stimulus",
+    "wardrobe",
+    "object",
     "environment",
     "lighting",
+    "composition",
+    "camera",
     "aspect ratio",
     "identity unless factor explicitly tests it"
   ],
@@ -27,7 +35,7 @@
     "semantic_compliance",
     "aesthetic_quality",
     "technical_defects",
-    "micro_story"
+    "visual_event_coherence"
   ],
   "model_target": "gpt-image-2",
   "status": "planned",
