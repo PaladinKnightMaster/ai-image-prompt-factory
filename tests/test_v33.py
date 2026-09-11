@@ -817,3 +817,62 @@ def test_exp005_prompts_do_not_introduce_blur_or_spacing_conflicts():
         assert "blurred foreground" not in prompt
         assert "text, watermark" in prompt
         assert "text,watermark" not in prompt
+
+def test_exp006_factors_distinguish_camera_brand_presence():
+    run = create_run_plan("EXP-006", replicates=1)
+
+    factors = {
+        variant["variant_id"]: variant["factor"]
+        for variant in run["variants"]
+    }
+
+    assert factors["control"] == "camera_brand_present"
+    assert factors["variant"] == "camera_brand_removed"
+
+
+def test_exp006_preserves_portrait_perspective_across_conditions():
+    run = create_run_plan("EXP-006", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    for prompt in prompts.values():
+        assert "85mm portrait perspective" in prompt
+        assert "satin outfit" in prompt
+        assert "ceramic vase" in prompt
+        assert "Soft directional window light" in prompt
+        assert "Foreground, midground, and background create depth" in prompt
+
+
+def test_exp006_only_removes_camera_brand_wording():
+    run = create_run_plan("EXP-006", replicates=1)
+
+    prompts = {
+        variant["variant_id"]: variant["prompt"]
+        for variant in run["variants"]
+    }
+
+    expected = prompts["control"].replace(
+        "Use an 85mm portrait perspective. Hasselblad camera.",
+        "Use an 85mm portrait perspective.",
+    )
+
+    assert prompts["variant"] == expected
+    assert "Hasselblad" in prompts["control"]
+    assert "Hasselblad" not in prompts["variant"]
+
+
+def test_exp006_scores_visible_rendering_not_prompt_brand_presence():
+    definition_path = (
+        Path(__file__).resolve().parents[1]
+        / "experiments"
+        / "definitions"
+        / "EXP-006.json"
+    )
+
+    definition = json.loads(definition_path.read_text(encoding="utf-8"))
+
+    assert "photographic_rendering_quality" in definition["evaluation_dimensions"]
+    assert "camera_brand" not in definition["evaluation_dimensions"]
