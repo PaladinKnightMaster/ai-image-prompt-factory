@@ -227,3 +227,50 @@ def test_exp015_changes_only_the_anachronistic_positive_object():
         "a compact electric desk lamp",
         "a ceramic oil lamp",
     )
+
+
+def test_transfer_prompt_text_integrity_preserves_token_boundaries():
+    archetype = _load(TRANSFER_ROOT / "archetypes" / "TB-A02.json")
+    prompt = archetype["first_party_baseline_prompt"]
+
+    assert "both hands visible near the work surface" in prompt
+    assert "a shelf edge in the foreground" in prompt
+    assert "and readable separation between subject and workspace" in prompt
+
+    for malformed in (
+        "visiblenear",
+        "nearthe",
+        "edgein",
+        "andreadable",
+    ):
+        assert malformed not in prompt
+
+
+def test_exp008_and_exp009_extend_tb_a02_without_rewriting_the_archetype():
+    archetype = _load(TRANSFER_ROOT / "archetypes" / "TB-A02.json")
+    base = archetype["first_party_baseline_prompt"]
+
+    exp8 = _load("experiments/definitions/EXP-008.json")
+    exp9 = _load("experiments/definitions/EXP-009.json")
+
+    broad_negative = (
+        "Avoid bad anatomy, extra fingers, blur, artifacts, text, watermark, logo."
+    )
+    emotion_stack = (
+        "Overall mood: quiet, tense, expectant, uncertain, restrained."
+    )
+
+    assert exp8["baseline_prompt"] == f"{base} {broad_negative}"
+    assert exp9["baseline_prompt"] == f"{base} {emotion_stack}"
+
+    run8 = create_run_plan("EXP-008", replicates=1)
+    prompts8 = {item["variant_id"]: item["prompt"] for item in run8["variants"]}
+    assert prompts8["control"] == exp8["baseline_prompt"]
+
+
+def test_exp011_garment_replacement_preserves_word_boundary():
+    run = create_run_plan("EXP-011", replicates=1)
+    prompts = {item["variant_id"]: item["prompt"] for item in run["variants"]}
+
+    assert "evening dress with narrow straps" in prompts["variant"]
+    assert "dresswith" not in prompts["variant"]

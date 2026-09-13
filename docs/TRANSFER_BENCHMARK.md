@@ -118,10 +118,16 @@ The transfer test suite validates:
 - version agreement between mapping, archetypes, and experiment definitions;
 - removal of the old generic portrait baseline from EXP-007 through EXP-015;
 - factor-specific prompt transformations for EXP-007, EXP-008, EXP-009, EXP-011, EXP-012, and EXP-015;
+- prompt-text integrity guards for token boundaries in shared archetypes and experiment realizations;
+- exact TB-A02 baseline extension checks for EXP-008 and EXP-009;
 - semantic-anchor preservation across natural-language and JSON-style EXP-010 prompts;
 - blocked execution state for EXP-013 and EXP-014 until first-party reference fixtures exist.
 
 The normal repository validator and full pytest suite remain the release gate.
+
+## Prompt-text integrity
+
+Transfer prompts are treated as frozen experimental fixtures, including ordinary token boundaries and spacing. Regression tests guard shared archetype text against accidental word joins and verify that experiment realizations extend or replace only their declared spans. A display or terminal rendering anomaly is not grounds for a version bump when the repository bytes, prompt hash, and generated run-plan string remain correct.
 
 ## First recorded Transfer Bench result
 
