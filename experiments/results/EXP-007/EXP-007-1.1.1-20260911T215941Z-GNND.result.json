@@ -1,0 +1,189 @@
+{
+  "result_id": "EXP-007-1.1.1-20260911T215941Z-GNND",
+  "experiment_id": "EXP-007",
+  "experiment_version": "1.1.1",
+  "run_id": "EXP-007-1.1.1-20260911T215941Z-GNND",
+  "status": "revealed",
+  "hypothesis": "Removing the phrase '8K masterpiece' does not materially reduce visible photographic rendering quality in a production-like editorial fashion prompt.",
+  "primary_dimension": "photographic_rendering_quality",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "1a676d2053e70d9e4de9968df62c2624ebb85975eab0a080710f1508cccc90d1",
+    "mapping_commitment_sha256": "b94a56cdd5ada3360860537d162fcd97ba80b31ef5b03e6da429f9bea627c3c5",
+    "frozen_at_utc": "2026-09-13T21:34:30.205044+00:00",
+    "revealed_at_utc": "2026-09-13T21:46:42.301994+00:00",
+    "rejected_round_count": 1,
+    "rejected_round_reason": "A prior blind review round was frozen before reveal but rejected as noncanonical because the reviewer added an unregistered editorial_fashion_quality evaluation dimension. The treatment mapping for that rejected round was never revealed before rejection.",
+    "rejected_review_sha256": "8373d32e66173592059898951a1254593b1a151e6ee8b23a25beac3eb5fd8927"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A01",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "quality_hype_present",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 4.0,
+        "photographic_rendering_quality": 4.0,
+        "overall": 4.4375
+      },
+      "overall_sample_sd": 0.125
+    },
+    "variant": {
+      "factor": "quality_hype_removed",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.25,
+        "technical_defects": 4.0,
+        "photographic_rendering_quality": 4.0,
+        "overall": 4.3125
+      },
+      "overall_sample_sd": 0.125
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": -0.5,
+    "technical_defects": 0.0,
+    "photographic_rendering_quality": 0.0,
+    "overall": -0.125
+  },
+  "evidence_classification": "weakly_supports",
+  "interpretation": "In the TB-A01 editorial-fashion transfer context, removing the phrase `8K masterpiece` while retaining `Ultra-detailed.` produced no change in the primary photographic_rendering_quality mean, semantic compliance, or technical-defect cleanliness. The removal condition scored 0.50 lower on aesthetic quality and 0.125 lower overall. This weakly supports the narrow hypothesis that `8K masterpiece` contributes little to core visible photographic rendering in an already well-specified production-like prompt, while the secondary aesthetic decrease prevents a stronger redundancy claim.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "Only one valid frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A01 editorial-fashion archetype and should be replicated on other photographic transfer archetypes before broader guidance is adopted.",
+    "A first blind-review round was rejected before treatment reveal because its reviewer modified the registered evaluation schema by adding an extra dimension; its scores are excluded from this result."
+  ],
+  "pattern_implications": [],
+  "raw_scores": [
+    {
+      "review_id": "RGGFWSC2",
+      "blind_id": "3BKW85",
+      "variant_id": "control",
+      "factor": "quality_hype_present",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "RV7WJC6H",
+      "blind_id": "M8FL9C",
+      "variant_id": "control",
+      "factor": "quality_hype_present",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "R3QCAKYG",
+      "blind_id": "8F37XC",
+      "variant_id": "control",
+      "factor": "quality_hype_present",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "R756RLZM",
+      "blind_id": "WWPAJN",
+      "variant_id": "control",
+      "factor": "quality_hype_present",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RE87WT9R",
+      "blind_id": "7ULK8L",
+      "variant_id": "variant",
+      "factor": "quality_hype_removed",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "RFF6YKG7",
+      "blind_id": "MZ24D8",
+      "variant_id": "variant",
+      "factor": "quality_hype_removed",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RFL4UEFJ",
+      "blind_id": "PDQGBG",
+      "variant_id": "variant",
+      "factor": "quality_hype_removed",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "R6MRPXTK",
+      "blind_id": "N8PFHM",
+      "variant_id": "variant",
+      "factor": "quality_hype_removed",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "photographic_rendering_quality": 4
+      },
+      "overall": 4.25
+    }
+  ]
+}

@@ -444,3 +444,96 @@ def test_exp006_definition_is_marked_executed_without_pattern_link():
     assert definition["status"] == "executed"
     assert definition["latest_result"] == EXP006_RESULT_REL.as_posix()
     assert definition["related_patterns"] == []
+
+EXP007_RESULT_REL = Path(
+    "experiments/results/EXP-007/"
+    "EXP-007-1.1.1-20260911T215941Z-GNND.result.json"
+)
+
+
+def _exp007_result():
+    return json.loads((repo_root() / EXP007_RESULT_REL).read_text(encoding="utf-8"))
+
+
+def test_exp007_result_schema_validates():
+    result = _exp007_result()
+    schema = json.loads(
+        (repo_root() / "data/schemas/experiment_result.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert list(Draft202012Validator(schema).iter_errors(result)) == []
+
+
+def test_exp007_result_aggregates_match_raw_scores():
+    result = _exp007_result()
+    dimensions = [
+        "semantic_compliance",
+        "aesthetic_quality",
+        "technical_defects",
+        "photographic_rendering_quality",
+    ]
+
+    for variant_id in ("control", "variant"):
+        rows = [
+            row for row in result["raw_scores"]
+            if row["variant_id"] == variant_id
+        ]
+        assert len(rows) == 4
+
+        for dimension in dimensions:
+            mean = sum(row["scores"][dimension] for row in rows) / len(rows)
+            assert mean == result["variants"][variant_id]["means"][dimension]
+
+        overall = sum(row["overall"] for row in rows) / len(rows)
+        assert overall == result["variants"][variant_id]["means"]["overall"]
+
+
+def test_exp007_transfer_result_delta_and_classification():
+    result = _exp007_result()
+
+    assert result["primary_dimension"] == "photographic_rendering_quality"
+    assert (
+        result["deltas_variant_minus_control"]["photographic_rendering_quality"]
+        == 0.0
+    )
+    assert result["deltas_variant_minus_control"]["semantic_compliance"] == 0.0
+    assert result["deltas_variant_minus_control"]["technical_defects"] == 0.0
+    assert result["deltas_variant_minus_control"]["aesthetic_quality"] == -0.5
+    assert result["deltas_variant_minus_control"]["overall"] == -0.125
+    assert result["evidence_classification"] == "weakly_supports"
+    assert result["pattern_implications"] == []
+    assert result["transfer_benchmark"]["archetype_id"] == "TB-A01"
+
+
+def test_exp007_uses_only_canonical_second_review_round():
+    result = _exp007_result()
+    review = result["review"]
+
+    assert review["review_set_count"] == 1
+    assert (
+        review["review_sha256"]
+        == "1a676d2053e70d9e4de9968df62c2624ebb85975eab0a080710f1508cccc90d1"
+    )
+    assert review["rejected_round_count"] == 1
+    assert (
+        review["rejected_review_sha256"]
+        == "8373d32e66173592059898951a1254593b1a151e6ee8b23a25beac3eb5fd8927"
+    )
+    assert all(
+        "editorial_fashion_quality" not in row["scores"]
+        for row in result["raw_scores"]
+    )
+
+
+def test_exp007_definition_is_marked_executed_without_pattern_link():
+    definition = json.loads(
+        (repo_root() / "experiments/definitions/EXP-007.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert definition["version"] == "1.1.1"
+    assert definition["status"] == "executed"
+    assert definition["latest_result"] == EXP007_RESULT_REL.as_posix()
+    assert definition["related_patterns"] == []

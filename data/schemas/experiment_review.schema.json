@@ -67,7 +67,7 @@
             "additionalProperties": {
               "anyOf": [
                 {"type": "null"},
-                {"type": "number", "minimum": 1, "maximum": 5}
+                {"type": "integer", "minimum": 1, "maximum": 5}
               ]
             }
           },

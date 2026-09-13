@@ -465,8 +465,84 @@ def test_v33_freeze_review_requires_all_scores(tmp_path):
     run_file = _complete_test_run(tmp_path, replicates=1)
     result = create_review_package(run_file)
 
-    with pytest.raises(ValueError, match="must be a number"):
+    with pytest.raises(ValueError, match="must be an integer"):
         freeze_review(result["review"])
+
+
+def _load_review_for_mutation(review_path: Path) -> dict:
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    for item in review["items"]:
+        for dimension in review["evaluation_dimensions"]:
+            item["scores"][dimension] = 4
+    return review
+
+
+def _write_review_mutation(review_path: Path, review: dict) -> None:
+    review_path.write_text(
+        json.dumps(review, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def test_v33_freeze_review_rejects_evaluation_dimension_tampering(tmp_path):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    result = create_review_package(run_file)
+    review_path = Path(result["review"])
+    review = _load_review_for_mutation(review_path)
+
+    review["evaluation_dimensions"].append("editorial_fashion_quality")
+    for item in review["items"]:
+        item["scores"]["editorial_fashion_quality"] = 4
+    _write_review_mutation(review_path, review)
+
+    with pytest.raises(
+        ValueError,
+        match="evaluation_dimensions does not match reviewer manifest",
+    ):
+        freeze_review(review_path)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "expected_message"),
+    [
+        ("extra_score_key", "do not match evaluation_dimensions"),
+        ("missing_score_key", "do not match evaluation_dimensions"),
+        ("renamed_score_key", "do not match evaluation_dimensions"),
+        ("non_integer_score", "must be an integer"),
+        ("out_of_range_score", "must be between 1 and 5"),
+    ],
+)
+def test_v33_freeze_review_rejects_invalid_score_schema(
+    tmp_path,
+    mutation,
+    expected_message,
+):
+    run_file = _complete_test_run(tmp_path, replicates=1)
+    result = create_review_package(run_file)
+    review_path = Path(result["review"])
+    review = _load_review_for_mutation(review_path)
+
+    item = review["items"][0]
+    dimension = review["evaluation_dimensions"][0]
+
+    if mutation == "extra_score_key":
+        item["scores"]["unexpected_dimension"] = 4
+    elif mutation == "missing_score_key":
+        item["scores"].pop(dimension)
+    elif mutation == "renamed_score_key":
+        score = item["scores"].pop(dimension)
+        item["scores"][f"{dimension}_renamed"] = score
+    elif mutation == "non_integer_score":
+        item["scores"][dimension] = 4.5
+    elif mutation == "out_of_range_score":
+        item["scores"][dimension] = 6
+    else:
+        raise AssertionError(mutation)
+
+    _write_review_mutation(review_path, review)
+
+    with pytest.raises(ValueError, match=expected_message):
+        freeze_review(review_path)
 
 
 def test_v33_freeze_review_writes_hashed_snapshot(tmp_path):

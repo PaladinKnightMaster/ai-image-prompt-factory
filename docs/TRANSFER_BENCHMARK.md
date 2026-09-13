@@ -85,7 +85,7 @@ Mapped experiment: EXP-014. Execution is blocked until all three first-party fix
 
 | Experiment | Archetype | Factor | Primary visible dimension | Readiness |
 | --- | --- | --- | --- | --- |
-| EXP-007 | TB-A01 | 8K/masterpiece phrase | photographic_rendering_quality | ready |
+| EXP-007 | TB-A01 | 8K/masterpiece phrase | photographic_rendering_quality | executed |
 | EXP-008 | TB-A02 | broad vs targeted constraints | targeted_failure_mode_control | ready |
 | EXP-009 | TB-A02 | adjective stack vs precise emotion | emotional_specificity | ready |
 | EXP-010 | TB-A05 | natural language vs JSON-style syntax | scene_constraint_fidelity | ready |
@@ -122,3 +122,9 @@ The transfer test suite validates:
 - blocked execution state for EXP-013 and EXP-014 until first-party reference fixtures exist.
 
 The normal repository validator and full pytest suite remain the release gate.
+
+## First recorded Transfer Bench result
+
+EXP-007 v1.1.1 is the first completed Transfer Bench experiment. In `TB-A01`, removing the generic `8K masterpiece` phrase while preserving `Ultra-detailed.` left `photographic_rendering_quality`, semantic compliance, and technical-defect cleanliness unchanged. The removal condition scored 0.50 lower on aesthetic quality and 0.125 lower overall, yielding a `weakly_supports` classification for the narrow rendering-quality hypothesis.
+
+The canonical result uses only the second blind-review round. An earlier review round was rejected before treatment reveal because its reviewer added an unregistered evaluation dimension. Review freezing is now hardened against that class of protocol mutation.

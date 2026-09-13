@@ -319,12 +319,76 @@ aipf experiment-review-reveal <run.json>
     }
 
 
-def _validate_review_scores(review: dict) -> None:
+def _verify_review_manifest(manifest: dict) -> None:
+    expected = manifest.get("review_package_sha256")
+    if not expected:
+        raise ValueError("review manifest is missing review_package_sha256")
+
+    payload = dict(manifest)
+    payload.pop("review_package_sha256", None)
+    actual = _canonical_sha256(payload)
+    if actual != expected:
+        raise ValueError("review manifest package hash verification failed")
+
+
+def _validate_review_against_manifest(review: dict, manifest: dict) -> None:
+    """Reject reviewer edits to protocol-locked package structure."""
+    _verify_review_manifest(manifest)
+
+    locked_fields = (
+        "run_id",
+        "experiment_id",
+        "review_package_sha256",
+        "mapping_commitment_sha256",
+        "created_at_utc",
+        "score_scale",
+        "evaluation_dimensions",
+    )
+    for field in locked_fields:
+        if review.get(field) != manifest.get(field):
+            raise ValueError(
+                f"review {field} does not match reviewer manifest"
+            )
+
+    if review.get("frozen_at_utc") is not None:
+        raise ValueError("open review must not set frozen_at_utc")
+    if review.get("review_sha256") is not None:
+        raise ValueError("open review must not set review_sha256")
+
+    manifest_ids = [item.get("review_id") for item in manifest.get("items", [])]
+    review_ids = [item.get("review_id") for item in review.get("items", [])]
+
+    if (
+        not manifest_ids
+        or len(manifest_ids) != len(set(manifest_ids))
+    ):
+        raise ValueError("review manifest has invalid or duplicate review IDs")
+
+    if len(review_ids) != len(manifest_ids) or set(review_ids) != set(manifest_ids):
+        raise ValueError(
+            "review items do not exactly match reviewer manifest review IDs"
+        )
+
+
+def _validate_review_scores(
+    review: dict,
+    *,
+    expected_dimensions: list[str] | None = None,
+) -> None:
     dimensions = review.get("evaluation_dimensions", [])
     items = review.get("items", [])
-    if not dimensions:
+    if not isinstance(dimensions, list) or not dimensions:
         raise ValueError("review has no evaluation dimensions")
-    if not items:
+    if (
+        any(not isinstance(dimension, str) or not dimension for dimension in dimensions)
+        or len(dimensions) != len(set(dimensions))
+    ):
+        raise ValueError("review evaluation_dimensions must be unique non-empty strings")
+    if expected_dimensions is not None and dimensions != expected_dimensions:
+        raise ValueError(
+            "review evaluation_dimensions do not match reviewer manifest"
+        )
+    if not isinstance(items, list) or not items:
         raise ValueError("review has no items")
 
     seen_ids: set[str] = set()
@@ -336,22 +400,25 @@ def _validate_review_scores(review: dict) -> None:
             raise ValueError(f"duplicate review_id: {review_id}")
         seen_ids.add(review_id)
 
-        scores = item.get("scores", {})
-        if set(scores) != set(dimensions):
+        scores = item.get("scores")
+        if not isinstance(scores, dict) or set(scores) != set(dimensions):
             raise ValueError(
                 f"review scores for {review_id} do not match "
                 "evaluation_dimensions"
             )
         for dimension in dimensions:
             score = scores.get(dimension)
-            if isinstance(score, bool) or not isinstance(score, (int, float)):
+            if isinstance(score, bool) or not isinstance(score, int):
                 raise ValueError(
-                    f"score for {review_id}/{dimension} must be a number"
+                    f"score for {review_id}/{dimension} must be an integer"
                 )
             if not 1 <= score <= 5:
                 raise ValueError(
                     f"score for {review_id}/{dimension} must be between 1 and 5"
                 )
+
+        if not isinstance(item.get("notes"), str):
+            raise ValueError(f"review notes for {review_id} must be a string")
 
 
 def _verify_frozen_review(frozen: dict) -> None:
@@ -374,7 +441,17 @@ def freeze_review(review_file: str | Path) -> dict:
     review = json.loads(path.read_text(encoding="utf-8"))
     if review.get("status") != "open":
         raise ValueError("only an open review can be frozen")
-    _validate_review_scores(review)
+
+    manifest_path = path.parent / REVIEW_MANIFEST_NAME
+    if not manifest_path.exists() or not manifest_path.is_file():
+        raise FileNotFoundError(manifest_path)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+    _validate_review_against_manifest(review, manifest)
+    _validate_review_scores(
+        review,
+        expected_dimensions=list(manifest["evaluation_dimensions"]),
+    )
 
     frozen_path = path.parent / REVIEW_FROZEN_NAME
     if frozen_path.exists():

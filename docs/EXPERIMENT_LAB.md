@@ -90,3 +90,11 @@ After EXP-001 through EXP-006 established the initial Isolation Bench, V3.3 adds
 The Isolation Bench remains the place for narrow causal tests with deliberately simple prompts. The Transfer Bench uses richer first-party archetypes to test whether those mechanisms remain useful in production-like contexts. Private corpus prompts and images are not copied into this layer; private indexes contribute only aggregate recurrence and mechanism-selection signals.
 
 Transfer Benchmark v1 defines seven archetypes and maps EXP-007 through EXP-015 onto them. EXP-013 and EXP-014 are intentionally blocked until first-party reference fixtures with frozen hashes are available. See `docs/TRANSFER_BENCHMARK.md` for the full contamination boundary, mapping, and validation rules.
+
+## V3.3 review-schema lock
+
+Blind-review freezing now treats the reviewer manifest as protocol-locked input. Before a review can be frozen, `review.json` must preserve the manifest's run identity, package commitment, mapping commitment, creation metadata, score scale, registered evaluation dimensions, and exact review-ID set. Score keys must exactly equal the registered dimensions, and every score must be an integer from 1 through 5. Missing, extra, renamed, null, fractional, boolean, or out-of-range scores are rejected.
+
+This hardening was added after an EXP-007 pilot review was frozen with an extra unregistered dimension. That round was rejected before treatment reveal and is not canonical evidence. The canonical EXP-007 review used a fresh review-ID mapping and exactly the four registered dimensions.
+
+EXP-007 v1.1.1 is the seventh recorded V3.3 empirical run and the first recorded Transfer Bench result. In the `TB-A01` editorial-fashion archetype, removing `8K masterpiece` while retaining `Ultra-detailed.` produced no change in the primary `photographic_rendering_quality` mean, semantic compliance, or technical-defect cleanliness. Aesthetic quality decreased by 0.50 and the overall mean decreased by 0.125, so the run is classified `weakly_supports` rather than `supports`. EXP-007 has no related VisualPattern and does not mutate the VisualPattern registry.
