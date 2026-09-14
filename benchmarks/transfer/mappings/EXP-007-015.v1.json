@@ -107,15 +107,15 @@
     },
     {
       "experiment_id": "EXP-012",
-      "experiment_version": "1.1.0",
+      "experiment_version": "1.1.1",
       "archetype_id": "TB-A01",
       "archetype_version": "1.0.0",
       "factor": "fabric_physics",
       "primary_dimension": "fabric_motion_coherence",
       "transfer_status": "ready",
       "control_strategy": "Use the frozen mid-turn fashion archetype without explicit fabric-response mechanics.",
-      "variant_strategy": "Append one fabric-response sentence describing lag, waist tension folds, and modest trailing hem motion.",
-      "single_factor_guard": "The only added information is how the already-present satin dress responds to the already-present turn.",
+      "variant_strategy": "Append one fabric-response sentence describing satin lag, waist-origin tension folds, and modest trailing motion at the hem.",
+      "single_factor_guard": "The only added information is how the already-present satin dress responds to the already-present turn; do not add garment-construction geometry or new body-pose instructions.",
       "fixture_requirements": [],
       "definition_path": "experiments/definitions/EXP-012.json"
     },

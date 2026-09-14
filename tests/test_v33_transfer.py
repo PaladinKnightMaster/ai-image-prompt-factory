@@ -89,6 +89,7 @@ def test_transfer_mapping_matches_archetype_and_experiment_versions():
         "EXP-009": "1.1.1",
         "EXP-010": "1.1.1",
         "EXP-011": "1.1.2",
+        "EXP-012": "1.1.1",
     }
 
     for item in mapping["mappings"]:

@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-012",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "hypothesis": "Explicit fabric-response language improves visible fabric-motion coherence in a mid-turn fashion portrait without changing the pose or garment identity.",
   "baseline_prompt": "Create a full-length editorial fashion portrait of an unmistakably adult model moving through a quiet modern gallery corridor. She is caught mid-turn beside a pale stone bench, wearing a deep teal satin evening dress and carrying a small structured clutch. One hand lightly steadies the clutch while the other hangs naturally after the turn. Tall side windows provide soft directional daylight; a dark doorway occupies the near foreground, the model remains in the midground, and framed architectural details recede into the background. Keep the face natural, the hands fully visible, the garment silhouette readable, and the polished stone floor subtly reflective. Use an 85mm portrait perspective with restrained depth of field and realistic photographic rendering.",
   "variants": [
@@ -13,7 +13,7 @@
       "id": "variant",
       "factor": "fabric_physics_present",
       "operation": "append",
-      "text": " The satin lags slightly behind the turn, with tension folds radiating from the waist and a modest trailing hem movement; keep the motion physically plausible."
+      "text": " The satin lags slightly behind the turn, with tension folds radiating from the waist and modest trailing motion at the hem; keep the fabric response physically plausible."
     }
   ],
   "preserved_dimensions": [
