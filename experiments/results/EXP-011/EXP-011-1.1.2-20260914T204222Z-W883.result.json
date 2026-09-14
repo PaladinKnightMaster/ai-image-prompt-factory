@@ -1,0 +1,187 @@
+{
+  "result_id": "EXP-011-1.1.2-20260914T204222Z-W883",
+  "experiment_id": "EXP-011",
+  "experiment_version": "1.1.2",
+  "run_id": "EXP-011-1.1.2-20260914T204222Z-W883",
+  "status": "revealed",
+  "hypothesis": "Detailed garment-construction language improves visible wardrobe-construction fidelity over a generic garment description in a production-like fashion portrait.",
+  "primary_dimension": "garment_construction_fidelity",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "73139c567cb66bdb149722c2eed2a3d068d6c16dbc142bb5a994dc24b75b95ba",
+    "mapping_commitment_sha256": "6944dba1a8be000acf6b987c4471dc6b3e91197efc31e888329bf08821496fce",
+    "frozen_at_utc": "2026-09-14T21:31:08.498788+00:00",
+    "revealed_at_utc": "2026-09-14T21:31:26.948308+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A01",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "generic_garment_description",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 4.75,
+        "garment_construction_fidelity": 4.75,
+        "overall": 4.875
+      },
+      "overall_sample_sd": 0.25
+    },
+    "variant": {
+      "factor": "explicit_garment_construction",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 4.75,
+        "garment_construction_fidelity": 5.0,
+        "overall": 4.9375
+      },
+      "overall_sample_sd": 0.125
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.0,
+    "technical_defects": 0.0,
+    "garment_construction_fidelity": 0.25,
+    "overall": 0.0625
+  },
+  "evidence_classification": "weakly_supports",
+  "interpretation": "In the TB-A01 editorial-fashion transfer context, explicit garment-construction geometry modestly improved visible garment-construction fidelity relative to the generic dress description. The construction condition scored 5.00 on garment_construction_fidelity versus 4.75 for the control, a variant-minus-control delta of +0.25. Semantic compliance, aesthetic quality, and technical-defect cleanliness were unchanged between conditions, and the overall mean improved by only +0.0625. The result therefore weakly supports the tested hypothesis in this context rather than establishing a broad rule that more garment-construction detail is always beneficial.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A01 editorial-fashion archetype and should be replicated across other garments and scenes before broader guidance is adopted.",
+    "The observed primary-dimension improvement was small at 0.25 points.",
+    "The treatment tested concrete garment-construction geometry and does not establish that every type of garment-detail wording will improve results."
+  ],
+  "pattern_implications": [],
+  "raw_scores": [
+    {
+      "review_id": "R8Q6YXDT",
+      "blind_id": "EBE4ST",
+      "variant_id": "control",
+      "factor": "generic_garment_description",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "garment_construction_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RE2C8C8U",
+      "blind_id": "WMMK3E",
+      "variant_id": "control",
+      "factor": "generic_garment_description",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "garment_construction_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RUZ2HKJL",
+      "blind_id": "36JF79",
+      "variant_id": "control",
+      "factor": "generic_garment_description",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "garment_construction_fidelity": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RJGGDGHG",
+      "blind_id": "HJR3WD",
+      "variant_id": "control",
+      "factor": "generic_garment_description",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "garment_construction_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RMZQQNNA",
+      "blind_id": "2TUAD4",
+      "variant_id": "variant",
+      "factor": "explicit_garment_construction",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "garment_construction_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R66SYQYP",
+      "blind_id": "7J72AE",
+      "variant_id": "variant",
+      "factor": "explicit_garment_construction",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "garment_construction_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RLCHRM88",
+      "blind_id": "26XAGF",
+      "variant_id": "variant",
+      "factor": "explicit_garment_construction",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "garment_construction_fidelity": 5
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RBNA6EPV",
+      "blind_id": "WGW8GL",
+      "variant_id": "variant",
+      "factor": "explicit_garment_construction",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "garment_construction_fidelity": 5
+      },
+      "overall": 5.0
+    }
+  ]
+}

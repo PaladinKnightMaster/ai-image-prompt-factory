@@ -37,7 +37,7 @@
     "garment_construction_fidelity"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "material-textile-lace-detail"
   ],
