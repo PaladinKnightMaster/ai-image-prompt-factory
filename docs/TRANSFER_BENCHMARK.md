@@ -86,7 +86,7 @@ Mapped experiment: EXP-014. Execution is blocked until all three first-party fix
 | Experiment | Archetype | Factor | Primary visible dimension | Readiness |
 | --- | --- | --- | --- | --- |
 | EXP-007 | TB-A01 | 8K/masterpiece phrase | photographic_rendering_quality | executed |
-| EXP-008 | TB-A02 | broad vs targeted constraints | targeted_failure_mode_control | ready |
+| EXP-008 | TB-A02 | broad vs targeted constraints | targeted_failure_mode_control | executed |
 | EXP-009 | TB-A02 | adjective stack vs precise emotion | emotional_specificity | ready |
 | EXP-010 | TB-A05 | natural language vs JSON-style syntax | scene_constraint_fidelity | ready |
 | EXP-011 | TB-A01 | generic vs constructed garment language | garment_construction_fidelity | ready |
@@ -129,8 +129,10 @@ The normal repository validator and full pytest suite remain the release gate.
 
 Transfer prompts are treated as frozen experimental fixtures, including ordinary token boundaries and spacing. Regression tests guard shared archetype text against accidental word joins and verify that experiment realizations extend or replace only their declared spans. A display or terminal rendering anomaly is not grounds for a version bump when the repository bytes, prompt hash, and generated run-plan string remain correct.
 
-## First recorded Transfer Bench result
+## Recorded Transfer Bench results
 
 EXP-007 v1.1.1 is the first completed Transfer Bench experiment. In `TB-A01`, removing the generic `8K masterpiece` phrase while preserving `Ultra-detailed.` left `photographic_rendering_quality`, semantic compliance, and technical-defect cleanliness unchanged. The removal condition scored 0.50 lower on aesthetic quality and 0.125 lower overall, yielding a `weakly_supports` classification for the narrow rendering-quality hypothesis.
+EXP-008 v1.1.0 is the second completed Transfer Bench experiment. In `TB-A02`, the broad generic negative stack outperformed the narrower targeted clause on `targeted_failure_mode_control` by 1.00 point and on overall mean by 0.375. The targeted condition's two lower-scoring outputs showed readable environmental signage/poster text while hand-object interaction remained clean. The run is classified `contradicts`; `prompt-targeted-constraints` is therefore treated as context-dependent, downgraded to `mixed`, and removed from compiler eligibility pending replication.
+
 
 The canonical result uses only the second blind-review round. An earlier review round was rejected before treatment reveal because its reviewer added an unregistered evaluation dimension. Review freezing is now hardened against that class of protocol mutation.

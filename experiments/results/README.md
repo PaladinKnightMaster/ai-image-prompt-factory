@@ -18,3 +18,4 @@ Results must preserve the run ID, experiment version, review hash, mapping commi
 - `EXP-005-1.0.1-20260911T175641Z-U8ZL` - explicit layered spatial roles vs generic cinematic depth; **weakly_supports**.
 - `EXP-006-1.0.1-20260911T204019Z-EPEL` - camera-brand phrase present vs removed with 85mm portrait perspective preserved; **supports** practical non-degradation.
 - `EXP-007-1.1.1-20260911T215941Z-GNND` - Transfer Bench `TB-A01`; `8K masterpiece` present vs removed; **weakly_supports**.
+- `EXP-008-1.1.0-20260913T233423Z-E24F` - Transfer Bench `TB-A02`; broad generic negative stack vs targeted likely-failure constraints; **contradicts**.

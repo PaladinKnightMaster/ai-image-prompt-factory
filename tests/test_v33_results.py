@@ -537,3 +537,104 @@ def test_exp007_definition_is_marked_executed_without_pattern_link():
     assert definition["status"] == "executed"
     assert definition["latest_result"] == EXP007_RESULT_REL.as_posix()
     assert definition["related_patterns"] == []
+
+
+EXP008_RESULT_REL = Path(
+    "experiments/results/EXP-008/"
+    "EXP-008-1.1.0-20260913T233423Z-E24F.result.json"
+)
+
+
+def _exp008_result():
+    return json.loads((repo_root() / EXP008_RESULT_REL).read_text(encoding="utf-8"))
+
+
+def test_exp008_result_schema_validates():
+    result = _exp008_result()
+    schema = json.loads(
+        (repo_root() / "data/schemas/experiment_result.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert list(Draft202012Validator(schema).iter_errors(result)) == []
+
+
+def test_exp008_result_aggregates_match_raw_scores():
+    result = _exp008_result()
+    dimensions = [
+        "semantic_compliance",
+        "aesthetic_quality",
+        "technical_defects",
+        "targeted_failure_mode_control",
+    ]
+
+    for variant_id in ("control", "variant"):
+        rows = [
+            row for row in result["raw_scores"]
+            if row["variant_id"] == variant_id
+        ]
+        assert len(rows) == 4
+
+        for dimension in dimensions:
+            mean = sum(row["scores"][dimension] for row in rows) / len(rows)
+            assert mean == result["variants"][variant_id]["means"][dimension]
+
+        overall = sum(row["overall"] for row in rows) / len(rows)
+        assert overall == result["variants"][variant_id]["means"]["overall"]
+
+
+def test_exp008_transfer_result_delta_and_classification():
+    result = _exp008_result()
+
+    assert result["primary_dimension"] == "targeted_failure_mode_control"
+    assert (
+        result["deltas_variant_minus_control"]["targeted_failure_mode_control"]
+        == -1.0
+    )
+    assert result["deltas_variant_minus_control"]["semantic_compliance"] == 0.0
+    assert result["deltas_variant_minus_control"]["technical_defects"] == 0.0
+    assert result["deltas_variant_minus_control"]["aesthetic_quality"] == -0.5
+    assert result["deltas_variant_minus_control"]["overall"] == -0.375
+    assert result["evidence_classification"] == "contradicts"
+    assert result["transfer_benchmark"]["archetype_id"] == "TB-A02"
+
+
+def test_exp008_review_integrity_is_recorded():
+    result = _exp008_result()
+    review = result["review"]
+
+    assert review["review_set_count"] == 1
+    assert (
+        review["review_sha256"]
+        == "d7a31d35a047dfad8e08789067677d550d75334e4246c12ece2c8900bfe9e88a"
+    )
+    assert (
+        review["mapping_commitment_sha256"]
+        == "0c432cf6b16f6ba23d544424048ab1823d58958e3861f68f85085bb5a9e1f57a"
+    )
+    assert len(result["raw_scores"]) == 8
+
+
+def test_exp008_definition_is_marked_executed():
+    definition = json.loads(
+        (repo_root() / "experiments/definitions/EXP-008.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert definition["version"] == "1.1.0"
+    assert definition["status"] == "executed"
+    assert definition["latest_result"] == EXP008_RESULT_REL.as_posix()
+    assert definition["related_patterns"] == ["prompt-targeted-constraints"]
+
+
+def test_exp008_pattern_is_mixed_and_not_compiler_eligible():
+    pattern = get_pattern("prompt-targeted-constraints")
+    assert pattern is not None
+    assert pattern["version"] == "1.0.1"
+    assert pattern["validation_status"] == "mixed"
+    assert pattern["confidence"]["level"] == "mixed"
+    assert pattern["compiler_usage"]["compiler_eligible"] is False
+    assert pattern["compiler_usage"]["director_gate"] is False
+    assert "EXP-008-1.1.0-20260913T233423Z-E24F" in pattern["evidence"]["experiments"]
+    assert "controlled_blind_experiment" in pattern["evidence"]["validation_basis"]

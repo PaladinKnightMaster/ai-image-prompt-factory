@@ -437,7 +437,7 @@
       "category": "composition",
       "validation_status": "hypothesis",
       "mechanism": {
-        "instruction": "Keep feet or support surface visible and let the environment explain the subject’s scale, action, and spatial relationship.",
+        "instruction": "Keep feet or support surface visible and let the environment explain the subject\u2019s scale, action, and spatial relationship.",
         "expected_effects": []
       },
       "evidence": {
@@ -908,7 +908,7 @@
       "category": "storytelling",
       "validation_status": "supported",
       "mechanism": {
-        "instruction": "Give the subject a small ongoing action—turning, adjusting, reaching, pausing, reading, lifting, or reacting—so the frame captures an event rather than a mannequin pose.",
+        "instruction": "Give the subject a small ongoing action\u2014turning, adjusting, reaching, pausing, reading, lifting, or reacting\u2014so the frame captures an event rather than a mannequin pose.",
         "expected_effects": []
       },
       "evidence": {
@@ -1284,10 +1284,10 @@
     },
     {
       "pattern_id": "prompt-targeted-constraints",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "name": "Targeted constraints over giant negatives",
       "category": "prompt_methods",
-      "validation_status": "supported",
+      "validation_status": "mixed",
       "mechanism": {
         "instruction": "Constrain only likely failure modes and explicit prohibitions instead of appending a long generic negative-prompt inventory.",
         "expected_effects": []
@@ -1307,24 +1307,29 @@
           "GAC-P0006",
           "GAC-P0010"
         ],
-        "experiments": [],
+        "experiments": [
+          "EXP-008-1.1.0-20260913T233423Z-E24F"
+        ],
         "validation_basis": [
           "internal_source_corpus_observation",
           "human_curated_project_rule",
-          "v3.1_regression_or_compiler_rule"
+          "v3.1_regression_or_compiler_rule",
+          "controlled_blind_experiment"
         ]
       },
       "confidence": {
-        "level": "supported",
-        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+        "level": "mixed",
+        "note": "Corpus observations and project rules suggested targeted constraints as a concise default, but EXP-008 v1.1.0 contradicted the broad replacement claim in one small-N blinded TB-A02 Transfer Bench run. The targeted condition preserved semantic and technical quality but scored lower on targeted failure-mode control because readable environmental signage/poster text appeared in two of four replicates. Keep non-compiler-eligible pending replication across scenes, constraint scopes, and failure-mode families."
       },
-      "failure_modes": [],
+      "failure_modes": [
+        "Narrowly scoped constraints can address the named failure while leaving semantically adjacent failure modes uncontrolled."
+      ],
       "retrieval_terms": [
         "avoid",
         "constraint"
       ],
       "compiler_usage": {
-        "compiler_eligible": true,
+        "compiler_eligible": false,
         "director_gate": false,
         "routes": [
           "new_generation",
@@ -1341,7 +1346,7 @@
       "category": "prompt_methods",
       "validation_status": "observed",
       "mechanism": {
-        "instruction": "Describe what the chosen medium physically does—surface, edges, marks, color, fabrication—rather than using the medium name as a decorative style tag.",
+        "instruction": "Describe what the chosen medium physically does\u2014surface, edges, marks, color, fabrication\u2014rather than using the medium name as a decorative style tag.",
         "expected_effects": []
       },
       "evidence": {

@@ -35,7 +35,7 @@
     "targeted_failure_mode_control"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "prompt-targeted-constraints"
   ],
@@ -47,5 +47,6 @@
     "mapping_version": "1.0.0",
     "realization": "archetype baseline plus broad-negative control clause",
     "execution_readiness": "ready"
-  }
+  },
+  "latest_result": "experiments/results/EXP-008/EXP-008-1.1.0-20260913T233423Z-E24F.result.json"
 }

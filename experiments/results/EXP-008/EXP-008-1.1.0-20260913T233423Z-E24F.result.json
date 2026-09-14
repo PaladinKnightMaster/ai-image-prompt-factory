@@ -1,0 +1,193 @@
+{
+  "result_id": "EXP-008-1.1.0-20260913T233423Z-E24F",
+  "experiment_id": "EXP-008",
+  "experiment_version": "1.1.0",
+  "run_id": "EXP-008-1.1.0-20260913T233423Z-E24F",
+  "status": "revealed",
+  "hypothesis": "Targeted likely-failure constraints provide at least as strong visible failure-mode control as a broad generic negative stack in a complex environmental portrait.",
+  "primary_dimension": "targeted_failure_mode_control",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "d7a31d35a047dfad8e08789067677d550d75334e4246c12ece2c8900bfe9e88a",
+    "mapping_commitment_sha256": "0c432cf6b16f6ba23d544424048ab1823d58958e3861f68f85085bb5a9e1f57a",
+    "frozen_at_utc": "2026-09-14T01:01:21.207286+00:00",
+    "revealed_at_utc": "2026-09-14T01:05:42.551571+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A02",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "generic_negative_stack",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "targeted_failure_mode_control": 5.0,
+        "overall": 5.0
+      },
+      "overall_sample_sd": 0.0
+    },
+    "variant": {
+      "factor": "targeted_constraints",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.5,
+        "technical_defects": 5.0,
+        "targeted_failure_mode_control": 4.0,
+        "overall": 4.625
+      },
+      "overall_sample_sd": 0.4330127018922193
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": -0.5,
+    "technical_defects": 0.0,
+    "targeted_failure_mode_control": -1.0,
+    "overall": -0.375
+  },
+  "evidence_classification": "contradicts",
+  "interpretation": "In the TB-A02 restoration-studio transfer context, the broad generic negative stack outperformed the narrower targeted-constraint clause on the primary targeted_failure_mode_control dimension (5.00 vs 4.00) and on overall mean (5.0000 vs 4.6250). Semantic compliance and technical-defect cleanliness were unchanged at 5.00 in both conditions, while aesthetic quality was 0.50 lower in the targeted condition. The two lower-scoring targeted-condition outputs were penalized for readable environmental signage/poster text; hand-object interaction remained technically clean. This contradicts the tested at-least-as-strong hypothesis in this context and indicates that narrowly scoped constraints can leave adjacent untargeted failure modes exposed.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A02 restoration-studio archetype and should be replicated across other scenes before broader guidance is adopted.",
+    "The targeted clause named readable text on archival tags, while the observed failures were readable environmental signage/poster text; the result therefore does not isolate archival-tag text control from broader environmental-text suppression.",
+    "The broad control stack covered additional prohibitions such as blur, artifacts, watermark, and logo, so the comparison tests broad generic coverage versus narrow targeted coverage rather than equal-scope wording."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "prompt-targeted-constraints",
+      "action": "downgrade_to_mixed_and_disable_compiler",
+      "reason": "EXP-008 directly contradicted the pattern's broad default-replacement claim in TB-A02: targeted constraints scored 1.00 lower on targeted_failure_mode_control and allowed adjacent readable environmental text in two of four replicates."
+    }
+  ],
+  "raw_scores": [
+    {
+      "review_id": "RVCFKEVQ",
+      "blind_id": "CSEVEQ",
+      "variant_id": "control",
+      "factor": "generic_negative_stack",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RCZ66FLA",
+      "blind_id": "LC22FK",
+      "variant_id": "control",
+      "factor": "generic_negative_stack",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R8ND5SRM",
+      "blind_id": "HFLQGB",
+      "variant_id": "control",
+      "factor": "generic_negative_stack",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RAZHTHAG",
+      "blind_id": "SKFAVJ",
+      "variant_id": "control",
+      "factor": "generic_negative_stack",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RWLKNWRT",
+      "blind_id": "9H3XUP",
+      "variant_id": "variant",
+      "factor": "targeted_constraints",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RG9JBNH6",
+      "blind_id": "H237CM",
+      "variant_id": "variant",
+      "factor": "targeted_constraints",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 3
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "RXEZ4YJ5",
+      "blind_id": "MVDZ8P",
+      "variant_id": "variant",
+      "factor": "targeted_constraints",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RVH4BBQ7",
+      "blind_id": "XCPKM4",
+      "variant_id": "variant",
+      "factor": "targeted_constraints",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "targeted_failure_mode_control": 3
+      },
+      "overall": 4.25
+    }
+  ]
+}
