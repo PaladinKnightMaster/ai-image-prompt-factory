@@ -79,14 +79,14 @@
     },
     {
       "experiment_id": "EXP-010",
-      "experiment_version": "1.1.0",
+      "experiment_version": "1.1.1",
       "archetype_id": "TB-A05",
       "archetype_version": "1.0.0",
       "factor": "prompt_format",
       "primary_dimension": "scene_constraint_fidelity",
       "transfer_status": "ready",
       "control_strategy": "Use the stylized key-art archetype as a readable natural-language production brief.",
-      "variant_strategy": "Encode the same subject, action, environment, lighting, composition, rendering, and exclusions as JSON-style structured text without adding or deleting semantic requirements.",
+      "variant_strategy": "Encode the same subject, action, environment, lighting, composition, rendering, medium, and exclusions as JSON-style structured text without adding or deleting semantic requirements.",
       "single_factor_guard": "A fixed semantic-anchor list must be present in both prompts; only representation format may differ.",
       "fixture_requirements": [],
       "definition_path": "experiments/definitions/EXP-010.json"
