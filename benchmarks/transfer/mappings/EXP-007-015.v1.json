@@ -65,14 +65,14 @@
     },
     {
       "experiment_id": "EXP-009",
-      "experiment_version": "1.1.0",
+      "experiment_version": "1.1.1",
       "archetype_id": "TB-A02",
       "archetype_version": "1.0.0",
       "factor": "emotion_precision",
       "primary_dimension": "emotional_specificity",
       "transfer_status": "ready",
       "control_strategy": "Append a stack of affectively similar emotion adjectives to the otherwise frozen narrative archetype.",
-      "variant_strategy": "Replace only the adjective stack with one precise emotional direction expressing restrained anticipation and uncertainty.",
+      "variant_strategy": "Replace only the adjective stack with one coherent emotional direction expressing restrained anticipation, quiet tension, and uncertainty.",
       "single_factor_guard": "No scene facts, action, camera, lighting, or environment content may change with the emotion clause.",
       "fixture_requirements": [],
       "definition_path": "experiments/definitions/EXP-009.json"

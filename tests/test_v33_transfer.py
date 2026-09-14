@@ -86,6 +86,7 @@ def test_transfer_mapping_matches_archetype_and_experiment_versions():
     expected_versions = {
         "EXP-007": "1.1.1",
         **{f"EXP-{i:03d}": "1.1.0" for i in range(8, 16)},
+        "EXP-009": "1.1.1",
     }
 
     for item in mapping["mappings"]:
@@ -143,8 +144,7 @@ def test_exp009_transfer_changes_only_emotion_wording():
 
     old = "Overall mood: quiet, tense, expectant, uncertain, restrained."
     new = (
-        "Overall mood: restrained anticipation, calm on the surface with a "
-        "slight sense of uncertainty."
+        "Overall mood: restrained anticipation, with quiet tension and uncertainty."
     )
     assert old in prompts["control"]
     assert new in prompts["variant"]

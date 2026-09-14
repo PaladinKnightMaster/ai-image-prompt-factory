@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-009",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "hypothesis": "One precise emotional direction produces more coherent visible emotional specificity than a stack of loosely overlapping adjectives when all scene facts are held constant.",
   "baseline_prompt": "Create a realistic environmental portrait of an adult museum conservator in a quiet restoration studio at dusk. She has just paused while placing a small ceramic fragment into a padded tray, with both hands visible near the work surface. A task lamp and fading window light create a controlled warm-cool contrast. A magnifier, soft brush, blank archival tags, and storage drawers establish the work setting without clutter. Frame her slightly off center, with a shelf edge in the foreground, the conservator and tray in the midground, and tall cabinets receding behind her. Keep the scene observational rather than posed, with natural skin, believable hand-object contact, and readable separation between subject and workspace. Overall mood: quiet, tense, expectant, uncertain, restrained.",
   "variants": [
@@ -14,7 +14,7 @@
       "factor": "precise_emotional_direction",
       "operation": "replace_literal",
       "old": "Overall mood: quiet, tense, expectant, uncertain, restrained.",
-      "new": "Overall mood: restrained anticipation, calm on the surface with a slight sense of uncertainty."
+      "new": "Overall mood: restrained anticipation, with quiet tension and uncertainty."
     }
   ],
   "preserved_dimensions": [
