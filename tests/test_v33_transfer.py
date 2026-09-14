@@ -88,7 +88,7 @@ def test_transfer_mapping_matches_archetype_and_experiment_versions():
         **{f"EXP-{i:03d}": "1.1.0" for i in range(8, 16)},
         "EXP-009": "1.1.1",
         "EXP-010": "1.1.1",
-        "EXP-011": "1.1.1",
+        "EXP-011": "1.1.2",
     }
 
     for item in mapping["mappings"]:
@@ -288,4 +288,6 @@ def test_exp011_garment_replacement_preserves_word_boundary():
     prompts = {item["variant_id"]: item["prompt"] for item in run["variants"]}
 
     assert "evening dress with narrow shoulder straps" in prompts["variant"]
+    assert "clean finished hem, and carrying a small structured clutch" in prompts["variant"]
+    assert "clean finished hem and carrying" not in prompts["variant"]
     assert "dresswith" not in prompts["variant"]

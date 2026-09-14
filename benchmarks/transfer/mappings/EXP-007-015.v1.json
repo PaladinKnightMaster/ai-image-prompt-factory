@@ -93,7 +93,7 @@
     },
     {
       "experiment_id": "EXP-011",
-      "experiment_version": "1.1.1",
+      "experiment_version": "1.1.2",
       "archetype_id": "TB-A01",
       "archetype_version": "1.0.0",
       "factor": "garment_construction",
