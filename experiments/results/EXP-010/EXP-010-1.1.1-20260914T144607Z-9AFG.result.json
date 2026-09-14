@@ -1,0 +1,187 @@
+{
+  "result_id": "EXP-010-1.1.1-20260914T144607Z-9AFG",
+  "experiment_id": "EXP-010",
+  "experiment_version": "1.1.1",
+  "run_id": "EXP-010-1.1.1-20260914T144607Z-9AFG",
+  "status": "revealed",
+  "hypothesis": "A readable natural-language production brief preserves multi-constraint scene fidelity at least as well as semantically equivalent JSON-style structured syntax.",
+  "primary_dimension": "scene_constraint_fidelity",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "f0d1cffbdfa97522316e1d035243d6b0ae46cb47baf69abac387a456c52fb5f6",
+    "mapping_commitment_sha256": "d0bd275f8758ddfe620248758f0fc3c1d1494864f4f1548c2b77660f6ec81052",
+    "frozen_at_utc": "2026-09-14T19:14:41.835481+00:00",
+    "revealed_at_utc": "2026-09-14T19:17:14.114077+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A05",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "natural_language_brief",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "scene_constraint_fidelity": 5.0,
+        "overall": 5.0
+      },
+      "overall_sample_sd": 0.0
+    },
+    "variant": {
+      "factor": "json_style_structure",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "scene_constraint_fidelity": 5.0,
+        "overall": 5.0
+      },
+      "overall_sample_sd": 0.0
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.0,
+    "technical_defects": 0.0,
+    "scene_constraint_fidelity": 0.0,
+    "overall": 0.0
+  },
+  "evidence_classification": "inconclusive",
+  "interpretation": "In the TB-A05 stylized rooftop-courier transfer context, the readable natural-language production brief and the semantically matched JSON-style structured prompt both received maximum blind-review scores on semantic compliance, aesthetic quality, technical-defect cleanliness, and the primary scene_constraint_fidelity dimension. The variant-minus-control delta was 0.00 on every registered dimension and on the overall mean. No visible prompt-format effect was detected in this run. However, all eight outputs saturated the 5-point review scale, leaving no discriminatory range between conditions. The result is therefore classified as inconclusive rather than as evidence that the two prompt representations are equivalent or that either representation is superior.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A05 stylized rooftop-courier archetype and should be replicated across other scene types before broader guidance is adopted.",
+    "All eight outputs received maximum scores on every registered dimension, creating a ceiling effect that prevented the review scale from discriminating between the two prompt formats.",
+    "A zero observed difference in this ceiling-saturated run does not establish equivalence between natural-language and JSON-style prompting."
+  ],
+  "pattern_implications": [],
+  "raw_scores": [
+    {
+      "review_id": "R6YHVYSQ",
+      "blind_id": "K9UHUA",
+      "variant_id": "control",
+      "factor": "natural_language_brief",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "REX83R5D",
+      "blind_id": "MCDKZG",
+      "variant_id": "control",
+      "factor": "natural_language_brief",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RSYEV6GQ",
+      "blind_id": "64GH2P",
+      "variant_id": "control",
+      "factor": "natural_language_brief",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RN6X5W36",
+      "blind_id": "XXJ6KX",
+      "variant_id": "control",
+      "factor": "natural_language_brief",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R55S48C8",
+      "blind_id": "XSZMUF",
+      "variant_id": "variant",
+      "factor": "json_style_structure",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RYW5UZHD",
+      "blind_id": "4JRDLU",
+      "variant_id": "variant",
+      "factor": "json_style_structure",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R4AW3K93",
+      "blind_id": "FER6KA",
+      "variant_id": "variant",
+      "factor": "json_style_structure",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R7DNCET9",
+      "blind_id": "2SRLJS",
+      "variant_id": "variant",
+      "factor": "json_style_structure",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "scene_constraint_fidelity": 5
+      },
+      "overall": 5.0
+    }
+  ]
+}
