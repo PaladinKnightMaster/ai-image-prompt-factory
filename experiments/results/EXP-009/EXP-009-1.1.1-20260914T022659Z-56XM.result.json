@@ -1,0 +1,193 @@
+{
+  "result_id": "EXP-009-1.1.1-20260914T022659Z-56XM",
+  "experiment_id": "EXP-009",
+  "experiment_version": "1.1.1",
+  "run_id": "EXP-009-1.1.1-20260914T022659Z-56XM",
+  "status": "revealed",
+  "hypothesis": "One precise emotional direction produces more coherent visible emotional specificity than a stack of loosely overlapping adjectives when all scene facts are held constant.",
+  "primary_dimension": "emotional_specificity",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "ffb8f1cdac8c619526cd09a48ddfc3e8def1225a30906c75be6f0a43d8d2d496",
+    "mapping_commitment_sha256": "3e70f54ebacb443aa1e15d1e7eab9fbc526322054a48417760a0374a106b0983",
+    "frozen_at_utc": "2026-09-14T03:43:35.774846+00:00",
+    "revealed_at_utc": "2026-09-14T03:44:21.434465+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A02",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "emotion_adjective_stack",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "emotional_specificity": 3.5,
+        "overall": 4.625
+      },
+      "overall_sample_sd": 0.14433756729740643
+    },
+    "variant": {
+      "factor": "precise_emotional_direction",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "emotional_specificity": 3.25,
+        "overall": 4.5625
+      },
+      "overall_sample_sd": 0.125
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.0,
+    "technical_defects": 0.0,
+    "emotional_specificity": -0.25,
+    "overall": -0.0625
+  },
+  "evidence_classification": "weakly_contradicts",
+  "interpretation": "In the TB-A02 restoration-studio transfer context, replacing the stacked emotion adjectives with one coherent emotional direction did not improve visible emotional specificity. The precise-emotional-direction condition scored 3.25 on the primary emotional_specificity dimension versus 3.50 for the adjective-stack control, a variant-minus-control delta of -0.25. Semantic compliance, aesthetic quality, and technical-defect cleanliness were unchanged at 5.00 in both conditions, and the overall mean differed by only -0.0625. The result therefore weakly contradicts the tested hypothesis in this context rather than establishing a broad advantage for adjective stacks.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A02 restoration-studio archetype and should be replicated across other scenes before broader guidance is adopted.",
+    "The observed primary-dimension difference was small at 0.25 points, so the result should not be generalized into a strong rule against precise emotional direction.",
+    "The experiment compares two wording strategies for a related emotional target; it does not establish equivalence of every adjective in the two clauses."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "prompt-structure-then-emotion",
+      "action": "downgrade_to_mixed",
+      "reason": "EXP-009 weakly contradicted the pattern's preference for one precise emotional line over stacked mood adjectives in TB-A02. The precise condition scored 0.25 lower on emotional_specificity while all other registered dimensions were unchanged. The pattern was already non-compiler-eligible, so compiler behavior remains unchanged."
+    }
+  ],
+  "raw_scores": [
+    {
+      "review_id": "REPZBKBD",
+      "blind_id": "628HA2",
+      "variant_id": "control",
+      "factor": "emotion_adjective_stack",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "R6V22RQ8",
+      "blind_id": "76R5EU",
+      "variant_id": "control",
+      "factor": "emotion_adjective_stack",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RJALL7AA",
+      "blind_id": "LP9PTM",
+      "variant_id": "control",
+      "factor": "emotion_adjective_stack",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 3
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RZKZJE2B",
+      "blind_id": "CXBLCY",
+      "variant_id": "control",
+      "factor": "emotion_adjective_stack",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 3
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "R6Y2BU93",
+      "blind_id": "SHBBA5",
+      "variant_id": "variant",
+      "factor": "precise_emotional_direction",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 3
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "R9DSZZ3F",
+      "blind_id": "G64MKB",
+      "variant_id": "variant",
+      "factor": "precise_emotional_direction",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RH5Q3ZQK",
+      "blind_id": "G8HGS5",
+      "variant_id": "variant",
+      "factor": "precise_emotional_direction",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 3
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "R73XYGHZ",
+      "blind_id": "VRL3TD",
+      "variant_id": "variant",
+      "factor": "precise_emotional_direction",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "emotional_specificity": 3
+      },
+      "overall": 4.5
+    }
+  ]
+}

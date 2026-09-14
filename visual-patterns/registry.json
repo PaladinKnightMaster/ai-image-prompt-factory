@@ -1235,10 +1235,10 @@
     },
     {
       "pattern_id": "prompt-structure-then-emotion",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "name": "Structure first, emotion second",
       "category": "prompt_methods",
-      "validation_status": "observed",
+      "validation_status": "mixed",
       "mechanism": {
         "instruction": "Lock subject, medium, composition, lighting, and materials first, then add one precise emotional line instead of stacking vague mood adjectives.",
         "expected_effects": []
@@ -1258,14 +1258,17 @@
           "FSC-P0016",
           "GAC-P0027"
         ],
-        "experiments": [],
+        "experiments": [
+          "EXP-009"
+        ],
         "validation_basis": [
-          "internal_source_corpus_observation"
+          "internal_source_corpus_observation",
+          "controlled_experiment"
         ]
       },
       "confidence": {
-        "level": "observed",
-        "note": "Corpus observations are not causal proof; controlled V3.2 experiments remain planned unless explicitly recorded."
+        "level": "mixed",
+        "note": "Internal corpus observations suggested that a single precise emotional direction may be preferable to stacked mood adjectives, but EXP-009 weakly contradicted that expectation on Transfer Bench TB-A02. The precise-direction condition scored 0.25 lower on emotional specificity while semantic compliance, aesthetic quality, and technical cleanliness were unchanged. Broader replication is required."
       },
       "failure_modes": [],
       "retrieval_terms": [
