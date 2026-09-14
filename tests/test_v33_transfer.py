@@ -88,6 +88,7 @@ def test_transfer_mapping_matches_archetype_and_experiment_versions():
         **{f"EXP-{i:03d}": "1.1.0" for i in range(8, 16)},
         "EXP-009": "1.1.1",
         "EXP-010": "1.1.1",
+        "EXP-011": "1.1.1",
     }
 
     for item in mapping["mappings"]:
@@ -188,7 +189,20 @@ def test_exp011_and_exp012_use_same_fashion_transfer_archetype_for_distinct_fact
     run11 = create_run_plan("EXP-011", replicates=1)
     p11 = {item["variant_id"]: item["prompt"] for item in run11["variants"]}
     assert "deep teal satin evening dress" in p11["control"]
-    assert "bias-cut deep teal satin evening dress" in p11["variant"]
+    assert "deep teal satin evening dress with narrow shoulder straps" in p11["variant"]
+    assert "bias-cut" not in p11["variant"]
+
+    garment11 = p11["variant"].lower()
+    for physics_term in (
+        "weighted",
+        "drape",
+        "draping",
+        "fold response",
+        "flutter",
+        "flowing",
+        "bias-cut",
+    ):
+        assert physics_term not in garment11
 
     run12 = create_run_plan("EXP-012", replicates=1)
     p12 = {item["variant_id"]: item["prompt"] for item in run12["variants"]}
@@ -273,5 +287,5 @@ def test_exp011_garment_replacement_preserves_word_boundary():
     run = create_run_plan("EXP-011", replicates=1)
     prompts = {item["variant_id"]: item["prompt"] for item in run["variants"]}
 
-    assert "evening dress with narrow straps" in prompts["variant"]
+    assert "evening dress with narrow shoulder straps" in prompts["variant"]
     assert "dresswith" not in prompts["variant"]

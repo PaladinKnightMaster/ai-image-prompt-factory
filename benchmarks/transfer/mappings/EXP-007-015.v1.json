@@ -93,15 +93,15 @@
     },
     {
       "experiment_id": "EXP-011",
-      "experiment_version": "1.1.0",
+      "experiment_version": "1.1.1",
       "archetype_id": "TB-A01",
       "archetype_version": "1.0.0",
       "factor": "garment_construction",
       "primary_dimension": "garment_construction_fidelity",
       "transfer_status": "ready",
       "control_strategy": "Keep the fashion archetype's generic 'deep teal satin evening dress' wording.",
-      "variant_strategy": "Replace only that garment phrase with construction details while preserving dress type, color, satin material, and scene.",
-      "single_factor_guard": "The control and variant must differ only in the garment-description span.",
+      "variant_strategy": "Replace only that garment phrase with visible construction geometry while preserving dress type, color, satin material, and scene; do not add fabric-motion, drape, weight, or fold-response language.",
+      "single_factor_guard": "The control and variant must differ only in the garment-description span; the treatment may add garment-construction geometry but must not add fabric-physics, drape, weight, or motion cues.",
       "fixture_requirements": [],
       "definition_path": "experiments/definitions/EXP-011.json"
     },
