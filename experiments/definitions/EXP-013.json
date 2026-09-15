@@ -34,7 +34,7 @@
     "identity_fidelity"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "reference-identity-isolation"
   ],

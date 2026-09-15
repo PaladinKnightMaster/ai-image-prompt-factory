@@ -306,7 +306,7 @@ def test_exp013_fixture_binding_is_frozen_and_ready():
     fixture_meta = _load("benchmarks/fixtures/identity/IDF-A01/IDF-A01.fixture.json")
 
     assert exp13["version"] == "1.1.1"
-    assert exp13["status"] == "planned"
+    assert exp13["status"] == "executed"
     assert exp13["transfer_benchmark"]["execution_readiness"] == "ready"
 
     req = exp13["requires_reference_inputs"][0]

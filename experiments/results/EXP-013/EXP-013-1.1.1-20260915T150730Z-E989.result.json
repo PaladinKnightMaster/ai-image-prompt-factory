@@ -1,0 +1,187 @@
+{
+  "result_id": "EXP-013-1.1.1-20260915T150730Z-E989",
+  "experiment_id": "EXP-013",
+  "experiment_version": "1.1.1",
+  "run_id": "EXP-013-1.1.1-20260915T150730Z-E989",
+  "status": "revealed",
+  "hypothesis": "A single precise identity-only lock preserves identity at least as well as repeating redundant identity locks when the same reference fixture and target scene are held constant.",
+  "primary_dimension": "identity_fidelity",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "0b33f5610684cb56e5a958ce890c72d2348a5c7834b0cefb8d2e3304d919df6a",
+    "mapping_commitment_sha256": "64fbebae2bca4fece3b06117000c4bc9b1e590e999017941f87bfc0c75850266",
+    "frozen_at_utc": "2026-09-15T20:04:54.223240+00:00",
+    "revealed_at_utc": "2026-09-15T20:05:06.203001+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A06",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.1.1"
+  },
+  "variants": {
+    "control": {
+      "factor": "repeated_identity_lock",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 4.25,
+        "identity_fidelity": 4.75,
+        "overall": 4.6875
+      },
+      "overall_sample_sd": 0.23935677693908453
+    },
+    "variant": {
+      "factor": "single_precise_identity_lock",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 4.75,
+        "identity_fidelity": 4.75,
+        "overall": 4.875
+      },
+      "overall_sample_sd": 0.25
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.25,
+    "technical_defects": 0.5,
+    "identity_fidelity": 0.0,
+    "overall": 0.1875
+  },
+  "evidence_classification": "inconclusive",
+  "interpretation": "In the TB-A06 identity-only reference-transfer context, the single precise identity lock produced the same mean identity_fidelity score as the repeated-lock control (4.75 versus 4.75, delta +0.00). Aesthetic quality improved by +0.25, technical cleanliness improved by +0.50, and semantic compliance was unchanged. The overall mean increased from 4.6875 to 4.8750 (+0.1875). This run therefore shows no observed identity-fidelity loss from using the single precise lock, but the result is classified inconclusive because no non-inferiority or equivalence margin was predeclared and the small sample cannot establish that the two identity-lock strategies are equivalent.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A06 identity-only reference fixture and botanical reading-room transfer context.",
+    "No non-inferiority or equivalence margin was predeclared, so the zero identity-fidelity difference cannot establish formal equivalence or non-inferiority.",
+    "Identity-fidelity scores were concentrated near the top of the 5-point scale, limiting sensitivity to small differences."
+  ],
+  "pattern_implications": [],
+  "raw_scores": [
+    {
+      "review_id": "R3WQAWB7",
+      "blind_id": "KW85TR",
+      "variant_id": "control",
+      "factor": "repeated_identity_lock",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "identity_fidelity": 5
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RFW584BE",
+      "blind_id": "QLFUZ2",
+      "variant_id": "control",
+      "factor": "repeated_identity_lock",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "identity_fidelity": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "R4W498H7",
+      "blind_id": "3VFN8S",
+      "variant_id": "control",
+      "factor": "repeated_identity_lock",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "identity_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R8YRBUGT",
+      "blind_id": "P2XJW4",
+      "variant_id": "control",
+      "factor": "repeated_identity_lock",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 4,
+        "identity_fidelity": 5
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RLGVWGT9",
+      "blind_id": "UPQ3Y7",
+      "variant_id": "variant",
+      "factor": "single_precise_identity_lock",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "identity_fidelity": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "REHLJTEY",
+      "blind_id": "CP7T9F",
+      "variant_id": "variant",
+      "factor": "single_precise_identity_lock",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "identity_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RWY6M22V",
+      "blind_id": "KKCDS8",
+      "variant_id": "variant",
+      "factor": "single_precise_identity_lock",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "identity_fidelity": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RMFUA3ZX",
+      "blind_id": "EVJB5V",
+      "variant_id": "variant",
+      "factor": "single_precise_identity_lock",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "identity_fidelity": 5
+      },
+      "overall": 5.0
+    }
+  ]
+}
