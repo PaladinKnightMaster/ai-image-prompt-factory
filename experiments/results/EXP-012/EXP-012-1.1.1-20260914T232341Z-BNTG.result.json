@@ -1,0 +1,193 @@
+{
+  "result_id": "EXP-012-1.1.1-20260914T232341Z-BNTG",
+  "experiment_id": "EXP-012",
+  "experiment_version": "1.1.1",
+  "run_id": "EXP-012-1.1.1-20260914T232341Z-BNTG",
+  "status": "revealed",
+  "hypothesis": "Explicit fabric-response language improves visible fabric-motion coherence in a mid-turn fashion portrait without changing the pose or garment identity.",
+  "primary_dimension": "fabric_motion_coherence",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "1c3c8f66addc68c3b836f5399d1200f53f287a6ab2b5e0f90628143f1ab04bbc",
+    "mapping_commitment_sha256": "5b4eff4bafce4081be41a340639caf17293c27b8785bc04a48614e8577628ae7",
+    "frozen_at_utc": "2026-09-15T00:27:25.042695+00:00",
+    "revealed_at_utc": "2026-09-15T00:27:32.880259+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A01",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "fabric_physics_absent",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 4.25,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 4.75,
+        "fabric_motion_coherence": 3.25,
+        "overall": 4.25
+      },
+      "overall_sample_sd": 0.3535533905932738
+    },
+    "variant": {
+      "factor": "fabric_physics_present",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "fabric_motion_coherence": 5.0,
+        "overall": 5.0
+      },
+      "overall_sample_sd": 0.0
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.75,
+    "aesthetic_quality": 0.25,
+    "technical_defects": 0.25,
+    "fabric_motion_coherence": 1.75,
+    "overall": 0.75
+  },
+  "evidence_classification": "supports",
+  "interpretation": "In the TB-A01 editorial-fashion transfer context, explicit fabric-response language substantially improved visible fabric-motion coherence. The fabric-physics condition scored 5.00 on fabric_motion_coherence versus 3.25 for the control, a variant-minus-control delta of +1.75. Semantic compliance improved by +0.75, while aesthetic quality and technical cleanliness each improved by +0.25. The overall mean increased from 4.25 to 5.00. The result supports the tested hypothesis in this context, but does not establish a universal benefit for fabric-physics wording.",
+  "limitations": [
+    "Four replicates per variant are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A01 mid-turn satin fashion context.",
+    "The variant reached the ceiling of the 5-point scale on every registered dimension, limiting measurement of improvements beyond that ceiling.",
+    "Earlier EXP-002 evidence for the related satin material-response mechanism was negative, so the broader VisualPattern remains context-dependent rather than universally supported."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "material-satin-fold-response",
+      "action": "retain_mixed",
+      "reason": "EXP-012 strongly supports explicit satin-motion mechanics in a mid-turn fashion scene, but EXP-002 previously contradicted a broader material-physics treatment. The evidence therefore remains context-dependent and is insufficient for compiler promotion."
+    }
+  ],
+  "raw_scores": [
+    {
+      "review_id": "RW3EE9LX",
+      "blind_id": "BZLZ9A",
+      "variant_id": "control",
+      "factor": "fabric_physics_absent",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "fabric_motion_coherence": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "R7KMKZWF",
+      "blind_id": "R8SAUD",
+      "variant_id": "control",
+      "factor": "fabric_physics_absent",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "fabric_motion_coherence": 3
+      },
+      "overall": 4.25
+    },
+    {
+      "review_id": "R8NVFJHF",
+      "blind_id": "WANUQ5",
+      "variant_id": "control",
+      "factor": "fabric_physics_absent",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 4,
+        "fabric_motion_coherence": 3
+      },
+      "overall": 4.0
+    },
+    {
+      "review_id": "RN83ELBG",
+      "blind_id": "CX5L3L",
+      "variant_id": "control",
+      "factor": "fabric_physics_absent",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "fabric_motion_coherence": 3
+      },
+      "overall": 4.0
+    },
+    {
+      "review_id": "RCKP79NE",
+      "blind_id": "78FL3T",
+      "variant_id": "variant",
+      "factor": "fabric_physics_present",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "fabric_motion_coherence": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R3XHMV4X",
+      "blind_id": "KT8WUJ",
+      "variant_id": "variant",
+      "factor": "fabric_physics_present",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "fabric_motion_coherence": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RX5DGLG8",
+      "blind_id": "5JQW8E",
+      "variant_id": "variant",
+      "factor": "fabric_physics_present",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "fabric_motion_coherence": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RK8MLKBQ",
+      "blind_id": "5UT8YT",
+      "variant_id": "variant",
+      "factor": "fabric_physics_present",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "fabric_motion_coherence": 5
+      },
+      "overall": 5.0
+    }
+  ]
+}

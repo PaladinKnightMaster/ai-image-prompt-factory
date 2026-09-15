@@ -34,7 +34,7 @@
     "fabric_motion_coherence"
   ],
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "material-satin-fold-response"
   ],
