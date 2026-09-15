@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-014",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "hypothesis": "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage compared with implicit multi-reference use when the same three fixtures are held constant.",
   "baseline_prompt": "Use Reference 1, Reference 2, and Reference 3 to create a realistic full-body portrait while preserving the intended identity, outfit, and pose. Place the final subject in a minimalist studio with a warm-gray backdrop and soft side light. Preserve natural anatomy, a clear garment silhouette, and recognizable identity. Do not import the environment from any reference.",
   "variants": [
@@ -46,19 +46,43 @@
       "slot": "Reference 1",
       "role": "identity",
       "fixture_policy": "first_party_or_project_owned",
-      "hash_required": true
+      "hash_required": true,
+      "fixture_id": "IDF-A01",
+      "fixture_version": "1.0.0",
+      "fixture_metadata_path": "benchmarks/fixtures/identity/IDF-A01/IDF-A01.fixture.json",
+      "fixture_sha256": "2d11465c7a5041b221fb6890e72c37e04710a28842f4371926d2944632252fbd",
+      "fixture_width": 1122,
+      "fixture_height": 1402,
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "fixture_relpath": "identity/IDF-A01/IDF-A01.png"
     },
     {
       "slot": "Reference 2",
       "role": "outfit",
       "fixture_policy": "first_party_or_project_owned",
-      "hash_required": true
+      "hash_required": true,
+      "fixture_id": "OTF-A01",
+      "fixture_version": "1.0.0",
+      "fixture_metadata_path": "benchmarks/fixtures/outfit/OTF-A01/OTF-A01.fixture.json",
+      "fixture_sha256": "6f90feb8dd1fb197c313923feb19795d48e35cca5fb40e15d65ed94d82e6e2ea",
+      "fixture_width": 1122,
+      "fixture_height": 1402,
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "fixture_relpath": "outfit/OTF-A01/OTF-A01.png"
     },
     {
       "slot": "Reference 3",
       "role": "pose",
       "fixture_policy": "first_party_or_project_owned",
-      "hash_required": true
+      "hash_required": true,
+      "fixture_id": "POF-A01",
+      "fixture_version": "1.0.0",
+      "fixture_metadata_path": "benchmarks/fixtures/pose/POF-A01/POF-A01.fixture.json",
+      "fixture_sha256": "2e492d80c338d95829ed785b0687f4bb5b0f858ec4b6d35ca4089287094980bc",
+      "fixture_width": 1122,
+      "fixture_height": 1402,
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "fixture_relpath": "pose/POF-A01/POF-A01.png"
     }
   ],
   "transfer_benchmark": {
@@ -66,8 +90,8 @@
     "archetype_id": "TB-A07",
     "archetype_version": "1.0.0",
     "archetype_prompt_sha256": "b8b374485b633f1518204486fcb04af7cc9670d6814c24b14812ea9c2ca7c7f2",
-    "mapping_version": "1.0.0",
+    "mapping_version": "1.1.1",
     "realization": "implicit-role control derived from explicit-role archetype",
-    "execution_readiness": "requires_first_party_reference_fixtures"
+    "execution_readiness": "ready"
   }
 }

@@ -1,0 +1,57 @@
+{
+  "fixture_id": "POF-A01",
+  "version": "1.0.0",
+  "name": "Neutral Contrapposto Pose Fixture",
+  "fixture_type": "pose_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "adult_proportioned": true,
+    "faceless": true,
+    "synthetic": true
+  },
+  "reference_role": "pose_only",
+  "generation_constraints": {
+    "pose": "standing contrapposto with weight on right leg",
+    "right_leg": "nearly straight and weight bearing",
+    "left_leg": "relaxed with knee slightly bent and foot forward/outward",
+    "pelvis_shoulders": "subtle counterbalance",
+    "torso": "slight rotation toward camera",
+    "left_arm": "forearm bent with hand near waist",
+    "right_arm": "relaxed with small gap from torso",
+    "hands_feet": "both hands and both feet visible",
+    "floor_contact": "clear and physically plausible",
+    "wardrobe": "plain solid medium-gray fitted bodysuit",
+    "background": "plain very light neutral studio",
+    "lighting": "flat even reference lighting"
+  },
+  "anti_leakage_constraints": [
+    "no recognizable identity",
+    "no hairstyle",
+    "no fashion design",
+    "no outfit palette intended for transfer",
+    "no accessories",
+    "no props",
+    "no environment",
+    "no logos",
+    "no text"
+  ],
+  "sha256": "2e492d80c338d95829ed785b0687f4bb5b0f858ec4b6d35ca4089287094980bc",
+  "width": 1122,
+  "height": 1402,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned pose-only fixture created specifically for controlled multi-reference experiments."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "4248399f-8643-40bf-85c9-d74f5697134f",
+    "source_filename": "contrapposto_gray_mannequin_pose.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "pose/POF-A01/POF-A01.png"
+}

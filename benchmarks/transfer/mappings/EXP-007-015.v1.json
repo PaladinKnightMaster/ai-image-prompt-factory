@@ -139,20 +139,23 @@
     },
     {
       "experiment_id": "EXP-014",
-      "experiment_version": "1.1.0",
+      "experiment_version": "1.1.1",
       "archetype_id": "TB-A07",
       "archetype_version": "1.0.0",
       "factor": "reference_roles",
       "primary_dimension": "reference_role_fidelity",
-      "transfer_status": "requires_first_party_reference_fixtures",
+      "transfer_status": "ready",
       "control_strategy": "Provide the same three project-owned references with an implicit instruction to preserve identity, outfit, and pose, but do not assign which reference controls which role.",
       "variant_strategy": "Replace only the opening reference instruction with explicit identity-only, outfit-only, and pose-only role declarations.",
       "single_factor_guard": "Reference files, ordering, target scene, and all non-role prompt text must remain identical.",
       "fixture_requirements": [
-        "one project-owned identity fixture",
-        "one project-owned outfit fixture",
-        "one project-owned pose fixture",
-        "frozen file hashes and reference ordering"
+        "Reference 1 = IDF-A01 v1.0.0 identity fixture",
+        "Reference 2 = OTF-A01 v1.0.0 outfit fixture",
+        "Reference 3 = POF-A01 v1.0.0 pose fixture",
+        "all three references use frozen SHA-256 hashes and fixed ordering",
+        "IDF-A01 SHA-256 = 2d11465c7a5041b221fb6890e72c37e04710a28842f4371926d2944632252fbd",
+        "OTF-A01 SHA-256 = 6f90feb8dd1fb197c313923feb19795d48e35cca5fb40e15d65ed94d82e6e2ea",
+        "POF-A01 SHA-256 = 2e492d80c338d95829ed785b0687f4bb5b0f858ec4b6d35ca4089287094980bc"
       ],
       "definition_path": "experiments/definitions/EXP-014.json"
     },

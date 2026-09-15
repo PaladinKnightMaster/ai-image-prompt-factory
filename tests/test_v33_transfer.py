@@ -91,6 +91,7 @@ def test_transfer_mapping_matches_archetype_and_experiment_versions():
         "EXP-011": "1.1.2",
         "EXP-012": "1.1.1",
         "EXP-013": "1.1.1",
+        "EXP-014": "1.1.1",
     }
 
     for item in mapping["mappings"]:
@@ -221,17 +222,11 @@ def test_reference_transfer_experiments_are_blocked_until_first_party_fixtures_e
     assert by_id["EXP-013"]["transfer_status"] == "ready"
     assert exp13["transfer_benchmark"]["execution_readiness"] == "ready"
 
-    # EXP-014 still has no frozen project-owned reference fixtures.
+    # EXP-014 now has three frozen first-party reference fixtures.
     exp14 = _load("experiments/definitions/EXP-014.json")
-    assert (
-        by_id["EXP-014"]["transfer_status"]
-        == "requires_first_party_reference_fixtures"
-    )
+    assert by_id["EXP-014"]["transfer_status"] == "ready"
     assert exp14["requires_reference_inputs"]
-    assert (
-        exp14["transfer_benchmark"]["execution_readiness"]
-        == "requires_first_party_reference_fixtures"
-    )
+    assert exp14["transfer_benchmark"]["execution_readiness"] == "ready"
 
     for fixture in exp14["requires_reference_inputs"]:
         assert fixture["fixture_policy"] == "first_party_or_project_owned"
@@ -332,5 +327,78 @@ def test_exp013_fixture_binding_is_frozen_and_ready():
 
     mapping = _load("benchmarks/transfer/mappings/EXP-007-015.v1.json")
     item = next(x for x in mapping["mappings"] if x["experiment_id"] == "EXP-013")
+    assert item["experiment_version"] == "1.1.1"
+    assert item["transfer_status"] == "ready"
+
+
+def test_exp014_fixture_bindings_are_frozen_and_ready():
+    exp14 = _load("experiments/definitions/EXP-014.json")
+
+    assert exp14["version"] == "1.1.1"
+    assert exp14["status"] == "planned"
+    assert exp14["transfer_benchmark"]["execution_readiness"] == "ready"
+
+    refs = exp14["requires_reference_inputs"]
+    assert len(refs) == 3
+
+    expected = [
+        {
+            "slot": "Reference 1",
+            "role": "identity",
+            "fixture_id": "IDF-A01",
+            "fixture_version": "1.0.0",
+            "fixture_metadata_path": "benchmarks/fixtures/identity/IDF-A01/IDF-A01.fixture.json",
+            "fixture_sha256": "2d11465c7a5041b221fb6890e72c37e04710a28842f4371926d2944632252fbd",
+            "fixture_relpath": "identity/IDF-A01/IDF-A01.png",
+        },
+        {
+            "slot": "Reference 2",
+            "role": "outfit",
+            "fixture_id": "OTF-A01",
+            "fixture_version": "1.0.0",
+            "fixture_metadata_path": "benchmarks/fixtures/outfit/OTF-A01/OTF-A01.fixture.json",
+            "fixture_sha256": "6f90feb8dd1fb197c313923feb19795d48e35cca5fb40e15d65ed94d82e6e2ea",
+            "fixture_relpath": "outfit/OTF-A01/OTF-A01.png",
+        },
+        {
+            "slot": "Reference 3",
+            "role": "pose",
+            "fixture_id": "POF-A01",
+            "fixture_version": "1.0.0",
+            "fixture_metadata_path": "benchmarks/fixtures/pose/POF-A01/POF-A01.fixture.json",
+            "fixture_sha256": "2e492d80c338d95829ed785b0687f4bb5b0f858ec4b6d35ca4089287094980bc",
+            "fixture_relpath": "pose/POF-A01/POF-A01.png",
+        },
+    ]
+
+    for req, want in zip(refs, expected):
+        for key, value in want.items():
+            assert req[key] == value
+
+        assert req["fixture_policy"] == "first_party_or_project_owned"
+        assert req["hash_required"] is True
+        assert req["fixture_root_env"] == "AIPF_FIXTURE_PATH"
+        assert req["fixture_width"] == 1122
+        assert req["fixture_height"] == 1402
+
+        meta = _load(req["fixture_metadata_path"])
+
+        assert meta["fixture_id"] == req["fixture_id"]
+        assert meta["version"] == req["fixture_version"]
+        assert meta["sha256"] == req["fixture_sha256"]
+        assert meta["width"] == req["fixture_width"]
+        assert meta["height"] == req["fixture_height"]
+        assert meta["fixture_root_env"] == req["fixture_root_env"]
+        assert meta["fixture_relpath"] == req["fixture_relpath"]
+
+    mapping = _load(
+        "benchmarks/transfer/mappings/EXP-007-015.v1.json"
+    )
+
+    item = next(
+        x for x in mapping["mappings"]
+        if x["experiment_id"] == "EXP-014"
+    )
+
     assert item["experiment_version"] == "1.1.1"
     assert item["transfer_status"] == "ready"

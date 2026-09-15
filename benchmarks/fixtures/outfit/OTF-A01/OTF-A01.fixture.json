@@ -1,0 +1,51 @@
+{
+  "fixture_id": "OTF-A01",
+  "version": "1.0.0",
+  "name": "Neutral Tailored Outfit Fixture",
+  "fixture_type": "outfit_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "recognizable_identity_present": false,
+    "presentation": "headless_mannequin"
+  },
+  "reference_role": "outfit_only",
+  "generation_constraints": {
+    "garment": "deep burgundy cropped tailored jacket, ivory blouse, matching high-waisted wide-leg trousers",
+    "presentation": "straight neutral product display",
+    "background": "plain cool off-white seamless background",
+    "lighting": "soft even catalog lighting",
+    "identity": "none",
+    "meaningful_pose": "none",
+    "props": "none"
+  },
+  "anti_leakage_constraints": [
+    "no recognizable face",
+    "no hairstyle",
+    "no expressive pose",
+    "no target warm-gray studio scene",
+    "no environmental storytelling",
+    "no props",
+    "no accessories",
+    "no logos",
+    "no text"
+  ],
+  "sha256": "6f90feb8dd1fb197c313923feb19795d48e35cca5fb40e15d65ed94d82e6e2ea",
+  "width": 1122,
+  "height": 1402,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned outfit-only fixture created specifically for controlled multi-reference experiments."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "0c0896c0-70e8-48e4-a43f-2665b0fed8c9",
+    "source_filename": "burgundy_tailored_suit_ensemble.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "outfit/OTF-A01/OTF-A01.png"
+}
