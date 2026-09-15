@@ -90,6 +90,7 @@ def test_transfer_mapping_matches_archetype_and_experiment_versions():
         "EXP-010": "1.1.1",
         "EXP-011": "1.1.2",
         "EXP-012": "1.1.1",
+        "EXP-013": "1.1.1",
     }
 
     for item in mapping["mappings"]:
@@ -215,20 +216,26 @@ def test_reference_transfer_experiments_are_blocked_until_first_party_fixtures_e
     mapping = _load(MAPPING_REL)
     by_id = {item["experiment_id"]: item for item in mapping["mappings"]}
 
-    for exp_id in ("EXP-013", "EXP-014"):
-        definition = _load(f"experiments/definitions/{exp_id}.json")
-        assert (
-            by_id[exp_id]["transfer_status"]
-            == "requires_first_party_reference_fixtures"
-        )
-        assert definition["requires_reference_inputs"]
-        assert (
-            definition["transfer_benchmark"]["execution_readiness"]
-            == "requires_first_party_reference_fixtures"
-        )
-        for fixture in definition["requires_reference_inputs"]:
-            assert fixture["fixture_policy"] == "first_party_or_project_owned"
-            assert fixture["hash_required"] is True
+    # EXP-013 now has a frozen first-party fixture.
+    exp13 = _load("experiments/definitions/EXP-013.json")
+    assert by_id["EXP-013"]["transfer_status"] == "ready"
+    assert exp13["transfer_benchmark"]["execution_readiness"] == "ready"
+
+    # EXP-014 still has no frozen project-owned reference fixtures.
+    exp14 = _load("experiments/definitions/EXP-014.json")
+    assert (
+        by_id["EXP-014"]["transfer_status"]
+        == "requires_first_party_reference_fixtures"
+    )
+    assert exp14["requires_reference_inputs"]
+    assert (
+        exp14["transfer_benchmark"]["execution_readiness"]
+        == "requires_first_party_reference_fixtures"
+    )
+
+    for fixture in exp14["requires_reference_inputs"]:
+        assert fixture["fixture_policy"] == "first_party_or_project_owned"
+        assert fixture["hash_required"] is True
 
 
 def test_exp015_changes_only_the_anachronistic_positive_object():
@@ -292,3 +299,38 @@ def test_exp011_garment_replacement_preserves_word_boundary():
     assert "clean finished hem, and carrying a small structured clutch" in prompts["variant"]
     assert "clean finished hem and carrying" not in prompts["variant"]
     assert "dresswith" not in prompts["variant"]
+
+
+def test_exp013_fixture_binding_is_frozen_and_ready():
+    exp13 = _load("experiments/definitions/EXP-013.json")
+    fixture_meta = _load("benchmarks/fixtures/identity/IDF-A01/IDF-A01.fixture.json")
+
+    assert exp13["version"] == "1.1.1"
+    assert exp13["status"] == "planned"
+    assert exp13["transfer_benchmark"]["execution_readiness"] == "ready"
+
+    req = exp13["requires_reference_inputs"][0]
+    assert req["slot"] == "Reference 1"
+    assert req["role"] == "identity"
+    assert req["fixture_id"] == "IDF-A01"
+    assert req["fixture_version"] == "1.0.0"
+    assert req["fixture_root_env"] == "AIPF_FIXTURE_PATH"
+    assert req["fixture_relpath"] == "identity/IDF-A01/IDF-A01.png"
+    assert req["fixture_metadata_path"] == "benchmarks/fixtures/identity/IDF-A01/IDF-A01.fixture.json"
+    assert req["fixture_sha256"] == "2d11465c7a5041b221fb6890e72c37e04710a28842f4371926d2944632252fbd"
+    assert req["fixture_width"] == 1122
+    assert req["fixture_height"] == 1402
+
+    assert fixture_meta["fixture_id"] == req["fixture_id"]
+    assert fixture_meta["version"] == req["fixture_version"]
+    assert fixture_meta["sha256"] == req["fixture_sha256"]
+    assert fixture_meta["width"] == req["fixture_width"]
+    assert fixture_meta["height"] == req["fixture_height"]
+
+    assert fixture_meta["fixture_root_env"] == req["fixture_root_env"]
+    assert fixture_meta["fixture_relpath"] == req["fixture_relpath"]
+
+    mapping = _load("benchmarks/transfer/mappings/EXP-007-015.v1.json")
+    item = next(x for x in mapping["mappings"] if x["experiment_id"] == "EXP-013")
+    assert item["experiment_version"] == "1.1.1"
+    assert item["transfer_status"] == "ready"

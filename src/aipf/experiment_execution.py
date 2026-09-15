@@ -8,7 +8,11 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .experiment_runs import sha256_file, validate_blind_ids
+from .experiment_runs import (
+    resolve_reference_input_source,
+    sha256_file,
+    validate_blind_ids,
+)
 
 
 HOST_PACKAGE_DIRNAME = "host-package"
@@ -80,6 +84,76 @@ def _refresh_run_status(run: dict) -> str:
     return status
 
 
+
+def _export_reference_inputs(
+    destination: Path,
+    run: dict,
+) -> list[dict]:
+    """Copy frozen private references into a blind-safe host package."""
+
+    references = run.get("reference_inputs") or []
+    references_dir = destination / "references"
+
+    if references_dir.exists():
+        shutil.rmtree(references_dir)
+
+    if not references:
+        return []
+
+    references_dir.mkdir(parents=True, exist_ok=True)
+
+    exported: list[dict] = []
+    used_filenames: set[str] = set()
+
+    for reference in references:
+        source = resolve_reference_input_source(reference)
+
+        slot = str(reference["slot"])
+        stem = "".join(
+            ch if ch.isalnum() else "_"
+            for ch in slot
+        ).strip("_")
+
+        if not stem:
+            stem = "Reference"
+
+        suffix = source.suffix.lower() or ".png"
+        filename = f"{stem}{suffix}"
+
+        if filename in used_filenames:
+            raise ValueError(
+                f"duplicate exported reference filename: {filename}"
+            )
+
+        used_filenames.add(filename)
+
+        target = references_dir / filename
+        shutil.copy2(source, target)
+
+        copied_sha256 = sha256_file(target)
+        expected_sha256 = reference["fixture_sha256"]
+
+        if copied_sha256 != expected_sha256:
+            raise ValueError(
+                "exported reference fixture SHA-256 mismatch: "
+                f"{filename}"
+            )
+
+        exported.append(
+            {
+                "slot": slot,
+                "role": reference["role"],
+                "fixture_id": reference["fixture_id"],
+                "fixture_version": reference[
+                    "fixture_version"
+                ],
+                "fixture_sha256": expected_sha256,
+                "file": f"references/{filename}",
+            }
+        )
+
+    return exported
+
 def export_host_package(
     run_file: str | Path,
     *,
@@ -107,6 +181,11 @@ def export_host_package(
         if output
         else path.parent / HOST_PACKAGE_DIRNAME
     )
+    host_reference_inputs = _export_reference_inputs(
+        destination,
+        run,
+    )
+
     prompts_dir = destination / "prompts"
     prompts_dir.mkdir(parents=True, exist_ok=True)
 
@@ -128,6 +207,7 @@ def export_host_package(
                     "prompt": variant["prompt"],
                     "prompt_sha256": variant["prompt_sha256"],
                     "expected_filename": f"{blind_id}.png",
+                    "reference_inputs": host_reference_inputs,
                     "settings": {
                         "size": run["settings"]["size"],
                         "quality": run["settings"]["quality"],
@@ -148,6 +228,7 @@ def export_host_package(
         "generation_mode": run["generation_mode"],
         "model_target": run["model"],
         "model_snapshot": run["model_snapshot"],
+        "reference_inputs": host_reference_inputs,
         "task_count": len(tasks),
         "tasks": tasks,
     }
@@ -161,8 +242,10 @@ Experiment: `{run['experiment_id']}`
 Tasks: `{len(tasks)}`
 
 Generate exactly one image for each blind ID using the associated prompt and
-settings. Do not rename or merge IDs. Save the resulting image using the
-blind ID, for example `ABC234.png`.
+settings. When `reference_inputs` are present, attach the listed reference
+file(s) to every task using exactly the declared role and slot. Do not rename
+or merge IDs. Save the resulting image using the blind ID, for example
+`ABC234.png`.
 
 The manifest deliberately omits control/variant labels. Treatment mappings
 remain only in the private `run.json` so downstream visual review can stay
@@ -182,6 +265,7 @@ aipf experiment-import <run.json> --blind-id <ID> --image <image-file>
     return {
         "run_id": run["run_id"],
         "task_count": len(tasks),
+        "reference_count": len(host_reference_inputs),
         "output": str(destination),
         "manifest": str(destination / "manifest.json"),
     }

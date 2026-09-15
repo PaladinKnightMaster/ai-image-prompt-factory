@@ -15,30 +15,75 @@
     "variants"
   ],
   "properties": {
-    "run_id": {"type": "string", "minLength": 1},
-    "experiment_id": {"type": "string", "minLength": 1},
-    "experiment_version": {"type": "string", "minLength": 1},
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experiment_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "experiment_version": {
+      "type": "string",
+      "minLength": 1
+    },
     "experiment_definition_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
     },
-    "created_at_utc": {"type": "string"},
+    "created_at_utc": {
+      "type": "string"
+    },
     "status": {
-      "enum": ["planned", "running", "completed", "partial", "failed"]
+      "enum": [
+        "planned",
+        "running",
+        "completed",
+        "partial",
+        "failed"
+      ]
     },
     "generation_mode": {
-      "enum": ["host_native", "api", "manual_import"]
+      "enum": [
+        "host_native",
+        "api",
+        "manual_import"
+      ]
     },
-    "model": {"type": "string", "minLength": 1},
-    "model_snapshot": {"type": "string", "minLength": 1},
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_snapshot": {
+      "type": "string",
+      "minLength": 1
+    },
     "settings": {
       "type": "object",
-      "required": ["replicates", "size", "quality"],
+      "required": [
+        "replicates",
+        "size",
+        "quality"
+      ],
       "properties": {
-        "replicates": {"type": "integer", "minimum": 1},
-        "size": {"type": "string", "minLength": 1},
-        "quality": {"type": "string", "minLength": 1},
-        "background": {"type": ["string", "null"]}
+        "replicates": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "size": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quality": {
+          "type": "string",
+          "minLength": 1
+        },
+        "background": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       },
       "additionalProperties": true
     },
@@ -55,9 +100,18 @@
           "outputs"
         ],
         "properties": {
-          "variant_id": {"type": "string", "minLength": 1},
-          "factor": {"type": "string", "minLength": 1},
-          "prompt": {"type": "string", "minLength": 1},
+          "variant_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "factor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1
+          },
           "prompt_sha256": {
             "type": "string",
             "pattern": "^[0-9a-f]{64}$"
@@ -67,29 +121,123 @@
             "minItems": 1,
             "items": {
               "type": "object",
-              "required": ["replicate", "blind_id", "status"],
+              "required": [
+                "replicate",
+                "blind_id",
+                "status"
+              ],
               "properties": {
-                "replicate": {"type": "integer", "minimum": 1},
+                "replicate": {
+                  "type": "integer",
+                  "minimum": 1
+                },
                 "blind_id": {
                   "type": "string",
                   "minLength": 4,
                   "pattern": "^[A-Z2-9]+$"
                 },
                 "status": {
-                  "enum": ["planned", "generated", "failed"]
-                },
-                "image": {"type": ["string", "null"]},
-                "image_sha256": {
-                  "anyOf": [
-                    {"type": "null"},
-                    {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+                  "enum": [
+                    "planned",
+                    "generated",
+                    "failed"
                   ]
                 },
-                "metadata": {"type": ["string", "null"]},
-                "error": {"type": ["string", "null"]}
+                "image": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "image_sha256": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    }
+                  ]
+                },
+                "metadata": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "error": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
               },
               "additionalProperties": true
             }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "reference_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slot",
+          "role",
+          "fixture_id",
+          "fixture_version",
+          "fixture_root_env",
+          "fixture_relpath",
+          "fixture_sha256"
+        ],
+        "properties": {
+          "slot": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_policy": {
+            "type": "string"
+          },
+          "fixture_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_root_env": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_relpath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_metadata_path": {
+            "type": "string"
+          },
+          "fixture_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "fixture_width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "fixture_height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "hash_required": {
+            "type": "boolean"
           }
         },
         "additionalProperties": true

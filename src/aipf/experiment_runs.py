@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import secrets
 from datetime import datetime, timezone
 from pathlib import Path
@@ -37,6 +38,164 @@ def sha256_file(path: Path) -> str:
 
     return digest.hexdigest()
 
+
+
+def _environment_value(name: str) -> str | None:
+    """Resolve an environment value, falling back to the repository .env."""
+
+    value = os.getenv(name)
+
+    if value:
+        return value
+
+    from .io import repo_root
+
+    env_file = repo_root() / ".env"
+
+    if not env_file.exists():
+        return None
+
+    for raw_line in env_file.read_text(
+        encoding="utf-8-sig"
+    ).splitlines():
+        line = raw_line.strip()
+
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+
+        if key.strip() != name:
+            continue
+
+        return value.strip().strip('"').strip("'")
+
+    return None
+
+
+def resolve_reference_input_source(
+    reference_input: dict,
+) -> Path:
+    """Resolve and verify one private frozen reference fixture."""
+
+    required = (
+        "fixture_root_env",
+        "fixture_relpath",
+        "fixture_sha256",
+    )
+
+    missing = [
+        key
+        for key in required
+        if not reference_input.get(key)
+    ]
+
+    if missing:
+        raise ValueError(
+            "reference fixture is missing required fields: "
+            + ", ".join(missing)
+        )
+
+    env_name = reference_input["fixture_root_env"]
+    root_value = _environment_value(env_name)
+
+    if not root_value:
+        raise ValueError(
+            f"reference fixture root is not configured: {env_name}"
+        )
+
+    root = Path(root_value).expanduser().resolve()
+    source = (
+        root / reference_input["fixture_relpath"]
+    ).resolve()
+
+    try:
+        source.relative_to(root)
+    except ValueError as exc:
+        raise ValueError(
+            "reference fixture path escapes configured fixture root: "
+            f"{source}"
+        ) from exc
+
+    if not source.exists() or not source.is_file():
+        raise FileNotFoundError(
+            f"reference fixture not found: {source}"
+        )
+
+    actual_sha256 = sha256_file(source)
+    expected_sha256 = str(
+        reference_input["fixture_sha256"]
+    ).lower()
+
+    if actual_sha256 != expected_sha256:
+        raise ValueError(
+            "reference fixture SHA-256 mismatch for "
+            f"{reference_input.get('fixture_id', source.name)}: "
+            f"expected {expected_sha256}, got {actual_sha256}"
+        )
+
+    return source
+
+
+def resolve_reference_inputs(
+    experiment: dict,
+) -> list[dict]:
+    """Validate and freeze reference declarations for a run plan."""
+
+    requirements = (
+        experiment.get("requires_reference_inputs") or []
+    )
+
+    if not requirements:
+        return []
+
+    readiness = (
+        experiment.get("transfer_benchmark", {})
+        .get("execution_readiness")
+    )
+
+    if readiness != "ready":
+        raise ValueError(
+            f"{experiment.get('experiment_id', 'experiment')} "
+            "requires reference fixtures but is not execution-ready"
+        )
+
+    required_metadata = (
+        "slot",
+        "role",
+        "fixture_id",
+        "fixture_version",
+        "fixture_root_env",
+        "fixture_relpath",
+        "fixture_sha256",
+    )
+
+    resolved: list[dict] = []
+
+    for requirement in requirements:
+        missing = [
+            key
+            for key in required_metadata
+            if not requirement.get(key)
+        ]
+
+        if missing:
+            raise ValueError(
+                "reference fixture declaration is incomplete: "
+                + ", ".join(missing)
+            )
+
+        # This performs file existence + frozen hash verification.
+        resolve_reference_input_source(requirement)
+
+        item = dict(requirement)
+        item["fixture_sha256"] = str(
+            item["fixture_sha256"]
+        ).lower()
+
+        resolved.append(item)
+
+    return resolved
 
 def definition_path(experiment_id: str) -> Path:
     from .io import repo_root
@@ -108,6 +267,13 @@ def create_run_plan(
 
     experiment = load_experiment(experiment_id)
     plan = plan_experiment(experiment)
+    reference_inputs = resolve_reference_inputs(experiment)
+
+    if reference_inputs and generation_mode == "api":
+        raise ValueError(
+            "reference-image experiment execution is currently "
+            "supported through host_native/manual_import only"
+        )
 
     source_path = definition_path(experiment["experiment_id"])
 
@@ -170,6 +336,7 @@ def create_run_plan(
         "generation_mode": generation_mode,
         "model": model,
         "model_snapshot": model_snapshot,
+        "reference_inputs": reference_inputs,
         "settings": {
             "replicates": replicates,
             "size": size,

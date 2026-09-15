@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-013",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "hypothesis": "A single precise identity-only lock preserves identity at least as well as repeating redundant identity locks when the same reference fixture and target scene are held constant.",
   "baseline_prompt": "Identity lock: use Reference 1 only for recognizable facial identity. Preserve the same recognizable identity throughout. Keep the same person in the final image. Do not change identity. Create a new realistic waist-up portrait in a sunlit botanical reading room. Do not import Reference 1 clothing, pose, camera angle, or background. Dress the subject in a charcoal knit jacket over a cream shirt, seated beside a leafy window and turning slightly toward the camera with relaxed hands resting on a closed book. Use soft daylight, natural skin texture, and restrained depth of field.",
   "variants": [
@@ -43,7 +43,15 @@
       "slot": "Reference 1",
       "role": "identity",
       "fixture_policy": "first_party_or_project_owned",
-      "hash_required": true
+      "hash_required": true,
+      "fixture_id": "IDF-A01",
+      "fixture_version": "1.0.0",
+      "fixture_metadata_path": "benchmarks/fixtures/identity/IDF-A01/IDF-A01.fixture.json",
+      "fixture_sha256": "2d11465c7a5041b221fb6890e72c37e04710a28842f4371926d2944632252fbd",
+      "fixture_width": 1122,
+      "fixture_height": 1402,
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "fixture_relpath": "identity/IDF-A01/IDF-A01.png"
     }
   ],
   "transfer_benchmark": {
@@ -53,6 +61,6 @@
     "archetype_prompt_sha256": "8d61e5ad450375bd408268f9966db60d32845e3eb5a8884fabc7d82f2ba40c8f",
     "mapping_version": "1.0.0",
     "realization": "counterfactual repeated-lock control derived from identity-only archetype",
-    "execution_readiness": "requires_first_party_reference_fixtures"
+    "execution_readiness": "ready"
   }
 }

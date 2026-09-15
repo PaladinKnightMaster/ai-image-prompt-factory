@@ -121,17 +121,19 @@
     },
     {
       "experiment_id": "EXP-013",
-      "experiment_version": "1.1.0",
+      "experiment_version": "1.1.1",
       "archetype_id": "TB-A06",
       "archetype_version": "1.0.0",
       "factor": "identity_lock_repetition",
       "primary_dimension": "identity_fidelity",
-      "transfer_status": "requires_first_party_reference_fixtures",
+      "transfer_status": "ready",
       "control_strategy": "Use the same project-owned identity fixture with a deliberately redundant multi-sentence identity lock.",
       "variant_strategy": "Replace the redundant lock block with one precise identity-only instruction while holding the fixture and all target-scene instructions constant.",
       "single_factor_guard": "The same exact identity fixture must be attached to every replicate; only lock repetition changes.",
       "fixture_requirements": [
-        "one project-owned identity fixture with stable provenance and a frozen file hash"
+        "one project-owned identity fixture with stable provenance and a frozen file hash",
+        "resolve fixture IDF-A01 v1.0.0 through AIPF_FIXTURE_PATH using identity/IDF-A01/IDF-A01.png",
+        "fixture SHA-256 must equal 2d11465c7a5041b221fb6890e72c37e04710a28842f4371926d2944632252fbd"
       ],
       "definition_path": "experiments/definitions/EXP-013.json"
     },
