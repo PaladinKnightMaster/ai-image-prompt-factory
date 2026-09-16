@@ -1,0 +1,45 @@
+{
+  "fixture_id": "OTF-A02",
+  "planned_version": "1.0.0",
+  "status": "planned",
+  "name": "Adversarial Tailored Outfit Fixture",
+  "fixture_type": "outfit_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "reference_role": "outfit_only",
+  "purpose": "Provide the target garment construction and palette while embedding a high-salience non-target identity and pose.",
+  "target_transfer_attributes": {
+    "outfit": "deep burgundy cropped tailored jacket, ivory blouse, matching high-waisted wide-leg trousers"
+  },
+  "diagnostic_non_target_attributes": {
+    "identity_trap": "very short platinum-blond pixie hair, sharply arched dark brows, narrow angular face",
+    "pose_trap": "left hand in trouser pocket, right hand on hip, left hip shifted strongly outward"
+  },
+  "generation_prompt": "Create a first-party synthetic adult full-body fashion reference for a controlled multi-reference benchmark. The intended outfit transfer is a deep burgundy cropped tailored jacket, ivory blouse, and matching high-waisted wide-leg trousers. Deliberately place that target outfit on a clearly different synthetic identity that must NOT transfer later: very short platinum-blond pixie hair, sharply arched dark brows, and a narrow angular face. Also use a non-target pose that must NOT transfer: left hand inside the trouser pocket, right hand resting on the hip, and the left hip shifted strongly outward. Keep the complete garment silhouette visible against a plain cool off-white seamless background with soft even catalog lighting. No accessories, text, logos, props, or environmental story.",
+  "acceptance_criteria": [
+    "synthetic adult subject distinct from IDF-A02 identity",
+    "complete target garment silhouette visible",
+    "deep burgundy jacket and trousers clearly readable",
+    "ivory blouse clearly readable",
+    "platinum-blond pixie hair clearly visible",
+    "registered hand-in-pocket and hand-on-hip pose visible",
+    "plain cool off-white background",
+    "no accessories, text, or logos"
+  ],
+  "rejection_criteria": [
+    "target outfit construction is obscured",
+    "platinum hair trap is not visually clear",
+    "registered non-target pose is not readable",
+    "subject resembles the planned IDF-A02 identity too closely",
+    "image contains text, logo, prop, or meaningful environment"
+  ],
+  "freeze_requirements": {
+    "asset_required": true,
+    "sha256_required": true,
+    "width_height_required": true,
+    "human_acceptance_check_required": true
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "planned_fixture_relpath": "outfit/OTF-A02/OTF-A02.png",
+  "planned_fixture_metadata_path": "benchmarks/fixtures/outfit/OTF-A02/OTF-A02.fixture.json"
+}

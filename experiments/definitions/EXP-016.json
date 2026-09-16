@@ -1,0 +1,136 @@
+{
+  "experiment_id": "EXP-016",
+  "version": "1.0.0",
+  "hypothesis": "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage relative to implicit multi-reference use when the references contain deliberately conflicting non-target attributes.",
+  "baseline_prompt": "Use Reference 1, Reference 2, and Reference 3 to create a realistic full-body portrait while preserving the intended identity, outfit, and pose. Place the final subject in a minimalist studio with a warm-gray backdrop and soft side light. Preserve natural anatomy, a clear garment silhouette, and recognizable identity. Do not import the environment from any reference.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "implicit_reference_roles_adversarial",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "explicit_reference_roles_adversarial",
+      "operation": "replace_literal",
+      "old": "Use Reference 1, Reference 2, and Reference 3 to create a realistic full-body portrait while preserving the intended identity, outfit, and pose.",
+      "new": "Use Reference 1 for identity only, Reference 2 for garment construction and palette only, and Reference 3 for joint arrangement and weight distribution only. Do not transfer unrelated attributes across reference roles."
+    }
+  ],
+  "preserved_dimensions": [
+    "same three adversarial reference fixtures",
+    "reference ordering",
+    "registered diagnostic conflict signatures",
+    "warm-gray studio",
+    "soft side light",
+    "full-body framing",
+    "natural anatomy",
+    "garment silhouette",
+    "aspect ratio"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "reference_role_fidelity",
+    "cross_reference_leakage_control"
+  ],
+  "primary_dimension": "cross_reference_leakage_control",
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "reference-identity-isolation",
+    "reference-outfit-isolation",
+    "reference-pose-isolation"
+  ],
+  "requires_reference_inputs": [],
+  "planned_reference_inputs": [
+    {
+      "slot": "Reference 1",
+      "role": "identity",
+      "fixture_policy": "first_party_or_project_owned",
+      "fixture_id": "IDF-A02",
+      "planned_fixture_version": "1.0.0",
+      "fixture_spec_path": "benchmarks/fixtures/identity/IDF-A02/IDF-A02.spec.json",
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "planned_fixture_relpath": "identity/IDF-A02/IDF-A02.png"
+    },
+    {
+      "slot": "Reference 2",
+      "role": "outfit",
+      "fixture_policy": "first_party_or_project_owned",
+      "fixture_id": "OTF-A02",
+      "planned_fixture_version": "1.0.0",
+      "fixture_spec_path": "benchmarks/fixtures/outfit/OTF-A02/OTF-A02.spec.json",
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "planned_fixture_relpath": "outfit/OTF-A02/OTF-A02.png"
+    },
+    {
+      "slot": "Reference 3",
+      "role": "pose",
+      "fixture_policy": "first_party_or_project_owned",
+      "fixture_id": "POF-A02",
+      "planned_fixture_version": "1.0.0",
+      "fixture_spec_path": "benchmarks/fixtures/pose/POF-A02/POF-A02.spec.json",
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "planned_fixture_relpath": "pose/POF-A02/POF-A02.png"
+    }
+  ],
+  "adversarial_leakage_diagnostics": {
+    "target_assignment": {
+      "Reference 1": "identity only",
+      "Reference 2": "outfit construction and palette only",
+      "Reference 3": "pose mechanics only"
+    },
+    "registered_non_target_traps": {
+      "Reference 1": [
+        "cobalt-blue windbreaker",
+        "black cargo trousers",
+        "white high-top sneakers",
+        "arms-crossed centered stance"
+      ],
+      "Reference 2": [
+        "platinum-blond pixie hair",
+        "narrow angular face",
+        "hand-in-pocket / hand-on-hip pose"
+      ],
+      "Reference 3": [
+        "copper-red high ponytail",
+        "lime-green athletic unitard"
+      ]
+    },
+    "primary_scoring_guidance": {
+      "5": "No clear registered non-target trap attribute transfers into the final image.",
+      "4": "At most one subtle or ambiguous possible trap transfer; no clear role substitution.",
+      "3": "One clearly recognizable non-target trap transfers from the wrong reference role.",
+      "2": "Multiple clear non-target trap attributes transfer or one role is substantially contaminated.",
+      "1": "Cross-reference leakage dominates one or more target roles or substantially replaces the intended assignment."
+    }
+  },
+  "review_context_requirement": {
+    "reference_visibility": "Blind reviewer must receive the three frozen source references or an equivalent blinded reference sheet labeled Reference 1, Reference 2, and Reference 3.",
+    "diagnostic_legend_visibility": true,
+    "treatment_visibility": false,
+    "reason": "Cross-reference leakage cannot be scored reliably without knowing which visible attributes belong to which reference."
+  },
+  "preregistration": {
+    "parent_experiment": "EXP-014",
+    "motivation": "EXP-014 ceiling-saturated cross_reference_leakage_control at 5/5 in both conditions.",
+    "replicates_per_condition": 4,
+    "reroll_policy": "no_rerolls_for_ordinary_defects",
+    "analysis_scope": "descriptive_at_n4_per_condition",
+    "blind_review_required": true,
+    "freeze_before_reveal_required": true,
+    "fixture_freeze_before_run_required": true,
+    "golden_promotion_allowed_from_single_run": false
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A08",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "07d1d28d04bceca35044640fc8c504ff35fb9de0d37d2ce74c2e9026ee452fd4",
+    "mapping_version": "1.0.0",
+    "realization": "implicit-role control derived from explicit-role adversarial three-reference archetype",
+    "execution_readiness": "blocked"
+  }
+}

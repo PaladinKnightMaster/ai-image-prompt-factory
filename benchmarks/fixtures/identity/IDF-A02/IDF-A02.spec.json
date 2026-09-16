@@ -1,0 +1,45 @@
+{
+  "fixture_id": "IDF-A02",
+  "planned_version": "1.0.0",
+  "status": "planned",
+  "name": "Adversarial Identity Fixture",
+  "fixture_type": "identity_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "reference_role": "identity_only",
+  "purpose": "Provide the target recognizable identity while embedding high-salience wardrobe and pose attributes that are explicitly non-target leakage traps.",
+  "target_transfer_attributes": {
+    "identity": "oval face, warm-medium complexion, dark brown eyes, straight dark brows, shoulder-length dark wavy hair parted slightly left"
+  },
+  "diagnostic_non_target_attributes": {
+    "outfit_trap": "saturated cobalt-blue hooded windbreaker, black cargo trousers, bright white high-top sneakers",
+    "pose_trap": "arms crossed firmly across torso, feet parallel, weight evenly distributed"
+  },
+  "generation_prompt": "Create a first-party synthetic adult reference image for a controlled multi-reference benchmark. Show the person at three-quarter to full-body scale with the face clearly readable. The intended identity signature is an oval face, warm-medium complexion, dark brown eyes, straight dark brows, and shoulder-length dark wavy hair parted slightly left. Deliberately give this identity reference a non-target outfit and pose that must NOT transfer later: a saturated cobalt-blue hooded windbreaker, black cargo trousers, bright white high-top sneakers, arms crossed firmly across the torso, feet parallel, and weight evenly distributed. Use a plain neutral studio background and soft even reference lighting. No text, logos, props, or environmental story.",
+  "acceptance_criteria": [
+    "synthetic adult subject",
+    "face clearly readable",
+    "registered identity signature visibly present",
+    "cobalt-blue windbreaker clearly visible",
+    "black cargo trousers visible",
+    "arms-crossed pose clearly visible",
+    "plain neutral studio background",
+    "no text or logos"
+  ],
+  "rejection_criteria": [
+    "identity signature is not visually readable",
+    "windbreaker is not clearly cobalt blue",
+    "arms are not clearly crossed",
+    "cropping hides the registered outfit or pose traps",
+    "image contains text, logo, or meaningful environment"
+  ],
+  "freeze_requirements": {
+    "asset_required": true,
+    "sha256_required": true,
+    "width_height_required": true,
+    "human_acceptance_check_required": true
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "planned_fixture_relpath": "identity/IDF-A02/IDF-A02.png",
+  "planned_fixture_metadata_path": "benchmarks/fixtures/identity/IDF-A02/IDF-A02.fixture.json"
+}

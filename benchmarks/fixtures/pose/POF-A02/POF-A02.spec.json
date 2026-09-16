@@ -1,0 +1,45 @@
+{
+  "fixture_id": "POF-A02",
+  "planned_version": "1.0.0",
+  "status": "planned",
+  "name": "Adversarial Contrapposto Pose Fixture",
+  "fixture_type": "pose_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "reference_role": "pose_only",
+  "purpose": "Provide the target joint arrangement and weight distribution while embedding high-salience non-target identity and wardrobe attributes.",
+  "target_transfer_attributes": {
+    "pose": "standing contrapposto with weight on right leg; right leg nearly straight; left leg relaxed and slightly bent; pelvis-shoulder counterbalance; slight torso rotation; left forearm bent near waist; right arm relaxed away from torso; both hands and feet visible"
+  },
+  "diagnostic_non_target_attributes": {
+    "identity_trap": "vivid copper-red high ponytail with blunt fringe",
+    "outfit_trap": "bright lime-green sleeveless athletic unitard with black side panels"
+  },
+  "generation_prompt": "Create a first-party synthetic adult full-body pose reference for a controlled multi-reference benchmark. The intended pose transfer is standing contrapposto with weight on the right leg, right leg nearly straight and weight bearing, left leg relaxed with the knee slightly bent and foot forward/outward, subtle pelvis-shoulder counterbalance, slight torso rotation toward camera, left forearm bent with the hand near the waist, right arm relaxed with a small gap from the torso, and both hands and both feet visible with plausible floor contact. Deliberately give this pose reference a different synthetic identity and wardrobe that must NOT transfer later: vivid copper-red hair in a high ponytail with a blunt fringe, plus a bright lime-green sleeveless athletic unitard with black side panels. Use a plain very light neutral studio background and flat even reference lighting. No accessories, text, logos, props, or environmental story.",
+  "acceptance_criteria": [
+    "synthetic adult subject distinct from both other fixture identities",
+    "registered contrapposto clearly readable",
+    "both hands and both feet visible",
+    "clear plausible floor contact",
+    "copper-red high ponytail clearly visible",
+    "lime-green unitard clearly visible",
+    "plain very light neutral background",
+    "no accessories, text, or logos"
+  ],
+  "rejection_criteria": [
+    "target contrapposto mechanics are ambiguous",
+    "hands or feet are cropped",
+    "copper-red hair trap is not visually clear",
+    "lime-green outfit trap is not visually clear",
+    "image contains text, logo, prop, or meaningful environment"
+  ],
+  "freeze_requirements": {
+    "asset_required": true,
+    "sha256_required": true,
+    "width_height_required": true,
+    "human_acceptance_check_required": true
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "planned_fixture_relpath": "pose/POF-A02/POF-A02.png",
+  "planned_fixture_metadata_path": "benchmarks/fixtures/pose/POF-A02/POF-A02.fixture.json"
+}

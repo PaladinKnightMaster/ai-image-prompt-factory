@@ -18,9 +18,24 @@ def _load(rel):
 
 
 def _archetypes():
+    archetype_root = (
+        repo_root()
+        / "benchmarks"
+        / "transfer"
+        / "archetypes"
+    )
+
+    paths = sorted(
+        archetype_root.glob("TB-A*.json")
+    )
+
     return [
-        _load(TRANSFER_ROOT / "archetypes" / f"TB-A{i:02d}.json")
-        for i in range(1, 8)
+        _load(
+            str(
+                path.relative_to(repo_root())
+            ).replace("\\", "/")
+        )
+        for path in paths
     ]
 
 
@@ -30,7 +45,7 @@ def test_transfer_archetypes_validate_and_hash_their_first_party_prompts():
     archetypes = _archetypes()
 
     assert [item["archetype_id"] for item in archetypes] == [
-        "TB-A01", "TB-A02", "TB-A03", "TB-A04", "TB-A05", "TB-A06", "TB-A07"
+        "TB-A01", "TB-A02", "TB-A03", "TB-A04", "TB-A05", "TB-A06", "TB-A07", "TB-A08"
     ]
 
     for item in archetypes:
@@ -402,3 +417,131 @@ def test_exp014_fixture_bindings_are_frozen_and_executed():
 
     assert item["experiment_version"] == "1.1.1"
     assert item["transfer_status"] == "ready"
+def test_exp016_adversarial_preregistration_is_blocked_until_fixture_freeze():
+    exp16 = _load("experiments/definitions/EXP-016.json")
+
+    assert exp16["experiment_id"] == "EXP-016"
+    assert exp16["version"] == "1.0.0"
+    assert exp16["status"] == "planned"
+    assert exp16["primary_dimension"] == "cross_reference_leakage_control"
+
+    transfer = exp16["transfer_benchmark"]
+
+    assert transfer["archetype_id"] == "TB-A08"
+    assert transfer["archetype_version"] == "1.0.0"
+    assert transfer["mapping_version"] == "1.0.0"
+    assert transfer["execution_readiness"] == "blocked"
+
+    # No fake frozen bindings are allowed in the preregistration.
+    assert exp16["requires_reference_inputs"] == []
+
+    planned = exp16["planned_reference_inputs"]
+
+    assert [item["fixture_id"] for item in planned] == [
+        "IDF-A02",
+        "OTF-A02",
+        "POF-A02",
+    ]
+
+    spec_paths = [
+        "benchmarks/fixtures/identity/IDF-A02/IDF-A02.spec.json",
+        "benchmarks/fixtures/outfit/OTF-A02/OTF-A02.spec.json",
+        "benchmarks/fixtures/pose/POF-A02/POF-A02.spec.json",
+    ]
+
+    specs = [_load(path) for path in spec_paths]
+
+    assert [item["reference_role"] for item in specs] == [
+        "identity_only",
+        "outfit_only",
+        "pose_only",
+    ]
+
+    assert all(item["status"] == "planned" for item in specs)
+
+    assert (
+        specs[0]["diagnostic_non_target_attributes"]["outfit_trap"]
+        != specs[2]["diagnostic_non_target_attributes"]["outfit_trap"]
+    )
+
+    identity_traps = (
+        exp16["adversarial_leakage_diagnostics"]
+        ["registered_non_target_traps"]
+    )
+
+    assert "cobalt-blue windbreaker" in identity_traps["Reference 1"]
+    assert "platinum-blond pixie hair" in identity_traps["Reference 2"]
+    assert "lime-green athletic unitard" in identity_traps["Reference 3"]
+
+    mapping = _load(
+        "benchmarks/transfer/mappings/EXP-016.v1.json"
+    )
+
+    assert len(mapping["mappings"]) == 1
+
+    node = mapping["mappings"][0]
+
+    assert node["experiment_id"] == "EXP-016"
+    assert node["experiment_version"] == "1.0.0"
+    assert node["archetype_id"] == "TB-A08"
+    assert node["archetype_version"] == "1.0.0"
+    assert node["transfer_status"] == "blocked"
+    assert (
+        node["primary_dimension"]
+        == "cross_reference_leakage_control"
+    )
+
+    try:
+        create_run_plan(
+            "EXP-016",
+            replicates=1,
+        )
+    except ValueError as exc:
+        assert "execution_readiness" in str(exc)
+        assert "blocked" in str(exc)
+    else:
+        raise AssertionError(
+            "EXP-016 run planning must remain blocked "
+            "until adversarial fixtures are frozen"
+        )
+
+
+def test_exp016_changes_only_the_reference_role_instruction():
+    exp16 = _load("experiments/definitions/EXP-016.json")
+
+    control = next(
+        item
+        for item in exp16["variants"]
+        if item["id"] == "control"
+    )
+
+    variant = next(
+        item
+        for item in exp16["variants"]
+        if item["id"] == "variant"
+    )
+
+    assert control["operation"] == "identity"
+    assert variant["operation"] == "replace_literal"
+
+    old = variant["old"]
+    new = variant["new"]
+    baseline = exp16["baseline_prompt"]
+
+    assert old in baseline
+    assert new not in baseline
+
+    treated = baseline.replace(old, new)
+
+    assert treated != baseline
+    assert treated.replace(new, old) == baseline
+
+    assert (
+        exp16["primary_dimension"]
+        == "cross_reference_leakage_control"
+    )
+
+    review_context = exp16["review_context_requirement"]
+
+    assert review_context["treatment_visibility"] is False
+    assert review_context["diagnostic_legend_visibility"] is True

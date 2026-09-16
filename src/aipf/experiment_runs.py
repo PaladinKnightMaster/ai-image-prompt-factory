@@ -266,6 +266,21 @@ def create_run_plan(
         )
 
     experiment = load_experiment(experiment_id)
+
+    execution_readiness = (
+        experiment
+        .get("transfer_benchmark", {})
+        .get("execution_readiness")
+    )
+
+    if (
+        execution_readiness is not None
+        and execution_readiness != "ready"
+    ):
+        raise ValueError(
+            f"experiment {experiment_id} execution_readiness is "
+            f"{execution_readiness!r}; expected 'ready'"
+        )
     plan = plan_experiment(experiment)
     reference_inputs = resolve_reference_inputs(experiment)
 

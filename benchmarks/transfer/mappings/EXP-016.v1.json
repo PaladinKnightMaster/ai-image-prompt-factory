@@ -1,0 +1,59 @@
+{
+  "benchmark_layer": "transfer",
+  "version": "1.0.0",
+  "status": "design_frozen",
+  "design_basis": {
+    "private_prompt_records_analyzed": 191,
+    "aggregate_category_signals": {
+      "composition": 557,
+      "lighting": 660,
+      "wardrobe": 483,
+      "material": 368,
+      "pose": 252,
+      "hand_logic": 219,
+      "narrative": 78,
+      "fabric_physics": 51,
+      "reference_role": 41
+    },
+    "aggregate_method_signals": {
+      "structure": 181,
+      "emotion": 138,
+      "medium": 131,
+      "design_system": 119,
+      "constraint": 111,
+      "variable_template": 86,
+      "narrative": 27,
+      "reference": 20
+    },
+    "raw_private_content_embedded": false
+  },
+  "rules": {
+    "one_factor_per_run": true,
+    "freeze_archetype_version_before_generation": true,
+    "no_pattern_auto_promotion": true,
+    "private_corpus_as_fixture_forbidden": true,
+    "first_party_reference_fixtures_only": true
+  },
+  "mappings": [
+    {
+      "experiment_id": "EXP-016",
+      "experiment_version": "1.0.0",
+      "archetype_id": "TB-A08",
+      "archetype_version": "1.0.0",
+      "factor": "reference_roles_under_adversarial_conflict",
+      "primary_dimension": "cross_reference_leakage_control",
+      "transfer_status": "blocked",
+      "control_strategy": "Provide the same three preregistered adversarial references with an implicit instruction to preserve identity, outfit, and pose, without assigning which reference controls which role.",
+      "variant_strategy": "Replace only the opening reference instruction with explicit identity-only, outfit-only, and pose-only role declarations plus a prohibition on unrelated cross-role transfer.",
+      "single_factor_guard": "Reference images, ordering, diagnostic conflict signatures, target studio scene, composition, and all non-role prompt text must remain identical between conditions.",
+      "fixture_requirements": [
+        "Reference 1 = IDF-A02 v1.0.0 adversarial identity fixture; currently preregistered but not frozen",
+        "Reference 2 = OTF-A02 v1.0.0 adversarial outfit fixture; currently preregistered but not frozen",
+        "Reference 3 = POF-A02 v1.0.0 adversarial pose fixture; currently preregistered but not frozen",
+        "all three fixture assets must pass preregistered acceptance criteria and receive immutable SHA-256 hashes before transfer_status may become ready",
+        "Reference 1 clothing/pose, Reference 2 identity/pose, and Reference 3 identity/wardrobe are registered non-target leakage traps"
+      ],
+      "definition_path": "experiments/definitions/EXP-016.json"
+    }
+  ]
+}
