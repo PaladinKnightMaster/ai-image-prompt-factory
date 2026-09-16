@@ -331,11 +331,11 @@ def test_exp013_fixture_binding_is_frozen_and_ready():
     assert item["transfer_status"] == "ready"
 
 
-def test_exp014_fixture_bindings_are_frozen_and_ready():
+def test_exp014_fixture_bindings_are_frozen_and_executed():
     exp14 = _load("experiments/definitions/EXP-014.json")
 
     assert exp14["version"] == "1.1.1"
-    assert exp14["status"] == "planned"
+    assert exp14["status"] == "executed"
     assert exp14["transfer_benchmark"]["execution_readiness"] == "ready"
 
     refs = exp14["requires_reference_inputs"]

@@ -1,0 +1,199 @@
+{
+  "result_id": "EXP-014-1.1.1-20260915T235228Z-EUSM",
+  "experiment_id": "EXP-014",
+  "experiment_version": "1.1.1",
+  "run_id": "EXP-014-1.1.1-20260915T235228Z-EUSM",
+  "status": "revealed",
+  "hypothesis": "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage compared with implicit multi-reference use when the same three fixtures are held constant.",
+  "primary_dimension": "cross_reference_leakage_control",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "3d7a679c19f21af26bb4715517e91544cbf8c5e960ed0dffc282556e1ed1d453",
+    "mapping_commitment_sha256": "38bf2356bfbb46d29f1bf8b98593c81b0a05aec1e7c50e64b4c249dcd1adf06d",
+    "frozen_at_utc": "2026-09-16T01:47:36.584799+00:00",
+    "revealed_at_utc": "2026-09-16T01:49:11.402963+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A07",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.1.1"
+  },
+  "variants": {
+    "control": {
+      "factor": "implicit_reference_roles",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 4.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "reference_role_fidelity": 4.0,
+        "cross_reference_leakage_control": 5.0,
+        "overall": 4.6
+      },
+      "overall_sample_sd": 0.0
+    },
+    "variant": {
+      "factor": "explicit_reference_roles",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 5.0,
+        "technical_defects": 5.0,
+        "reference_role_fidelity": 5.0,
+        "cross_reference_leakage_control": 5.0,
+        "overall": 5.0
+      },
+      "overall_sample_sd": 0.0
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 1.0,
+    "aesthetic_quality": 0.0,
+    "technical_defects": 0.0,
+    "reference_role_fidelity": 1.0,
+    "cross_reference_leakage_control": 0.0,
+    "overall": 0.4
+  },
+  "evidence_classification": "inconclusive",
+  "interpretation": "In the TB-A07 three-reference transfer context, explicit reference-role declarations did not improve the registered primary cross_reference_leakage_control dimension because both conditions scored 5.00, producing a variant-minus-control delta of 0.00. The explicit-role condition did improve semantic_compliance from 4.00 to 5.00 and reference_role_fidelity from 4.00 to 5.00, while aesthetic quality and technical cleanliness were unchanged. The overall mean increased from 4.60 to 5.00. EXP-014 is classified inconclusive because the leakage-control metric was already saturated at the maximum score in the control condition, leaving no discriminatory range with which to observe the hypothesized leakage reduction.",
+  "limitations": [
+    "Four replicates per condition are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A07 three-reference identity, outfit, and pose transfer context.",
+    "The primary cross_reference_leakage_control dimension was ceiling-saturated at 5.00 in both conditions, preventing measurement of further leakage-control improvement.",
+    "A zero observed primary-dimension difference under ceiling saturation does not establish equivalence between implicit and explicit reference-role prompting.",
+    "All four replicates within each condition received identical score vectors, so the observed zero sample SD should not be interpreted as zero underlying model variability."
+  ],
+  "pattern_implications": [],
+  "raw_scores": [
+    {
+      "review_id": "R5LL7GH7",
+      "blind_id": "YXGBUA",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 4,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 4.6
+    },
+    {
+      "review_id": "RFKMTZVW",
+      "blind_id": "769NJS",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 4,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 4.6
+    },
+    {
+      "review_id": "RWSYLBBA",
+      "blind_id": "CXGWJK",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 4,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 4.6
+    },
+    {
+      "review_id": "R96L5A8T",
+      "blind_id": "3NNLR3",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 4,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 4.6
+    },
+    {
+      "review_id": "RXQZYDW7",
+      "blind_id": "FWNGNQ",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 5,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RQ8SMP5F",
+      "blind_id": "DFPYPK",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 5,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "RE3Z3LLL",
+      "blind_id": "C9MPA3",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 5,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "review_id": "R9KL5T55",
+      "blind_id": "4B5KBD",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 5,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 5.0
+    }
+  ]
+}
