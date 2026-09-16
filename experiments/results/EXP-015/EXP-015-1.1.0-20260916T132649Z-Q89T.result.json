@@ -1,0 +1,188 @@
+{
+  "result_id": "EXP-015-1.1.0-20260916T132649Z-Q89T",
+  "experiment_id": "EXP-015",
+  "experiment_version": "1.1.0",
+  "run_id": "EXP-015-1.1.0-20260916T132649Z-Q89T",
+  "status": "revealed",
+  "hypothesis": "Resolving an anachronistic object into a period-compatible positive instruction before composition improves historical-cultural coherence compared with retaining the conflicting modern object and relying on post-hoc negative prompting.",
+  "primary_dimension": "historical_cultural_coherence",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_sha256": "ca3454985c85bac71f003d04f830f18c4e75a2015dc7b7300965ca0ea119d188",
+    "mapping_commitment_sha256": "692bb0105f266f29186526cbe87f91ad4170424d3505929c3e6937b798c3250d",
+    "frozen_at_utc": "2026-09-16T16:50:44.881100+00:00",
+    "revealed_at_utc": "2026-09-16T17:02:37.674006+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A03",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "post_hoc_negative_only",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.5,
+        "technical_defects": 5.0,
+        "historical_cultural_coherence": 4.0,
+        "overall": 4.625
+      },
+      "overall_sample_sd": 0.14433756729740643
+    },
+    "variant": {
+      "factor": "pre_resolved_positive_content",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 5.0,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 5.0,
+        "historical_cultural_coherence": 4.0,
+        "overall": 4.6875
+      },
+      "overall_sample_sd": 0.125
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 0.0,
+    "aesthetic_quality": 0.25,
+    "technical_defects": 0.0,
+    "historical_cultural_coherence": 0.0,
+    "overall": 0.0625
+  },
+  "evidence_classification": "inconclusive",
+  "interpretation": "In the TB-A03 historically grounded scholar-study transfer context, pre-resolving the anachronistic positive object did not improve the registered primary historical_cultural_coherence dimension. Both conditions scored 4.00, producing a variant-minus-control delta of 0.00. The pre-resolved-positive-content condition improved aesthetic_quality from 4.50 to 4.75, while semantic_compliance and technical_defects were unchanged at 5.00. Overall mean increased from 4.6250 to 4.6875. EXP-015 is therefore inconclusive.",
+  "limitations": [
+    "Four replicates per condition are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A03 Ming-period scholar-study transfer context.",
+    "The primary historical_cultural_coherence score was 4 in every replicate of both conditions, limiting sensitivity to smaller effects.",
+    "Shared historical-authenticity weaknesses unrelated to the manipulated lamp phrase may have affected the primary score.",
+    "A zero observed primary-dimension difference does not establish equivalence between the two prompting approaches."
+  ],
+  "pattern_implications": [],
+  "raw_scores": [
+    {
+      "review_id": "RUZWXJPN",
+      "blind_id": "GAWWZE",
+      "variant_id": "control",
+      "factor": "post_hoc_negative_only",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RWTDMWTX",
+      "blind_id": "ZR5HLN",
+      "variant_id": "control",
+      "factor": "post_hoc_negative_only",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RD7KH66E",
+      "blind_id": "Y4H7DN",
+      "variant_id": "control",
+      "factor": "post_hoc_negative_only",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RVC5ME6P",
+      "blind_id": "P6PQDH",
+      "variant_id": "control",
+      "factor": "post_hoc_negative_only",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "RZL5Z8C9",
+      "blind_id": "4QWA9Q",
+      "variant_id": "variant",
+      "factor": "pre_resolved_positive_content",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "R2EXFK28",
+      "blind_id": "ZY5S7S",
+      "variant_id": "variant",
+      "factor": "pre_resolved_positive_content",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.75
+    },
+    {
+      "review_id": "R2MFHKE5",
+      "blind_id": "9B55M7",
+      "variant_id": "variant",
+      "factor": "pre_resolved_positive_content",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.5
+    },
+    {
+      "review_id": "RL7836GF",
+      "blind_id": "TC8X9Z",
+      "variant_id": "variant",
+      "factor": "pre_resolved_positive_content",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 5,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "historical_cultural_coherence": 4
+      },
+      "overall": 4.75
+    }
+  ]
+}
