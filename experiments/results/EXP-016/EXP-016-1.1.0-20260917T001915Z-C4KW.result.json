@@ -1,0 +1,215 @@
+{
+  "result_id": "EXP-016-1.1.0-20260917T001915Z-C4KW",
+  "experiment_id": "EXP-016",
+  "experiment_version": "1.1.0",
+  "run_id": "EXP-016-1.1.0-20260917T001915Z-C4KW",
+  "status": "revealed",
+  "hypothesis": "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage relative to implicit multi-reference use when the references contain deliberately conflicting non-target attributes.",
+  "primary_dimension": "cross_reference_leakage_control",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "second_layer_blind_review_with_precommitted_mapping",
+    "review_set_count": 1,
+    "review_package_sha256": "dff82bdf6724dd940dd95e81c0689d1f8c854e4ce3919ab618dd3902fd5182de",
+    "review_sha256": "24a81fb40c7681f83718ae4dda17ab5f392ba5abc0788c3fbdf1c6c784caf6d2",
+    "mapping_commitment_sha256": "a6cd09c1daebdad409c8200d5d70529ff03a0bd8e5489552e05c2dfa58f7cc97",
+    "scored_candidate_sha256": "93f935d2d1b776305183fc167ed7d8b63753b90cb18e1a90e695f741df048e65",
+    "frozen_file_sha256": "8c3f9acfe2360d00a55ca5211159550420af25d24b0c373ffac61223a050c716",
+    "reviewer_bundle_sha256": "64aac90d6eed174fc4f789f14d9f8a51021680ea91dddc7546d149e8e35e7099",
+    "reveal_file_sha256": "3fd2eb1822495c40a8eaf7386468271a0df6f30b788a48ebc90c0296a0ae457d",
+    "frozen_at_utc": "2026-09-17T15:35:27.502035+00:00",
+    "revealed_at_utc": "2026-09-17T15:37:11.959797+00:00"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A08",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.1.0"
+  },
+  "variants": {
+    "control": {
+      "factor": "implicit_reference_roles_adversarial",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 2,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 1,
+        "cross_reference_leakage_control": 1,
+        "overall": 2.8
+      },
+      "overall_sample_sd": 0.0
+    },
+    "variant": {
+      "factor": "explicit_reference_roles_adversarial",
+      "n": 4,
+      "means": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 4.75,
+        "technical_defects": 5,
+        "reference_role_fidelity": 3.5,
+        "cross_reference_leakage_control": 3.5,
+        "overall": 4.15
+      },
+      "overall_sample_sd": 0.34156502553198653
+    }
+  },
+  "deltas_variant_minus_control": {
+    "semantic_compliance": 2,
+    "aesthetic_quality": -0.25,
+    "technical_defects": 0,
+    "reference_role_fidelity": 2.5,
+    "cross_reference_leakage_control": 2.5,
+    "overall": 1.3500000000000005
+  },
+  "observed_score_signal_classification": "supports",
+  "evidence_classification": "inconclusive",
+  "evidence_classification_reason": "The frozen blind scores strongly favor explicit reference-role declarations on the registered primary dimension, but the available host-generation record does not independently verify, for every sample, the binding of the intended task prompt and all three frozen references. The score-level signal is therefore retained as supports while the final experiment-level evidence classification remains inconclusive.",
+  "generation_provenance_assessment": {
+    "per_sample_prompt_and_reference_binding": "not_independently_verifiable_from_available_host_record",
+    "effect_on_classification": "score_signal_supports_but_final_evidence_inconclusive"
+  },
+  "interpretation": "In the TB-A08 adversarial three-reference context, the explicit-role condition increased mean cross_reference_leakage_control from 1.00 to 3.50, a variant-minus-control difference of +2.50. reference_role_fidelity also increased from 1.00 to 3.50, while semantic_compliance increased from 2.00 to 4.00. Technical cleanliness was unchanged at 5.00. Aesthetic quality decreased slightly from 5.00 to 4.75. Every explicit-role replicate exceeded every implicit-role replicate on the registered primary dimension. These frozen blind scores provide a strong positive observed signal for explicit role declarations under adversarial reference conflict. However, because the available host-generation provenance does not independently establish per-sample prompt-plus-reference binding, the run is conservatively classified inconclusive at the experiment-evidence level.",
+  "limitations": [
+    "Four replicates per condition are insufficient for a statistical-significance claim.",
+    "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to TB-A08 and the three frozen adversarial IDF-A02, OTF-A02, and POF-A02 fixtures.",
+    "The available host-generation record does not independently verify the intended prompt plus all three frozen reference bindings for every individual generated sample.",
+    "The zero control overall sample SD describes this four-image review sample only and must not be interpreted as zero underlying model variability.",
+    "Residual leakage remained in the explicit-role condition: three of four variant replicates scored 3 on the primary dimension rather than 5."
+  ],
+  "pattern_implications": [
+    "The blind-score signal favors explicit identity, outfit, and pose role declarations when references contain adversarial non-target attributes.",
+    "No VisualPattern confidence is changed automatically from EXP-016 because the final experiment-level evidence classification is inconclusive.",
+    "No compiler rule is promoted from this run alone.",
+    "No golden benchmark is promoted from this run."
+  ],
+  "raw_scores": [
+    {
+      "review_id": "RNNCEB87",
+      "blind_id": "AZ7T8P",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 2,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 1,
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 2.8
+    },
+    {
+      "review_id": "RV3GF4D8",
+      "blind_id": "8YQQMR",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 2,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 1,
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 2.8
+    },
+    {
+      "review_id": "R2YPQV6L",
+      "blind_id": "PEEKC9",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 2,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 1,
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 2.8
+    },
+    {
+      "review_id": "R52RHHPH",
+      "blind_id": "LL4U6B",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 2,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 1,
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 2.8
+    },
+    {
+      "review_id": "R9C5VKF3",
+      "blind_id": "JXBC5Y",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial",
+      "replicate": 1,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 3,
+        "cross_reference_leakage_control": 3
+      },
+      "overall": 4
+    },
+    {
+      "review_id": "RDXX466F",
+      "blind_id": "8QW5RP",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial",
+      "replicate": 2,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 4,
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 4.6
+    },
+    {
+      "review_id": "R974GGKM",
+      "blind_id": "NLZVBN",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial",
+      "replicate": 3,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 5,
+        "technical_defects": 5,
+        "reference_role_fidelity": 4,
+        "cross_reference_leakage_control": 3
+      },
+      "overall": 4.2
+    },
+    {
+      "review_id": "R5227LEH",
+      "blind_id": "QRUBH2",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial",
+      "replicate": 4,
+      "scores": {
+        "semantic_compliance": 4,
+        "aesthetic_quality": 4,
+        "technical_defects": 5,
+        "reference_role_fidelity": 3,
+        "cross_reference_leakage_control": 3
+      },
+      "overall": 3.8
+    }
+  ]
+}

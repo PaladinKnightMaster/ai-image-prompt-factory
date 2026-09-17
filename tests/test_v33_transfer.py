@@ -417,14 +417,14 @@ def test_exp014_fixture_bindings_are_frozen_and_executed():
 
     assert item["experiment_version"] == "1.1.1"
     assert item["transfer_status"] == "ready"
-def test_exp016_adversarial_fixture_bindings_are_frozen_and_ready():
+def test_exp016_adversarial_fixture_bindings_are_frozen_and_executed():
     exp16 = _load(
         "experiments/definitions/EXP-016.json"
     )
 
     assert exp16["experiment_id"] == "EXP-016"
     assert exp16["version"] == "1.1.0"
-    assert exp16["status"] == "planned"
+    assert exp16["status"] == "executed"
 
     assert (
         exp16["primary_dimension"]
