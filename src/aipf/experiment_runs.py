@@ -361,6 +361,15 @@ def create_run_plan(
         "variants": variants,
     }
 
+    execution_provenance = experiment.get(
+        "execution_provenance"
+    )
+
+    if execution_provenance is not None:
+        run["execution_provenance"] = json.loads(
+            json.dumps(execution_provenance)
+        )
+
     validate_blind_ids(run)
     return run
 

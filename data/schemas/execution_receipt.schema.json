@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v3.3/execution_receipt.schema.json",
+  "title": "AIPF Host Execution Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "blind_id",
+    "task_commitment_sha256",
+    "prompt_sha256",
+    "reference_inputs",
+    "generation_mode",
+    "provider",
+    "model",
+    "model_snapshot",
+    "settings",
+    "invocation",
+    "image_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "blind_id": {
+      "type": "string",
+      "minLength": 4,
+      "pattern": "^[A-Z2-9]+$"
+    },
+    "task_commitment_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "prompt_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "reference_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "slot",
+          "role",
+          "fixture_id",
+          "fixture_version",
+          "fixture_sha256"
+        ],
+        "properties": {
+          "slot": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fixture_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "generation_mode": {
+      "enum": [
+        "host_native",
+        "manual_import"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_snapshot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "settings": {
+      "type": "object",
+      "required": [
+        "size",
+        "quality",
+        "background"
+      ],
+      "properties": {
+        "size": {
+          "type": "string",
+          "minLength": 1
+        },
+        "quality": {
+          "type": "string",
+          "minLength": 1
+        },
+        "background": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "invocation": {
+      "type": "object",
+      "required": [
+        "mode",
+        "host_generation_id",
+        "generated_at_utc",
+        "image_count"
+      ],
+      "properties": {
+        "mode": {
+          "const": "single_sample"
+        },
+        "host_generation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generated_at_utc": {
+          "type": "string",
+          "minLength": 1
+        },
+        "image_count": {
+          "const": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "image_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

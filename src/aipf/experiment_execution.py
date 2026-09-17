@@ -13,6 +13,13 @@ from .experiment_runs import (
     sha256_file,
     validate_blind_ids,
 )
+from .execution_receipt import (
+    normalized_reference_inputs,
+    receipt_required,
+    receipt_template,
+    task_commitment_sha256,
+    validate_execution_receipt,
+)
 
 
 HOST_PACKAGE_DIRNAME = "host-package"
@@ -159,21 +166,11 @@ def export_host_package(
     *,
     output: str | Path | None = None,
 ) -> dict:
-    """Export blind-safe generation tasks for ChatGPT/host-native use.
-
-    The exported manifest intentionally omits variant/control labels. It is
-    suitable for generation operators and later blind review, while the
-    private ``run.json`` retains the treatment mapping.
-    """
     path, run = load_run(run_file)
 
-    if run.get("generation_mode") not in {
-        "host_native",
-        "manual_import",
-    }:
+    if run.get("generation_mode") not in {"host_native", "manual_import"}:
         raise ValueError(
-            "host export requires generation_mode host_native or "
-            "manual_import"
+            "host export requires generation_mode host_native or manual_import"
         )
 
     destination = (
@@ -181,13 +178,15 @@ def export_host_package(
         if output
         else path.parent / HOST_PACKAGE_DIRNAME
     )
-    host_reference_inputs = _export_reference_inputs(
-        destination,
-        run,
-    )
+    host_reference_inputs = _export_reference_inputs(destination, run)
 
     prompts_dir = destination / "prompts"
     prompts_dir.mkdir(parents=True, exist_ok=True)
+
+    requires_receipt = receipt_required(run)
+    receipts_dir = destination / "receipts"
+    if requires_receipt:
+        receipts_dir.mkdir(parents=True, exist_ok=True)
 
     tasks: list[dict] = []
 
@@ -200,34 +199,49 @@ def export_host_package(
                 encoding="utf-8",
             )
 
-            tasks.append(
-                {
-                    "blind_id": blind_id,
-                    "status": item["status"],
-                    "prompt": variant["prompt"],
-                    "prompt_sha256": variant["prompt_sha256"],
-                    "expected_filename": f"{blind_id}.png",
-                    "reference_inputs": host_reference_inputs,
-                    "settings": {
-                        "size": run["settings"]["size"],
-                        "quality": run["settings"]["quality"],
-                        "background": run["settings"].get(
-                            "background"
-                        ),
-                    },
-                }
-            )
+            commitment = task_commitment_sha256(run, variant, item)
+            task = {
+                "blind_id": blind_id,
+                "status": item["status"],
+                "prompt": variant["prompt"],
+                "prompt_sha256": variant["prompt_sha256"],
+                "task_commitment_sha256": commitment,
+                "expected_filename": f"{blind_id}.png",
+                "reference_inputs": host_reference_inputs,
+                "settings": {
+                    "size": run["settings"]["size"],
+                    "quality": run["settings"]["quality"],
+                    "background": run["settings"].get("background"),
+                },
+            }
 
-    # Blind IDs are random, so sorting by them produces a stable-looking order
-    # without exposing the underlying variant grouping.
+            if requires_receipt:
+                template_name = f"{blind_id}.receipt.template.json"
+                template_path = receipts_dir / template_name
+                template_path.write_text(
+                    json.dumps(
+                        receipt_template(run, variant, item),
+                        ensure_ascii=False,
+                        indent=2,
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+                task["receipt_template"] = f"receipts/{template_name}"
+
+            tasks.append(task)
+
     tasks.sort(key=lambda task: task["blind_id"])
 
     manifest = {
         "run_id": run["run_id"],
         "experiment_id": run["experiment_id"],
+        "experiment_version": run["experiment_version"],
         "generation_mode": run["generation_mode"],
         "model_target": run["model"],
         "model_snapshot": run["model_snapshot"],
+        "task_commitment_schema_version": "1.0.0",
+        "receipt_required": requires_receipt,
         "reference_inputs": host_reference_inputs,
         "task_count": len(tasks),
         "tasks": tasks,
@@ -235,40 +249,53 @@ def export_host_package(
 
     _write_json_atomic(destination / "manifest.json", manifest)
 
-    readme = f"""# AIPF Host-Native Experiment Package
+    if requires_receipt:
+        import_command = (
+            "aipf experiment-import <run.json> --blind-id <ID> "
+            "--image <image-file> --receipt <receipt-json>"
+        )
+        provenance_section = (
+            "This run requires one provenance receipt per sample. Perform "
+            "exactly one host invocation per blind ID, produce exactly one "
+            "image, record the host generation ID and timestamp, hash the "
+            "final image, and complete that blind ID's receipt template.\n"
+        )
+    else:
+        import_command = (
+            "aipf experiment-import <run.json> --blind-id <ID> "
+            "--image <image-file>"
+        )
+        provenance_section = ""
 
-Run: `{run['run_id']}`  
-Experiment: `{run['experiment_id']}`  
-Tasks: `{len(tasks)}`
-
-Generate exactly one image for each blind ID using the associated prompt and
-settings. When `reference_inputs` are present, attach the listed reference
-file(s) to every task using exactly the declared role and slot. Do not rename
-or merge IDs. Save the resulting image using the blind ID, for example
-`ABC234.png`.
-
-The manifest deliberately omits control/variant labels. Treatment mappings
-remain only in the private `run.json` so downstream visual review can stay
-blind.
-
-After generation, import each result with:
-
-```text
-aipf experiment-import <run.json> --blind-id <ID> --image <image-file>
-```
-"""
-    (destination / "README.md").write_text(
-        readme,
-        encoding="utf-8",
+    readme = (
+        "# AIPF Host-Native Experiment Package\n\n"
+        f"Run: `{run['run_id']}`\n"
+        f"Experiment: `{run['experiment_id']}`\n"
+        f"Tasks: `{len(tasks)}`\n"
+        f"Receipt required: `{str(requires_receipt).lower()}`\n\n"
+        "Generate exactly one image for each blind ID using its associated "
+        "prompt and settings. When reference inputs are present, attach "
+        "exactly the listed files in their declared order. Do not rename or "
+        "merge blind IDs.\n\n"
+        "The package intentionally omits treatment labels. The private run "
+        "retains the control/variant mapping.\n\n"
+        f"{provenance_section}\n"
+        "After generation, import each result with:\n\n"
+        "```text\n"
+        f"{import_command}\n"
+        "```\n"
     )
+    (destination / "README.md").write_text(readme, encoding="utf-8")
 
     return {
         "run_id": run["run_id"],
         "task_count": len(tasks),
         "reference_count": len(host_reference_inputs),
+        "receipt_required": requires_receipt,
         "output": str(destination),
         "manifest": str(destination / "manifest.json"),
     }
+
 
 
 def import_output(
@@ -280,13 +307,13 @@ def import_output(
     model: str | None = None,
     model_snapshot: str | None = None,
     notes: str | None = None,
+    receipt: str | Path | None = None,
     overwrite: bool = False,
 ) -> dict:
-    """Attach a host-native/manual image to its blind experiment slot."""
     path, run = load_run(run_file)
     source = Path(image).expanduser().resolve()
 
-    if not source.exists() or not source.is_file():
+    if not source.is_file():
         raise FileNotFoundError(source)
 
     variant, output = _find_output(run, blind_id)
@@ -295,6 +322,35 @@ def import_output(
         raise ValueError(
             f"blind_id {output['blind_id']} already has a generated output; "
             "use overwrite=True to replace it"
+        )
+
+    effective_model = model or run.get("model") or "unknown"
+    effective_snapshot = (
+        model_snapshot or run.get("model_snapshot") or "unknown"
+    )
+    source_image_sha256 = sha256_file(source)
+
+    receipt_source = None
+    receipt_payload = None
+    receipt_sha256 = None
+
+    if receipt_required(run) and receipt is None:
+        raise ValueError(
+            "this run requires an execution receipt for every imported sample"
+        )
+
+    if receipt is not None:
+        receipt_source, receipt_payload, receipt_sha256 = (
+            validate_execution_receipt(
+                receipt=receipt,
+                run=run,
+                variant=variant,
+                output=output,
+                image_sha256=source_image_sha256,
+                provider=provider,
+                model=effective_model,
+                model_snapshot=effective_snapshot,
+            )
         )
 
     suffix = source.suffix.lower() or ".png"
@@ -308,58 +364,107 @@ def import_output(
 
     shutil.copy2(source, image_path)
     image_hash = sha256_file(image_path)
+    if image_hash != source_image_sha256:
+        raise ValueError("imported image SHA-256 changed during copy")
+
+    commitment = task_commitment_sha256(run, variant, output)
+
+    receipt_name = None
+    host_generation_id = None
+    generated_at_utc = None
+
+    if receipt_payload is not None:
+        receipt_name = f"{output['blind_id']}.receipt.json"
+        receipt_target = outputs_dir / receipt_name
+        if receipt_source != receipt_target.resolve():
+            shutil.copy2(receipt_source, receipt_target)
+        if sha256_file(receipt_target) != receipt_sha256:
+            raise ValueError(
+                "execution receipt SHA-256 changed during copy"
+            )
+        host_generation_id = str(
+            receipt_payload["invocation"]["host_generation_id"]
+        ).strip()
+        generated_at_utc = str(
+            receipt_payload["invocation"]["generated_at_utc"]
+        ).strip()
 
     metadata = {
         "run_id": run["run_id"],
         "experiment_id": run["experiment_id"],
         "blind_id": output["blind_id"],
         "replicate": output["replicate"],
-        "generation_mode": run.get(
-            "generation_mode",
-            "manual_import",
-        ),
+        "generation_mode": run.get("generation_mode", "manual_import"),
         "provider": provider,
-        "model": model or run.get("model") or "unknown",
-        "model_snapshot": (
-            model_snapshot
-            or run.get("model_snapshot")
-            or "unknown"
-        ),
+        "model": effective_model,
+        "model_snapshot": effective_snapshot,
         "size": run["settings"]["size"],
         "quality": run["settings"]["quality"],
         "prompt_sha256": variant["prompt_sha256"],
+        "task_commitment_sha256": commitment,
+        "reference_inputs": normalized_reference_inputs(run),
         "imported_at_utc": _utc_now(),
         "source_image_name": source.name,
         "image_sha256": image_hash,
         "notes": notes,
     }
 
-    metadata_path.write_text(
-        json.dumps(
-            metadata,
-            ensure_ascii=False,
-            indent=2,
+    if receipt_payload is not None:
+        metadata.update(
+            {
+                "receipt": receipt_name,
+                "receipt_sha256": receipt_sha256,
+                "host_generation_id": host_generation_id,
+                "generated_at_utc": generated_at_utc,
+            }
         )
-        + "\n",
-        encoding="utf-8",
-    )
+
+    _write_json_atomic(metadata_path, metadata)
 
     output["status"] = "generated"
     output["image"] = image_name
     output["image_sha256"] = image_hash
     output["metadata"] = metadata_name
     output["error"] = None
+    output["task_commitment_sha256"] = commitment
+
+    for key in (
+        "receipt",
+        "receipt_sha256",
+        "host_generation_id",
+        "generated_at_utc",
+    ):
+        output.pop(key, None)
+
+    if receipt_payload is not None:
+        output["receipt"] = receipt_name
+        output["receipt_sha256"] = receipt_sha256
+        output["host_generation_id"] = host_generation_id
+        output["generated_at_utc"] = generated_at_utc
 
     status = _refresh_run_status(run)
     _write_json_atomic(path, run)
 
-    return {
+    result = {
         "run_id": run["run_id"],
         "blind_id": output["blind_id"],
         "image": str(image_path),
         "image_sha256": image_hash,
+        "task_commitment_sha256": commitment,
         "status": status,
     }
+
+    if receipt_payload is not None:
+        result.update(
+            {
+                "receipt": str(outputs_dir / receipt_name),
+                "receipt_sha256": receipt_sha256,
+                "host_generation_id": host_generation_id,
+            }
+        )
+
+    return result
+
 
 
 def record_failed_output(

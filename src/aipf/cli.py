@@ -75,6 +75,7 @@ def main():
     p.add_argument("run_file")
     p.add_argument("--blind-id", required=True)
     p.add_argument("--image", required=True)
+    p.add_argument("--receipt")
     p.add_argument("--provider", default="chatgpt")
     p.add_argument("--model")
     p.add_argument("--model-snapshot")
@@ -196,6 +197,7 @@ def main():
                 args.run_file,
                 blind_id=args.blind_id,
                 image=args.image,
+                receipt=args.receipt,
                 provider=args.provider,
                 model=args.model,
                 model_snapshot=args.model_snapshot,
