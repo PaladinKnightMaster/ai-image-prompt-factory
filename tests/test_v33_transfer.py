@@ -417,93 +417,206 @@ def test_exp014_fixture_bindings_are_frozen_and_executed():
 
     assert item["experiment_version"] == "1.1.1"
     assert item["transfer_status"] == "ready"
-def test_exp016_adversarial_preregistration_is_blocked_until_fixture_freeze():
-    exp16 = _load("experiments/definitions/EXP-016.json")
+def test_exp016_adversarial_fixture_bindings_are_frozen_and_ready():
+    exp16 = _load(
+        "experiments/definitions/EXP-016.json"
+    )
 
     assert exp16["experiment_id"] == "EXP-016"
-    assert exp16["version"] == "1.0.0"
+    assert exp16["version"] == "1.1.0"
     assert exp16["status"] == "planned"
-    assert exp16["primary_dimension"] == "cross_reference_leakage_control"
+
+    assert (
+        exp16["primary_dimension"]
+        == "cross_reference_leakage_control"
+    )
 
     transfer = exp16["transfer_benchmark"]
 
     assert transfer["archetype_id"] == "TB-A08"
     assert transfer["archetype_version"] == "1.0.0"
-    assert transfer["mapping_version"] == "1.0.0"
-    assert transfer["execution_readiness"] == "blocked"
+    assert transfer["mapping_version"] == "1.1.0"
+    assert transfer["execution_readiness"] == "ready"
 
-    # No fake frozen bindings are allowed in the preregistration.
-    assert exp16["requires_reference_inputs"] == []
+    refs = exp16["requires_reference_inputs"]
 
-    planned = exp16["planned_reference_inputs"]
+    assert len(refs) == 3
 
-    assert [item["fixture_id"] for item in planned] == [
-        "IDF-A02",
-        "OTF-A02",
-        "POF-A02",
+    expected = [
+        {
+            "slot": "Reference 1",
+            "role": "identity",
+            "fixture_id": "IDF-A02",
+            "fixture_version": "1.0.0",
+            "fixture_metadata_path": (
+                "benchmarks/fixtures/identity/IDF-A02/"
+                "IDF-A02.fixture.json"
+            ),
+            "fixture_sha256": (
+                "37f05e52a44bf931ac93f100c2698827"
+                "d104ada7490697edbd8b1cdb63dfd455"
+            ),
+            "fixture_width": 1122,
+            "fixture_height": 1402,
+            "fixture_relpath": (
+                "identity/IDF-A02/IDF-A02.png"
+            ),
+            "reference_role": "identity_only",
+        },
+        {
+            "slot": "Reference 2",
+            "role": "outfit",
+            "fixture_id": "OTF-A02",
+            "fixture_version": "1.0.0",
+            "fixture_metadata_path": (
+                "benchmarks/fixtures/outfit/OTF-A02/"
+                "OTF-A02.fixture.json"
+            ),
+            "fixture_sha256": (
+                "fe9ab0498f86e6db906e2b19fe770d81"
+                "4b4f731fea0f8dbc292e2be3265c8a7c"
+            ),
+            "fixture_width": 1122,
+            "fixture_height": 1402,
+            "fixture_relpath": (
+                "outfit/OTF-A02/OTF-A02.png"
+            ),
+            "reference_role": "outfit_only",
+        },
+        {
+            "slot": "Reference 3",
+            "role": "pose",
+            "fixture_id": "POF-A02",
+            "fixture_version": "1.0.0",
+            "fixture_metadata_path": (
+                "benchmarks/fixtures/pose/POF-A02/"
+                "POF-A02.fixture.json"
+            ),
+            "fixture_sha256": (
+                "4cdefa71a73ea3c7571983619663b162"
+                "a2a6b47448e2eab418b47b93730b11a8"
+            ),
+            "fixture_width": 1086,
+            "fixture_height": 1448,
+            "fixture_relpath": (
+                "pose/POF-A02/POF-A02.png"
+            ),
+            "reference_role": "pose_only",
+        },
     ]
 
-    spec_paths = [
-        "benchmarks/fixtures/identity/IDF-A02/IDF-A02.spec.json",
-        "benchmarks/fixtures/outfit/OTF-A02/OTF-A02.spec.json",
-        "benchmarks/fixtures/pose/POF-A02/POF-A02.spec.json",
-    ]
+    for req, want in zip(refs, expected):
 
-    specs = [_load(path) for path in spec_paths]
+        assert req["slot"] == want["slot"]
+        assert req["role"] == want["role"]
+        assert req["fixture_id"] == want["fixture_id"]
+        assert req["fixture_version"] == want["fixture_version"]
 
-    assert [item["reference_role"] for item in specs] == [
-        "identity_only",
-        "outfit_only",
-        "pose_only",
-    ]
+        assert (
+            req["fixture_metadata_path"]
+            == want["fixture_metadata_path"]
+        )
 
-    assert all(item["status"] == "planned" for item in specs)
+        assert (
+            req["fixture_sha256"]
+            == want["fixture_sha256"]
+        )
 
-    assert (
-        specs[0]["diagnostic_non_target_attributes"]["outfit_trap"]
-        != specs[2]["diagnostic_non_target_attributes"]["outfit_trap"]
-    )
+        assert (
+            req["fixture_width"]
+            == want["fixture_width"]
+        )
 
-    identity_traps = (
-        exp16["adversarial_leakage_diagnostics"]
-        ["registered_non_target_traps"]
-    )
+        assert (
+            req["fixture_height"]
+            == want["fixture_height"]
+        )
 
-    assert "cobalt-blue windbreaker" in identity_traps["Reference 1"]
-    assert "platinum-blond pixie hair" in identity_traps["Reference 2"]
-    assert "lime-green athletic unitard" in identity_traps["Reference 3"]
+        assert (
+            req["fixture_relpath"]
+            == want["fixture_relpath"]
+        )
+
+        assert (
+            req["fixture_policy"]
+            == "first_party_or_project_owned"
+        )
+
+        assert req["hash_required"] is True
+
+        assert (
+            req["fixture_root_env"]
+            == "AIPF_FIXTURE_PATH"
+        )
+
+        meta = _load(
+            req["fixture_metadata_path"]
+        )
+
+        assert meta["fixture_id"] == req["fixture_id"]
+        assert meta["version"] == req["fixture_version"]
+        assert meta["sha256"] == req["fixture_sha256"]
+        assert meta["width"] == req["fixture_width"]
+        assert meta["height"] == req["fixture_height"]
+
+        assert (
+            meta["reference_role"]
+            == want["reference_role"]
+        )
+
+        assert (
+            meta["fixture_root_env"]
+            == req["fixture_root_env"]
+        )
+
+        assert (
+            meta["fixture_relpath"]
+            == req["fixture_relpath"]
+        )
 
     mapping = _load(
         "benchmarks/transfer/mappings/EXP-016.v1.json"
     )
 
+    assert mapping["version"] == "1.1.0"
     assert len(mapping["mappings"]) == 1
 
     node = mapping["mappings"][0]
 
     assert node["experiment_id"] == "EXP-016"
-    assert node["experiment_version"] == "1.0.0"
+    assert node["experiment_version"] == "1.1.0"
     assert node["archetype_id"] == "TB-A08"
     assert node["archetype_version"] == "1.0.0"
-    assert node["transfer_status"] == "blocked"
+    assert node["transfer_status"] == "ready"
+
     assert (
         node["primary_dimension"]
         == "cross_reference_leakage_control"
     )
 
-    try:
-        create_run_plan(
-            "EXP-016",
-            replicates=1,
-        )
-    except ValueError as exc:
-        assert "execution_readiness" in str(exc)
-        assert "blocked" in str(exc)
-    else:
-        raise AssertionError(
-            "EXP-016 run planning must remain blocked "
-            "until adversarial fixtures are frozen"
-        )
+    # Successful creation proves the readiness gate and
+    # fixture resolver both accept the frozen bindings.
+    run = create_run_plan(
+        "EXP-016",
+        replicates=1,
+    )
+
+    assert run["experiment_id"] == "EXP-016"
+
+    prompts = {
+        item["variant_id"]: item["prompt"]
+        for item in run["variants"]
+    }
+
+    assert (
+        "Use Reference 1, Reference 2, and Reference 3"
+        in prompts["control"]
+    )
+
+    assert (
+        "Use Reference 1 for identity only"
+        in prompts["variant"]
+    )
 
 
 def test_exp016_changes_only_the_reference_role_instruction():

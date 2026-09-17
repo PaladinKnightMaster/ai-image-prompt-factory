@@ -1,6 +1,6 @@
 {
   "benchmark_layer": "transfer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "design_frozen",
   "design_basis": {
     "private_prompt_records_analyzed": 191,
@@ -37,21 +37,22 @@
   "mappings": [
     {
       "experiment_id": "EXP-016",
-      "experiment_version": "1.0.0",
+      "experiment_version": "1.1.0",
       "archetype_id": "TB-A08",
       "archetype_version": "1.0.0",
       "factor": "reference_roles_under_adversarial_conflict",
       "primary_dimension": "cross_reference_leakage_control",
-      "transfer_status": "blocked",
+      "transfer_status": "ready",
       "control_strategy": "Provide the same three preregistered adversarial references with an implicit instruction to preserve identity, outfit, and pose, without assigning which reference controls which role.",
       "variant_strategy": "Replace only the opening reference instruction with explicit identity-only, outfit-only, and pose-only role declarations plus a prohibition on unrelated cross-role transfer.",
       "single_factor_guard": "Reference images, ordering, diagnostic conflict signatures, target studio scene, composition, and all non-role prompt text must remain identical between conditions.",
       "fixture_requirements": [
-        "Reference 1 = IDF-A02 v1.0.0 adversarial identity fixture; currently preregistered but not frozen",
-        "Reference 2 = OTF-A02 v1.0.0 adversarial outfit fixture; currently preregistered but not frozen",
-        "Reference 3 = POF-A02 v1.0.0 adversarial pose fixture; currently preregistered but not frozen",
-        "all three fixture assets must pass preregistered acceptance criteria and receive immutable SHA-256 hashes before transfer_status may become ready",
-        "Reference 1 clothing/pose, Reference 2 identity/pose, and Reference 3 identity/wardrobe are registered non-target leakage traps"
+        "Reference 1 = IDF-A02 v1.0.0 adversarial identity fixture; frozen SHA-256 = 37f05e52a44bf931ac93f100c2698827d104ada7490697edbd8b1cdb63dfd455; dimensions = 1122x1402",
+        "Reference 2 = OTF-A02 v1.0.0 adversarial outfit fixture; frozen SHA-256 = fe9ab0498f86e6db906e2b19fe770d814b4f731fea0f8dbc292e2be3265c8a7c; dimensions = 1122x1402",
+        "Reference 3 = POF-A02 v1.0.0 adversarial pose fixture; frozen SHA-256 = 4cdefa71a73ea3c7571983619663b162a2a6b47448e2eab418b47b93730b11a8; dimensions = 1086x1448",
+        "all three fixtures passed preregistered acceptance criteria before freeze",
+        "reference ordering is immutable: IDF-A02, OTF-A02, POF-A02",
+        "Reference 1 clothing/pose, Reference 2 identity/pose, and Reference 3 identity/wardrobe remain registered non-target leakage traps"
       ],
       "definition_path": "experiments/definitions/EXP-016.json"
     }

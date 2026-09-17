@@ -1,0 +1,55 @@
+{
+  "fixture_id": "POF-A02",
+  "version": "1.0.0",
+  "name": "Adversarial Contrapposto Pose Fixture",
+  "fixture_type": "pose_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "adult": true,
+    "synthetic": true,
+    "identity_origin": "project_generated"
+  },
+  "reference_role": "pose_only",
+  "generation_constraints": {
+    "pose": "standing contrapposto with weight on right leg",
+    "right_leg": "nearly straight and weight bearing",
+    "left_leg": "relaxed with knee slightly bent and foot forward/outward",
+    "pelvis_shoulders": "subtle counterbalance",
+    "torso": "slight rotation toward camera",
+    "left_arm": "forearm bent with hand near waist",
+    "right_arm": "relaxed with small gap from torso",
+    "hands_feet": "both hands and both feet visible",
+    "floor_contact": "clear and physically plausible",
+    "identity_trap": "vivid copper-red high ponytail with blunt fringe",
+    "outfit_trap": "bright lime-green sleeveless athletic unitard with black side panels",
+    "background": "plain very light neutral studio",
+    "lighting": "flat even reference lighting"
+  },
+  "anti_leakage_constraints": [
+    "pose mechanics are the only intended transfer role",
+    "copper-red high ponytail is a diagnostic non-target identity attribute",
+    "blunt fringe is a diagnostic non-target identity attribute",
+    "lime-green athletic unitard is a diagnostic non-target wardrobe attribute",
+    "black side panels are a diagnostic non-target wardrobe attribute",
+    "reference background is not intended for transfer"
+  ],
+  "sha256": "4cdefa71a73ea3c7571983619663b162a2a6b47448e2eab418b47b93730b11a8",
+  "width": 1086,
+  "height": 1448,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned adversarial pose fixture generated from the preregistered POF-A02 specification and accepted only against its registered criteria."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "517b37d9-aab0-430a-8c89-0cee8b91a374",
+    "source_filename": "redhead_in_lime_athletic_unitard.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "pose/POF-A02/POF-A02.png"
+}

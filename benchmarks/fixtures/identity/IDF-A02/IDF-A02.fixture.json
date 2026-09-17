@@ -1,0 +1,48 @@
+{
+  "fixture_id": "IDF-A02",
+  "version": "1.0.0",
+  "name": "Adversarial Identity Fixture",
+  "fixture_type": "identity_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "adult": true,
+    "synthetic": true,
+    "identity_origin": "project_generated"
+  },
+  "reference_role": "identity_only",
+  "generation_constraints": {
+    "identity_target": "oval face, warm-medium complexion, dark brown eyes, straight dark brows, shoulder-length dark wavy hair parted slightly left",
+    "outfit_trap": "saturated cobalt-blue hooded windbreaker, black cargo trousers, bright white high-top sneakers",
+    "pose_trap": "arms crossed firmly across torso, feet parallel, weight evenly distributed",
+    "background": "plain neutral studio background",
+    "lighting": "soft even reference lighting",
+    "text_logos_props": "none"
+  },
+  "anti_leakage_constraints": [
+    "identity is the only intended transfer role",
+    "cobalt-blue windbreaker is a diagnostic non-target attribute",
+    "black cargo trousers are a diagnostic non-target attribute",
+    "white high-top sneakers are a diagnostic non-target attribute",
+    "arms-crossed stance is a diagnostic non-target pose",
+    "reference background is not intended for transfer"
+  ],
+  "sha256": "37f05e52a44bf931ac93f100c2698827d104ada7490697edbd8b1cdb63dfd455",
+  "width": 1122,
+  "height": 1402,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned adversarial identity fixture generated from the preregistered IDF-A02 specification and accepted only against its registered criteria."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "4cf0f1ce-ca42-470b-9217-70d70997561b",
+    "source_filename": "confident_blue_jacket_portrait.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "identity/IDF-A02/IDF-A02.png"
+}

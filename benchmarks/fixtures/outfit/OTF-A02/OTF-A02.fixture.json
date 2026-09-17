@@ -1,0 +1,47 @@
+{
+  "fixture_id": "OTF-A02",
+  "version": "1.0.0",
+  "name": "Adversarial Tailored Outfit Fixture",
+  "fixture_type": "outfit_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "adult": true,
+    "synthetic": true,
+    "identity_origin": "project_generated"
+  },
+  "reference_role": "outfit_only",
+  "generation_constraints": {
+    "outfit_target": "deep burgundy cropped tailored jacket, ivory blouse, matching high-waisted wide-leg trousers",
+    "identity_trap": "very short platinum-blond pixie hair, sharply arched dark brows, narrow angular face",
+    "pose_trap": "left hand in trouser pocket, right hand on hip, left hip shifted strongly outward",
+    "background": "plain cool off-white seamless background",
+    "lighting": "soft even catalog lighting",
+    "accessories_text_logos_props": "none"
+  },
+  "anti_leakage_constraints": [
+    "outfit construction and palette are the only intended transfer role",
+    "platinum-blond pixie identity is a diagnostic non-target attribute",
+    "angular face is a diagnostic non-target identity attribute",
+    "hand-in-pocket and hand-on-hip stance is a diagnostic non-target pose",
+    "reference background is not intended for transfer"
+  ],
+  "sha256": "fe9ab0498f86e6db906e2b19fe770d814b4f731fea0f8dbc292e2be3265c8a7c",
+  "width": 1122,
+  "height": 1402,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned adversarial outfit fixture generated from the preregistered OTF-A02 specification and accepted only against its registered criteria."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "8e6294ae-9c3d-47be-8774-2e37bcfa10a7",
+    "source_filename": "burgundy_tailored_fashion_portrait.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "outfit/OTF-A02/OTF-A02.png"
+}
