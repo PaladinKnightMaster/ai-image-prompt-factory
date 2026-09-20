@@ -243,7 +243,7 @@ def test_exp017_is_exact_scientific_replication():
             encoding="utf-8"
         )
     )
-    assert exp17["status"] == "planned"
+    assert exp17["status"] == "executed"
     assert exp17["version"] == "1.0.0"
     assert exp17["hypothesis"] == exp16["hypothesis"]
     assert exp17["variants"] == exp16["variants"]

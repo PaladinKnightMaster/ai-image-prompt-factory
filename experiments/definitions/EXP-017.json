@@ -37,7 +37,7 @@
   ],
   "primary_dimension": "cross_reference_leakage_control",
   "model_target": "gpt-image-2",
-  "status": "planned",
+  "status": "executed",
   "related_patterns": [
     "reference-identity-isolation",
     "reference-outfit-isolation",

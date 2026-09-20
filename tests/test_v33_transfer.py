@@ -658,3 +658,42 @@ def test_exp016_changes_only_the_reference_role_instruction():
 
     assert review_context["treatment_visibility"] is False
     assert review_context["diagnostic_legend_visibility"] is True
+
+def test_exp017_provenance_replication_is_executed():
+    exp17 = _load(
+        "experiments/definitions/EXP-017.json"
+    )
+
+    assert exp17["experiment_id"] == "EXP-017"
+    assert exp17["version"] == "1.0.0"
+    assert exp17["status"] == "executed"
+
+    assert (
+        exp17["primary_dimension"]
+        == "cross_reference_leakage_control"
+    )
+
+    transfer = exp17["transfer_benchmark"]
+
+    assert transfer["archetype_id"] == "TB-A08"
+    assert transfer["archetype_version"] == "1.0.0"
+    assert transfer["mapping_version"] == "1.0.0"
+    assert transfer["execution_readiness"] == "ready"
+
+    replication = exp17["replication_of"]
+
+    assert replication["experiment_id"] == "EXP-016"
+    assert replication["experiment_version"] == "1.1.0"
+    assert (
+        replication["purpose"]
+        == "provenance_complete_replication"
+    )
+
+    provenance = exp17["execution_provenance"]
+
+    assert provenance["receipt_required"] is True
+    assert provenance["receipt_schema_version"] == "1.0.0"
+    assert provenance["independent_invocations_required"] is True
+    assert provenance["unique_host_generation_id_required"] is True
+    assert provenance["image_count_per_invocation"] == 1
+    assert provenance["finalize_receipt_before_next_invocation"] is True

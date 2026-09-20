@@ -638,3 +638,72 @@ def test_exp008_pattern_is_mixed_and_not_compiler_eligible():
     assert pattern["compiler_usage"]["director_gate"] is False
     assert "EXP-008-1.1.0-20260913T233423Z-E24F" in pattern["evidence"]["experiments"]
     assert "controlled_blind_experiment" in pattern["evidence"]["validation_basis"]
+
+def test_exp017_result_schema_validates():
+    schema = json.loads(
+        (
+            repo_root()
+            / "data/schemas/experiment_result.schema.json"
+        ).read_text(encoding="utf-8")
+    )
+
+    result = json.loads(
+        (
+            repo_root()
+            / (
+                "experiments/results/EXP-017/"
+                "EXP-017-1.0.0-20260917T205419Z-DZQ3.result.json"
+            )
+        ).read_text(encoding="utf-8")
+    )
+
+    Draft202012Validator(schema).validate(result)
+
+    assert result["experiment_id"] == "EXP-017"
+    assert result["experiment_version"] == "1.0.0"
+    assert result["status"] == "revealed"
+    assert result["evidence_classification"] == "supports"
+
+    assert (
+        result["primary_dimension"]
+        == "cross_reference_leakage_control"
+    )
+
+    assert (
+        result["deltas_variant_minus_control"][
+            "cross_reference_leakage_control"
+        ]
+        == 2.25
+    )
+
+    assert len(result["raw_scores"]) == 8
+
+    assert all(
+        isinstance(item, dict)
+        for item in result["pattern_implications"]
+    )
+
+def test_exp017_records_classification_process_deviation():
+    result = json.loads(
+        (
+            repo_root()
+            / (
+                "experiments/results/EXP-017/"
+                "EXP-017-1.0.0-20260917T205419Z-DZQ3.result.json"
+            )
+        ).read_text(encoding="utf-8")
+    )
+
+    note = result["analysis_provenance"][
+        "classification_process_deviation"
+    ]
+
+    assert note["occurred"] is True
+    assert note["frozen_scores_changed"] is False
+    assert note["aggregate_values_changed"] is False
+    assert note["evidence_classification_changed"] is False
+    assert note["frozen_private_analysis_overwritten"] is False
+    assert (
+        "did not preregister a numeric evidence-classification threshold"
+        in note["post_freeze_verification"]
+    )

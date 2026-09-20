@@ -1,0 +1,265 @@
+{
+    "result_id":  "EXP-017-1.0.0-20260917T205419Z-DZQ3",
+    "experiment_id":  "EXP-017",
+    "experiment_version":  "1.0.0",
+    "run_id":  "EXP-017-1.0.0-20260917T205419Z-DZQ3",
+    "status":  "revealed",
+    "hypothesis":  "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage relative to implicit multi-reference use when the references contain deliberately conflicting non-target attributes.",
+    "primary_dimension":  "cross_reference_leakage_control",
+    "generation":  {
+                       "mode":  "host_native",
+                       "model":  "gpt-image-2",
+                       "model_snapshot":  "unknown",
+                       "replicates_per_variant":  4
+                   },
+    "review":  {
+                   "protocol":  "second_layer_blind_review_with_precommitted_mapping",
+                   "review_set_count":  1,
+                   "review_package_sha256":  "f86c2f029b993cd7e4ec6dd731b3d3c185827b99cabc65cadba71455f91d711d",
+                   "review_sha256":  "43f29fecc6e3e09608e9911b5bf246d3ca016f29d601d9d39b542c241e44fdbb",
+                   "mapping_commitment_sha256":  "acc55bf38f55db542fdd2af97af448f739765f360f9a68530ea861905dba6e76",
+                   "scored_candidate_sha256":  "e922250ab0877c08fc3e60a34ae07b0a7a2e2e38c1a34e6435eb4c5522cb1587",
+                   "frozen_file_sha256":  "4d75e91bc00023444e1c48fe1d91199d3004faf8dc73a13d2a891b3e724e970e",
+                   "reviewer_bundle_sha256":  "d7aab5e0538fd0957ae3195b6268ac7b1ccc6544f0c7055095a7367d5f100a19",
+                   "reveal_file_sha256":  "358bb214841e919fc433aa0be6dac4a9dd167a90d4df8f108ee4f88ff1141076",
+                   "frozen_at_utc":  "2026-09-18T21:58:39.903170+00:00",
+                   "revealed_at_utc":  "2026-09-18T22:08:34.436689+00:00"
+               },
+    "transfer_benchmark":  {
+                               "layer":  "transfer",
+                               "archetype_id":  "TB-A08",
+                               "archetype_version":  "1.0.0",
+                               "mapping_version":  "1.0.0"
+                           },
+    "replication_of":  {
+                           "experiment_id":  "EXP-016",
+                           "experiment_version":  "1.1.0",
+                           "run_id":  "EXP-016-1.1.0-20260917T001915Z-C4KW",
+                           "purpose":  "provenance_complete_replication"
+                       },
+    "generation_provenance_assessment":  {
+                                             "workflow":  "task_commitment_plus_execution_receipt",
+                                             "receipt_required":  true,
+                                             "receipt_schema_version":  "1.0.0",
+                                             "receipt_schema_sha256":  "195908f2ec10f842b9d34a3c39f3b182241444c1d980c3b845c732e3f7fcb498",
+                                             "validated_sample_count":  8,
+                                             "per_sample_prompt_and_reference_binding":  "locally_validated_against_task_commitment_and_execution_receipt",
+                                             "provider_signed_request_metadata_available":  false,
+                                             "effect_on_classification":  "closes_the_EXP-016_local_execution_binding_limitation"
+                                         },
+    "variants":  {
+                     "control":  {
+                                     "factor":  "implicit_reference_roles_adversarial",
+                                     "n":  4,
+                                     "means":  {
+                                                   "semantic_compliance":  5,
+                                                   "aesthetic_quality":  5,
+                                                   "technical_defects":  5,
+                                                   "reference_role_fidelity":  1.75,
+                                                   "cross_reference_leakage_control":  2,
+                                                   "overall":  3.75
+                                               },
+                                     "overall_sample_sd":  0.7
+                                 },
+                     "variant":  {
+                                     "factor":  "explicit_reference_roles_adversarial",
+                                     "n":  4,
+                                     "means":  {
+                                                   "semantic_compliance":  5,
+                                                   "aesthetic_quality":  5,
+                                                   "technical_defects":  5,
+                                                   "reference_role_fidelity":  4.5,
+                                                   "cross_reference_leakage_control":  4.25,
+                                                   "overall":  4.75
+                                               },
+                                     "overall_sample_sd":  0.5
+                                 }
+                 },
+    "deltas_variant_minus_control":  {
+                                         "semantic_compliance":  0,
+                                         "aesthetic_quality":  0,
+                                         "technical_defects":  0,
+                                         "reference_role_fidelity":  2.75,
+                                         "cross_reference_leakage_control":  2.25,
+                                         "overall":  1
+                                     },
+    "observed_score_signal_classification":  "supports",
+    "evidence_classification":  "supports",
+    "evidence_classification_reason":  "The frozen blind review shows a +2.25 variant-minus-control difference on the registered cross_reference_leakage_control primary dimension and a +2.75 difference on reference_role_fidelity, with no observed mean degradation on semantic_compliance, aesthetic_quality, or technical_defects. EXP-017 also used the preregistered task-commitment and execution-receipt workflow for all eight imported samples, addressing the local execution-binding limitation that forced EXP-016 to remain inconclusive. The result is descriptive at n=4 per condition and is not a statistical-significance claim or provider-signed attestation. No numeric evidence-classification threshold was preregistered; supports is used here as a post-reveal qualitative evidence label under the repository evidence model.",
+    "replication_assessment":  {
+                                   "parent_experiment":  "EXP-016",
+                                   "parent_primary_delta":  2.5,
+                                   "replication_primary_delta":  2.25,
+                                   "direction_replicated":  true,
+                                   "interpretation":  "The positive leakage-control direction observed in EXP-016 was reproduced with locally validated task-commitment and execution-receipt records."
+                               },
+    "interpretation":  "In the TB-A08 adversarial three-reference context, explicit reference-role declarations increased mean cross_reference_leakage_control from 2.00 to 4.25, a variant-minus-control difference of +2.25. reference_role_fidelity increased from 1.75 to 4.50 (+2.75). semantic_compliance, aesthetic_quality, and technical_defects were all 5.00 in both conditions, so no observed mean tradeoff appeared on those registered dimensions. The primary replicate distributions were heterogeneous: one control replicate scored 5 while one explicit-role replicate scored 2, so the observed benefit was not uniform across every sample. This replication supports the tested hypothesis in this specific context, while remaining a descriptive small-N result.",
+    "limitations":  [
+                        "Four replicates per condition are insufficient for a statistical-significance claim.",
+                        "Only one frozen blind-review score set was used, so inter-rater reliability was not measured.",
+                        "The exact host model snapshot and reproducible generation seed were unavailable.",
+                        "The finding is specific to TB-A08 and the frozen adversarial IDF-A02, OTF-A02, and POF-A02 fixtures.",
+                        "The registered scores use an ordinal 1-5 review scale.",
+                        "semantic_compliance, aesthetic_quality, and technical_defects were ceiling-saturated at 5.00 in both conditions.",
+                        "Primary-dimension replicate performance overlapped: one control replicate scored 5 and one explicit-role replicate scored 2.",
+                        "The execution-receipt workflow provides locally validated task, prompt, reference, and output binding records, but provider-signed request metadata was unavailable."
+                    ],
+    "pattern_implications":  [
+                                 {
+                                     "pattern_id":  "reference-identity-isolation",
+                                     "evidence_direction":  "supports",
+                                     "action":  "no_automatic_change",
+                                     "reason":  "EXP-017 adds positive replication evidence in TB-A08; compiler or pattern promotion requires a separate evidence review."
+                                 },
+                                 {
+                                     "pattern_id":  "reference-outfit-isolation",
+                                     "evidence_direction":  "supports",
+                                     "action":  "no_automatic_change",
+                                     "reason":  "EXP-017 adds positive replication evidence in TB-A08; compiler or pattern promotion requires a separate evidence review."
+                                 },
+                                 {
+                                     "pattern_id":  "reference-pose-isolation",
+                                     "evidence_direction":  "supports",
+                                     "action":  "no_automatic_change",
+                                     "reason":  "EXP-017 adds positive replication evidence in TB-A08; compiler or pattern promotion requires a separate evidence review."
+                                 }
+                             ],
+    "analysis_provenance":  {
+                                "run_sha256":  "edd8b0495bc29e038e332c5a006dd6c7f6d4da8ae3a11ec63c7c9a683e099f27",
+                                "private_analysis_sha256":  "bf9af193b0bd0367a82fba422a5120fbc69762d1ab5be1c0cdc2825f19717301",
+                                "private_analysis_freeze_sha256":  "1de9e27e38fd460590e3818695f16840fcd0251ba1ae9af2f8cb49dd46656718",
+                                "private_analysis_sha256sums_sha256":  "68ec32856175ce4cf78d3feebef8c62a059677bcdf5d1b18a1e42b3627f514bd",
+                                "classification_process_deviation":  {
+                                                                         "occurred":  true,
+                                                                         "description":  "The private frozen analysis recorded the qualitative evidence classification \u0027supports\u0027 before the preregistration and repository evidence-classification conventions were re-inspected.",
+                                                                         "post_freeze_verification":  "A later read-only audit confirmed that EXP-017 preregistered descriptive analysis at n=4 per condition but did not preregister a numeric evidence-classification threshold.",
+                                                                         "publication_interpretation":  "The published \u0027supports\u0027 label is a post-reveal qualitative evidence classification under the repository evidence model, not the result of a preregistered numeric supports threshold.",
+                                                                         "frozen_scores_changed":  false,
+                                                                         "aggregate_values_changed":  false,
+                                                                         "evidence_classification_changed":  false,
+                                                                         "frozen_private_analysis_overwritten":  false
+                                                                     }
+                            },
+    "raw_scores":  [
+                       {
+                           "review_id":  "R5MLR8B9",
+                           "blind_id":  "86CVYD",
+                           "variant_id":  "control",
+                           "factor":  "implicit_reference_roles_adversarial",
+                           "replicate":  1,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  1,
+                                          "cross_reference_leakage_control":  1
+                                      },
+                           "overall":  3.4
+                       },
+                       {
+                           "review_id":  "RUF3XJNW",
+                           "blind_id":  "PS979R",
+                           "variant_id":  "control",
+                           "factor":  "implicit_reference_roles_adversarial",
+                           "replicate":  2,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  4,
+                                          "cross_reference_leakage_control":  5
+                                      },
+                           "overall":  4.8
+                       },
+                       {
+                           "review_id":  "RWY4MZ87",
+                           "blind_id":  "QRF56T",
+                           "variant_id":  "control",
+                           "factor":  "implicit_reference_roles_adversarial",
+                           "replicate":  3,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  1,
+                                          "cross_reference_leakage_control":  1
+                                      },
+                           "overall":  3.4
+                       },
+                       {
+                           "review_id":  "RMBCFZXB",
+                           "blind_id":  "FGVRCP",
+                           "variant_id":  "control",
+                           "factor":  "implicit_reference_roles_adversarial",
+                           "replicate":  4,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  1,
+                                          "cross_reference_leakage_control":  1
+                                      },
+                           "overall":  3.4
+                       },
+                       {
+                           "review_id":  "RE9WEQHB",
+                           "blind_id":  "T8CRYL",
+                           "variant_id":  "variant",
+                           "factor":  "explicit_reference_roles_adversarial",
+                           "replicate":  1,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  3,
+                                          "cross_reference_leakage_control":  2
+                                      },
+                           "overall":  4
+                       },
+                       {
+                           "review_id":  "RGHNY36A",
+                           "blind_id":  "FVNAXW",
+                           "variant_id":  "variant",
+                           "factor":  "explicit_reference_roles_adversarial",
+                           "replicate":  2,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  5,
+                                          "cross_reference_leakage_control":  5
+                                      },
+                           "overall":  5
+                       },
+                       {
+                           "review_id":  "RZTX4DY5",
+                           "blind_id":  "MK9LJE",
+                           "variant_id":  "variant",
+                           "factor":  "explicit_reference_roles_adversarial",
+                           "replicate":  3,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  5,
+                                          "cross_reference_leakage_control":  5
+                                      },
+                           "overall":  5
+                       },
+                       {
+                           "review_id":  "RCDUPUTV",
+                           "blind_id":  "RJVSTP",
+                           "variant_id":  "variant",
+                           "factor":  "explicit_reference_roles_adversarial",
+                           "replicate":  4,
+                           "scores":  {
+                                          "semantic_compliance":  5,
+                                          "aesthetic_quality":  5,
+                                          "technical_defects":  5,
+                                          "reference_role_fidelity":  5,
+                                          "cross_reference_leakage_control":  5
+                                      },
+                           "overall":  5
+                       }
+                   ]
+}
