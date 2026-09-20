@@ -1,0 +1,46 @@
+{
+  "fixture_id": "IDF-A03",
+  "planned_version": "1.0.0",
+  "status": "planned",
+  "name": "Independent Adversarial Identity Fixture",
+  "fixture_type": "identity_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "reference_role": "identity_only",
+  "purpose": "Provide a new target recognizable identity while embedding structural wardrobe and seated-orientation traps that are materially different from the color-heavy wardrobe and arms-crossed traps in IDF-A02.",
+  "target_transfer_attributes": {
+    "identity": "broad oval face, light-olive complexion, hazel eyes, softly curved dark brows, chin-length straight black bob tucked behind the right ear"
+  },
+  "diagnostic_non_target_attributes": {
+    "outfit_trap": "cream calf-length belted trench coat with bold black windowpane grid, charcoal pleated midi skirt, dark oxford shoes",
+    "pose_trap": "seated on a plain backless stool, torso turned about thirty degrees left, ankles crossed, hands resting separately on thighs"
+  },
+  "generation_prompt": "Create a first-party synthetic adult reference image for a controlled multi-reference benchmark. Show the person at full-body scale with the face clearly readable. The intended identity signature is a broad oval face, light-olive complexion, hazel eyes, softly curved dark brows, and a chin-length straight black bob tucked behind the right ear. Deliberately give this identity reference non-target wardrobe and pose attributes that must NOT transfer later: a cream calf-length belted trench coat with a bold black windowpane grid, charcoal pleated midi skirt, dark oxford shoes, seated on a plain backless stool with the torso turned about thirty degrees left, ankles crossed, and hands resting separately on the thighs. Use a plain neutral studio background and soft even reference lighting. No text, logos, handheld props, or environmental story.",
+  "acceptance_criteria": [
+    "synthetic adult subject",
+    "face clearly readable",
+    "registered identity signature visibly present",
+    "windowpane trench silhouette and grid pattern clearly readable",
+    "charcoal pleated skirt visible",
+    "seated three-quarter orientation and crossed ankles clearly readable",
+    "plain neutral studio background",
+    "no text or logos"
+  ],
+  "rejection_criteria": [
+    "identity signature is not visually readable",
+    "trench silhouette or windowpane pattern is ambiguous",
+    "seated orientation or crossed ankles are not clearly readable",
+    "cropping hides the registered wardrobe or pose traps",
+    "image contains text, logo, handheld prop, or meaningful environment",
+    "fixture substantially recreates IDF-A02 cobalt outerwear or arms-crossed trap signatures"
+  ],
+  "freeze_requirements": {
+    "asset_required": true,
+    "sha256_required": true,
+    "width_height_required": true,
+    "human_acceptance_check_required": true
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "planned_fixture_relpath": "identity/IDF-A03/IDF-A03.png",
+  "planned_fixture_metadata_path": "benchmarks/fixtures/identity/IDF-A03/IDF-A03.fixture.json"
+}

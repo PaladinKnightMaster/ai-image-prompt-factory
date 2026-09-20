@@ -45,7 +45,7 @@ def test_transfer_archetypes_validate_and_hash_their_first_party_prompts():
     archetypes = _archetypes()
 
     assert [item["archetype_id"] for item in archetypes] == [
-        "TB-A01", "TB-A02", "TB-A03", "TB-A04", "TB-A05", "TB-A06", "TB-A07", "TB-A08"
+        "TB-A01", "TB-A02", "TB-A03", "TB-A04", "TB-A05", "TB-A06", "TB-A07", "TB-A08", "TB-A09"
     ]
 
     for item in archetypes:
@@ -697,3 +697,107 @@ def test_exp017_provenance_replication_is_executed():
     assert provenance["unique_host_generation_id_required"] is True
     assert provenance["image_count_per_invocation"] == 1
     assert provenance["finalize_receipt_before_next_invocation"] is True
+
+# STEP 18C EXP-018 PREREGISTRATION CONTRACTS
+
+
+def test_per_experiment_transfer_mappings_validate_schema():
+    schema = _load("data/schemas/transfer_mapping.schema.json")
+    validator = Draft202012Validator(schema)
+
+    for rel in (
+        "benchmarks/transfer/mappings/EXP-016.v1.json",
+        "benchmarks/transfer/mappings/EXP-017.v1.json",
+        "benchmarks/transfer/mappings/EXP-018.v1.json",
+    ):
+        assert list(validator.iter_errors(_load(rel))) == []
+
+
+def test_exp018_preregisters_independent_fixture_external_validity():
+    exp17 = _load("experiments/definitions/EXP-017.json")
+    exp18 = _load("experiments/definitions/EXP-018.json")
+    mapping = _load("benchmarks/transfer/mappings/EXP-018.v1.json")
+
+    assert exp18["experiment_id"] == "EXP-018"
+    assert exp18["version"] == "1.0.0"
+    assert exp18["status"] == "planned"
+    assert exp18["baseline_prompt"] == exp17["baseline_prompt"]
+    assert exp18["variants"][0]["operation"] == "identity"
+    assert exp18["variants"][1]["operation"] == "replace_literal"
+    assert exp18["variants"][1]["old"] == exp17["variants"][1]["old"]
+    assert exp18["variants"][1]["new"] == exp17["variants"][1]["new"]
+    assert "requires_reference_inputs" not in exp18
+
+    planned = exp18["planned_reference_inputs"]
+    assert [item["fixture_id"] for item in planned] == [
+        "IDF-A03", "OTF-A03", "POF-A03"
+    ]
+    assert [item["role"] for item in planned] == ["identity", "outfit", "pose"]
+
+    transfer = exp18["transfer_benchmark"]
+    assert transfer["archetype_id"] == "TB-A09"
+    assert transfer["archetype_version"] == "1.0.0"
+    assert (
+        transfer["execution_readiness"]
+        == "requires_first_party_reference_fixtures"
+    )
+
+    assert exp18["execution_provenance"] == exp17["execution_provenance"]
+
+    rule = exp18["preregistration"]["analysis_rule"]
+    assert rule["type"] == "preregistered_descriptive_primary_delta_bands"
+    assert rule["primary_dimension"] == "cross_reference_leakage_control"
+    assert rule["statistical_claim"] == "none"
+    assert [item["classification"] for item in rule["bands"]] == [
+        "supports",
+        "weakly_supports",
+        "inconclusive",
+        "weakly_contradicts",
+        "contradicts",
+    ]
+
+    node = mapping["mappings"][0]
+    assert node["experiment_id"] == "EXP-018"
+    assert node["archetype_id"] == "TB-A09"
+    assert (
+        node["transfer_status"]
+        == "requires_first_party_reference_fixtures"
+    )
+
+
+def test_exp018_a03_fixture_specs_are_planned_and_a02_distinct():
+    specs = [
+        _load("benchmarks/fixtures/identity/IDF-A03/IDF-A03.spec.json"),
+        _load("benchmarks/fixtures/outfit/OTF-A03/OTF-A03.spec.json"),
+        _load("benchmarks/fixtures/pose/POF-A03/POF-A03.spec.json"),
+    ]
+
+    assert [item["fixture_id"] for item in specs] == [
+        "IDF-A03", "OTF-A03", "POF-A03"
+    ]
+    assert [item["reference_role"] for item in specs] == [
+        "identity_only", "outfit_only", "pose_only"
+    ]
+    assert all(item["status"] == "planned" for item in specs)
+    assert all(
+        item["freeze_requirements"]["sha256_required"] is True
+        for item in specs
+    )
+    assert all(
+        item["freeze_requirements"]["human_acceptance_check_required"] is True
+        for item in specs
+    )
+
+    public_text = "\n".join(
+        json.dumps(item, sort_keys=True) for item in specs
+    ).lower()
+
+    for a02_signature in (
+        "cobalt-blue hooded windbreaker",
+        "arms crossed firmly across torso",
+        "platinum-blond pixie hair",
+        "hand-in-pocket / hand-on-hip",
+        "copper-red high ponytail",
+        "lime-green athletic unitard",
+    ):
+        assert a02_signature not in public_text

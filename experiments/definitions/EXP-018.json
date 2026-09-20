@@ -1,0 +1,200 @@
+{
+  "experiment_id": "EXP-018",
+  "version": "1.0.0",
+  "hypothesis": "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage relative to implicit multi-reference use in an independent adversarial three-reference fixture realization whose preregistered non-target conflict signatures are materially different from TB-A08/A02.",
+  "baseline_prompt": "Use Reference 1, Reference 2, and Reference 3 to create a realistic full-body portrait while preserving the intended identity, outfit, and pose. Place the final subject in a minimalist studio with a warm-gray backdrop and soft side light. Preserve natural anatomy, a clear garment silhouette, and recognizable identity. Do not import the environment from any reference.",
+  "variants": [
+    {
+      "id": "control",
+      "factor": "implicit_reference_roles_adversarial_external_validity",
+      "operation": "identity"
+    },
+    {
+      "id": "variant",
+      "factor": "explicit_reference_roles_adversarial_external_validity",
+      "operation": "replace_literal",
+      "old": "Use Reference 1, Reference 2, and Reference 3 to create a realistic full-body portrait while preserving the intended identity, outfit, and pose.",
+      "new": "Use Reference 1 for identity only, Reference 2 for garment construction and palette only, and Reference 3 for joint arrangement and weight distribution only. Do not transfer unrelated attributes across reference roles."
+    }
+  ],
+  "preserved_dimensions": [
+    "same three A03 adversarial reference fixtures within both conditions",
+    "reference ordering",
+    "registered A03 diagnostic conflict signatures",
+    "warm-gray studio",
+    "soft side light",
+    "full-body framing",
+    "natural anatomy",
+    "garment silhouette",
+    "aspect ratio",
+    "all non-role prompt text"
+  ],
+  "evaluation_dimensions": [
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects",
+    "reference_role_fidelity",
+    "cross_reference_leakage_control"
+  ],
+  "primary_dimension": "cross_reference_leakage_control",
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "related_patterns": [
+    "reference-identity-isolation",
+    "reference-outfit-isolation",
+    "reference-pose-isolation"
+  ],
+  "planned_reference_inputs": [
+    {
+      "slot": "Reference 1",
+      "role": "identity",
+      "fixture_policy": "first_party_or_project_owned",
+      "fixture_id": "IDF-A03",
+      "planned_fixture_version": "1.0.0",
+      "fixture_spec_path": "benchmarks/fixtures/identity/IDF-A03/IDF-A03.spec.json",
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "planned_fixture_relpath": "identity/IDF-A03/IDF-A03.png"
+    },
+    {
+      "slot": "Reference 2",
+      "role": "outfit",
+      "fixture_policy": "first_party_or_project_owned",
+      "fixture_id": "OTF-A03",
+      "planned_fixture_version": "1.0.0",
+      "fixture_spec_path": "benchmarks/fixtures/outfit/OTF-A03/OTF-A03.spec.json",
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "planned_fixture_relpath": "outfit/OTF-A03/OTF-A03.png"
+    },
+    {
+      "slot": "Reference 3",
+      "role": "pose",
+      "fixture_policy": "first_party_or_project_owned",
+      "fixture_id": "POF-A03",
+      "planned_fixture_version": "1.0.0",
+      "fixture_spec_path": "benchmarks/fixtures/pose/POF-A03/POF-A03.spec.json",
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "planned_fixture_relpath": "pose/POF-A03/POF-A03.png"
+    }
+  ],
+  "adversarial_leakage_diagnostics": {
+    "target_assignment": {
+      "Reference 1": "identity only",
+      "Reference 2": "outfit construction and palette only",
+      "Reference 3": "pose mechanics only"
+    },
+    "registered_non_target_traps": {
+      "Reference 1": [
+        "cream calf-length belted trench coat with bold black windowpane grid",
+        "charcoal pleated midi skirt and dark oxford shoes",
+        "seated three-quarter orientation with ankles crossed"
+      ],
+      "Reference 2": [
+        "close-cropped silver-gray hair",
+        "thick round dark eyeglasses and a small beauty mark below the left eye",
+        "forward walking stride with the left leg leading and reciprocal arm swing"
+      ],
+      "Reference 3": [
+        "waist-length straight honey-blond hair with a center part",
+        "black-and-ivory horizontally striped oversized sweater",
+        "brick-red straight-leg trousers"
+      ]
+    },
+    "primary_scoring_guidance": {
+      "5": "No clear registered non-target trap attribute transfers into the final image.",
+      "4": "At most one subtle or ambiguous possible trap transfer; no clear role substitution.",
+      "3": "One clearly recognizable non-target trap transfers from the wrong reference role.",
+      "2": "Multiple clear non-target trap attributes transfer or one role is substantially contaminated.",
+      "1": "Cross-reference leakage dominates one or more target roles or substantially replaces the intended assignment."
+    }
+  },
+  "review_context_requirement": {
+    "reference_visibility": "Blind reviewer must receive the three frozen source references or an equivalent blinded reference sheet labeled Reference 1, Reference 2, and Reference 3.",
+    "diagnostic_legend_visibility": true,
+    "treatment_visibility": false,
+    "reason": "Cross-reference leakage cannot be scored reliably without knowing which visible attributes belong to which reference."
+  },
+  "preregistration": {
+    "parent_experiments": [
+      "EXP-016",
+      "EXP-017"
+    ],
+    "motivation": "EXP-016 and EXP-017 reproduced a positive explicit-role leakage-control direction using the same TB-A08/A02 fixture realization. EXP-018 tests whether that mechanism transfers to an independently constructed fixture set with materially different non-target conflict signatures.",
+    "replicates_per_condition": 4,
+    "reroll_policy": "no_rerolls_for_ordinary_defects",
+    "analysis_scope": "descriptive_at_n4_per_condition",
+    "blind_review_required": true,
+    "freeze_before_reveal_required": true,
+    "fixture_freeze_before_run_required": true,
+    "golden_promotion_allowed_from_single_run": false,
+    "automatic_pattern_or_compiler_promotion_allowed": false,
+    "analysis_rule": {
+      "type": "preregistered_descriptive_primary_delta_bands",
+      "primary_dimension": "cross_reference_leakage_control",
+      "statistical_claim": "none",
+      "delta_definition": "variant_mean_minus_control_mean",
+      "bands": [
+        {
+          "classification": "supports",
+          "condition": "delta >= 1.0"
+        },
+        {
+          "classification": "weakly_supports",
+          "condition": "0.5 <= delta < 1.0"
+        },
+        {
+          "classification": "inconclusive",
+          "condition": "-0.5 < delta < 0.5"
+        },
+        {
+          "classification": "weakly_contradicts",
+          "condition": "-1.0 < delta <= -0.5"
+        },
+        {
+          "classification": "contradicts",
+          "condition": "delta <= -1.0"
+        }
+      ],
+      "directional_consistency_safeguard": "Compare all 16 control-versus-variant primary-score pairs. If the mean-delta band points positive but variants do not win a strict majority of non-tied pairs, or points negative but controls do not win a strict majority of non-tied pairs, move the score-signal classification one level toward inconclusive.",
+      "ceiling_floor_safeguard": "If the control is ceiling-saturated at 5 for all four replicates, lack of positive separation cannot support the superiority hypothesis; equal 5-versus-5 is inconclusive. Analogous floor saturation must be disclosed when interpreting negative separation.",
+      "provenance_safeguard": "Record the observed score-signal classification separately. If required task, prompt, reference, and output binding cannot be locally verified for every sample, final experiment-level evidence is inconclusive even when the score signal is directional.",
+      "protocol_invalidation": [
+        "treatment revealed to blind reviewer before review freeze",
+        "fixture asset or hash changes after fixture freeze",
+        "control or variant prompt changes after preregistration without a version bump",
+        "ordinary-defect reroll",
+        "reference ordering changes",
+        "review mapping changes after freeze",
+        "required execution receipt missing or invalid"
+      ],
+      "note": "These are preregistered project-level descriptive decision bands for an ordinal 1-to-5 rubric at n=4 per condition. They are not statistical significance thresholds."
+    }
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A09",
+    "archetype_version": "1.0.0",
+    "archetype_prompt_sha256": "07d1d28d04bceca35044640fc8c504ff35fb9de0d37d2ce74c2e9026ee452fd4",
+    "mapping_version": "1.0.0",
+    "realization": "independent adversarial fixture replication of the explicit-versus-implicit three-role reference-control mechanism",
+    "execution_readiness": "requires_first_party_reference_fixtures"
+  },
+  "replication_of": {
+    "experiment_id": "EXP-017",
+    "experiment_version": "1.0.0",
+    "purpose": "independent_fixture_external_validity_replication"
+  },
+  "execution_provenance": {
+    "receipt_required": true,
+    "receipt_schema_version": "1.0.0",
+    "independent_invocations_required": true,
+    "unique_host_generation_id_required": true,
+    "image_count_per_invocation": 1,
+    "finalize_receipt_before_next_invocation": true
+  },
+  "promotion_boundaries": {
+    "automatic_pattern_confidence_change": false,
+    "automatic_compiler_change": false,
+    "automatic_golden_promotion": false,
+    "post_result_action": "separate_evidence_review_required"
+  }
+}

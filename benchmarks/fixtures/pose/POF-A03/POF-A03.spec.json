@@ -1,0 +1,47 @@
+{
+  "fixture_id": "POF-A03",
+  "planned_version": "1.0.0",
+  "status": "planned",
+  "name": "Independent Adversarial Side-Lunge Pose Fixture",
+  "fixture_type": "pose_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "reference_role": "pose_only",
+  "purpose": "Provide a new asymmetric side-lunge joint arrangement and weight distribution while embedding patterned wardrobe and long-hair identity traps that are materially different from POF-A02.",
+  "target_transfer_attributes": {
+    "pose": "wide side lunge toward the viewer's left with weight on the bent left leg; right leg extended laterally with foot flat; torso upright with a slight counter-rotation; left forearm angled across the midline without covering the face; right arm extended diagonally downward with a visible hand; both feet fully visible with plausible floor contact"
+  },
+  "diagnostic_non_target_attributes": {
+    "identity_trap": "waist-length straight honey-blond hair with a center part",
+    "outfit_trap": "black-and-ivory horizontally striped oversized sweater with brick-red straight-leg trousers"
+  },
+  "generation_prompt": "Create a first-party synthetic adult full-body pose reference for a controlled multi-reference benchmark. The intended pose transfer is a wide side lunge toward the viewer's left with weight on the bent left leg, the right leg extended laterally with the foot flat, torso upright with slight counter-rotation, left forearm angled across the midline without covering the face, right arm extended diagonally downward with the hand visible, and both feet fully visible with plausible floor contact. Deliberately give this pose reference a different synthetic identity and wardrobe that must NOT transfer later: waist-length straight honey-blond hair with a center part, plus a black-and-ivory horizontally striped oversized sweater and brick-red straight-leg trousers. Use a plain very light neutral studio background and flat even reference lighting. No accessories, text, logos, handheld props, or environmental story.",
+  "acceptance_criteria": [
+    "synthetic adult subject distinct from both other planned fixture identities",
+    "registered side-lunge mechanics clearly readable",
+    "both hands and both feet visible",
+    "clear plausible floor contact",
+    "waist-length honey-blond hair clearly visible",
+    "horizontal striped sweater and brick-red trousers clearly readable",
+    "plain very light neutral background",
+    "no accessories, text, or logos"
+  ],
+  "rejection_criteria": [
+    "target side-lunge mechanics are ambiguous",
+    "hands or feet are cropped",
+    "long-hair identity trap is not visually clear",
+    "striped sweater or brick-red trouser trap is not visually clear",
+    "wardrobe physically constrains the pose so strongly that pose and clothing cannot be judged separately",
+    "image contains text, logo, handheld prop, or meaningful environment",
+    "fixture substantially recreates POF-A02 red-ponytail or lime-unitard trap signatures"
+  ],
+  "freeze_requirements": {
+    "asset_required": true,
+    "sha256_required": true,
+    "width_height_required": true,
+    "human_acceptance_check_required": true
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "planned_fixture_relpath": "pose/POF-A03/POF-A03.png",
+  "planned_fixture_metadata_path": "benchmarks/fixtures/pose/POF-A03/POF-A03.fixture.json"
+}

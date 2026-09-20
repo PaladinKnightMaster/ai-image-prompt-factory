@@ -88,8 +88,7 @@
     },
     "mappings": {
       "type": "array",
-      "minItems": 9,
-      "maxItems": 9,
+      "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": false,

@@ -1,0 +1,59 @@
+{
+  "benchmark_layer": "transfer",
+  "version": "1.0.0",
+  "status": "design_frozen",
+  "design_basis": {
+    "private_prompt_records_analyzed": 191,
+    "aggregate_category_signals": {
+      "composition": 557,
+      "lighting": 660,
+      "wardrobe": 483,
+      "material": 368,
+      "pose": 252,
+      "hand_logic": 219,
+      "narrative": 78,
+      "fabric_physics": 51,
+      "reference_role": 41
+    },
+    "aggregate_method_signals": {
+      "structure": 181,
+      "emotion": 138,
+      "medium": 131,
+      "design_system": 119,
+      "constraint": 111,
+      "variable_template": 86,
+      "narrative": 27,
+      "reference": 20
+    },
+    "raw_private_content_embedded": false
+  },
+  "rules": {
+    "one_factor_per_run": true,
+    "freeze_archetype_version_before_generation": true,
+    "no_pattern_auto_promotion": true,
+    "private_corpus_as_fixture_forbidden": true,
+    "first_party_reference_fixtures_only": true
+  },
+  "mappings": [
+    {
+      "experiment_id": "EXP-018",
+      "experiment_version": "1.0.0",
+      "archetype_id": "TB-A09",
+      "archetype_version": "1.0.0",
+      "factor": "reference_roles_under_independent_adversarial_conflict",
+      "primary_dimension": "cross_reference_leakage_control",
+      "transfer_status": "requires_first_party_reference_fixtures",
+      "control_strategy": "Provide the same three preregistered A03 adversarial references with an implicit instruction to preserve identity, outfit, and pose, without assigning which reference controls which role.",
+      "variant_strategy": "Replace only the opening reference instruction with explicit identity-only, outfit-only, and pose-only role declarations plus a prohibition on unrelated cross-role transfer.",
+      "single_factor_guard": "Within EXP-018, reference images, ordering, A03 diagnostic conflict signatures, target studio scene, composition, and all non-role prompt text must remain identical between conditions. The A03 fixture set is the fixed experimental context, not an additional treatment factor.",
+      "fixture_requirements": [
+        "Reference 1 = planned IDF-A03 v1.0.0 identity fixture; must pass preregistered acceptance criteria and be frozen with SHA-256 and dimensions before execution",
+        "Reference 2 = planned OTF-A03 v1.0.0 outfit fixture; must pass preregistered acceptance criteria and be frozen with SHA-256 and dimensions before execution",
+        "Reference 3 = planned POF-A03 v1.0.0 pose fixture; must pass preregistered acceptance criteria and be frozen with SHA-256 and dimensions before execution",
+        "reference ordering is immutable after freeze: IDF-A03, OTF-A03, POF-A03",
+        "A03 non-target traps must remain materially distinct from the registered A02 trap signatures"
+      ],
+      "definition_path": "experiments/definitions/EXP-018.json"
+    }
+  ]
+}

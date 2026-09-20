@@ -1,0 +1,47 @@
+{
+  "fixture_id": "OTF-A03",
+  "planned_version": "1.0.0",
+  "status": "planned",
+  "name": "Independent Adversarial Structured Outfit Fixture",
+  "fixture_type": "outfit_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "reference_role": "outfit_only",
+  "purpose": "Provide a new target garment construction and restrained palette while embedding grooming/accessory identity cues and walking-motion traps that are materially different from OTF-A02.",
+  "target_transfer_attributes": {
+    "outfit": "charcoal double-breasted waistcoat over a fine cream-and-gray pinstripe shirt, asymmetrical slate wrap skirt over narrow black trousers, matte black knee-high boots"
+  },
+  "diagnostic_non_target_attributes": {
+    "identity_trap": "close-cropped silver-gray hair, thick round dark eyeglasses, small beauty mark below the left eye",
+    "pose_trap": "forward walking stride with left leg leading, right heel lifted, left arm swung back and right arm swung forward"
+  },
+  "generation_prompt": "Create a first-party synthetic adult full-body fashion reference for a controlled multi-reference benchmark. The intended outfit transfer is a charcoal double-breasted waistcoat over a fine cream-and-gray pinstripe shirt, an asymmetrical slate wrap skirt layered over narrow black trousers, and matte black knee-high boots. Deliberately place that target outfit on a clearly different synthetic identity that must NOT transfer later: close-cropped silver-gray hair, thick round dark eyeglasses, and a small beauty mark below the left eye. Also use a non-target walking pose that must NOT transfer: left leg leading, right heel lifted, left arm swung back, and right arm swung forward. Keep the complete garment silhouette visible against a plain cool off-white seamless background with soft even catalog lighting. No jewelry, text, logos, handheld props, or environmental story.",
+  "acceptance_criteria": [
+    "synthetic adult subject distinct from IDF-A03 identity",
+    "complete target garment silhouette visible",
+    "double-breasted waistcoat and pinstripe shirt clearly readable",
+    "asymmetrical wrap-skirt-over-trousers construction clearly readable",
+    "silver-gray cropped hair and round eyeglasses clearly visible",
+    "registered forward walking stride clearly visible",
+    "plain cool off-white background",
+    "no jewelry, text, or logos"
+  ],
+  "rejection_criteria": [
+    "target outfit construction is obscured",
+    "pinstripe or layered wrap silhouette is not readable",
+    "registered identity cues are not visually clear",
+    "walking stride is ambiguous",
+    "subject resembles the planned IDF-A03 identity too closely",
+    "image contains text, logo, handheld prop, or meaningful environment",
+    "fixture substantially recreates OTF-A02 platinum-pixie or hand-on-hip trap signatures"
+  ],
+  "freeze_requirements": {
+    "asset_required": true,
+    "sha256_required": true,
+    "width_height_required": true,
+    "human_acceptance_check_required": true
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "planned_fixture_relpath": "outfit/OTF-A03/OTF-A03.png",
+  "planned_fixture_metadata_path": "benchmarks/fixtures/outfit/OTF-A03/OTF-A03.fixture.json"
+}
