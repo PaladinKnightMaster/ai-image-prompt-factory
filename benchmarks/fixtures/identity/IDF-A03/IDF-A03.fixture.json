@@ -1,0 +1,48 @@
+{
+  "fixture_id": "IDF-A03",
+  "version": "1.0.0",
+  "name": "Independent Adversarial Identity Fixture",
+  "fixture_type": "identity_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "adult": true,
+    "synthetic": true,
+    "identity_origin": "project_generated"
+  },
+  "reference_role": "identity_only",
+  "generation_constraints": {
+    "identity_target": "broad oval face, light-olive complexion, hazel eyes, softly curved dark brows, chin-length straight black bob tucked behind the right ear",
+    "outfit_trap": "cream calf-length belted trench coat with bold black windowpane grid, charcoal pleated midi skirt, dark oxford shoes",
+    "pose_trap": "seated on a plain backless stool, torso turned about thirty degrees left, ankles crossed, hands resting separately on thighs",
+    "background": "plain neutral studio background",
+    "lighting": "soft even reference lighting",
+    "text_logos_props": "none"
+  },
+  "anti_leakage_constraints": [
+    "identity is the only intended transfer role",
+    "windowpane trench coat is a diagnostic non-target wardrobe attribute",
+    "charcoal pleated midi skirt is a diagnostic non-target wardrobe attribute",
+    "dark oxford shoes are a diagnostic non-target wardrobe attribute",
+    "seated three-quarter orientation with crossed ankles is a diagnostic non-target pose",
+    "reference background is not intended for transfer"
+  ],
+  "sha256": "a19a8ba36ffe63e4f26a3229b6fb82c06852cbce4fc795f44a60089e726c568d",
+  "width": 1086,
+  "height": 1448,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned adversarial identity fixture generated from the preregistered IDF-A03 specification and accepted only against its registered criteria."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "166ab09d-ff63-4819-ab93-99a8cd7ac758",
+    "source_filename": "elegant_checkered_trench_coat_portrait.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "identity/IDF-A03/IDF-A03.png"
+}
