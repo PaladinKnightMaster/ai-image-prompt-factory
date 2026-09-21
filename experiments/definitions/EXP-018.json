@@ -44,6 +44,50 @@
     "reference-outfit-isolation",
     "reference-pose-isolation"
   ],
+  "requires_reference_inputs": [
+    {
+      "slot": "Reference 1",
+      "role": "identity",
+      "fixture_policy": "first_party_or_project_owned",
+      "hash_required": true,
+      "fixture_id": "IDF-A03",
+      "fixture_version": "1.0.0",
+      "fixture_metadata_path": "benchmarks/fixtures/identity/IDF-A03/IDF-A03.fixture.json",
+      "fixture_sha256": "a19a8ba36ffe63e4f26a3229b6fb82c06852cbce4fc795f44a60089e726c568d",
+      "fixture_width": 1086,
+      "fixture_height": 1448,
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "fixture_relpath": "identity/IDF-A03/IDF-A03.png"
+    },
+    {
+      "slot": "Reference 2",
+      "role": "outfit",
+      "fixture_policy": "first_party_or_project_owned",
+      "hash_required": true,
+      "fixture_id": "OTF-A03",
+      "fixture_version": "1.0.0",
+      "fixture_metadata_path": "benchmarks/fixtures/outfit/OTF-A03/OTF-A03.fixture.json",
+      "fixture_sha256": "6be0348e5100cb9cb51c0827f3ab7c0647b4c16f5f4debe81e4e200537803d2c",
+      "fixture_width": 1086,
+      "fixture_height": 1448,
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "fixture_relpath": "outfit/OTF-A03/OTF-A03.png"
+    },
+    {
+      "slot": "Reference 3",
+      "role": "pose",
+      "fixture_policy": "first_party_or_project_owned",
+      "hash_required": true,
+      "fixture_id": "POF-A03",
+      "fixture_version": "1.0.0",
+      "fixture_metadata_path": "benchmarks/fixtures/pose/POF-A03/POF-A03.fixture.json",
+      "fixture_sha256": "6dac445003d75b4679a0e10ef1cb0bc8ebc66142ab809e1a633ece58f0a69eae",
+      "fixture_width": 1086,
+      "fixture_height": 1448,
+      "fixture_root_env": "AIPF_FIXTURE_PATH",
+      "fixture_relpath": "pose/POF-A03/POF-A03.png"
+    }
+  ],
   "planned_reference_inputs": [
     {
       "slot": "Reference 1",
@@ -176,7 +220,7 @@
     "archetype_prompt_sha256": "07d1d28d04bceca35044640fc8c504ff35fb9de0d37d2ce74c2e9026ee452fd4",
     "mapping_version": "1.0.0",
     "realization": "independent adversarial fixture replication of the explicit-versus-implicit three-role reference-control mechanism",
-    "execution_readiness": "requires_first_party_reference_fixtures"
+    "execution_readiness": "ready"
   },
   "replication_of": {
     "experiment_id": "EXP-017",

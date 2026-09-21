@@ -42,16 +42,18 @@
       "archetype_version": "1.0.0",
       "factor": "reference_roles_under_independent_adversarial_conflict",
       "primary_dimension": "cross_reference_leakage_control",
-      "transfer_status": "requires_first_party_reference_fixtures",
+      "transfer_status": "ready",
       "control_strategy": "Provide the same three preregistered A03 adversarial references with an implicit instruction to preserve identity, outfit, and pose, without assigning which reference controls which role.",
       "variant_strategy": "Replace only the opening reference instruction with explicit identity-only, outfit-only, and pose-only role declarations plus a prohibition on unrelated cross-role transfer.",
       "single_factor_guard": "Within EXP-018, reference images, ordering, A03 diagnostic conflict signatures, target studio scene, composition, and all non-role prompt text must remain identical between conditions. The A03 fixture set is the fixed experimental context, not an additional treatment factor.",
       "fixture_requirements": [
-        "Reference 1 = planned IDF-A03 v1.0.0 identity fixture; must pass preregistered acceptance criteria and be frozen with SHA-256 and dimensions before execution",
-        "Reference 2 = planned OTF-A03 v1.0.0 outfit fixture; must pass preregistered acceptance criteria and be frozen with SHA-256 and dimensions before execution",
-        "Reference 3 = planned POF-A03 v1.0.0 pose fixture; must pass preregistered acceptance criteria and be frozen with SHA-256 and dimensions before execution",
-        "reference ordering is immutable after freeze: IDF-A03, OTF-A03, POF-A03",
-        "A03 non-target traps must remain materially distinct from the registered A02 trap signatures"
+        "Reference 1 = IDF-A03 v1.0.0 adversarial identity fixture; frozen SHA-256 = a19a8ba36ffe63e4f26a3229b6fb82c06852cbce4fc795f44a60089e726c568d; dimensions = 1086x1448",
+        "Reference 2 = OTF-A03 v1.0.0 adversarial outfit fixture; frozen SHA-256 = 6be0348e5100cb9cb51c0827f3ab7c0647b4c16f5f4debe81e4e200537803d2c; dimensions = 1086x1448",
+        "Reference 3 = POF-A03 v1.0.0 adversarial pose fixture; frozen SHA-256 = 6dac445003d75b4679a0e10ef1cb0bc8ebc66142ab809e1a633ece58f0a69eae; dimensions = 1086x1448",
+        "all three fixtures passed preregistered acceptance criteria before freeze",
+        "reference ordering is immutable: IDF-A03, OTF-A03, POF-A03",
+        "Reference 1 clothing/pose, Reference 2 identity/pose, and Reference 3 identity/wardrobe remain registered non-target leakage traps",
+        "A03 non-target traps remain materially distinct from the registered A02 trap signatures"
       ],
       "definition_path": "experiments/definitions/EXP-018.json"
     }
