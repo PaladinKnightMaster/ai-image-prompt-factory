@@ -1,0 +1,47 @@
+{
+  "fixture_id": "POF-A03",
+  "version": "1.0.0",
+  "name": "Independent Adversarial Side-Lunge Pose Fixture",
+  "fixture_type": "pose_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "adult": true,
+    "synthetic": true,
+    "identity_origin": "project_generated"
+  },
+  "reference_role": "pose_only",
+  "generation_constraints": {
+    "pose_target": "wide side lunge toward the viewer's left with weight on the bent left leg; right leg extended laterally with foot flat; torso upright with slight counter-rotation; left forearm angled across the midline without covering the face; right arm extended diagonally downward with a visible hand; both feet fully visible with plausible floor contact",
+    "identity_trap": "waist-length straight honey-blond hair with a center part",
+    "outfit_trap": "black-and-ivory horizontally striped oversized sweater with brick-red straight-leg trousers",
+    "background": "plain very light neutral studio background",
+    "lighting": "flat even reference lighting",
+    "accessories_text_logos_props": "none"
+  },
+  "anti_leakage_constraints": [
+    "pose mechanics are the only intended transfer role",
+    "waist-length straight honey-blond center-parted hair is a diagnostic non-target identity attribute",
+    "black-and-ivory horizontally striped oversized sweater is a diagnostic non-target wardrobe attribute",
+    "brick-red straight-leg trousers are a diagnostic non-target wardrobe attribute",
+    "reference background is not intended for transfer"
+  ],
+  "sha256": "6dac445003d75b4679a0e10ef1cb0bc8ebc66142ab809e1a633ece58f0a69eae",
+  "width": 1086,
+  "height": 1448,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned adversarial pose fixture generated from the preregistered POF-A03 specification and accepted only against its registered criteria."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "3ec6e584-0d01-44a3-99fe-3a51eaa62dbe",
+    "source_filename": "striped_sweater_side_lunge.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "pose/POF-A03/POF-A03.png"
+}
