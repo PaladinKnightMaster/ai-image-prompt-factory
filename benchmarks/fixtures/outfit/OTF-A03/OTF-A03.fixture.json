@@ -1,0 +1,48 @@
+{
+  "fixture_id": "OTF-A03",
+  "version": "1.0.0",
+  "name": "Independent Adversarial Structured Outfit Fixture",
+  "fixture_type": "outfit_reference",
+  "ownership": "first_party_project_owned",
+  "publication_safe": true,
+  "subject": {
+    "adult": true,
+    "synthetic": true,
+    "identity_origin": "project_generated"
+  },
+  "reference_role": "outfit_only",
+  "generation_constraints": {
+    "outfit_target": "charcoal double-breasted waistcoat over a fine cream-and-gray pinstripe shirt, asymmetrical slate wrap skirt over narrow black trousers, matte black knee-high boots",
+    "identity_trap": "close-cropped silver-gray hair, thick round dark eyeglasses, small beauty mark below the left eye",
+    "pose_trap": "forward walking stride with left leg leading, right heel lifted, left arm swung back and right arm swung forward",
+    "background": "plain cool off-white seamless background",
+    "lighting": "soft even catalog lighting",
+    "accessories_text_logos_props": "none"
+  },
+  "anti_leakage_constraints": [
+    "outfit construction and palette are the only intended transfer role",
+    "silver-gray cropped hair is a diagnostic non-target identity attribute",
+    "round dark eyeglasses are a diagnostic non-target identity attribute",
+    "beauty mark below the left eye is a diagnostic non-target identity attribute",
+    "forward walking stride is a diagnostic non-target pose",
+    "reference background is not intended for transfer"
+  ],
+  "sha256": "6be0348e5100cb9cb51c0827f3ab7c0647b4c16f5f4debe81e4e200537803d2c",
+  "width": 1086,
+  "height": 1448,
+  "provenance": {
+    "private_corpus_used_as_fixture": false,
+    "external_creator_image_used": false,
+    "first_party_generated": true,
+    "notes": "Synthetic project-owned adversarial outfit fixture generated from the preregistered OTF-A03 specification and accepted only against its registered criteria."
+  },
+  "generation_record": {
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "host_mode": "host_native",
+    "gen_id": "661b6e02-85f3-4cb5-8312-05a36215fbc3",
+    "source_filename": "silver_haired_stride_in_tailored_layers.png"
+  },
+  "fixture_root_env": "AIPF_FIXTURE_PATH",
+  "fixture_relpath": "outfit/OTF-A03/OTF-A03.png"
+}
