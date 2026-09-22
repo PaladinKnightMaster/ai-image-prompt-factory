@@ -1,0 +1,200 @@
+{
+  "result_id": "EXP-018-1.0.0-20260921T214945Z-9ZJV",
+  "experiment_id": "EXP-018",
+  "experiment_version": "1.0.0",
+  "run_id": "EXP-018-1.0.0-20260921T214945Z-9ZJV",
+  "status": "revealed",
+  "hypothesis": "Explicit identity, outfit, and pose role declarations reduce cross-reference leakage relative to implicit multi-reference use in an independent adversarial three-reference fixture realization whose preregistered non-target conflict signatures are materially different from TB-A08/A02.",
+  "primary_dimension": "cross_reference_leakage_control",
+  "generation": {
+    "mode": "host_native",
+    "model": "gpt-image-2",
+    "model_snapshot": "unknown",
+    "replicates_per_variant": 4
+  },
+  "review": {
+    "protocol": "independent_blind_primary_review_with_frozen_score_artifact",
+    "review_set_count": 1,
+    "review_package_sha256": "da3a401733258130adaf68da8f14d605a91cfa3dbe0be30783a6cc64aa20f9e6",
+    "review_sha256": "5f404d6e917ac5459470d314a72b71a0e38074d8a26b407509dcf71a011edad3",
+    "scored_candidate_sha256": "94131f8692782d84cffbdcd076351f09661ff0eaae9439c01c14e99acac741b0",
+    "mapping_commitment_sha256": "697148495dc44b5eb4620015b7b55a793a74b2a3307434c12451e25cd5095f93",
+    "completed_blind_run_freeze_sha256": "0a80f7bd7d60a2908abaa8e4c11e54b37bf5bf76702627ae7ccffc007cc5a383",
+    "private_analysis_sha256": "517244f4eec330af0297c7670dcacb915ba4ba24354dfad0351e79623208be6c",
+    "reviewer_id": "ChatGPT GPT-5.6 Sol",
+    "blind_reviewer_condition_assignment_seen_before_score_freeze": false,
+    "blind_reviewer_outside_material_consulted": false,
+    "operator_mapping_revealed_before_independent_scoring": true,
+    "frozen_at_utc": "2026-09-22T18:07:53Z",
+    "revealed_at_utc": "not_recorded_in_frozen_public_metadata"
+  },
+  "transfer_benchmark": {
+    "layer": "transfer",
+    "archetype_id": "TB-A09",
+    "archetype_version": "1.0.0",
+    "mapping_version": "1.0.0",
+    "realization": "independent adversarial A03 fixture external-validity replication"
+  },
+  "variants": {
+    "control": {
+      "factor": "implicit_reference_roles_adversarial_external_validity",
+      "n": 4,
+      "means": {
+        "cross_reference_leakage_control": 2.0,
+        "overall": 2.0
+      },
+      "overall_sample_sd": 2.0
+    },
+    "variant": {
+      "factor": "explicit_reference_roles_adversarial_external_validity",
+      "n": 4,
+      "means": {
+        "cross_reference_leakage_control": 2.25,
+        "overall": 2.25
+      },
+      "overall_sample_sd": 1.8929694486000912
+    }
+  },
+  "deltas_variant_minus_control": {
+    "cross_reference_leakage_control": 0.25,
+    "overall": 0.25
+  },
+  "observed_score_signal_classification": "inconclusive",
+  "evidence_classification": "inconclusive",
+  "evidence_classification_reason": "The frozen independent blind review produced a +0.25 variant-minus-control difference on the preregistered primary dimension. This falls inside the preregistered -0.5 < delta < 0.5 inconclusive band. The directional, ceiling/floor, and local-provenance safeguards do not change that band.",
+  "pairwise_directional_consistency": {
+    "total_pairs": 16,
+    "variant_wins": 6,
+    "control_wins": 3,
+    "ties": 7,
+    "non_tied_pairs": 9,
+    "directional_safeguard_triggered": false
+  },
+  "safeguards": {
+    "control_ceiling_saturated": false,
+    "control_floor_saturated": false,
+    "variant_ceiling_saturated": false,
+    "variant_floor_saturated": false,
+    "required_bindings_locally_verified": true,
+    "provenance_forced_inconclusive": false
+  },
+  "interpretation": "In the TB-A09 independent A03 adversarial three-reference context, the explicit-role variant scored 2.25 versus 2.00 for the implicit-role control on cross_reference_leakage_control, a +0.25 variant-minus-control difference. Under the preregistered descriptive bands, -0.5 < delta < 0.5 is inconclusive. Across all 16 cross-condition pairs, variants won 6, controls won 3, and 7 tied. Neither condition was ceiling- or floor-saturated, and the locally verifiable execution and score-binding chain did not force a provenance downgrade. The run therefore remains inconclusive: the small positive descriptive direction does not establish the superiority hypothesis and is not a statistical-significance claim.",
+  "limitations": [
+    "Four replicates per condition are insufficient for a statistical-significance claim.",
+    "Only one independent blind-review score set was used, so inter-rater reliability was not measured.",
+    "The exact host model snapshot and reproducible generation seed were unavailable.",
+    "The finding is specific to the TB-A09 independent A03 adversarial three-reference realization.",
+    "The primary mean difference was small at +0.25 points and fell inside the preregistered inconclusive band.",
+    "Primary scores were heterogeneous within both conditions: control scores were 5, 1, 1, 1 and variant scores were 2, 1, 5, 1.",
+    "The operator-side treatment mapping had already been revealed before the independent reviewer scored the blind package. The reviewer attested that condition assignment was not seen before score freeze and that no outside experiment material was consulted.",
+    "Accordingly, this run should not be described as using the older project's strict global review-freeze-then-reveal ordering; its blindness claim is reviewer-specific."
+  ],
+  "pattern_implications": [
+    {
+      "pattern_id": "reference-identity-isolation",
+      "evidence_direction": "inconclusive",
+      "action": "no_automatic_change",
+      "reason": "EXP-018 produced only a +0.25 primary difference in the independent A03 fixture realization and the preregistered classification is inconclusive."
+    },
+    {
+      "pattern_id": "reference-outfit-isolation",
+      "evidence_direction": "inconclusive",
+      "action": "no_automatic_change",
+      "reason": "EXP-018 produced only a +0.25 primary difference in the independent A03 fixture realization and the preregistered classification is inconclusive."
+    },
+    {
+      "pattern_id": "reference-pose-isolation",
+      "evidence_direction": "inconclusive",
+      "action": "no_automatic_change",
+      "reason": "EXP-018 produced only a +0.25 primary difference in the independent A03 fixture realization and the preregistered classification is inconclusive."
+    }
+  ],
+  "promotion_boundaries": {
+    "automatic_pattern_confidence_change": false,
+    "automatic_compiler_change": false,
+    "automatic_golden_promotion": false,
+    "post_result_action": "separate_evidence_review_required"
+  },
+  "raw_scores": [
+    {
+      "blind_id": "3WMZ63",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial_external_validity",
+      "replicate": 1,
+      "scores": {
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "blind_id": "VSARD8",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial_external_validity",
+      "replicate": 2,
+      "scores": {
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 1.0
+    },
+    {
+      "blind_id": "TECNBY",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial_external_validity",
+      "replicate": 3,
+      "scores": {
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 1.0
+    },
+    {
+      "blind_id": "XSJLYS",
+      "variant_id": "control",
+      "factor": "implicit_reference_roles_adversarial_external_validity",
+      "replicate": 4,
+      "scores": {
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 1.0
+    },
+    {
+      "blind_id": "F9AF3C",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial_external_validity",
+      "replicate": 1,
+      "scores": {
+        "cross_reference_leakage_control": 2
+      },
+      "overall": 2.0
+    },
+    {
+      "blind_id": "5QSCR8",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial_external_validity",
+      "replicate": 2,
+      "scores": {
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 1.0
+    },
+    {
+      "blind_id": "C84Q89",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial_external_validity",
+      "replicate": 3,
+      "scores": {
+        "cross_reference_leakage_control": 5
+      },
+      "overall": 5.0
+    },
+    {
+      "blind_id": "TAZ993",
+      "variant_id": "variant",
+      "factor": "explicit_reference_roles_adversarial_external_validity",
+      "replicate": 4,
+      "scores": {
+        "cross_reference_leakage_control": 1
+      },
+      "overall": 1.0
+    }
+  ]
+}

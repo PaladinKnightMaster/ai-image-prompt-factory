@@ -713,14 +713,14 @@ def test_per_experiment_transfer_mappings_validate_schema():
         assert list(validator.iter_errors(_load(rel))) == []
 
 
-def test_exp018_frozen_fixture_external_validity_is_ready():
+def test_exp018_frozen_fixture_external_validity_is_executed():
     exp17 = _load("experiments/definitions/EXP-017.json")
     exp18 = _load("experiments/definitions/EXP-018.json")
     mapping = _load("benchmarks/transfer/mappings/EXP-018.v1.json")
 
     assert exp18["experiment_id"] == "EXP-018"
     assert exp18["version"] == "1.0.0"
-    assert exp18["status"] == "planned"
+    assert exp18["status"] == "executed"
     assert exp18["baseline_prompt"] == exp17["baseline_prompt"]
     assert exp18["variants"][0]["operation"] == "identity"
     assert exp18["variants"][1]["operation"] == "replace_literal"
