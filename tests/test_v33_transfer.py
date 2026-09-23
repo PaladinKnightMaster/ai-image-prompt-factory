@@ -417,7 +417,7 @@ def test_exp014_fixture_bindings_are_frozen_and_executed():
 
     assert item["experiment_version"] == "1.1.1"
     assert item["transfer_status"] == "ready"
-def test_exp016_adversarial_fixture_bindings_are_frozen_and_executed():
+def test_exp016_adversarial_fixture_bindings_are_frozen_and_executed(monkeypatch):
     exp16 = _load(
         "experiments/definitions/EXP-016.json"
     )
@@ -594,8 +594,15 @@ def test_exp016_adversarial_fixture_bindings_are_frozen_and_executed():
         == "cross_reference_leakage_control"
     )
 
-    # Successful creation proves the readiness gate and
-    # fixture resolver both accept the frozen bindings.
+    # Public CI does not contain the private frozen fixture bytes.
+    # Keep declaration/readiness validation active and stub only
+    # the final private-file existence/hash lookup here. Dedicated
+    # resolver tests exercise real path/hash enforcement via tmp_path.
+    monkeypatch.setattr(
+        "aipf.experiment_runs.resolve_reference_input_source",
+        lambda reference_input: None,
+    )
+
     run = create_run_plan(
         "EXP-016",
         replicates=1,

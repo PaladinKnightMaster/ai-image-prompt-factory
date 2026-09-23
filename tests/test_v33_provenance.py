@@ -232,7 +232,7 @@ def test_duplicate_host_generation_id_is_rejected(tmp_path):
         )
 
 
-def test_exp017_is_exact_scientific_replication():
+def test_exp017_is_exact_scientific_replication(monkeypatch):
     exp16 = json.loads(
         Path("experiments/definitions/EXP-016.json").read_text(
             encoding="utf-8"
@@ -257,6 +257,14 @@ def test_exp017_is_exact_scientific_replication():
     assert provenance["unique_host_generation_id_required"] is True
     assert provenance["image_count_per_invocation"] == 1
     assert provenance["finalize_receipt_before_next_invocation"] is True
+
+    # Public CI does not contain the private frozen fixture bytes.
+    # Keep declaration/readiness validation active and stub only
+    # the final private-file existence/hash lookup here.
+    monkeypatch.setattr(
+        "aipf.experiment_runs.resolve_reference_input_source",
+        lambda reference_input: None,
+    )
 
     run = create_run_plan("EXP-017", replicates=1)
     assert run["execution_provenance"] == provenance
