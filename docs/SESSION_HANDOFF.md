@@ -31,11 +31,11 @@ V3.3 is tagged and integrated. Current `main` contains a source-hash notation er
 
 ### Known risks / unresolved issues
 
-Cross-fixture generalization for explicit reference roles remains unresolved. This branch needs review and merge before its documents become canonical on `main`.
+Cross-fixture generalization for explicit reference roles remains unresolved. The branch is pushed, but PR creation is pending because GitHub CLI returned HTTP 401 and the available browser session is signed out. This branch needs review and merge before its documents become canonical on `main`.
 
 ### Next recommended task
 
-Review and merge this process-only PR, then begin a separate V3.4 foundation research task using the P0 [research queue](RESEARCH_QUEUE.md).
+Open a process-only PR from `chore/project-sync-protocol` into `main`, review and merge it, then begin a separate V3.4 foundation research task using the P0 [research queue](RESEARCH_QUEUE.md).
 
 ### Do not do yet
 
