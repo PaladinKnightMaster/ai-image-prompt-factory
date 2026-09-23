@@ -1,4 +1,4 @@
-# AI Image Prompt Factory V3.2
+# AI Image Prompt Factory V3.3
 [![CI](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/ci.yml/badge.svg)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/ci.yml)
 [![GitHub Pages](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/pages.yml/badge.svg)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/pages.yml)
 [![Latest Release](https://img.shields.io/github/v/release/PaladinKnightMaster/ai-image-prompt-factory)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/releases/latest)
@@ -6,13 +6,13 @@
 
 **[View the public benchmark gallery →](https://paladinknightmaster.github.io/ai-image-prompt-factory/)**
 
-**Visual Intelligence Lab** — an installable, agentic GPT Image 2 prompt compiler that combines evidence-backed historical/material reasoning with an internal prompt/image research corpus, prompt-mechanism decomposition, a VisualPattern registry, controlled ablation experiments, and first-party benchmark planning.
+**Empirical Lab** - an installable, agentic GPT Image 2 prompt compiler and controlled visual-research environment combining evidence-backed historical/material reasoning, preregistered prompt experiments, frozen fixtures, reviewer/blind evaluation, execution provenance, replication, transfer testing, and first-party benchmarks.
 
-V3.2 does **not** ship the private 606-image research corpus in the public release. It ships derived metadata/indexes and tooling, and reconnects to the private corpus through `AIPF_CORPUS_PATH` or the internal-gallery generator.
+V3.3 does **not** ship the private 606-image research corpus or private frozen reference images in the public release. It ships public metadata, eligible fixture specifications, result records, provenance-aware tooling, and reconnects to private development assets through configured paths.
 
-## V3.2 in one sentence
+## V3.3 in one sentence
 
-> V3.1 taught the system how to justify visual knowledge; V3.2 teaches the project how to turn collected examples into testable mechanism hypotheses without confusing correlation with causal evidence.
+> V3.2 built the visual-learning laboratory; V3.3 executes it with preregistration, frozen fixtures, provenance-aware generation, controlled review, replication, external-validity testing, and cross-experiment evidence synthesis.
 
 ## Runtime
 
@@ -38,21 +38,19 @@ User Request
 → Optional First-Party Benchmark Promotion
 ```
 
-## What V3.2 adds
-
-- Internal corpus model for APC/FSC/GAC/LAC/LCC with verified collection provenance and a hard private/public boundary.
-- Corrected LAC/LCC mapping from V3.1: LAC = Liyue AI, LCC = Larus Canus / MrLarus.
-- 191 extracted source-prompt records and prompt-mechanism decomposition into functional clauses.
-- Prompt-method taxonomy covering structure, emotion, medium, reference, narrative, constraints, design systems, process, result and variable templates.
-- Low-signal prompt audit for unverified/redundant quality and camera-brand language.
-- 33 initial `VisualPattern` records with explicit observation/hypothesis/support states.
-- Confidence-gated compiler eligibility: unvalidated corpus observations cannot silently enter production prompts.
-- 15 controlled experiment/ablation plans; none are falsely marked executed without real image generation.
-- 20 first-party benchmark candidates/specs/compiled prompts; promotion requires actual output, evaluation and human approval.
-- Internal searchable prompt/image gallery generator, separate from the public benchmark gallery.
-- Prompt clause traceability and pattern-aware semantic diffing.
-- V3.1 evidence, historical strictness, survival-bias handling, 10 golden cases and 19 semantic/prompt regressions remain intact.
-
+## What V3.3 adds
+- Empirical research framework with preregistered single-factor experiments and explicit evidence classifications.
+- Frozen first-party reference fixtures, transfer archetypes, and immutable reference ordering for controlled tests.
+- Reviewer/blind evaluation workflows with precise blindness claims.
+- Task commitments, execution receipts, and SHA-256 prompt/reference/output provenance bindings.
+- Ceiling/floor safeguards and explicit treatment of saturated benchmarks.
+- Replication workflow separating score strength from provenance quality.
+- External-validity testing across independently constructed fixture realizations.
+- Cross-experiment synthesis in `docs/V3.3_EVIDENCE_SYNTHESIS.md`.
+- Credible positive evidence for explicit identity/outfit/pose reference-role assignment, strongest in EXP-017.
+- No fixture-invariant claim: EXP-018 remained inconclusive.
+- No statistical-significance claim, automatic compiler mutation, pattern-confidence promotion, or golden promotion from V3.3.
+- V3.2 corpus intelligence, VisualPattern discipline, evidence-aware compilation, benchmarks, and public/private boundaries remain intact.
 ## Quick start
 
 ```bash
@@ -77,7 +75,7 @@ python scripts/factory.py compile cases/golden/04-tang-court-lantern/case.json
 
 ## Internal corpus workflow
 
-The source images live outside the distributable repository. Point V3.2 at the extracted private corpus or use the ingestion tools:
+The source images live outside the distributable repository. Point V3.3 at the extracted private corpus or use the ingestion tools:
 
 ```bash
 export AIPF_CORPUS_PATH=/path/to/internal/image-library
@@ -93,7 +91,7 @@ Current audited corpus state: 606 images, 587 unique SHA-256 hashes, 19 duplicat
 
 ## VisualPattern discipline
 
-A collected source example is an observation, not proof that every phrase in its prompt caused the output. V3.2 uses the sequence:
+A collected source example is an observation, not proof that every phrase in its prompt caused the output. V3.3 retains the sequence:
 
 ```text
 source example
@@ -109,10 +107,9 @@ Only confidence-gated patterns can be injected by the Director Gate. Most corpus
 
 ## Experiment lab
 
-V3.2 includes planned tests for posture mechanics, material physics, hand-object interaction, layered composition, camera-brand language, `8K/masterpiece` language, negative-prompt density, emotional adjective stacking, natural-language vs JSON-style briefs, garment construction, fabric physics, identity-lock repetition, explicit reference-role declarations, and pre-compiler historical adaptation.
+V3.3 executes the empirical-lab workflow rather than treating experiment plans as evidence. The release includes preregistered experiments, frozen fixtures, review packages, provenance-aware execution, published result metadata, replication, and transfer testing.
 
-Offline planning is first-class. If no generation API is available, experiments remain `planned`; the repository does not invent visual scores or conclusions.
-
+The final reference-role evidence arc is deliberately bounded: EXP-014 was inconclusive under ceiling saturation; EXP-016 showed a strong score signal but remained provenance-limited; EXP-017 reproduced the positive effect with locally validated execution binding and is the strongest clean supporting result; EXP-018 tested an independent fixture realization and remained inconclusive. See `docs/V3.3_EVIDENCE_SYNTHESIS.md`.
 ## Benchmarks
 
 `benchmarks/` separates candidate specifications from future generated/golden outputs. A benchmark becomes golden only after generation metadata, evaluation and human approval exist. The initial 20 candidates cover reference-role isolation, Tang/Dunhuang/Ming+Wuxia/Edo/Greek/Roman cases, several art methods, and Director mechanics.
@@ -141,7 +138,7 @@ export AIPF_DIRECT_API=1
 python scripts/generate_api.py --prompt-file path/to/prompt.md --execute --metadata-output generation.json
 ```
 
-V3.2 targets `gpt-image-2` first and records the dated model snapshot when known. Unsupported parameters are not invented.
+V3.3 targets `gpt-image-2` first and records the dated model snapshot when known. Unsupported parameters are not invented.
 
 ## Knowledge layout
 
@@ -158,6 +155,6 @@ V3.2 targets `gpt-image-2` first and records the dated model snapshot when known
 
 ## Scope boundary
 
-V3.2 establishes a trustworthy visual-learning laboratory; it does not claim that its 33 initial patterns are scientifically proven, that its 15 planned experiments have been executed, or that 20 benchmark candidates are visual golden baselines. Those execution-dependent steps are the intended next empirical milestone.
+V3.3 closes with credible positive evidence that explicit identity/outfit/pose role assignment can improve cross-reference leakage control, strongest in the provenance-complete EXP-017 replication. It does **not** establish a fixture-invariant effect: EXP-018 did not reproduce the strong A02 separation and remained inconclusive. V3.3 makes no statistical-significance claim and does not automatically change compiler behavior, pattern confidence, or golden benchmarks.
 
-See `docs/ADR-0003-v3.2-visual-intelligence-lab.md`, `docs/PROMPT_MECHANISM_MODEL.md`, `docs/VISUAL_PATTERN_REGISTRY.md`, `docs/EXPERIMENT_LAB.md`, and `docs/VALIDATION_REPORT_V3_2.md`.
+The authoritative detailed synthesis is `docs/V3.3_EVIDENCE_SYNTHESIS.md`. Historical V3.2 architecture remains documented in `docs/ADR-0003-v3.2-visual-intelligence-lab.md`, `docs/PROMPT_MECHANISM_MODEL.md`, `docs/VISUAL_PATTERN_REGISTRY.md`, `docs/EXPERIMENT_LAB.md`, and `docs/VALIDATION_REPORT_V3_2.md`.

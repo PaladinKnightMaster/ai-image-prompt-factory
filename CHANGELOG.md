@@ -1,4 +1,12 @@
 # Changelog
+## 3.3.0 â€” 2026-09-23
+- Added the V3.3 Empirical Lab execution framework with preregistration, frozen fixtures, controlled review, and evidence classification.
+- Added task commitments, execution receipts, SHA-256 artifact bindings, replication, ceiling/floor safeguards, and external-validity testing.
+- Published empirical results through EXP-018 and the authoritative synthesis in `docs/V3.3_EVIDENCE_SYNTHESIS.md`.
+- EXP-017 is the strongest clean support for explicit identity/outfit/pose reference-role assignment; EXP-018 remained inconclusive on an independent fixture realization.
+- V3.3 makes no statistical-significance claim and does not automatically promote compiler behavior, pattern confidence, or golden benchmarks.
+- Preserved the private/public fixture boundary; public CI does not require private frozen fixture bytes.
+
 
 ## 3.1.0 — 2026-09-07
 - Corrected package runtime version reporting to `3.1.0` during final release audit.

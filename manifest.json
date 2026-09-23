@@ -1,8 +1,8 @@
 {
   "name": "ai-image-prompt-factory",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "category": "Image Prompt Engineering / Visual Direction",
-  "description": "Evidence-backed GPT Image 2 prompt compiler with internal visual intelligence lab, prompt-mechanism decomposition, VisualPatterns, controlled experiments, and regression testing.",
+  "description": "Evidence-backed GPT Image 2 prompt compiler and Empirical Lab with preregistered experiments, frozen fixtures, provenance-aware execution, controlled review, replication, transfer testing, and regression coverage.",
   "primary_output": "prompt",
   "primary_adapter": "gpt-image-2",
   "license": "MIT",

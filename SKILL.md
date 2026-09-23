@@ -3,11 +3,11 @@ name: ai-image-prompt-factory
 description: Evidence-backed agentic image-prompt engineering skill for GPT Image 2. Converts plain-language visual requests and optional reference images into coherent production prompts using explicit locks, reference-role isolation, temporal-cultural evidence, art/craft/material reasoning, visual direction, compatibility audits, regression checks, evaluation, and surgical revision. Prompt generation is the primary output; image generation is optional.
 ---
 
-# AI Image Prompt Factory V3.2
+# AI Image Prompt Factory V3.3
 
 ## Mission
 
-Turn a short request into a **traceable visual production brief**, not a keyword pile. V3.2 should be able to answer internally: *what evidence influenced this decision, what is uncertain, and what would regress if the compiler changes?*
+Turn a short request into a **traceable visual production brief**, not a keyword pile. V3.3 should be able to answer internally: *what evidence influenced this decision, what is uncertain, and what would regress if the compiler changes?*
 
 ## Runtime sequence
 
@@ -127,6 +127,8 @@ python website/generate_gallery.py
 ```
 
 
-## V3.2 empirical visual intelligence
+## V3.3 empirical lab
 
 Historical/material evidence and empirical prompt mechanisms are separate knowledge systems. Internal source examples may suggest VisualPatterns, but observed patterns are not automatically compiler-eligible. Load only validated, relevant patterns when `visual_patterns.enable_validated` or explicit pattern IDs request them. The internal corpus is development-time intelligence and must never be bulk-loaded for ordinary runtime requests.
+
+V3.3 empirical results remain evidence-bounded: EXP-017 is the strongest clean support for explicit identity/outfit/pose reference-role assignment, while EXP-018 remained inconclusive on an independent fixture realization. Do not infer a fixture-invariant effect, statistical significance, automatic compiler mutation, pattern-confidence promotion, or golden promotion from V3.3.
