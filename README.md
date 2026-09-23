@@ -153,6 +153,10 @@ V3.3 targets `gpt-image-2` first and records the dated model snapshot when known
 - `internal-gallery/` — private research gallery generator.
 - `website/` — public case gallery.
 
+## Project state / development
+
+For the current release boundary and next planned scope, start with [project state](docs/PROJECT_STATE.md) and the [capability roadmap](docs/ROADMAP.md). Contributors and agents should follow the [repository operating contract](AGENTS.md).
+
 ## Scope boundary
 
 V3.3 closes with credible positive evidence that explicit identity/outfit/pose role assignment can improve cross-reference leakage control, strongest in the provenance-complete EXP-017 replication. It does **not** establish a fixture-invariant effect: EXP-018 did not reproduce the strong A02 separation and remained inconclusive. V3.3 makes no statistical-significance claim and does not automatically change compiler behavior, pattern confidence, or golden benchmarks.
