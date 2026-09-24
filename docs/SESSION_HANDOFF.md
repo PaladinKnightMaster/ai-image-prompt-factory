@@ -1,29 +1,23 @@
 # Session Handoff
 
-Purpose: Continue from the committed repository state. Read [project state](PROJECT_STATE.md), [roadmap](ROADMAP.md), [decisions](DECISIONS.md), and the [V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md).
+Purpose: Continue from committed repository state. Read [project state](PROJECT_STATE.md), [roadmap](ROADMAP.md), [decisions](DECISIONS.md), and the [V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md).
 
 ## Current handoff
 
-- Date: 2026-09-23
-- Branch: `feat/v3.4-transformation-intelligence`
-- HEAD: this implementation commit; resolve with `git rev-parse HEAD` after checkout
-- Base: up-to-date `main` at `8c8eeeaa662e6536aca3610374d1016ca61eb134`
-- Worktree: expected clean after the implementation commit; verify with `git status`
-- Stable release: V3.3 Empirical Lab, tag `v3.3.0`
-- V3.4 status: architecture frozen; implementation prepared for review, not merged or released
+- Date: 2026-09-24
+- Canonical branch: `main`; HEAD at synchronization: `aa6ae9bb57166d70840fb6ec6ca2a2f4a59b8a52` (PR #6)
+- Documentation sync branch: `chore/v3.4-post-merge-sync`; worktree clean after its commit
+- Stable release: V3.3 Empirical Lab, tag `v3.3.0`; package/manifest and README/SKILL release labels remain V3.3
+- V3.4: architecture frozen; four-family implementation merged to `main`; empirical validation pending; unreleased
 
-### Implementation summary
+### Findings
 
-Added four generic, data-driven TransformationPacks, optional transformation request data, two artifact forms, and `concept_refs` in the existing method, form, and bounded Greek era knowledge. Added the 30-concept Visual Semantic Lexicon, candidate lookup, gated semantic concept plan, deterministic Lexical Realizer, compiler traces, transformation evaluation dimensions/failures, and exactly four ungenerated candidate cases. Added six canonical source records and one V3.4 pouncing claim without changing released V3.3 claims or results. EXP-019 defines a planned, unexecuted C/A/B lexical comparison.
-
-The complete file inventory and four resolver, concept, trace, and prompt examples are in [V3.4 implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md).
-
-Legacy requests still use the V3.3 prose path. The four V3.4 families share one resolver and realizer. Conditional concepts are emitted only after explicit semantic selection and applicable gates. `historical_precision` changes expression detail, not historical strictness.
+The merged implementation and its traceability examples are recorded in [V3.4 implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 is a planned Domain-Grounded Lexical Realization definition (`0.1.0`) with draft preregistration fields; first-party fixtures and replicate count remain unfrozen. No EXP-019 result, execution receipt, V3.4 generation, or general lexical-effectiveness conclusion exists.
 
 ### Validation
 
-Schema and repository validator: passed, including 30 lexicon concepts, four TransformationPacks, four V3.4 candidate cases, 23 evidence claims, and 19/19 legacy regression cases. Full pytest suite: 197 passed. Separate regression run: 19/19 passed. Golden baseline check: 10/10 stable, zero drift. `git diff --check` and local documentation links checked. The validator's distributable raster/privacy check passed; no private fixture/image bytes were added. No V3.3 empirical result or experiment artifact was modified. All commands used the bundled Python through `uv` because the local `.venv` points to a missing interpreter.
+On canonical `main` code with documentation-only changes: full pytest 197 passed; repository validator passed (30 concepts, four V3.4 candidates, 19/19 regressions); separate regression run 19/19 passed; golden baselines 10/10 stable with zero drift. The validator's privacy check passed after removing generated pytest temp images. No V3.3 empirical result or V3.4 execution artifact changed.
 
-### Unresolved and next task
+### Exact next task
 
-No image generations, visual evaluations, or lexical superiority claims exist for V3.4. Candidate references are placeholders pending separately frozen first-party fixtures. Review and merge the V3.4 implementation PR after code review; then separately freeze fixtures and preregistration details for EXP-019 before any image-generation experiment.
+Freeze first-party fixtures and preregistration for EXP-019 before generation.
