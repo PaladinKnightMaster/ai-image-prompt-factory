@@ -1,0 +1,17 @@
+{
+  "experiment_id": "EXP-019",
+  "version": "0.1.0",
+  "hypothesis": "Domain-Grounded Lexical Realization: canonical terminology plus the same visible explanation may improve art/material fidelity over generic wording; superiority is unverified.",
+  "baseline_prompt": "Create a Japanese woodblock print of the same adult portrait on the same paper sheet with the same composition and color regions. Use a controlled printed gradation from darker to lighter pigment within selected color regions. Keep all other production, identity, framing, and lighting instructions fixed.",
+  "variants": [
+    {"id": "C", "factor": "generic_visible_description", "operation": "identity"},
+    {"id": "A", "factor": "canonical_term_only", "operation": "replace_literal", "old": "Use a controlled printed gradation from darker to lighter pigment within selected color regions.", "new": "Use bokashi."},
+    {"id": "B", "factor": "canonical_term_plus_same_visible_description", "operation": "replace_literal", "old": "Use a controlled printed gradation from darker to lighter pigment within selected color regions.", "new": "Use bokashi, a controlled printed gradation from darker to lighter pigment within selected color regions."}
+  ],
+  "preserved_dimensions": ["same adult subject", "same frozen reference fixture once registered", "same print composition", "same color regions", "same model and generation settings", "all non-lexical prompt text"],
+  "evaluation_dimensions": ["art_material_fidelity", "semantic_compliance", "transformation_fidelity", "aesthetic_quality", "technical_defects"],
+  "primary_dimension": "art_material_fidelity",
+  "model_target": "gpt-image-2",
+  "status": "planned",
+  "preregistration": {"comparison": "C generic visible wording; A canonical term only; B canonical term plus the same visible wording", "freeze_before_generation": true, "blind_review_required": true, "record_character_word_and_token_counts": true, "replicates_and_fixtures": "to be frozen before execution", "automatic_compiler_or_golden_promotion": false, "conclusion": "unverified"}
+}

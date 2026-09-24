@@ -38,6 +38,7 @@
     "fading, edge wear and paper discoloration depend on artifact state; do not force antique damage for a newly printed work"
   ],
   "artifact_compatibility": [
+    "print_sheet",
     "book_page",
     "album_leaf",
     "scroll",
@@ -69,5 +70,9 @@
     }
   ],
   "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
+  "concept_refs": {
+    "core": ["method.japanese_woodblock_print", "woodblock.keyblock", "woodblock.color_block", "woodblock.kento_registration", "woodblock.baren_printing", "woodblock.kozo_paper"],
+    "conditional": ["woodblock.bokashi"]
+  },
   "version": "1.1.0"
 }

@@ -8,11 +8,11 @@ These are planning targets, not promises or evidence that a feature exists. The 
 
 **Closed.** Added preregistered experiments, frozen fixtures, controlled review, execution provenance, result classification, replication, transfer testing, and cross-experiment synthesis. Findings and limits are in the [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md).
 
-## Architecture frozen — implementation next
+## Implementation in progress
 
 ### V3.4 - Transformation Intelligence
 
-**Architecture frozen — implementation next.** The canonical [V3.4 architecture](V3.4_ARCHITECTURE_FREEZE.md) defines the approved Transformation Intelligence boundaries, four MVP transformation families, and lexical realization amendment. Implementation has not started or completed. V3.3 remains the stable released baseline. Next exact task: implement the frozen V3.4 Transformation Intelligence architecture.
+**Architecture frozen; implementation in progress on `feat/v3.4-transformation-intelligence`.** The canonical [V3.4 architecture](V3.4_ARCHITECTURE_FREEZE.md) defines the approved boundaries, four MVP transformation families, and lexical realization amendment. The branch implementation is pending review and merge; V3.4 is not released. V3.3 remains the stable released baseline.
 
 ## Planned
 

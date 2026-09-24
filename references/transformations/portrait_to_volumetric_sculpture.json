@@ -1,0 +1,12 @@
+{
+  "id": "portrait_to_volumetric_sculpture",
+  "version": "1.0.0",
+  "source_representation": "portrait",
+  "target_representation": "volumetric_sculpture",
+  "representation_delta": {
+    "geometry": "Translate the portrait silhouette and distinguishing features into a coherent three-dimensional object with deliberate support and termination.",
+    "depth": "Replace camera-dependent facial shading with readable volume from multiple viewing angles.",
+    "surface_mapping": "Make source features part of the object's continuous surface rather than a living face with a surface filter."
+  },
+  "failure_modes": ["living skin left inside an apparent sculpture", "floating or unsupported portrait details"]
+}

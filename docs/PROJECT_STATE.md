@@ -4,13 +4,13 @@
 - Current stable release: V3.3 Empirical Lab
 - Stable tag: `v3.3.0` (annotated; closure commit `3c0119e`)
 - Architecture freeze base HEAD: `a86b66cee21c37e9a055ee0b3809082b7413d370` on `main`
-- Architecture freeze branch: `codex/v3-4-architecture-freeze`; see the [current handoff](SESSION_HANDOFF.md) for validation and commit state.
+- Current implementation branch: `feat/v3.4-transformation-intelligence`, created from `main` at `8c8eeeaa662e6536aca3610374d1016ca61eb134`; see the [current handoff](SESSION_HANDOFF.md).
 
 ## Current status
 
 **V3.3 Empirical Lab: CLOSED.** The release tag marks scientific closure and is integrated into `main`. Later `main` commits fixed CI portability and corrected an EXP-017 source-hash notation without changing the underlying result or conclusion. Package and manifest version are `3.3.0`; the compiler/evidence-snapshot lineage remains `3.2.0` by design. See the [release notes](RELEASE_NOTES_V3.3.md).
 
-**V3.4 Transformation Intelligence: Architecture frozen — implementation next.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) is approved as amended. Implementation has not started or completed; V3.3 remains the stable released baseline.
+**V3.4 Transformation Intelligence: architecture frozen; implementation in progress on the feature branch.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. The four-family MVP is implemented for review and validation on the branch, but V3.4 is not merged or released. V3.3 remains the stable released baseline.
 
 ## Strongest established findings
 
@@ -26,7 +26,7 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Next scope
 
-The next exact task is to implement the frozen V3.4 Transformation Intelligence architecture. Later tracks remain in the [capability roadmap](ROADMAP.md).
+Complete implementation review and PR preparation for the frozen V3.4 Transformation Intelligence architecture. Do not run the planned lexical image-generation experiment as part of implementation. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 
@@ -36,4 +36,4 @@ The next exact task is to implement the frozen V3.4 Transformation Intelligence 
 
 ## Canonical references
 
-[V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) · [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md) · [V3.3 release notes](RELEASE_NOTES_V3.3.md) · [roadmap](ROADMAP.md) · [decision index](DECISIONS.md) · [research queue](RESEARCH_QUEUE.md) · [session handoff](SESSION_HANDOFF.md)
+[V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) · [V3.4 implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md) · [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md) · [V3.3 release notes](RELEASE_NOTES_V3.3.md) · [roadmap](ROADMAP.md) · [decision index](DECISIONS.md) · [research queue](RESEARCH_QUEUE.md) · [session handoff](SESSION_HANDOFF.md)

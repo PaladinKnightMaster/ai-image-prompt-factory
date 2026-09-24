@@ -122,6 +122,10 @@
   ],
   "default_confidence": "medium",
   "scope_note": "Foundation pack: use as a bounded starting point, not an encyclopedia.",
+  "concept_refs": {
+    "core": [],
+    "conditional": ["garment.chiton", "garment.peplos", "garment.himation", "pose.contrapposto", "sculpture.polychromy"]
+  },
   "strict_reconstruction_note": "Strict mode should narrow city/region, date, civic/mythic role and archaeological/artwork evidence family.",
   "version": "1.1.0",
   "evidence_claims": [

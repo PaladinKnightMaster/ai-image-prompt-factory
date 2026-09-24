@@ -10,5 +10,16 @@
     "incompatible_or_anachronistic",
     "prompt_fragments",
     "sources"
-  ]
+  ],
+  "properties": {
+    "concept_refs": {
+      "type": "object",
+      "required": ["core", "conditional"],
+      "properties": {
+        "core": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "conditional": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    }
+  }
 }

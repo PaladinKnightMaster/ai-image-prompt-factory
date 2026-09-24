@@ -21,7 +21,8 @@
       "enum": [
         "3.0",
         "3.1",
-        "3.2"
+        "3.2",
+        "3.4"
       ]
     },
     "id": {
@@ -230,6 +231,20 @@
         "type": "string"
       }
     },
+    "transformation": {
+      "type": "object",
+      "required": ["pack_id"],
+      "properties": {
+        "pack_id": {"type": "string"},
+        "source_representation": {"const": "portrait"},
+        "selected_concepts": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "signature_atoms": {
+          "type": "object",
+          "additionalProperties": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        }
+      },
+      "additionalProperties": false
+    },
     "director": {
       "type": "object",
       "properties": {
@@ -291,6 +306,10 @@
             "extended"
           ]
         },
+        "lexical_profile": {
+          "enum": ["auto", "compact", "descriptive", "historical_precision", "artifact_technical"]
+        },
+        "lexical_budget": {"type": "integer", "minimum": 80},
         "aspect_ratio": {
           "type": "string"
         },

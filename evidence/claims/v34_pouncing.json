@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0",
+  "pack_id": "dunhuang",
+  "claims": [
+    {
+      "claim_id": "mogao-pouncing-v34-001",
+      "version": "1.0.0",
+      "subject": "mural_transfer_method",
+      "value": "By the tenth century, pouncing was used by Dunhuang mural artists to transfer iconographic designs.",
+      "context": {"pack_ids": ["dunhuang"], "subperiods": ["10th century"], "art_methods": ["mineral_pigment_mural"]},
+      "compatibility": "well_attested",
+      "confidence": 0.9,
+      "source_ids": ["met-dunhuang-pouncing"],
+      "interpretation": "A preparatory transfer method, not a required visible mark on every mural.",
+      "prompt_implications": ["Show pouncing traces only when the selected bounded mural context explicitly calls for them."],
+      "trigger_keywords": ["pouncing transfer"],
+      "always_for_context": false
+    }
+  ]
+}

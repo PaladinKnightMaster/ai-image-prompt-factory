@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "sources": "evidence/sources/registry.json",
   "claim_sets": [
+    {"selector": "v34_pouncing", "path": "evidence/claims/v34_pouncing.json"},
     {
       "selector": "classical_greek",
       "path": "evidence/claims/classical_greek.json"

@@ -1,0 +1,12 @@
+{
+  "id": "portrait_to_architectural_mural",
+  "version": "1.0.0",
+  "source_representation": "portrait",
+  "target_representation": "architectural_mural",
+  "representation_delta": {
+    "geometry": "Recompose the portrait within a fixed architectural plane and its bounded picture field.",
+    "depth": "Translate photographic depth into a legible planar figure and contour hierarchy.",
+    "surface_mapping": "Bind the represented figure to the wall surface so its marks and losses share the support rather than floating above it."
+  },
+  "failure_modes": ["photograph pasted onto a wall", "uniform cracked-wall overlay"]
+}

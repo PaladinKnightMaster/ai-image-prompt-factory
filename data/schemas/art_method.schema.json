@@ -17,5 +17,16 @@
     "prompt_fragments",
     "typical_generation_failures",
     "evaluation_criteria"
-  ]
+  ],
+  "properties": {
+    "concept_refs": {
+      "type": "object",
+      "required": ["core", "conditional"],
+      "properties": {
+        "core": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "conditional": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    }
+  }
 }
