@@ -3,12 +3,14 @@
 - Last updated: 2026-09-23
 - Current stable release: V3.3 Empirical Lab
 - Stable tag: `v3.3.0` (annotated; closure commit `3c0119e`)
-- Main HEAD at this synchronization base: `3617a040483410b4d4e2d0468a48165c69087a3e`
-- Test state: on this documentation branch, 171 pytest tests passed and `scripts/validate_repo.py` passed on 2026-09-23; see the [current handoff](SESSION_HANDOFF.md).
+- Architecture freeze base HEAD: `a86b66cee21c37e9a055ee0b3809082b7413d370` on `main`
+- Architecture freeze branch: `codex/v3-4-architecture-freeze`; see the [current handoff](SESSION_HANDOFF.md) for validation and commit state.
 
 ## Current status
 
 **V3.3 Empirical Lab: CLOSED.** The release tag marks scientific closure and is integrated into `main`. Later `main` commits fixed CI portability and corrected an EXP-017 source-hash notation without changing the underlying result or conclusion. Package and manifest version are `3.3.0`; the compiler/evidence-snapshot lineage remains `3.2.0` by design. See the [release notes](RELEASE_NOTES_V3.3.md).
+
+**V3.4 Transformation Intelligence: Architecture frozen — implementation next.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) is approved as amended. Implementation has not started or completed; V3.3 remains the stable released baseline.
 
 ## Strongest established findings
 
@@ -24,7 +26,7 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Next scope
 
-**V3.4 Transformation Intelligence: PLANNED, not implemented.** Candidate capabilities and later tracks are in the [capability roadmap](ROADMAP.md). This synchronization branch contains process documentation only.
+The next exact task is to implement the frozen V3.4 Transformation Intelligence architecture. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 
@@ -34,4 +36,4 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Canonical references
 
-[V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md) · [V3.3 release notes](RELEASE_NOTES_V3.3.md) · [roadmap](ROADMAP.md) · [decision index](DECISIONS.md) · [research queue](RESEARCH_QUEUE.md) · [session handoff](SESSION_HANDOFF.md)
+[V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) · [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md) · [V3.3 release notes](RELEASE_NOTES_V3.3.md) · [roadmap](ROADMAP.md) · [decision index](DECISIONS.md) · [research queue](RESEARCH_QUEUE.md) · [session handoff](SESSION_HANDOFF.md)
