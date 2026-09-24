@@ -199,6 +199,7 @@ def _verify_prior_receipts(root: Path, run: dict, variant: dict, output: dict, p
 
 def execute_exp019_run(run_file: str | Path, *, dry_run: bool = False, client=None) -> dict:
     from .experiment_execution import load_run
+    from .exp019_anchor import append_attempt_checkpoint, ensure_run_root, verify_external
 
     path, run = load_run(run_file)
     validate_run(run)
@@ -217,9 +218,11 @@ def execute_exp019_run(run_file: str | Path, *, dry_run: bool = False, client=No
         # SDK-level automatic retries would create unrecorded invocations.
         client = OpenAI(max_retries=0)
 
+    ensure_run_root(path, run)
     generated = 0
     root = path.parent
     for slot in run["invocation_order"]:
+        verify_external(path, run)
         variant, output = find_slot(run, slot["blind_id"])
         prior_count, prior_outcome = _slot_state(output)
         _verify_prior_receipts(root, run, variant, output, slot["position"])
@@ -239,6 +242,7 @@ def execute_exp019_run(run_file: str | Path, *, dry_run: bool = False, client=No
         for attempt_number in range(prior_count + 1, 4):
             if attempt_number > 1:
                 _verify_prior_receipts(root, run, variant, output, slot["position"])
+                verify_external(path, run)
             started = {"event": "started", "attempt_number": attempt_number,
                        "at_utc": _now(), "prompt_sha256": variant["prompt_sha256"]}
             append_attempt_event(output, started)
@@ -262,10 +266,11 @@ def execute_exp019_run(run_file: str | Path, *, dry_run: bool = False, client=No
                 output["status"] = "failed"
                 output["error"] = str(exc)
                 _write_receipt(root, run, variant, output, slot["position"])
+                _save_run(path, run)
+                append_attempt_checkpoint(path, run, output["blind_id"], attempt_number)
                 if kind != "technical_failure" or attempt_number == 3:
                     _finish_run(path, run, "incomplete")
                     return {"run_id": run["run_id"], "status": "incomplete", "stopped_slot": output["blind_id"], "generated": generated}
-                _save_run(path, run)
                 continue
 
             data = getattr(response, "data", None)
@@ -278,6 +283,8 @@ def execute_exp019_run(run_file: str | Path, *, dry_run: bool = False, client=No
                 output["status"] = "failed"
                 output["error"] = "API returned other than exactly one base64 image"
                 _write_receipt(root, run, variant, output, slot["position"])
+                _save_run(path, run)
+                append_attempt_checkpoint(path, run, output["blind_id"], attempt_number)
                 _finish_run(path, run, "incomplete")
                 return {"run_id": run["run_id"], "status": "incomplete", "stopped_slot": output["blind_id"], "generated": generated}
 
@@ -297,10 +304,11 @@ def execute_exp019_run(run_file: str | Path, *, dry_run: bool = False, client=No
                 output["status"] = "failed"
                 output["error"] = "API response did not contain a fully decodable 1024x1536 raster"
                 _write_receipt(root, run, variant, output, slot["position"])
+                _save_run(path, run)
+                append_attempt_checkpoint(path, run, output["blind_id"], attempt_number)
                 if attempt_number == 3:
                     _finish_run(path, run, "incomplete")
                     return {"run_id": run["run_id"], "status": "incomplete", "stopped_slot": output["blind_id"], "generated": generated}
-                _save_run(path, run)
                 continue
             suffix = ".png" if decoded_format == "PNG" else ".jpg"
             image_path = root / "outputs" / f"{output['blind_id']}{suffix}"
@@ -330,6 +338,7 @@ def execute_exp019_run(run_file: str | Path, *, dry_run: bool = False, client=No
                           metadata_sha256=sha256_file(root / "outputs" / metadata_name), error=None)
             _write_receipt(root, run, variant, output, slot["position"])
             _save_run(path, run)
+            append_attempt_checkpoint(path, run, output["blind_id"], attempt_number)
             generated += 1
             break
 

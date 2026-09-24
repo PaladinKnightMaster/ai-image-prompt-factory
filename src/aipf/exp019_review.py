@@ -269,6 +269,8 @@ def verify_reveal_against_private(run_path: Path, run: dict, revealed: dict) -> 
 
 def reveal(run_file: str | Path) -> dict:
     run_path, run = load_run(run_file)
+    from .exp019_anchor import verify_external
+    verify_external(run_path, run, require_reviews=True)
     root = run_path.parent
     reveal_path = root / "blind-review" / "reveal.json"
     if reveal_path.exists():

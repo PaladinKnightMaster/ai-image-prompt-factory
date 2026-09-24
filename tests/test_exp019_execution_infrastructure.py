@@ -24,6 +24,22 @@ from aipf.experiment_runs import create_run_plan, load_run_plan, sha256_file, wr
 from aipf.io import load_json
 
 
+@pytest.fixture(autouse=True)
+def _isolate_existing_unit_tests_from_external_git(monkeypatch):
+    """These pre-existing unit probes use local evidence; remote Git is tested separately."""
+    import aipf.exp019_anchor as anchor
+
+    monkeypatch.setattr(anchor, "ensure_run_root", lambda path, run: {})
+    monkeypatch.setattr(anchor, "verify_external", lambda path, run, **kwargs: {})
+    monkeypatch.setattr(anchor, "append_attempt_checkpoint", lambda *args: {})
+    monkeypatch.setattr(anchor, "append_review_checkpoint", lambda *args: {})
+    monkeypatch.setattr(anchor, "run_receipt_provenance", lambda path, run: {
+        "backend": "remote_git", "ref": "refs/heads/exp-provenance/unit-test-only",
+        "root_anchor_commit": "0" * 40, "terminal_anchor_commit": "0" * 40,
+        "checkpoints": [{"commit": "0" * 40}, {"commit": "0" * 40}],
+    })
+
+
 def _png(index: int) -> bytes:
     """Small valid synthetic raster bytes for an offline transport test."""
     def chunk(kind: bytes, body: bytes) -> bytes:

@@ -71,7 +71,9 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         raise ValueError("EXP-019 analysis requires a completed frozen run")
     from .exp019_receipt import RECEIPT_NAME, validate_run_receipt
     from .exp019_review import verify_reveal_against_private
+    from .exp019_anchor import verify_external
     run_receipt = validate_run_receipt(run_path, run)
+    verify_external(run_path, run, require_reviews=True)
     definition, _fixture = frozen_protocol()
     root = run_path.parent
     reveal_path = root / "blind-review" / "reveal.json"

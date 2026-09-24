@@ -17,6 +17,7 @@ RECEIPT_NAME = "exp019.run.receipt.json"
 def receipt_from_run(run: dict, root: Path) -> dict:
     """Derive evidence and completeness from the ledger, never from a caller's conclusion."""
     from .exp019_execution import _verify_prior_receipts
+    from .exp019_anchor import run_receipt_provenance
 
     validate_run(run)
     slots = []
@@ -90,6 +91,7 @@ def receipt_from_run(run: dict, root: Path) -> dict:
         "recorded_model_snapshot": run["model_snapshot"],
         "settings": run["settings"], "reference_inputs": [],
         "ordered_slots": slots, "derived_run_status": derived_status,
+        "external_provenance": run_receipt_provenance(root / "run.json", run),
     }
     return {**core, "evidence_sha256": _canonical_sha256(core)}
 

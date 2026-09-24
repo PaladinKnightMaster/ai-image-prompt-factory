@@ -485,7 +485,11 @@ def freeze_review(review_file: str | Path) -> dict:
     _write_json_atomic(frozen_path, frozen)
     if review.get("experiment_id") == "EXP-019":
         from .exp019_review import write_freeze_commitment
+        from .exp019_anchor import append_review_checkpoint
         write_freeze_commitment(frozen_path)
+        run_path = path.parent.parent.parent / "run.json"
+        _path, exp019_run = load_run(run_path)
+        append_review_checkpoint(run_path, exp019_run, review["reviewer_id"])
 
     return {
         "run_id": frozen["run_id"],
