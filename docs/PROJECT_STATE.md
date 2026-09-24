@@ -1,16 +1,16 @@
 # Current Project State
 
-- Last updated: 2026-09-23
+- Last updated: 2026-09-24
+- Canonical branch: `main`; V3.4 implementation merge commit: `aa6ae9bb57166d70840fb6ec6ca2a2f4a59b8a52` (PR #6)
 - Current stable release: V3.3 Empirical Lab
 - Stable tag: `v3.3.0` (annotated; closure commit `3c0119e`)
 - Architecture freeze base HEAD: `a86b66cee21c37e9a055ee0b3809082b7413d370` on `main`
-- Current implementation branch: `feat/v3.4-transformation-intelligence`, created from `main` at `8c8eeeaa662e6536aca3610374d1016ca61eb134`; see the [current handoff](SESSION_HANDOFF.md).
 
 ## Current status
 
-**V3.3 Empirical Lab: CLOSED.** The release tag marks scientific closure and is integrated into `main`. Later `main` commits fixed CI portability and corrected an EXP-017 source-hash notation without changing the underlying result or conclusion. Package and manifest version are `3.3.0`; the compiler/evidence-snapshot lineage remains `3.2.0` by design. See the [release notes](RELEASE_NOTES_V3.3.md).
+**V3.3 Empirical Lab: CLOSED and latest stable release.** The release tag marks scientific closure and is integrated into `main`. Later `main` commits fixed CI portability and corrected an EXP-017 source-hash notation without changing the underlying result or conclusion. README and SKILL titles, package, and manifest retain the V3.3 release label; the compiler/evidence-snapshot lineage remains `3.2.0` by design. See the [release notes](RELEASE_NOTES_V3.3.md).
 
-**V3.4 Transformation Intelligence: architecture frozen; implementation in progress on the feature branch.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. The four-family MVP is implemented for review and validation on the branch, but V3.4 is not merged or released. V3.3 remains the stable released baseline.
+**V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 has a planned Domain-Grounded Lexical Realization definition, but its first-party fixture and preregistration details are not frozen; no V3.4 generation experiment has run. No general image-generation benefit from domain-grounded lexical realization has been established.
 
 ## Strongest established findings
 
@@ -22,11 +22,11 @@ The detailed, corrected source of these conclusions is the [V3.3 evidence synthe
 
 ## Current architecture
 
-A prompt-first compiler uses structured request/case data, explicit locks and reference roles, routed era/art/material knowledge, evidence-aware compatibility checks, and readable production prompts. Optional generation, empirical experiments, independent evaluation, regression cases, and public/internal galleries build on that shared data. The [runtime contract](../SKILL.md) and [architecture ADRs](DECISIONS.md) hold the details.
+A prompt-first compiler uses structured request/case data, explicit locks and reference roles, routed era/art/material knowledge, evidence-aware compatibility checks, and readable production prompts. The merged V3.4 path adds generic representation transformations and deterministic lexical realization of resolved concepts. Optional generation, empirical experiments, independent evaluation, regression cases, and public/internal galleries build on shared data. The [runtime contract](../SKILL.md) and [architecture ADRs](DECISIONS.md) hold the details.
 
 ## Next scope
 
-Complete implementation review and PR preparation for the frozen V3.4 Transformation Intelligence architecture. Do not run the planned lexical image-generation experiment as part of implementation. Later tracks remain in the [capability roadmap](ROADMAP.md).
+Freeze first-party fixtures and preregistration for EXP-019 before generation. Keep implementation completion separate from empirical validation and release. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 
