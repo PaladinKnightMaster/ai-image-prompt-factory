@@ -16,8 +16,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-api = ["openai>=2.0"]
-dev = ["pytest>=8.0"]
+api = ["openai>=2.0", "Pillow>=10.0"]
+dev = ["pytest>=8.0", "Pillow>=10.0"]
 gallery = ["Pillow>=10.0"]
 
 [project.scripts]

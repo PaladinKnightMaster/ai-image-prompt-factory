@@ -17,6 +17,8 @@ from .experiment_review import (
 
 def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path | None = None) -> dict:
     run_path, run = load_run(run_file)
+    from .exp019_receipt import validate_run_receipt
+    validate_run_receipt(run_path, run)
     if reviewer_id not in REVIEWERS:
         raise ValueError("EXP-019 reviewer_id must be R1 or R2")
     if run.get("status") != "completed" or any(
@@ -149,6 +151,122 @@ def validate_review_details(review: dict, manifest: dict) -> None:
             raise ValueError("EXP-019 invalid blind failure taxonomy classes")
 
 
+def _freeze_commitment_path(root: Path, reviewer_id: str) -> Path:
+    return root / ".review-private" / f"{reviewer_id}.freeze.commitment.json"
+
+
+def write_freeze_commitment(frozen_path: Path) -> dict:
+    """Persist a second, exclusive-create hash anchor outside the review file."""
+    reviewer_id = frozen_path.parent.name
+    if reviewer_id not in REVIEWERS:
+        raise ValueError("EXP-019 invalid reviewer freeze path")
+    root = frozen_path.parent.parent.parent
+    mapping_path = root / ".review-private" / f"{reviewer_id}.mapping.json"
+    frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+    mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+    _verify_frozen_review(frozen)
+    commitment = {
+        "reviewer_id": reviewer_id,
+        "run_id": mapping["run_id"],
+        "review_batch_id": frozen["run_id"],
+        "review_sha256": frozen["review_sha256"],
+        "frozen_file_sha256": sha256_file(frozen_path),
+        "mapping_commitment_sha256": mapping["mapping_commitment_sha256"],
+        "mapping_file_sha256": sha256_file(mapping_path),
+        "sample_set_sha256": _canonical_sha256({"entries": mapping["entries"]}),
+        "review_package_sha256": frozen["review_package_sha256"],
+        "frozen_at_utc": frozen["frozen_at_utc"],
+    }
+    destination = _freeze_commitment_path(root, reviewer_id)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("x", encoding="utf-8", newline="\n") as handle:
+        json.dump(commitment, handle, ensure_ascii=False, indent=2)
+        handle.write("\n")
+    return commitment
+
+
+def verify_freeze_commitment(root: Path, reviewer_id: str) -> dict:
+    directory = root / "blind-review" / reviewer_id
+    frozen_path = directory / "review.frozen.json"
+    mapping_path = root / ".review-private" / f"{reviewer_id}.mapping.json"
+    commitment_path = _freeze_commitment_path(root, reviewer_id)
+    if not all(path.is_file() for path in (frozen_path, mapping_path, commitment_path)):
+        raise ValueError("both EXP-019 reviews require independent freeze commitments")
+    frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+    mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+    commitment = json.loads(commitment_path.read_text(encoding="utf-8"))
+    _verify_frozen_review(frozen)
+    expected = {
+        "reviewer_id": reviewer_id,
+        "run_id": mapping["run_id"],
+        "review_batch_id": frozen["run_id"],
+        "review_sha256": frozen["review_sha256"],
+        "frozen_file_sha256": sha256_file(frozen_path),
+        "mapping_commitment_sha256": mapping["mapping_commitment_sha256"],
+        "mapping_file_sha256": sha256_file(mapping_path),
+        "sample_set_sha256": _canonical_sha256({"entries": mapping["entries"]}),
+        "review_package_sha256": frozen["review_package_sha256"],
+        "frozen_at_utc": frozen["frozen_at_utc"],
+    }
+    if commitment != expected:
+        raise ValueError("EXP-019 external review freeze commitment mismatch")
+    return {"commitment": commitment, "sha256": sha256_file(commitment_path)}
+
+
+def verify_reveal_against_private(run_path: Path, run: dict, revealed: dict) -> None:
+    """Rebind a persisted reveal to both original private mappings and freezes."""
+    root = run_path.parent
+    if (revealed.get("run_id") != run["run_id"]
+            or revealed.get("experiment_id") != "EXP-019"
+            or revealed.get("plan_commitment_sha256") != run["plan_commitment_sha256"]
+            or set(revealed.get("reviews", {})) != set(REVIEWERS)):
+        raise ValueError("EXP-019 reveal protocol binding mismatch")
+    mappings = {}
+    for reviewer_id in REVIEWERS:
+        anchor = verify_freeze_commitment(root, reviewer_id)
+        mapping_path = root / ".review-private" / f"{reviewer_id}.mapping.json"
+        mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+        frozen_path = root / "blind-review" / reviewer_id / "review.frozen.json"
+        frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+        mapping_core = {key: mapping[key] for key in (
+            "run_id", "experiment_id", "reviewer_id", "review_batch_id", "entries"
+        )}
+        if (_canonical_sha256(mapping_core) != mapping.get("mapping_commitment_sha256")
+                or mapping["run_id"] != run["run_id"]):
+            raise ValueError("EXP-019 private mapping commitment mismatch after reveal")
+        expected_record = {
+            "review_sha256": frozen["review_sha256"],
+            "frozen_file_sha256": sha256_file(frozen_path),
+            "freeze_commitment_sha256": anchor["sha256"],
+            "mapping_commitment_sha256": mapping["mapping_commitment_sha256"],
+            "review_package_sha256": frozen["review_package_sha256"],
+        }
+        if revealed["reviews"][reviewer_id] != expected_record:
+            raise ValueError("EXP-019 revealed review commitment mismatch")
+        indexed = {entry["blind_id"]: entry for entry in mapping["entries"]}
+        if len(mapping["entries"]) != 12 or len(indexed) != 12:
+            raise ValueError("EXP-019 private mapping sample set mismatch")
+        mappings[reviewer_id] = indexed
+    expected_items = []
+    for slot in run["invocation_order"]:
+        _variant, output = find_slot(run, slot["blind_id"])
+        review_ids = {}
+        for reviewer_id in REVIEWERS:
+            entry = mappings[reviewer_id].get(slot["blind_id"])
+            if (not entry or entry["variant_id"] != slot["variant_id"]
+                    or entry["replicate"] != slot["replicate"]
+                    or entry["image_sha256"] != output["image_sha256"]):
+                raise ValueError("EXP-019 private mapping disagrees with source output")
+            review_ids[reviewer_id] = entry["review_id"]
+        expected_items.append({
+            "slot_id": slot["blind_id"], "position": slot["position"],
+            "condition": slot["variant_id"], "replicate": slot["replicate"],
+            "image_sha256": output["image_sha256"], "review_ids": review_ids,
+        })
+    if revealed.get("items") != expected_items:
+        raise ValueError("EXP-019 revealed assignment differs from committed mapping")
+
+
 def reveal(run_file: str | Path) -> dict:
     run_path, run = load_run(run_file)
     root = run_path.parent
@@ -165,6 +283,7 @@ def reveal(run_file: str | Path) -> dict:
         manifest_path = directory / "manifest.json"
         if not frozen_path.is_file() or not mapping_path.is_file() or not manifest_path.is_file():
             raise ValueError("both EXP-019 reviews must be frozen before reveal")
+        freeze_anchor = verify_freeze_commitment(root, reviewer_id)
         frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
         mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -215,6 +334,7 @@ def reveal(run_file: str | Path) -> dict:
                 raise ValueError("EXP-019 source output changed before reveal")
         review_records[reviewer_id] = {"review_sha256": frozen["review_sha256"],
                                        "frozen_file_sha256": sha256_file(frozen_path),
+                                       "freeze_commitment_sha256": freeze_anchor["sha256"],
                                        "mapping_commitment_sha256": mapping["mapping_commitment_sha256"],
                                        "review_package_sha256": frozen["review_package_sha256"]}
         mappings[reviewer_id] = entry_by_source
@@ -229,5 +349,6 @@ def reveal(run_file: str | Path) -> dict:
         } for slot in run["invocation_order"]],
     }
     _write_json_atomic(reveal_path, revealed)
+    verify_reveal_against_private(run_path, run, revealed)
     return {"run_id": run["run_id"], "status": "revealed", "reveal": str(reveal_path),
             "review_hashes": {reviewer: review_records[reviewer]["review_sha256"] for reviewer in REVIEWERS}}

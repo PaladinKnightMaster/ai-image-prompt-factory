@@ -69,12 +69,16 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
     run_path, run = load_run(run_file)
     if run.get("experiment_id") != "EXP-019" or run.get("status") != "completed":
         raise ValueError("EXP-019 analysis requires a completed frozen run")
+    from .exp019_receipt import RECEIPT_NAME, validate_run_receipt
+    from .exp019_review import verify_reveal_against_private
+    run_receipt = validate_run_receipt(run_path, run)
     definition, _fixture = frozen_protocol()
     root = run_path.parent
     reveal_path = root / "blind-review" / "reveal.json"
     if not reveal_path.is_file():
         raise ValueError("EXP-019 analysis requires treatment reveal after two review freezes")
     reveal = json.loads(reveal_path.read_text(encoding="utf-8"))
+    verify_reveal_against_private(run_path, run, reveal)
     if reveal.get("run_id") != run["run_id"] or reveal.get("plan_commitment_sha256") != run["plan_commitment_sha256"]:
         raise ValueError("EXP-019 reveal/run binding mismatch")
     if set(reveal.get("reviews", {})) != set(REVIEWERS):
@@ -193,6 +197,8 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         "experiment_id": "EXP-019", "experiment_version": "1.0.0", "run_id": run["run_id"],
         "status": "completed", "definition_sha256": run["experiment_definition_sha256"],
         "fixture_sha256": run["fixture_sha256"], "plan_commitment_sha256": run["plan_commitment_sha256"],
+        "run_receipt_sha256": sha256_file(root / "receipts" / RECEIPT_NAME),
+        "run_evidence_sha256": run_receipt["evidence_sha256"],
         "prompt_hashes": {v["variant_id"]: v["prompt_sha256"] for v in run["variants"]},
         "generation": {"provider": "openai", "mode": "generate", "requested_model": run["model"],
                        "recorded_model_snapshot": run["model_snapshot"], "settings": run["settings"],
@@ -219,4 +225,17 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         with destination.open("x", encoding="utf-8", newline="\n") as handle:
             json.dump(result, handle, ensure_ascii=False, indent=2)
             handle.write("\n")
+        validate_exp019_result(run_path, destination)
     return result
+
+
+def validate_exp019_result(run_file: str | Path, result_file: str | Path) -> dict:
+    """Recompute all evidence and arithmetic; JSON-schema validity alone is insufficient."""
+    persisted = json.loads(Path(result_file).expanduser().resolve().read_text(encoding="utf-8"))
+    schema = load_json("data/schemas/exp019_result.schema.json")
+    if list(Draft202012Validator(schema).iter_errors(persisted)):
+        raise ValueError("EXP-019 persisted result schema invalid")
+    expected = analyze_exp019(run_file)
+    if persisted != expected:
+        raise ValueError("EXP-019 persisted result differs from frozen evidence or derived analysis")
+    return persisted

@@ -483,6 +483,9 @@ def freeze_review(review_file: str | Path) -> dict:
     hash_payload.pop("review_sha256", None)
     frozen["review_sha256"] = _canonical_sha256(hash_payload)
     _write_json_atomic(frozen_path, frozen)
+    if review.get("experiment_id") == "EXP-019":
+        from .exp019_review import write_freeze_commitment
+        write_freeze_commitment(frozen_path)
 
     return {
         "run_id": frozen["run_id"],

@@ -3,7 +3,7 @@
   "$id": "https://example.org/aipf/exp019/result.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "result_id", "experiment_id", "experiment_version", "run_id", "status", "definition_sha256", "fixture_sha256", "plan_commitment_sha256", "prompt_hashes", "generation", "review", "samples", "condition_means", "contrasts", "safeguards", "initial_evidence_classification", "evidence_classification", "statistical_significance_claim"],
+  "required": ["schema_version", "result_id", "experiment_id", "experiment_version", "run_id", "status", "definition_sha256", "fixture_sha256", "plan_commitment_sha256", "run_receipt_sha256", "run_evidence_sha256", "prompt_hashes", "generation", "review", "samples", "condition_means", "contrasts", "safeguards", "initial_evidence_classification", "evidence_classification", "statistical_significance_claim"],
   "properties": {
     "schema_version": {"const": "1.0.0"},
     "result_id": {"type": "string", "minLength": 1},
@@ -14,6 +14,8 @@
     "definition_sha256": {"$ref": "#/$defs/sha"},
     "fixture_sha256": {"$ref": "#/$defs/sha"},
     "plan_commitment_sha256": {"$ref": "#/$defs/sha"},
+    "run_receipt_sha256": {"$ref": "#/$defs/sha"},
+    "run_evidence_sha256": {"$ref": "#/$defs/sha"},
     "prompt_hashes": {"type": "object", "required": ["C", "A", "B"], "additionalProperties": false, "properties": {"C": {"$ref": "#/$defs/sha"}, "A": {"$ref": "#/$defs/sha"}, "B": {"$ref": "#/$defs/sha"}}},
     "generation": {
       "type": "object", "required": ["provider", "mode", "requested_model", "recorded_model_snapshot", "settings", "reference_inputs", "slots"],
@@ -39,7 +41,7 @@
     "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "classification": {"enum": ["supports", "weakly_supports", "inconclusive", "weakly_contradicts", "contradicts"]},
     "scores": {"type": "object", "required": ["art_material_fidelity", "semantic_compliance", "aesthetic_quality", "technical_defects"], "additionalProperties": false, "properties": {"art_material_fidelity": {"type": "number", "minimum": 1, "maximum": 5}, "semantic_compliance": {"type": "number", "minimum": 1, "maximum": 5}, "aesthetic_quality": {"type": "number", "minimum": 1, "maximum": 5}, "technical_defects": {"type": "number", "minimum": 1, "maximum": 5}}},
-    "reviewRecord": {"type": "object", "required": ["review_sha256", "frozen_file_sha256", "mapping_commitment_sha256", "review_package_sha256"], "properties": {"review_sha256": {"$ref": "#/$defs/sha"}, "frozen_file_sha256": {"$ref": "#/$defs/sha"}, "mapping_commitment_sha256": {"$ref": "#/$defs/sha"}, "review_package_sha256": {"$ref": "#/$defs/sha"}}},
+    "reviewRecord": {"type": "object", "required": ["review_sha256", "frozen_file_sha256", "freeze_commitment_sha256", "mapping_commitment_sha256", "review_package_sha256"], "properties": {"review_sha256": {"$ref": "#/$defs/sha"}, "frozen_file_sha256": {"$ref": "#/$defs/sha"}, "freeze_commitment_sha256": {"$ref": "#/$defs/sha"}, "mapping_commitment_sha256": {"$ref": "#/$defs/sha"}, "review_package_sha256": {"$ref": "#/$defs/sha"}}},
     "diagnostics": {"type": "object", "required": ["target_region_localization", "controlled_tonal_transition_visible", "integrated_with_flat_print_structure", "generic_global_or_3d_shading", "airbrushed_or_overlay_like_gradient"], "additionalProperties": false, "properties": {"target_region_localization": {"enum": ["yes", "partial", "no"]}, "controlled_tonal_transition_visible": {"enum": ["yes", "partial", "no"]}, "integrated_with_flat_print_structure": {"enum": ["yes", "partial", "no"]}, "generic_global_or_3d_shading": {"enum": ["none", "ambiguous", "clear"]}, "airbrushed_or_overlay_like_gradient": {"enum": ["none", "ambiguous", "clear"]}}},
     "sampleReview": {"type": "object", "required": ["review_id", "scores", "diagnostics", "failure_observations", "failure_classes", "term_realization_failure", "derived_failure_classes"], "properties": {"review_id": {"type": "string"}, "scores": {"$ref": "#/$defs/scores"}, "diagnostics": {"$ref": "#/$defs/diagnostics"}, "failure_observations": {"type": "object", "required": ["target_gradation_materially_absent_or_generic"], "additionalProperties": false, "properties": {"target_gradation_materially_absent_or_generic": {"type": "boolean"}}}, "failure_classes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "term_realization_failure": {"type": "boolean"}, "derived_failure_classes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}}},
     "contrast": {"type": "object", "required": ["contrast", "delta", "raw_classification", "classification", "pairwise", "moved_one_level_toward_inconclusive"], "properties": {"contrast": {"enum": ["B-C", "B-A"]}, "delta": {"type": "number"}, "raw_classification": {"$ref": "#/$defs/classification"}, "classification": {"$ref": "#/$defs/classification"}, "pairwise": {"type": "object", "required": ["B_wins", "B_losses", "ties", "direction_wins", "non_tied"], "properties": {"B_wins": {"type": "integer"}, "B_losses": {"type": "integer"}, "ties": {"type": "integer"}, "direction_wins": {"type": "integer"}, "non_tied": {"type": "integer"}}}, "moved_one_level_toward_inconclusive": {"type": "boolean"}}}
