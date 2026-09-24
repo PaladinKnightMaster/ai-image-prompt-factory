@@ -1,0 +1,47 @@
+{
+  "fixture_id": "EXP-019-BOKASHI-01",
+  "version": "1.0.0",
+  "status": "frozen",
+  "fixture_type": "first_party_textual_isolation_bench",
+  "art_method_id": "japanese_woodblock_print",
+  "artifact_form_id": "print_sheet",
+  "artifact_condition": "newly printed",
+  "orientation": "vertical",
+  "era": null,
+  "named_artist": null,
+  "identity": null,
+  "reference_inputs": [],
+  "transformation_pack": null,
+  "transformation": null,
+  "target_region": "broad upper sky color region only",
+  "target_inks": [
+    "indigo",
+    "light blue"
+  ],
+  "common_prompt": "Create a newly printed Japanese woodblock relief print on one unframed vertical sheet. Depict a quiet riverbank scene with a low arched wooden bridge across the lower third, one dark pine mass at the left edge, a broad open sky occupying the upper half, and a narrow band of calm water below. Use crisp carved contour lines, flat block-printed color areas, slight hand-print variation, visible off-white paper, and no lettering. Keep most color regions flat. The upper sky color region is the sole designated treatment region and uses only indigo and light blue ink. Present the full sheet frontally against a plain neutral background under even neutral light, with no photographic depth of field, dramatic lighting, or 3D-rendered volume.",
+  "treatment_clauses": {
+    "C": "In the upper sky color region only, use a controlled printed gradation from darker indigo near the top edge to lighter blue toward the horizon.",
+    "A": "In the upper sky color region only, use bokashi.",
+    "B": "In the upper sky color region only, use bokashi, a controlled printed gradation from darker indigo near the top edge to lighter blue toward the horizon."
+  },
+  "prompt_assembly": {
+    "separator": " ",
+    "encoding": "UTF-8",
+    "trailing_whitespace": false,
+    "rule": "common_prompt + one ASCII space + one treatment clause"
+  },
+  "generation_config": {
+    "requested_model": "gpt-image-2-2026-04-21",
+    "model_snapshot": "gpt-image-2-2026-04-21",
+    "aspect_ratio": "2:3",
+    "width": 1024,
+    "height": 1536,
+    "size": "1024x1536",
+    "quality": "high",
+    "background": "opaque",
+    "reference_inputs": [],
+    "seed": null,
+    "seed_support": "unsupported",
+    "image_count_per_invocation": 1
+  }
+}
