@@ -8,11 +8,13 @@ These are planning targets, not promises or evidence that a feature exists. The 
 
 **Closed.** Added preregistered experiments, frozen fixtures, controlled review, execution provenance, result classification, replication, transfer testing, and cross-experiment synthesis. Findings and limits are in the [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md).
 
-## Planned
+## Architecture frozen — implementation next
 
 ### V3.4 - Transformation Intelligence
 
-Candidate composable routes: identity → era; identity → historical role; identity → artifact; identity → art method; era → art method; artifact → living reconstruction; living scene → artifact; historical → modern encounter. Routes should compose shared identity, era, art-method, artifact, and evidence knowledge rather than duplicate prompt libraries. Research questions are in the [queue](RESEARCH_QUEUE.md).
+**Architecture frozen — implementation next.** The canonical [V3.4 architecture](V3.4_ARCHITECTURE_FREEZE.md) defines the approved Transformation Intelligence boundaries, four MVP transformation families, and lexical realization amendment. Implementation has not started or completed. V3.3 remains the stable released baseline. Next exact task: implement the frozen V3.4 Transformation Intelligence architecture.
+
+## Planned
 
 ### V3.5 - Visual Knowledge Expansion
 
