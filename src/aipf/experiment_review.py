@@ -104,6 +104,7 @@ def create_review_package(
     run_file: str | Path,
     *,
     output: str | Path | None = None,
+    reviewer_id: str | None = None,
 ) -> dict:
     """Create a doubly blinded reviewer package.
 
@@ -112,6 +113,13 @@ def create_review_package(
     before review and stored outside the reviewer-facing directory.
     """
     run_path, run = load_run(run_file)
+    if run.get("experiment_id") == "EXP-019":
+        if reviewer_id is None:
+            raise ValueError("EXP-019 requires explicit reviewer_id R1 or R2")
+        from .exp019_review import create_package
+        return create_package(run_path, reviewer_id=reviewer_id, output=output)
+    if reviewer_id is not None:
+        raise ValueError("reviewer_id is reserved for two-review protocols")
 
     if run.get("status") != "completed" or not _all_outputs_generated(run):
         raise ValueError(
@@ -452,6 +460,14 @@ def freeze_review(review_file: str | Path) -> dict:
         review,
         expected_dimensions=list(manifest["evaluation_dimensions"]),
     )
+    if review.get("experiment_id") == "EXP-019":
+        from jsonschema import Draft202012Validator
+        from .io import load_json
+        review_schema = load_json("data/schemas/experiment_review.schema.json")
+        if list(Draft202012Validator(review_schema).iter_errors(review)):
+            raise ValueError("EXP-019 review schema validation failed")
+        from .exp019_review import validate_review_details
+        validate_review_details(review, manifest)
 
     frozen_path = path.parent / REVIEW_FROZEN_NAME
     if frozen_path.exists():
@@ -467,6 +483,13 @@ def freeze_review(review_file: str | Path) -> dict:
     hash_payload.pop("review_sha256", None)
     frozen["review_sha256"] = _canonical_sha256(hash_payload)
     _write_json_atomic(frozen_path, frozen)
+    if review.get("experiment_id") == "EXP-019":
+        from .exp019_review import write_freeze_commitment
+        from .exp019_anchor import append_review_checkpoint
+        write_freeze_commitment(frozen_path)
+        run_path = path.parent.parent.parent / "run.json"
+        _path, exp019_run = load_run(run_path)
+        append_review_checkpoint(run_path, exp019_run, review["reviewer_id"])
 
     return {
         "run_id": frozen["run_id"],
@@ -479,6 +502,9 @@ def freeze_review(review_file: str | Path) -> dict:
 def reveal_review(run_file: str | Path) -> dict:
     """Reveal the committed treatment mapping only after review freeze."""
     run_path, run = load_run(run_file)
+    if run.get("experiment_id") == "EXP-019":
+        from .exp019_review import reveal
+        return reveal(run_path)
     review_dir = run_path.parent / BLIND_REVIEW_DIRNAME
     frozen_path = review_dir / REVIEW_FROZEN_NAME
     mapping_path = run_path.parent / REVIEW_PRIVATE_DIRNAME / REVIEW_MAPPING_NAME

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/result.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "result_id", "experiment_id", "experiment_version", "run_id", "status", "definition_sha256", "fixture_sha256", "plan_commitment_sha256", "run_receipt_sha256", "run_evidence_sha256", "prompt_hashes", "generation", "review", "samples", "condition_means", "contrasts", "safeguards", "initial_evidence_classification", "evidence_classification", "statistical_significance_claim"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "result_id": {"type": "string", "minLength": 1},
+    "experiment_id": {"const": "EXP-019"},
+    "experiment_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "status": {"const": "completed"},
+    "definition_sha256": {"$ref": "#/$defs/sha"},
+    "fixture_sha256": {"$ref": "#/$defs/sha"},
+    "plan_commitment_sha256": {"$ref": "#/$defs/sha"},
+    "run_receipt_sha256": {"$ref": "#/$defs/sha"},
+    "run_evidence_sha256": {"$ref": "#/$defs/sha"},
+    "prompt_hashes": {"type": "object", "required": ["C", "A", "B"], "additionalProperties": false, "properties": {"C": {"$ref": "#/$defs/sha"}, "A": {"$ref": "#/$defs/sha"}, "B": {"$ref": "#/$defs/sha"}}},
+    "generation": {
+      "type": "object", "required": ["provider", "mode", "requested_model", "recorded_model_snapshot", "settings", "reference_inputs", "slots"],
+      "properties": {
+        "provider": {"const": "openai"}, "mode": {"const": "generate"},
+        "requested_model": {"const": "gpt-image-2-2026-04-21"},
+        "recorded_model_snapshot": {"const": "gpt-image-2-2026-04-21"},
+        "settings": {"type": "object", "required": ["replicates", "size", "quality", "background", "seed", "image_count_per_invocation"], "properties": {"replicates": {"const": 4}, "size": {"const": "1024x1536"}, "quality": {"const": "high"}, "background": {"const": "opaque"}, "seed": {"type": "null"}, "image_count_per_invocation": {"const": 1}}},
+        "reference_inputs": {"const": []},
+        "slots": {"type": "array", "minItems": 12, "maxItems": 12, "items": {"type": "object", "required": ["slot_id", "position", "condition", "replicate", "prompt_sha256", "attempt_events", "receipt_history", "output_sha256", "metadata_file", "metadata_sha256"], "properties": {"slot_id": {"type": "string"}, "position": {"type": "integer", "minimum": 1, "maximum": 12}, "condition": {"enum": ["C", "A", "B"]}, "replicate": {"type": "integer", "minimum": 1, "maximum": 4}, "prompt_sha256": {"$ref": "#/$defs/sha"}, "attempt_events": {"type": "array", "minItems": 2, "items": {"type": "object"}}, "receipt_history": {"type": "array", "minItems": 1, "items": {"type": "object"}}, "output_sha256": {"$ref": "#/$defs/sha"}, "metadata_file": {"type": "string"}, "metadata_sha256": {"$ref": "#/$defs/sha"}}}}
+      }
+    },
+    "review": {"type": "object", "required": ["records", "reveal_file_sha256", "revealed_at_utc"], "properties": {"records": {"type": "object", "required": ["R1", "R2"], "additionalProperties": false, "properties": {"R1": {"$ref": "#/$defs/reviewRecord"}, "R2": {"$ref": "#/$defs/reviewRecord"}}}, "reveal_file_sha256": {"$ref": "#/$defs/sha"}, "revealed_at_utc": {"type": "string"}}},
+    "samples": {"type": "array", "minItems": 12, "maxItems": 12, "items": {"type": "object", "required": ["slot_id", "position", "condition", "replicate", "image_sha256", "reviewers", "averaged_scores"], "properties": {"slot_id": {"type": "string"}, "position": {"type": "integer"}, "condition": {"enum": ["C", "A", "B"]}, "replicate": {"type": "integer"}, "image_sha256": {"$ref": "#/$defs/sha"}, "reviewers": {"type": "object", "required": ["R1", "R2"], "additionalProperties": false, "properties": {"R1": {"$ref": "#/$defs/sampleReview"}, "R2": {"$ref": "#/$defs/sampleReview"}}}, "averaged_scores": {"$ref": "#/$defs/scores"}}}},
+    "condition_means": {"type": "object", "required": ["C", "A", "B"], "additionalProperties": false, "properties": {"C": {"$ref": "#/$defs/scores"}, "A": {"$ref": "#/$defs/scores"}, "B": {"$ref": "#/$defs/scores"}}},
+    "contrasts": {"type": "object", "required": ["B-C", "B-A"], "additionalProperties": false, "properties": {"B-C": {"$ref": "#/$defs/contrast"}, "B-A": {"$ref": "#/$defs/contrast"}}},
+    "safeguards": {"type": "object", "required": ["ceiling", "floor", "reviewer_ambiguity", "reviewer_ambiguity_sample_count", "side_effect_veto", "side_effects", "provenance_valid"], "properties": {"ceiling": {"type": "boolean"}, "floor": {"type": "boolean"}, "reviewer_ambiguity": {"type": "boolean"}, "reviewer_ambiguity_sample_count": {"type": "integer"}, "side_effect_veto": {"type": "boolean"}, "side_effects": {"type": "array", "items": {"type": "object"}}, "provenance_valid": {"const": true}}},
+    "initial_evidence_classification": {"$ref": "#/$defs/classification"},
+    "evidence_classification": {"$ref": "#/$defs/classification"},
+    "statistical_significance_claim": {"const": false}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classification": {"enum": ["supports", "weakly_supports", "inconclusive", "weakly_contradicts", "contradicts"]},
+    "scores": {"type": "object", "required": ["art_material_fidelity", "semantic_compliance", "aesthetic_quality", "technical_defects"], "additionalProperties": false, "properties": {"art_material_fidelity": {"type": "number", "minimum": 1, "maximum": 5}, "semantic_compliance": {"type": "number", "minimum": 1, "maximum": 5}, "aesthetic_quality": {"type": "number", "minimum": 1, "maximum": 5}, "technical_defects": {"type": "number", "minimum": 1, "maximum": 5}}},
+    "reviewRecord": {"type": "object", "required": ["review_sha256", "frozen_file_sha256", "freeze_commitment_sha256", "mapping_commitment_sha256", "review_package_sha256"], "properties": {"review_sha256": {"$ref": "#/$defs/sha"}, "frozen_file_sha256": {"$ref": "#/$defs/sha"}, "freeze_commitment_sha256": {"$ref": "#/$defs/sha"}, "mapping_commitment_sha256": {"$ref": "#/$defs/sha"}, "review_package_sha256": {"$ref": "#/$defs/sha"}}},
+    "diagnostics": {"type": "object", "required": ["target_region_localization", "controlled_tonal_transition_visible", "integrated_with_flat_print_structure", "generic_global_or_3d_shading", "airbrushed_or_overlay_like_gradient"], "additionalProperties": false, "properties": {"target_region_localization": {"enum": ["yes", "partial", "no"]}, "controlled_tonal_transition_visible": {"enum": ["yes", "partial", "no"]}, "integrated_with_flat_print_structure": {"enum": ["yes", "partial", "no"]}, "generic_global_or_3d_shading": {"enum": ["none", "ambiguous", "clear"]}, "airbrushed_or_overlay_like_gradient": {"enum": ["none", "ambiguous", "clear"]}}},
+    "sampleReview": {"type": "object", "required": ["review_id", "scores", "diagnostics", "failure_observations", "failure_classes", "term_realization_failure", "derived_failure_classes"], "properties": {"review_id": {"type": "string"}, "scores": {"$ref": "#/$defs/scores"}, "diagnostics": {"$ref": "#/$defs/diagnostics"}, "failure_observations": {"type": "object", "required": ["target_gradation_materially_absent_or_generic"], "additionalProperties": false, "properties": {"target_gradation_materially_absent_or_generic": {"type": "boolean"}}}, "failure_classes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "term_realization_failure": {"type": "boolean"}, "derived_failure_classes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}}},
+    "contrast": {"type": "object", "required": ["contrast", "delta", "raw_classification", "classification", "pairwise", "moved_one_level_toward_inconclusive"], "properties": {"contrast": {"enum": ["B-C", "B-A"]}, "delta": {"type": "number"}, "raw_classification": {"$ref": "#/$defs/classification"}, "classification": {"$ref": "#/$defs/classification"}, "pairwise": {"type": "object", "required": ["B_wins", "B_losses", "ties", "direction_wins", "non_tied"], "properties": {"B_wins": {"type": "integer"}, "B_losses": {"type": "integer"}, "ties": {"type": "integer"}, "direction_wins": {"type": "integer"}, "non_tied": {"type": "integer"}}}, "moved_one_level_toward_inconclusive": {"type": "boolean"}}}
+  }
+}

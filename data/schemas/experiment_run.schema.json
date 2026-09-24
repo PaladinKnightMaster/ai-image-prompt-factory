@@ -40,7 +40,8 @@
         "running",
         "completed",
         "partial",
-        "failed"
+        "failed",
+        "incomplete"
       ]
     },
     "generation_mode": {

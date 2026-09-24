@@ -370,6 +370,10 @@ def create_run_plan(
             json.dumps(execution_provenance)
         )
 
+    if experiment["experiment_id"] == "EXP-019":
+        from .exp019_protocol import configure_run
+        configure_run(run)
+
     validate_blind_ids(run)
     return run
 
@@ -402,6 +406,9 @@ def write_run_plan(
 ) -> Path:
     """Persist a private experiment run plan and its variant prompts."""
     validate_blind_ids(run)
+    if run.get("experiment_id") == "EXP-019":
+        from .exp019_protocol import validate_run
+        validate_run(run)
 
     root = resolve_run_root(output)
     root.mkdir(parents=True, exist_ok=True)
@@ -440,6 +447,9 @@ def load_run_plan(run_file: str | Path) -> dict:
 
     run = json.loads(path.read_text(encoding="utf-8"))
     validate_blind_ids(run)
+    if run.get("experiment_id") == "EXP-019":
+        from .exp019_protocol import validate_run
+        validate_run(run)
     return run
 
 

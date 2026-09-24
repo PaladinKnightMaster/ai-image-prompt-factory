@@ -12,6 +12,8 @@
 
 **V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 now has a frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json) and [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md), while its definition remains `planned` and unexecuted. No generation receipt or result exists, and no general image-generation benefit from domain-grounded lexical realization has been established.
 
+EXP-019 execution infrastructure hardening is under review on `codex/exp-019-execution-infrastructure`. Its offline synthetic rehearsal is not empirical evidence. A fresh execution-readiness audit is required before any real generation.
+
 ## Strongest established findings
 
 - Explicit identity/outfit/pose reference-role assignment has credible positive evidence for cross-reference leakage control in the tested context. EXP-017 is the strongest clean local result.
@@ -26,7 +28,7 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Next scope
 
-Execute EXP-019 only after its frozen execution and review-readiness gates are satisfied. Do not treat fixture/preregistration freeze as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
+Re-audit the EXP-019 execution infrastructure against the frozen protocol before any generation. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 

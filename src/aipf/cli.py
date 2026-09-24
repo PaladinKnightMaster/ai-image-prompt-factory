@@ -95,12 +95,17 @@ def main():
     p = sub.add_parser("experiment-review-package")
     p.add_argument("run_file")
     p.add_argument("--output")
+    p.add_argument("--reviewer-id", choices=["R1", "R2"])
 
     p = sub.add_parser("experiment-review-freeze")
     p.add_argument("review_file")
 
     p = sub.add_parser("experiment-review-reveal")
     p.add_argument("run_file")
+
+    p = sub.add_parser("experiment-analyze-exp019")
+    p.add_argument("run_file")
+    p.add_argument("--output", required=True)
 
     p = sub.add_parser("experiment-status")
     p.add_argument("run_file")
@@ -229,6 +234,7 @@ def main():
             create_review_package(
                 args.run_file,
                 output=args.output,
+                reviewer_id=args.reviewer_id,
             )
         )
         return
@@ -237,6 +243,12 @@ def main():
         return
     if args.cmd == "experiment-review-reveal":
         _dump(reveal_review(args.run_file))
+        return
+
+    if args.cmd == "experiment-analyze-exp019":
+        from .exp019_analysis import analyze_exp019
+        result = analyze_exp019(args.run_file, output=args.output)
+        _dump({"result_id": result["result_id"], "evidence_classification": result["evidence_classification"], "output": args.output})
         return
     if args.cmd == "experiment-status":
         _dump(experiment_status(args.run_file))

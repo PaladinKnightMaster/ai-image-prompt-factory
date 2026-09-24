@@ -17,6 +17,17 @@
   "properties": {
     "run_id": {"type": "string", "minLength": 1},
     "experiment_id": {"type": "string", "minLength": 1},
+    "reviewer_id": {"enum": ["R1", "R2"]},
+    "reviewer_pseudonym": {"type": "string"},
+    "attestations": {
+      "type": "object",
+      "properties": {
+        "independent_reviewer": {"type": "boolean"},
+        "individual_image_review": {"type": "boolean"},
+        "treatment_blind_until_freeze": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
     "review_package_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
@@ -71,6 +82,23 @@
               ]
             }
           },
+          "diagnostics": {
+            "type": "object",
+            "properties": {
+              "target_region_localization": {"enum": ["yes", "partial", "no", null]},
+              "controlled_tonal_transition_visible": {"enum": ["yes", "partial", "no", null]},
+              "integrated_with_flat_print_structure": {"enum": ["yes", "partial", "no", null]},
+              "generic_global_or_3d_shading": {"enum": ["none", "ambiguous", "clear", null]},
+              "airbrushed_or_overlay_like_gradient": {"enum": ["none", "ambiguous", "clear", null]}
+            },
+            "additionalProperties": false
+          },
+          "failure_observations": {
+            "type": "object",
+            "properties": {"target_gradation_materially_absent_or_generic": {"type": ["boolean", "null"]}},
+            "additionalProperties": false
+          },
+          "failure_classes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
           "notes": {"type": "string"}
         },
         "additionalProperties": false

@@ -1,23 +1,16 @@
 # Session Handoff
 
-Purpose: Continue from committed repository state. Read [project state](PROJECT_STATE.md), [roadmap](ROADMAP.md), [decisions](DECISIONS.md), and the [V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md).
-
-## Current handoff
+Read [project state](PROJECT_STATE.md), [roadmap](ROADMAP.md), [decisions](DECISIONS.md), and the [frozen EXP-019 preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) before continuing.
 
 - Date: 2026-09-24
-- Branch: `codex/exp-019-preregistration-freeze`, based on canonical `main` at `94eb511ffea50693e3f94d25a07a648911327e7a`
-- Worktree: expected clean after the preregistration commit; verify with `git status`
-- Stable release: V3.3 Empirical Lab, tag `v3.3.0`
-- V3.4: architecture and implementation merged to `main`; empirical validation pending; unreleased
+- Branch: `codex/exp-019-execution-infrastructure`; base canonical `main`: `a5ee6e52e97f267d2ee69b2153e681227e5b9499` (PR #8 merge)
+- Stable release: V3.3; V3.4 implementation merged, empirical validation pending, unreleased
+- EXP-019 v1.0.0: frozen, `planned`, unexecuted; no generation, receipt, review, result, or empirical conclusion
 
-### EXP-019 freeze
+## Implementation
 
-EXP-019 v1.0.0 is a planned, unexecuted Domain-Grounded Lexical Realization Isolation-Bench test of `woodblock.bokashi`. Its [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json) and [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) are frozen. The fixture and definition hashes, exact C/A/B prompt hashes, four-replicate invocation order, two-review rule, safeguards, retry limits, and provenance gates are bound there. No EXP-019 generation, receipt, output, result, or lexical-effectiveness conclusion exists. Execution readiness, including capture of two independent frozen reviews, must be verified before any generation.
+This branch implements the frozen twelve-slot execution, full raster validation, attempt and run receipts, two blind reviews, two-freeze reveal, and deterministic three-condition analysis. The final corrective patch adds [remote Git provenance checkpoints](EXP-019_REMOTE_PROVENANCE.md) for the run root, every completed attempt, and each reviewer freeze. Retry, reveal, receipt validation, and result analysis fetch and verify the external chain. The fixture, definition, C/A/B prompts, V3.3 behavior, and scientific rules remain unchanged.
 
-### Validation
+## Validation and next task
 
-Full pytest suite: 199 passed. Repository validator: passed, including 19/19 regressions and distributable raster/privacy checks. The fixture and definition file hashes and all three prompt byte/count bindings were verified. No V3.3 result, V3.4 runtime/compiler/lexicon behavior, golden baseline, or release metadata changed.
-
-### Exact next task
-
-Verify the frozen EXP-019 execution/readiness gates, then execute its 12 independent invocations without changing the fixture, prompts, or preregistered review and analysis rules.
+PR #9 is open. Its first CI run exposed a test setup conflict: repository-local `.pytest_tmp` held synthetic rasters when the privacy test scanned the worktree. This branch now lets pytest use the system temporary directory; the privacy test and EXP-019 protocol remain unchanged. A clean Python 3.12 install passed all 266 tests and repository validation (19/19 regressions, 10 golden baselines, no errors). The four pre-existing EXP-016 `pattern_implications` schema errors are unchanged. Worktree: verify clean after commit. Next task: confirm PR #9 passes both CI runners, then review it through the normal merge workflow. Do not generate images until execution readiness is separately authorized.
