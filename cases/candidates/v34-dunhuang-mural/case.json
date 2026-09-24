@@ -1,0 +1,15 @@
+{
+  "version": "3.4", "id": "v34-dunhuang-mural", "title": "Portrait to bounded Dunhuang mineral-pigment mural", "status": "candidate",
+  "request": "Translate this adult portrait into a wall-integrated mineral-pigment mural within a bounded Dunhuang donor-portrait context.",
+  "route": "artifact_transform", "locks": {"adult_subject": true, "primary_subject": "same adult sitter", "recognizable_face": true},
+  "references": [{"id": "candidate-source-portrait", "roles": ["identity"]}],
+  "identity": {"mode": "recognizable_identity", "locked_features": ["recognizable facial structure"]},
+  "body_transformation": {"mode": "artistic_stylization"},
+  "historical": {"strictness": "historically_informed", "packs": ["dunhuang"], "subperiod": "10th-century Mogao donor-portrait evidence family", "region": "Mogao cave-temple setting", "role": "modern adult sitter translated as donor portrait", "occasion": "bounded wall-painting reconstruction", "intentional_hybrids": ["modern sitter identity in a bounded historical mural representation"]},
+  "art": {"method": "mineral_pigment_mural", "artifact_form": "wall_surface", "artifact_state": "modern_reconstruction", "variant": null},
+  "transformation": {"pack_id": "portrait_to_architectural_mural", "selected_concepts": []},
+  "requested_elements": [],
+  "director": {"moment": "a quiet donor-portrait panel", "camera": "frontal view of a bounded wall field", "light_source": "even light showing the physical wall plane"},
+  "output": {"profile": "standard", "lexical_profile": "artifact_technical", "aspect_ratio": "4:5", "generation_requested": false},
+  "case_record": {"original_simple_request": "Portrait to bounded Dunhuang mural", "output_image": null, "evaluation": null}
+}

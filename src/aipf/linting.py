@@ -2,7 +2,8 @@ from __future__ import annotations
 import re
 from jsonschema import Draft202012Validator
 from .io import load_json
-from .gates import temporal_cultural_gate, art_craft_gate
+from .gates import temporal_cultural_gate, art_craft_gate, transformation_art_gate, resolved_concept_plan
+from .transformations import transformation_findings
 from .evidence import select_evidence
 from .compatibility import audit_compatibility
 
@@ -21,6 +22,10 @@ def lint_spec(spec: dict) -> list[dict]:
         return out
     out.extend(temporal_cultural_gate(spec))
     out.extend(art_craft_gate(spec))
+    out.extend(transformation_findings(spec))
+    out.extend(transformation_art_gate(spec))
+    if spec.get("transformation") and any(f["level"] == "error" for f in out):
+        return out
     text=spec.get("request","").casefold()
     if re.search(r"\b(8k|16k|32k)\b", text):
         out.append(_finding("info","resolution_hype","Resolution hype is low-signal unless tied to actual export requirements."))
@@ -43,6 +48,13 @@ def lint_spec(spec: dict) -> list[dict]:
     # Evidence-backed compatibility is diagnostic, not a second hidden source of user requirements.
     try:
         audit=audit_compatibility(spec,select_evidence(spec))
+        if spec.get("transformation"):
+            methods={row["id"]:row["path"] for row in load_json("references/art-methods/registry.json")["methods"]}
+            eras={row["id"]:row["path"] for row in load_json("references/eras/registry.json")["packs"]}
+            method_doc=load_json(methods[spec["art"]["method"]])
+            era_docs=[load_json(eras[pid]) for pid in spec["historical"]["packs"]]
+            _, concept_findings=resolved_concept_plan(spec,method_doc,era_docs,audit)
+            out.extend(concept_findings)
         for d in audit.get("decisions",[]):
             if d["status"] in {"adapt","reject"}:
                 out.append(_finding("warning","historical_evidence_conflict",f"{d['claim_id']}: {d['instruction']}"))

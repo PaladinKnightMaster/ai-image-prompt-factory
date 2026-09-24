@@ -1,0 +1,9 @@
+{
+  "version": "3.4.0",
+  "packs": [
+    {"id": "portrait_to_volumetric_sculpture", "path": "references/transformations/portrait_to_volumetric_sculpture.json"},
+    {"id": "portrait_to_architectural_mural", "path": "references/transformations/portrait_to_architectural_mural.json"},
+    {"id": "portrait_to_relief_print", "path": "references/transformations/portrait_to_relief_print.json"},
+    {"id": "portrait_to_decorated_artifact", "path": "references/transformations/portrait_to_decorated_artifact.json"}
+  ]
+}

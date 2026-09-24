@@ -1,0 +1,15 @@
+{
+  "version": "3.4", "id": "v34-blue-white-vase", "title": "Portrait to blue-and-white ceramic vase", "status": "candidate",
+  "request": "Translate this adult portrait into blue-and-white decoration integrated with a ceramic vase; do not assign a dynasty or regional tradition.",
+  "route": "artifact_transform", "locks": {"adult_subject": true, "primary_subject": "same adult sitter", "recognizable_face": true},
+  "references": [{"id": "candidate-source-portrait", "roles": ["identity"]}],
+  "identity": {"mode": "recognizable_identity", "locked_features": ["recognizable facial structure"]},
+  "body_transformation": {"mode": "artistic_stylization"},
+  "historical": {"strictness": "historically_informed", "packs": [], "subperiod": null, "region": null, "role": null, "occasion": null, "intentional_hybrids": []},
+  "art": {"method": "blue_white_ceramic", "artifact_form": "vase", "artifact_state": "newly_created", "variant": null},
+  "transformation": {"pack_id": "portrait_to_decorated_artifact", "selected_concepts": []},
+  "requested_elements": [],
+  "director": {"moment": "a newly finished decorated vase", "camera": "three-quarter view showing neck, shoulder, belly and foot", "light_source": "side light revealing form and glaze"},
+  "output": {"profile": "standard", "lexical_profile": "artifact_technical", "aspect_ratio": "4:5", "generation_requested": false},
+  "case_record": {"original_simple_request": "Portrait to blue-and-white vase without assigned era", "output_image": null, "evaluation": null}
+}

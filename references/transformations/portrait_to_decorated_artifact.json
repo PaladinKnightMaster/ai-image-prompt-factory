@@ -1,0 +1,12 @@
+{
+  "id": "portrait_to_decorated_artifact",
+  "version": "1.0.0",
+  "source_representation": "portrait",
+  "target_representation": "decorated_artifact",
+  "representation_delta": {
+    "geometry": "Recompose the portrait as decoration constrained by the selected object's physical zones.",
+    "depth": "Translate photographic depth into a readable object-bound motif hierarchy.",
+    "surface_mapping": "Wrap and foreshorten the representation with the object's curvature or planes instead of applying a flat decal."
+  },
+  "failure_modes": ["flat portrait pasted onto an object", "decoration ignores the object's curvature or zones"]
+}

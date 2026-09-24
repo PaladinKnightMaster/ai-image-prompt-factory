@@ -11,7 +11,8 @@
     },
     "vase": {
       "family": "ceramic",
-      "geometry": "continuous rotational body; motif scale changes across neck, shoulder and belly"
+      "geometry": "continuous rotational body; motif scale changes across neck, shoulder and belly",
+      "concept_refs": {"core": ["ceramic.vessel_zones", "ceramic.curvature_aware_decoration"], "conditional": []}
     },
     "jar": {
       "family": "ceramic",
@@ -64,6 +65,14 @@
     "popup_diorama": {
       "family": "paper",
       "geometry": "layered cut/fold elements rise from a base; hinges/tabs and cast shadows are visible"
+    },
+    "wall_surface": {
+      "family": "architectural_surface",
+      "geometry": "fixed planar wall support; painted composition follows the bounded architectural field and physical substrate"
+    },
+    "print_sheet": {
+      "family": "paper",
+      "geometry": "flat physical sheet with edges, margins and a bounded impression field"
     }
   }
 }

@@ -36,7 +36,7 @@ def check_schemas(errors):
 
 
 def check_registry_targets(errors):
-    for regrel in ['data/registry.json','references/eras/registry.json','references/art-methods/registry.json','references/routes/registry.json','evidence/registry.json']:
+    for regrel in ['data/registry.json','references/eras/registry.json','references/art-methods/registry.json','references/transformations/registry.json','references/routes/registry.json','evidence/registry.json']:
         obj=load_json(regrel)
         def walk(x):
             if isinstance(x,dict):
@@ -51,7 +51,8 @@ def check_registry_targets(errors):
 def check_modules(errors):
     pairs=[
       ('references/eras/registry.json','data/schemas/era_pack.schema.json','packs'),
-      ('references/art-methods/registry.json','data/schemas/art_method.schema.json','methods')]
+      ('references/art-methods/registry.json','data/schemas/art_method.schema.json','methods'),
+      ('references/transformations/registry.json','data/schemas/transformation_pack.schema.json','packs')]
     for regrel,schemarel,key in pairs:
         schema=load_json(schemarel)
         for row in load_json(regrel)[key]:
@@ -134,6 +135,34 @@ def check_evaluation_example(errors):
     validate_obj(load_json('evaluation/example_evaluation.json'),load_json('data/schemas/evaluation.schema.json'),'evaluation/example_evaluation.json',errors)
 
 
+def check_v34_artifacts(errors):
+    from aipf.lexicon import validate_registry,validate_concept_refs
+    registry=load_json('references/lexicon/registry.json')
+    errors.extend(f'lexicon: {message}' for message in validate_registry(registry))
+    errors.extend(f'concept_refs: {message}' for message in validate_concept_refs())
+    concepts=registry.get('concepts',[])
+    if len(concepts)!=30: errors.append(f'V3.4 expected 30 MVP concepts, found {len(concepts)}')
+    expected={'v34-greek-marble-bust','v34-dunhuang-mural','v34-edo-woodblock','v34-blue-white-vase'}
+    candidates=sorted((ROOT/'cases/candidates').glob('v34-*/case.json'))
+    if {p.parent.name for p in candidates}!=expected: errors.append('V3.4 candidate case inventory does not match the frozen four')
+    for path in candidates:
+        spec=json.loads(path.read_text(encoding='utf-8'))
+        validate_obj(spec,case_schema(),str(path.relative_to(ROOT)),errors)
+        for finding in lint_spec(spec):
+            if finding['level']=='error': errors.append(f"{path.relative_to(ROOT)} [{finding['code']}]: {finding['message']}")
+        if spec.get('output',{}).get('generation_requested') or spec.get('case_record',{}).get('output_image'):
+            errors.append(f'{path.relative_to(ROOT)}: candidate must remain ungenerated')
+        try:
+            result=compile_result(spec)
+            ids=[x['concept_id'] for x in result['resolved_concepts']]
+            traced=[x['concept_id'] for x in result['lexical_trace']]
+            if ids!=traced or len(ids)!=len(set(ids)):
+                errors.append(f'{path.relative_to(ROOT)}: lexical trace and resolved concepts differ')
+        except Exception as exc:
+            errors.append(f'{path.relative_to(ROOT)}: V3.4 compilation failed: {exc}')
+    return len(concepts),len(candidates)
+
+
 def check_required(errors):
     required=[
       'README.md','SKILL.md','manifest.json','evidence/registry.json','evidence/sources/registry.json',
@@ -195,6 +224,7 @@ def main():
     golden,compiled,reg_cases=check_cases(errors)
     corpus_assets,unique_hashes,dup_extra=check_corpus(errors)
     patterns,eligible_patterns,experiments,executed_experiments,benchmark_candidates,benchmark_golden=check_v32_artifacts(errors)
+    lexical_concepts,v34_candidates=check_v34_artifacts(errors)
     reg=run_regression()
     if not reg['ok']:
         for x in reg['results']:
@@ -210,6 +240,7 @@ def main():
       'regression_cases':reg_cases,'regression_passed':reg['passed'],'regression_failed':reg['failed'],
       'corpus_assets':corpus_assets,'corpus_unique_hashes':unique_hashes,'corpus_duplicate_extra_files':dup_extra,
       'visual_patterns':patterns,'compiler_eligible_patterns':eligible_patterns,'experiment_definitions':experiments,'executed_experiments':executed_experiments,'benchmark_candidates':benchmark_candidates,'benchmark_golden':benchmark_golden,
+      'lexical_concepts':lexical_concepts,'v34_candidate_cases':v34_candidates,
       'errors':errors}
     print(json.dumps(result,ensure_ascii=False,indent=2)); raise SystemExit(0 if not errors else 1)
 

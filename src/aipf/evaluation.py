@@ -2,23 +2,31 @@ from __future__ import annotations
 from .io import load_json
 
 AXES=['semantic_compliance','aesthetic_quality','historical_cultural_integrity','art_material_fidelity','identity_fidelity','technical_defects']
+TRANSFORMATION_AXES=['transformation_fidelity','artifact_integration']
 SUBDIMENSIONS={
  'semantic_compliance':['subject','action','reference_roles','explicit_locks','requested_text'],
  'aesthetic_quality':['visual_hierarchy','coherence','story_moment','light','composition'],
  'historical_cultural_integrity':['wardrobe','hair_headwear','makeup_grooming','props','architecture_furniture','technology_writing','cross_cultural_contamination','evidence_confidence'],
  'art_material_fidelity':['material_identity','fabrication_marks','surface_response','color_behavior','structural_behavior','artifact_form','artifact_state','aging_weathering'],
  'identity_fidelity':['face_identity','age_presentation','distinctive_features','reference_role_isolation'],
- 'technical_defects':['anatomy','hands','object_geometry','text_rendering','edge_artifacts','unwanted_duplication']
+ 'technical_defects':['anatomy','hands','object_geometry','text_rendering','edge_artifacts','unwanted_duplication'],
+ 'transformation_fidelity':['representation_delta','source_lock_survival','surface_mapping'],
+ 'artifact_integration':['support_geometry','surface_attachment','material_coherence']
 }
 
 
 def evaluation_template(case_id:str,spec:dict|None=None)->dict:
-    return {'case_id':case_id,'schema_version':'3.2','scores':{a:None for a in AXES},'subscores':{a:{s:None for s in SUBDIMENSIONS[a]} for a in AXES},'observations':[],'failures':[],'failure_classes':[],'preserve':[],'change':[],'revision_instruction':None,'model_metadata':{},'evidence_snapshot_sha256':None,'experiment_subscores':{'pose_mechanic_adherence':None,'hand_logic':None,'prop_interaction':None,'material_response_correctness':None,'composition_depth':None,'lighting_motivation':None,'narrative_clarity':None,'reference_role_isolation':None},'human_review':{'preferred_variant':None,'confidence':None,'notes':None}}
+    axes=AXES+(TRANSFORMATION_AXES if spec and spec.get('transformation') else [])
+    return {'case_id':case_id,'schema_version':'3.4' if len(axes)>len(AXES) else '3.2','scores':{a:None for a in axes},'subscores':{a:{s:None for s in SUBDIMENSIONS[a]} for a in axes},'observations':[],'failures':[],'failure_classes':[],'preserve':[],'change':[],'revision_instruction':None,'model_metadata':{},'evidence_snapshot_sha256':None,'experiment_subscores':{'pose_mechanic_adherence':None,'hand_logic':None,'prop_interaction':None,'material_response_correctness':None,'composition_depth':None,'lighting_motivation':None,'narrative_clarity':None,'reference_role_isolation':None},'human_review':{'preferred_variant':None,'confidence':None,'notes':None}}
 
 
 def summarize_evaluation(ev:dict)->dict:
-    scores=ev.get('scores',{}); vals=[scores.get(a) for a in AXES if isinstance(scores.get(a),(int,float))]
-    return {'average':round(sum(vals)/len(vals),2) if vals else None,'weak_axes':[a for a in AXES if isinstance(scores.get(a),(int,float)) and scores[a]<3.5],'failure_classes':[x.get('class') for x in ev.get('failures',[])]}
+    scores=ev.get('scores',{}); axes=AXES+[a for a in TRANSFORMATION_AXES if a in scores]; vals=[scores.get(a) for a in axes if isinstance(scores.get(a),(int,float))]
+    result={'average':round(sum(vals)/len(vals),2) if vals else None,'weak_axes':[a for a in axes if isinstance(scores.get(a),(int,float)) and scores[a]<3.5],'failure_classes':[x.get('class') for x in ev.get('failures',[])]}
+    if 'transformation_fidelity' in scores:
+        fidelity=scores['transformation_fidelity']; integration=scores.get('artifact_integration')
+        result['transformation_gate']='fail' if any(isinstance(x,(int,float)) and x<3.5 for x in (fidelity,integration)) else ('unscored' if fidelity is None or integration is None else 'pass')
+    return result
 
 
 def surgical_revision_plan(ev:dict)->dict:

@@ -1,0 +1,15 @@
+{
+  "version": "3.4", "id": "v34-edo-woodblock", "title": "Portrait to Edo Japanese woodblock print", "status": "candidate",
+  "request": "Translate this adult portrait into an Edo Japanese woodblock relief print on a physical sheet.",
+  "route": "artifact_transform", "locks": {"adult_subject": true, "primary_subject": "same adult sitter", "recognizable_face": true},
+  "references": [{"id": "candidate-source-portrait", "roles": ["identity"]}],
+  "identity": {"mode": "recognizable_identity", "locked_features": ["recognizable facial structure"]},
+  "body_transformation": {"mode": "artistic_stylization"},
+  "historical": {"strictness": "historically_informed", "packs": ["edo"], "subperiod": "late 18th-century color-print context", "region": "Japan", "role": "adult portrait subject without assigned rank", "occasion": "commercial print-inspired portrait", "intentional_hybrids": ["modern sitter identity in Edo print grammar"]},
+  "art": {"method": "japanese_woodblock_print", "artifact_form": "print_sheet", "artifact_state": "newly_created", "variant": null},
+  "transformation": {"pack_id": "portrait_to_relief_print", "selected_concepts": []},
+  "requested_elements": [],
+  "director": {"moment": "a freshly pulled print impression", "camera": "page-aware portrait framing", "light_source": "even light revealing the paper sheet"},
+  "output": {"profile": "standard", "lexical_profile": "artifact_technical", "aspect_ratio": "3:4", "generation_requested": false},
+  "case_record": {"original_simple_request": "Portrait to Edo woodblock print", "output_image": null, "evaluation": null}
+}

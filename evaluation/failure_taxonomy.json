@@ -1,6 +1,11 @@
 {
   "id": "failure-taxonomy-v3",
   "classes": {
+    "REPRESENTATION_DELTA_FAILURE": {"revision_strategy": "Correct how the source portrait is translated into the target representation while preserving explicit locks."},
+    "SURFACE_MAPPING_FAILURE": {"revision_strategy": "Bind the translated image to the selected support or object surface; remove flat pasted-on imagery."},
+    "ARTIFACT_INTEGRATION_FAILURE": {"revision_strategy": "Correct object geometry, support, and material integration without changing the selected era or identity."},
+    "IDENTITY_PRESERVATION_FAILURE": {"revision_strategy": "Restore the explicit reference and identity locks within the target representation."},
+    "TERM_REALIZATION_FAILURE": {"revision_strategy": "Inspect whether the stated technical concept produced its expected visible structure; revise only the failed realization after evidence review."},
     "wrong_route": {
       "revision_strategy": "Reclassify the task and recompile; preserve explicit user locks."
     },

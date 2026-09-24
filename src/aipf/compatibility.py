@@ -48,14 +48,14 @@ def audit_compatibility(spec:dict,claims:list[dict]|None=None)->dict:
     }
 
 
-def compatibility_prompt_clauses(audit:dict,claims:list[dict])->list[str]:
+def compatibility_prompt_clauses(audit:dict,claims:list[dict],include_accepted:bool=True)->list[str]:
     by_id={c['claim_id']:c for c in claims}; out=[]
     for d in audit.get('decisions',[]):
         c=by_id.get(d['claim_id'])
         if not c: continue
         if d['status'] in {'adapt','qualify','reject','allow_hybrid'}:
             out.append(d['instruction'])
-        elif c.get('prompt_implications'):
+        elif include_accepted and c.get('prompt_implications'):
             out.append(c['prompt_implications'][0])
     # keep evidence influence concise and deterministic
     return list(dict.fromkeys(out))[:5]

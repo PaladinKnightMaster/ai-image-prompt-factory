@@ -15,6 +15,8 @@
   "routes": "references/routes/registry.json",
   "eras": "references/eras/registry.json",
   "art_methods": "references/art-methods/registry.json",
+  "transformations": "references/transformations/registry.json",
+  "visual_semantic_lexicon": "references/lexicon/registry.json",
   "artifacts": {
     "forms": "references/artifacts/forms.json",
     "states": "references/artifacts/states.json"
@@ -25,6 +27,8 @@
     "request": "data/schemas/request.schema.json",
     "era": "data/schemas/era_pack.schema.json",
     "art_method": "data/schemas/art_method.schema.json",
+    "transformation_pack": "data/schemas/transformation_pack.schema.json",
+    "visual_semantic_lexicon": "data/schemas/visual_semantic_lexicon.schema.json",
     "evaluation": "data/schemas/evaluation.schema.json",
     "source": "data/schemas/source.schema.json",
     "claim": "data/schemas/evidence_claim.schema.json",

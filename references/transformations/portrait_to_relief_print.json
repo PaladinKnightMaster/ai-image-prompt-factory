@@ -1,0 +1,12 @@
+{
+  "id": "portrait_to_relief_print",
+  "version": "1.0.0",
+  "source_representation": "portrait",
+  "target_representation": "relief_print",
+  "representation_delta": {
+    "geometry": "Recompose the portrait into reproducible contour and bounded color regions on a sheet.",
+    "depth": "Replace photographic modeling with a controlled hierarchy of graphic value and shape.",
+    "surface_mapping": "Make the image read as marks impressed on a physical sheet, not a screen image with paper texture."
+  },
+  "failure_modes": ["photographic portrait beneath a print filter", "color regions detached from the represented contour"]
+}

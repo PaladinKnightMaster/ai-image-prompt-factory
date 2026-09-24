@@ -1,0 +1,15 @@
+{
+  "version": "3.4", "id": "v34-greek-marble-bust", "title": "Portrait to Classical Greek marble bust", "status": "candidate",
+  "request": "Translate this adult portrait into a Classical Greek marble sculptural bust while preserving the subject's recognizable facial structure.",
+  "route": "artifact_transform", "locks": {"adult_subject": true, "primary_subject": "same adult sitter", "recognizable_face": true},
+  "references": [{"id": "candidate-source-portrait", "roles": ["identity"]}],
+  "identity": {"mode": "recognizable_identity", "locked_features": ["recognizable facial structure"]},
+  "body_transformation": {"mode": "artistic_stylization"},
+  "historical": {"strictness": "historically_informed", "packs": ["classical_greek"], "subperiod": "late 5th century BCE", "region": "Greek world", "role": "adult portrait subject", "occasion": "sculptural portrait", "intentional_hybrids": ["modern sitter identity translated into Classical sculptural language"]},
+  "art": {"method": "marble_sculpture", "artifact_form": "bust", "artifact_state": "newly_created", "variant": null},
+  "transformation": {"pack_id": "portrait_to_volumetric_sculpture", "selected_concepts": [], "signature_atoms": {"method.marble_sculpture": ["carved planar transitions"]}},
+  "requested_elements": [],
+  "director": {"moment": "a still sculptural portrait", "camera": "three-quarter view showing face and intentional bust termination", "light_source": "one side light revealing object volume"},
+  "output": {"profile": "standard", "lexical_profile": "historical_precision", "aspect_ratio": "4:5", "generation_requested": false},
+  "case_record": {"original_simple_request": "Portrait to Classical Greek marble bust", "output_image": null, "evaluation": null}
+}
