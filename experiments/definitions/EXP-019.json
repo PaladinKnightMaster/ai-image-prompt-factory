@@ -1,17 +1,279 @@
 {
   "experiment_id": "EXP-019",
-  "version": "0.1.0",
-  "hypothesis": "Domain-Grounded Lexical Realization: canonical terminology plus the same visible explanation may improve art/material fidelity over generic wording; superiority is unverified.",
-  "baseline_prompt": "Create a Japanese woodblock print of the same adult portrait on the same paper sheet with the same composition and color regions. Use a controlled printed gradation from darker to lighter pigment within selected color regions. Keep all other production, identity, framing, and lighting instructions fixed.",
+  "version": "1.0.0",
+  "hypothesis": "Domain-Grounded Lexical Realization: in this no-reference Japanese woodblock isolation fixture, canonical bokashi terminology plus the same visible explanation may improve art/material fidelity over generic visible wording and terminology alone; superiority is unverified.",
+  "experiment_layer": "isolation_bench",
+  "target_concept_id": "woodblock.bokashi",
+  "fixture": {
+    "fixture_id": "EXP-019-BOKASHI-01",
+    "fixture_version": "1.0.0",
+    "path": "experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json",
+    "sha256": "a47d5cb22b3ee0b83bc585db310cfe3e4a9facc2e9227777503248156d93a1b0",
+    "sha256_scope": "exact UTF-8 fixture file bytes"
+  },
+  "baseline_prompt": "Create a newly printed Japanese woodblock relief print on one unframed vertical sheet. Depict a quiet riverbank scene with a low arched wooden bridge across the lower third, one dark pine mass at the left edge, a broad open sky occupying the upper half, and a narrow band of calm water below. Use crisp carved contour lines, flat block-printed color areas, slight hand-print variation, visible off-white paper, and no lettering. Keep most color regions flat. The upper sky color region is the sole designated treatment region and uses only indigo and light blue ink. Present the full sheet frontally against a plain neutral background under even neutral light, with no photographic depth of field, dramatic lighting, or 3D-rendered volume. In the upper sky color region only, use a controlled printed gradation from darker indigo near the top edge to lighter blue toward the horizon.",
   "variants": [
-    {"id": "C", "factor": "generic_visible_description", "operation": "identity"},
-    {"id": "A", "factor": "canonical_term_only", "operation": "replace_literal", "old": "Use a controlled printed gradation from darker to lighter pigment within selected color regions.", "new": "Use bokashi."},
-    {"id": "B", "factor": "canonical_term_plus_same_visible_description", "operation": "replace_literal", "old": "Use a controlled printed gradation from darker to lighter pigment within selected color regions.", "new": "Use bokashi, a controlled printed gradation from darker to lighter pigment within selected color regions."}
+    {
+      "id": "C",
+      "factor": "generic_visible_description",
+      "operation": "identity"
+    },
+    {
+      "id": "A",
+      "factor": "canonical_term_only",
+      "operation": "replace_literal",
+      "old": "In the upper sky color region only, use a controlled printed gradation from darker indigo near the top edge to lighter blue toward the horizon.",
+      "new": "In the upper sky color region only, use bokashi."
+    },
+    {
+      "id": "B",
+      "factor": "canonical_term_plus_same_visible_description",
+      "operation": "replace_literal",
+      "old": "In the upper sky color region only, use a controlled printed gradation from darker indigo near the top edge to lighter blue toward the horizon.",
+      "new": "In the upper sky color region only, use bokashi, a controlled printed gradation from darker indigo near the top edge to lighter blue toward the horizon."
+    }
   ],
-  "preserved_dimensions": ["same adult subject", "same frozen reference fixture once registered", "same print composition", "same color regions", "same model and generation settings", "all non-lexical prompt text"],
-  "evaluation_dimensions": ["art_material_fidelity", "semantic_compliance", "transformation_fidelity", "aesthetic_quality", "technical_defects"],
+  "prompt_bindings": {
+    "assembly": "fixture.common_prompt + one ASCII space + fixture.treatment_clauses[condition]; no trailing whitespace",
+    "encoding": "UTF-8",
+    "token_estimate": null,
+    "token_estimate_reason": "No canonical repository tokenizer is registered; no estimate is invented.",
+    "conditions": {
+      "C": {
+        "characters": 883,
+        "whitespace_delimited_words": 144,
+        "sha256": "481ecd1360a354f545c23a012525762d4505fa8e7df8a95b034c92dc9b45b6e4"
+      },
+      "A": {
+        "characters": 788,
+        "whitespace_delimited_words": 128,
+        "sha256": "96ec98c7ae489f2722139000bd2b6b04a040868ae1bbb4d7ec86dc7ac259bdf1"
+      },
+      "B": {
+        "characters": 892,
+        "whitespace_delimited_words": 145,
+        "sha256": "6d202bca0d5928d8369c8b4ad8c78aefcd895c32a215c2abd6d1ec01805baf69"
+      }
+    },
+    "length_policy": "Do not pad A to length-match C or B; report the registered length difference as a limitation."
+  },
+  "preserved_dimensions": [
+    "same first-party textual fixture and riverbank composition",
+    "same newly printed unframed vertical sheet and frontal presentation",
+    "same upper sky treatment region and indigo/light-blue inks",
+    "same flat color regions outside the upper sky",
+    "same zero-reference, no-identity, no-era, no-artist, no-transformation setup",
+    "same requested model, size, quality, background, and one-image invocation settings",
+    "all common prompt text byte-for-byte"
+  ],
+  "evaluation_dimensions": [
+    "art_material_fidelity",
+    "semantic_compliance",
+    "aesthetic_quality",
+    "technical_defects"
+  ],
   "primary_dimension": "art_material_fidelity",
-  "model_target": "gpt-image-2",
+  "model_target": "gpt-image-2-2026-04-21",
   "status": "planned",
-  "preregistration": {"comparison": "C generic visible wording; A canonical term only; B canonical term plus the same visible wording", "freeze_before_generation": true, "blind_review_required": true, "record_character_word_and_token_counts": true, "replicates_and_fixtures": "to be frozen before execution", "automatic_compiler_or_golden_promotion": false, "conclusion": "unverified"}
+  "requires_reference_inputs": [],
+  "transformation": null,
+  "generation_config": {
+    "mode": "generate",
+    "requested_model": "gpt-image-2-2026-04-21",
+    "model_snapshot": "gpt-image-2-2026-04-21",
+    "aspect_ratio": "2:3",
+    "width": 1024,
+    "height": 1536,
+    "size": "1024x1536",
+    "quality": "high",
+    "background": "opaque",
+    "reference_inputs": [],
+    "seed": null,
+    "seed_support": "unsupported; replicates are not paired by seed",
+    "image_count_per_invocation": 1,
+    "independent_invocations_required": true,
+    "total_images_planned": 12,
+    "api_script_model_argument": "--model gpt-image-2-2026-04-21",
+    "api_script_model_snapshot_argument": "--model-snapshot gpt-image-2-2026-04-21",
+    "effective_or_revised_prompt_metadata": "Retain provider-returned metadata if available; never infer or invent it."
+  },
+  "preregistration": {
+    "status": "frozen",
+    "conclusion": "unverified",
+    "protocol_path": "experiments/preregistrations/EXP-019.PREREGISTRATION.md",
+    "freeze_before_generation": true,
+    "replicates_per_condition": 4,
+    "conditions": [
+      "C",
+      "A",
+      "B"
+    ],
+    "invocation_blocks": [
+      [
+        "B",
+        "A",
+        "C"
+      ],
+      [
+        "C",
+        "B",
+        "A"
+      ],
+      [
+        "B",
+        "C",
+        "A"
+      ],
+      [
+        "A",
+        "B",
+        "C"
+      ]
+    ],
+    "replicate_independence": "Twelve independent invocations; no seed pairing; one image per invocation.",
+    "primary_rubric": {
+      "5": "Clearly localized darker-to-lighter gradation in the target sky; visually integrated as a printed pigment field; surrounding regions remain predominantly flat; no meaningful global photographic/3D shading or obvious airbrushed overlay.",
+      "4": "Clear localized print-like gradation with one noticeable minor weakness, such as slightly over-smooth rendering, minor spill, or imperfect integration.",
+      "3": "Gradation exists in the target region but is materially ambiguous between print-like gradation and generic digital shading, or localization/integration is inconsistent.",
+      "2": "Weak/barely identifiable target gradation, or primarily generic/global/3D-like shading.",
+      "1": "Requested target-region gradation is materially absent, incorrect, or replaced by an unrelated phenomenon."
+    },
+    "diagnostics": {
+      "target_region_localization": [
+        "yes",
+        "partial",
+        "no"
+      ],
+      "controlled_tonal_transition_visible": [
+        "yes",
+        "partial",
+        "no"
+      ],
+      "integrated_with_flat_print_structure": [
+        "yes",
+        "partial",
+        "no"
+      ],
+      "generic_global_or_3d_shading": [
+        "none",
+        "ambiguous",
+        "clear"
+      ],
+      "airbrushed_or_overlay_like_gradient": [
+        "none",
+        "ambiguous",
+        "clear"
+      ]
+    },
+    "failure_taxonomy": {
+      "TERM_REALIZATION_FAILURE": "A/B only: bokashi is present in the prompt but its expected localized print gradation is materially absent or replaced by generic digital/global shading. Never assign to C. Prefer a more-specific existing failure class where applicable."
+    },
+    "review": {
+      "independent_blind_reviewers_required": 2,
+      "review_each_image_independently": true,
+      "side_by_side_review": false,
+      "reviewer_visible_context": "Japanese woodblock print; upper sky is the designated effect region. Do not use the word bokashi.",
+      "reviewer_hidden_fields": [
+        "treatment",
+        "prompt text",
+        "prompt hashes",
+        "generation IDs",
+        "replicate IDs",
+        "private mapping"
+      ],
+      "freeze_both_reviews_before_reveal": true,
+      "per_image_primary_score": "arithmetic mean of two reviewer art_material_fidelity scores",
+      "post_reveal_adjudication": false,
+      "technical_defects_direction": "higher score means cleaner image"
+    },
+    "analysis": {
+      "contrasts": [
+        "B-C",
+        "B-A"
+      ],
+      "condition_mean": "arithmetic mean of four reviewer-averaged per-image primary scores",
+      "contrast_delta": "mean(B) minus mean(comparator)",
+      "descriptive_delta_bands": [
+        {
+          "classification": "supports",
+          "rule": "delta >= +1.0"
+        },
+        {
+          "classification": "weakly_supports",
+          "rule": "+0.5 <= delta < +1.0"
+        },
+        {
+          "classification": "inconclusive",
+          "rule": "-0.5 < delta < +0.5"
+        },
+        {
+          "classification": "weakly_contradicts",
+          "rule": "-1.0 < delta <= -0.5"
+        },
+        {
+          "classification": "contradicts",
+          "rule": "delta <= -1.0"
+        }
+      ],
+      "cross_condition_pairs": "For each contrast compare all 16 reviewer-averaged primary-score pairs; omit ties. If the mean-delta direction does not win a strict majority of non-tied pairs, move that contrast one evidence level toward inconclusive.",
+      "full_hypothesis_support": "Both B-C and B-A must be at least weakly positive; at least one must reach supports; no safeguard, provenance, or side-effect veto may fire.",
+      "mixed_or_positive_plus_neutral": "Experiment-level inconclusive; report both contrasts separately, never average away their directions.",
+      "statistical_significance_claim": false
+    },
+    "safeguards": {
+      "ceiling": "If all four C reviewer-averaged primary scores are >= 4.5, B-vs-C superiority cannot be supported; cap experiment classification at inconclusive.",
+      "floor": "If all three condition means are <= 2.0 and no reviewer-averaged sample exceeds 3.0, cap final classification at inconclusive.",
+      "reviewer_ambiguity": "If the two reviewers differ by >= 2 primary-score points on at least 4 of 12 samples, cap final classification at inconclusive.",
+      "side_effect_veto": "If mean B is >= 1.0 point worse than either comparator on semantic_compliance, aesthetic_quality, or technical_defects cleanliness, overall evidence cannot exceed inconclusive.",
+      "post_result_redesign": "Do not redesign or rerun this frozen version after viewing outputs."
+    },
+    "retry_policy": {
+      "decodable_output": "no reroll",
+      "infrastructure_failure_before_evaluable_image": "at most two retries; preserve every attempt",
+      "three_failed_technical_attempts_on_one_slot": "stop run as incomplete",
+      "provider_safety_refusal": "record; no silent reroll"
+    },
+    "execution_provenance": {
+      "receipt_required": true,
+      "receipt_schema_version": "1.0.0",
+      "required_bindings": [
+        "fixture SHA-256",
+        "definition SHA-256",
+        "exact prompt SHA-256",
+        "requested model",
+        "model snapshot",
+        "generation config",
+        "empty reference set",
+        "timestamps",
+        "host/provider generation identifier when available",
+        "output SHA-256",
+        "attempt and failure history",
+        "treatment/sample mapping",
+        "mapping commitment",
+        "both independent review records and hashes",
+        "reveal record",
+        "final classification"
+      ],
+      "retain_provider_effective_or_revised_prompt_if_available": true,
+      "two_review_record_capability_required_before_generation": true,
+      "no_execution_receipt_or_result_created_by_this_freeze": true
+    },
+    "readiness_gates_before_generation": [
+      "Verify fixture and definition file hashes and exact C/A/B prompt bindings.",
+      "Verify the exact dated --model argument, 1024x1536 size, high quality, opaque background, and zero references can be sent without silent substitution.",
+      "Verify twelve independent single-image invocations and attempt-history capture.",
+      "Verify two independent blind review records can be separately frozen before any mapping reveal.",
+      "Verify mapping commitment, provenance bindings, and provider-returned effective/revised-prompt retention where available."
+    ],
+    "promotion_boundaries": {
+      "automatic_lexical_realizer_default_change": false,
+      "automatic_compiler_change": false,
+      "automatic_lexicon_wide_promotion": false,
+      "automatic_conditional_concept_enablement": false,
+      "automatic_golden_promotion": false,
+      "automatic_v34_release": false,
+      "global_lexical_superiority_claim": false,
+      "positive_result_next_step": "mechanism-specific retention/review and independent transfer experiments only"
+    }
+  }
 }

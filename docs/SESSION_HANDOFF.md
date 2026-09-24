@@ -5,19 +5,19 @@ Purpose: Continue from committed repository state. Read [project state](PROJECT_
 ## Current handoff
 
 - Date: 2026-09-24
-- Canonical branch: `main`; HEAD at synchronization: `aa6ae9bb57166d70840fb6ec6ca2a2f4a59b8a52` (PR #6)
-- Documentation sync branch: `chore/v3.4-post-merge-sync`; worktree clean after its commit
-- Stable release: V3.3 Empirical Lab, tag `v3.3.0`; package/manifest and README/SKILL release labels remain V3.3
-- V3.4: architecture frozen; four-family implementation merged to `main`; empirical validation pending; unreleased
+- Branch: `codex/exp-019-preregistration-freeze`, based on canonical `main` at `94eb511ffea50693e3f94d25a07a648911327e7a`
+- Worktree: expected clean after the preregistration commit; verify with `git status`
+- Stable release: V3.3 Empirical Lab, tag `v3.3.0`
+- V3.4: architecture and implementation merged to `main`; empirical validation pending; unreleased
 
-### Findings
+### EXP-019 freeze
 
-The merged implementation and its traceability examples are recorded in [V3.4 implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 is a planned Domain-Grounded Lexical Realization definition (`0.1.0`) with draft preregistration fields; first-party fixtures and replicate count remain unfrozen. No EXP-019 result, execution receipt, V3.4 generation, or general lexical-effectiveness conclusion exists.
+EXP-019 v1.0.0 is a planned, unexecuted Domain-Grounded Lexical Realization Isolation-Bench test of `woodblock.bokashi`. Its [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json) and [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) are frozen. The fixture and definition hashes, exact C/A/B prompt hashes, four-replicate invocation order, two-review rule, safeguards, retry limits, and provenance gates are bound there. No EXP-019 generation, receipt, output, result, or lexical-effectiveness conclusion exists. Execution readiness, including capture of two independent frozen reviews, must be verified before any generation.
 
 ### Validation
 
-On canonical `main` code with documentation-only changes: full pytest 197 passed; repository validator passed (30 concepts, four V3.4 candidates, 19/19 regressions); separate regression run 19/19 passed; golden baselines 10/10 stable with zero drift. The validator's privacy check passed after removing generated pytest temp images. No V3.3 empirical result or V3.4 execution artifact changed.
+Full pytest suite: 199 passed. Repository validator: passed, including 19/19 regressions and distributable raster/privacy checks. The fixture and definition file hashes and all three prompt byte/count bindings were verified. No V3.3 result, V3.4 runtime/compiler/lexicon behavior, golden baseline, or release metadata changed.
 
 ### Exact next task
 
-Freeze first-party fixtures and preregistration for EXP-019 before generation.
+Verify the frozen EXP-019 execution/readiness gates, then execute its 12 independent invocations without changing the fixture, prompts, or preregistered review and analysis rules.
