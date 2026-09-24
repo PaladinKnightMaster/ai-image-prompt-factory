@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/execution_receipt.schema.json",
+  "type": "object",
+  "required": ["schema_version", "experiment_id", "experiment_version", "run_id", "slot_id", "slot_position", "plan_commitment_sha256", "fixture_sha256", "definition_sha256", "prompt_sha256", "provider", "requested_model", "recorded_model_snapshot", "settings", "reference_inputs", "attempt_events", "output_image_sha256", "status", "recorded_at_utc"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "EXP-019"},
+    "experiment_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "slot_id": {"type": "string", "minLength": 1},
+    "slot_position": {"type": "integer", "minimum": 1, "maximum": 12},
+    "plan_commitment_sha256": {"$ref": "#/$defs/sha"},
+    "fixture_sha256": {"$ref": "#/$defs/sha"},
+    "definition_sha256": {"$ref": "#/$defs/sha"},
+    "prompt_sha256": {"$ref": "#/$defs/sha"},
+    "provider": {"const": "openai"},
+    "requested_model": {"const": "gpt-image-2-2026-04-21"},
+    "recorded_model_snapshot": {"const": "gpt-image-2-2026-04-21"},
+    "settings": {"type": "object", "required": ["replicates", "size", "quality", "background", "seed", "image_count_per_invocation"], "properties": {"replicates": {"const": 4}, "size": {"const": "1024x1536"}, "quality": {"const": "high"}, "background": {"const": "opaque"}, "seed": {"type": "null"}, "image_count_per_invocation": {"const": 1}}},
+    "reference_inputs": {"const": []},
+    "attempt_events": {"type": "array", "minItems": 2, "items": {"type": "object", "required": ["event", "attempt_number", "at_utc", "previous_event_sha256", "event_sha256"], "properties": {"event": {"enum": ["started", "success", "technical_failure", "safety_refusal", "provider_failure", "protocol_failure"]}, "attempt_number": {"type": "integer", "minimum": 1, "maximum": 3}, "at_utc": {"type": "string"}, "previous_event_sha256": {"type": ["string", "null"]}, "event_sha256": {"$ref": "#/$defs/sha"}}}},
+    "output_image_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/sha"}]},
+    "status": {"enum": ["generated", "failed"]},
+    "recorded_at_utc": {"type": "string"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

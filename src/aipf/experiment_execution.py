@@ -55,6 +55,9 @@ def load_run(run_file: str | Path) -> tuple[Path, dict]:
 
     run = json.loads(path.read_text(encoding="utf-8"))
     validate_blind_ids(run)
+    if run.get("experiment_id") == "EXP-019":
+        from .exp019_protocol import validate_run
+        validate_run(run)
     return path, run
 
 
@@ -167,6 +170,8 @@ def export_host_package(
     output: str | Path | None = None,
 ) -> dict:
     path, run = load_run(run_file)
+    if run.get("experiment_id") == "EXP-019":
+        raise ValueError("EXP-019 requires its frozen OpenAI API execution path")
 
     if run.get("generation_mode") not in {"host_native", "manual_import"}:
         raise ValueError(
@@ -311,6 +316,8 @@ def import_output(
     overwrite: bool = False,
 ) -> dict:
     path, run = load_run(run_file)
+    if run.get("experiment_id") == "EXP-019":
+        raise ValueError("EXP-019 requires receipt-bound API execution; manual import is disabled")
     source = Path(image).expanduser().resolve()
 
     if not source.is_file():
@@ -475,6 +482,8 @@ def record_failed_output(
 ) -> dict:
     """Record a host/manual generation failure without dropping the slot."""
     path, run = load_run(run_file)
+    if run.get("experiment_id") == "EXP-019":
+        raise ValueError("EXP-019 failures must be recorded in the append-only API attempt ledger")
     _variant, output = _find_output(run, blind_id)
 
     output["status"] = "failed"
@@ -536,6 +545,11 @@ def execute_run(
     use ``experiment-export`` and ``experiment-import`` instead.
     """
     path, run = load_run(run_file)
+    if run.get("experiment_id") == "EXP-019":
+        if limit is not None:
+            raise ValueError("EXP-019 frozen invocation sequence cannot be limited")
+        from .exp019_execution import execute_exp019_run
+        return execute_exp019_run(path, dry_run=dry_run)
 
     if dry_run:
         planned = sum(
