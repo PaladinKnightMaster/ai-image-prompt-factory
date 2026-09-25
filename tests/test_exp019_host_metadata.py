@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+from datetime import datetime, timedelta, timezone
 from io import BytesIO
 from pathlib import Path
 
@@ -10,10 +11,10 @@ import pytest
 from PIL import Image
 
 from aipf.exp019_analysis import analyze_exp019
-from aipf.exp019_anchor import verify_external
+from aipf.exp019_anchor import _attempt_digest, verify_external
 from aipf.exp019_host import ATTESTATIONS, SOURCE_ATTESTATIONS, verify_host_attempts
-from aipf.exp019_host_metadata import QUERY_ATTESTATION, load_host_session_metadata
-from aipf.exp019_protocol import find_slot, frozen_protocol
+from aipf.exp019_host_metadata import QUERY_ATTESTATION, SIDECAR_NAME, load_host_session_metadata
+from aipf.exp019_protocol import _canonical_sha256, find_slot, frozen_protocol
 from aipf.exp019_receipt import validate_run_receipt
 from aipf.experiment_execution import export_host_package, import_output
 from aipf.experiment_review import create_review_package, freeze_review, reveal_review
@@ -30,7 +31,8 @@ def _sidecar() -> dict:
              "generation_completed_at_utc", "backend_model", "backend_model_snapshot",
              "generated_file_path", "reference_image_count", "requested_output_count",
              "returned_output_count", "edit_or_regeneration_used")
-    result = {"host_product": "ChatGPT Images", "generation_mode": "host_native"}
+    result = {"opaque_slot_id": "HADCEH", "host_product": "ChatGPT Images",
+              "generation_mode": "host_native"}
     for name in names:
         result[name] = None
         result[name + "_status"] = "not_observable"
@@ -51,8 +53,10 @@ def _stage(run_file: Path, slot: dict, sidecar: dict | None = None) -> tuple[Pat
     directory = run_file.parent / "host-import-staging" / slot["blind_id"]
     image = directory / "synthetic.png"
     image.write_bytes(_image())
-    metadata = directory / "host-session.json"
-    metadata.write_text(json.dumps(_sidecar() if sidecar is None else sidecar) + "\n", encoding="utf-8")
+    metadata = directory / SIDECAR_NAME
+    payload = (_sidecar() if sidecar is None else sidecar).copy()
+    payload["opaque_slot_id"] = slot["blind_id"]
+    metadata.write_text(json.dumps(payload) + "\n", encoding="utf-8")
     return image, metadata
 
 
@@ -99,8 +103,13 @@ def test_host_metadata_export_and_missing_sidecar(tmp_path, offline_anchor):
     contract = frozen_protocol("1.1.1")[0]["host_evidence_contract"]
     assert len(manifest["tasks"]) == 12
     for task in manifest["tasks"]:
-        query = Path(package["output"]) / task["metadata_query_template"]
-        assert sha256_file(query) == task["metadata_query_template_sha256"] == contract["metadata_query_template_sha256"]
+        query = Path(package["output"]) / task["metadata_query_file"]
+        assert sha256_file(query) == task["metadata_query_sha256"]
+        assert task["metadata_query_template_sha256"] == contract["metadata_query_template_sha256"]
+        assert f'"opaque_slot_id" to "{task["opaque_slot_id"]}"'.encode() in query.read_bytes()
+        assert b"{{OPAQUE_SLOT_ID}}" not in query.read_bytes()
+        assert b"variant_id" not in query.read_bytes() and b"replicate" not in query.read_bytes()
+        assert task["host_metadata_staging_relative_path"].endswith(f"/{SIDECAR_NAME}")
         assert "variant_id" not in task and "replicate" not in task
         assert task["requested_outputs"] == 1 and task["reference_count"] == 0
         assert b"Do not generate, edit, regenerate" in query.read_bytes()
@@ -120,7 +129,8 @@ def test_observed_timestamp_and_null_status_rules(tmp_path, offline_anchor, fiel
     slot = load_run_plan(run_file)["invocation_order"][0]
     image, metadata = _stage(run_file, slot)
     base = _sidecar()
-    base[field], base[field + "_status"] = "2026-01-01T00:00:00+00:00", "observed"
+    base["opaque_slot_id"] = slot["blind_id"]
+    base[field], base[field + "_status"] = datetime.now(timezone.utc).isoformat(), "observed"
     metadata.write_text(json.dumps(base), encoding="utf-8")
     load_host_session_metadata(metadata)
     receipt = _receipt(run_file, slot, image, base, tmp_path / "observed.json")
@@ -139,6 +149,98 @@ def test_invalid_timestamp_observations_rejected(tmp_path, field, value, status)
     path.write_text(json.dumps(metadata), encoding="utf-8")
     with pytest.raises(ValueError, match="metadata sidecar schema invalid|timestamp requires a timezone"):
         load_host_session_metadata(path)
+
+
+@pytest.mark.parametrize("field", ["invoked_at_utc", "generation_completed_at_utc"])
+@pytest.mark.parametrize("sentinel", ["0001-01-01T00:00:00Z", "1601-01-01T00:00:00Z",
+                                       "1970-01-01T00:00:00Z", "1969-12-31T19:00:00-05:00"])
+def test_observed_timestamp_sentinels_rejected(tmp_path, field, sentinel):
+    metadata = _sidecar()
+    metadata[field], metadata[field + "_status"] = sentinel, "observed"
+    path = tmp_path / SIDECAR_NAME
+    path.write_text(json.dumps(metadata), encoding="utf-8")
+    with pytest.raises(ValueError, match="disallowed placeholder"):
+        load_host_session_metadata(path)
+
+
+def test_null_not_observable_timestamps_accepted(tmp_path):
+    path = tmp_path / SIDECAR_NAME
+    path.write_text(json.dumps(_sidecar()), encoding="utf-8")
+    assert load_host_session_metadata(path)["invoked_at_utc"] is None
+    assert load_host_session_metadata(path)["generation_completed_at_utc"] is None
+
+
+@pytest.mark.parametrize("field", ["invoked_at_utc", "generation_completed_at_utc"])
+@pytest.mark.parametrize("offset", [-timedelta(days=30), timedelta(days=30)])
+def test_observed_timestamp_outside_run_lifecycle_rejected(tmp_path, offline_anchor, field, offset):
+    run_file = _run(tmp_path)
+    export_host_package(run_file)
+    slot = load_run_plan(run_file)["invocation_order"][0]
+    sidecar = _sidecar()
+    sidecar[field] = (datetime.now(timezone.utc) + offset).isoformat()
+    sidecar[field + "_status"] = "observed"
+    image, metadata = _stage(run_file, slot, sidecar)
+    receipt = _receipt(run_file, slot, image, sidecar, tmp_path / "receipt.json")
+    with pytest.raises(ValueError, match="outside the run lifecycle"):
+        import_output(run_file, blind_id=slot["blind_id"], image=image,
+                      host_metadata=metadata, receipt=receipt)
+
+
+@pytest.mark.parametrize("bad_slot", [None, "not-a-slot", "AAAAAA"])
+def test_missing_malformed_or_wrong_sidecar_slot_rejected(tmp_path, offline_anchor, bad_slot):
+    run_file = _run(tmp_path)
+    export_host_package(run_file)
+    slot = load_run_plan(run_file)["invocation_order"][0]
+    image, metadata = _stage(run_file, slot)
+    data = json.loads(metadata.read_text(encoding="utf-8"))
+    if bad_slot is None:
+        del data["opaque_slot_id"]
+    else:
+        data["opaque_slot_id"] = bad_slot if bad_slot != slot["blind_id"] else "BBBBBB"
+    metadata.write_text(json.dumps(data), encoding="utf-8")
+    receipt = _receipt(run_file, slot, image, data, tmp_path / "receipt.json")
+    with pytest.raises(ValueError, match="schema invalid|another opaque slot"):
+        import_output(run_file, blind_id=slot["blind_id"], image=image,
+                      host_metadata=metadata, receipt=receipt)
+
+
+def test_wrong_slot_sidecar_direct_and_copied_rejected(tmp_path, offline_anchor):
+    run_file = _run(tmp_path)
+    export_host_package(run_file)
+    first, second = load_run_plan(run_file)["invocation_order"][:2]
+    first_image, first_metadata = _stage(run_file, first)
+    second_image, second_metadata = _stage(run_file, second)
+    first_data = json.loads(first_metadata.read_text(encoding="utf-8"))
+    first_receipt = _receipt(run_file, first, first_image, _sidecar(), tmp_path / "first.json")
+    with pytest.raises(ValueError, match="staging directory"):
+        import_output(run_file, blind_id=first["blind_id"], image=first_image,
+                      host_metadata=second_metadata, receipt=first_receipt)
+    import_output(run_file, blind_id=first["blind_id"], image=first_image,
+                  host_metadata=first_metadata, receipt=first_receipt)
+    second_metadata.write_text(json.dumps(first_data), encoding="utf-8")
+    second_receipt = _receipt(run_file, second, second_image, _sidecar(), tmp_path / "second.json")
+    with pytest.raises(ValueError, match="another opaque slot"):
+        import_output(run_file, blind_id=second["blind_id"], image=second_image,
+                      host_metadata=second_metadata, receipt=second_receipt)
+
+
+def test_duplicate_and_alternate_sidecars_rejected(tmp_path, offline_anchor):
+    run_file = _run(tmp_path)
+    export_host_package(run_file)
+    slot = load_run_plan(run_file)["invocation_order"][0]
+    image, metadata = _stage(run_file, slot)
+    receipt = _receipt(run_file, slot, image, _sidecar(), tmp_path / "receipt.json")
+    duplicate = metadata.with_name("extra.json")
+    duplicate.write_bytes(metadata.read_bytes())
+    with pytest.raises(ValueError, match="ambiguous extra files"):
+        import_output(run_file, blind_id=slot["blind_id"], image=image,
+                      host_metadata=metadata, receipt=receipt)
+    duplicate.unlink()
+    alternate = metadata.with_name("alternate.json")
+    metadata.rename(alternate)
+    with pytest.raises(ValueError, match="canonical sidecar filename"):
+        import_output(run_file, blind_id=slot["blind_id"], image=image,
+                      host_metadata=alternate, receipt=receipt)
 
 
 def test_optional_ids_snapshot_and_sidecar_binding(tmp_path, offline_anchor):
@@ -161,7 +263,10 @@ def test_optional_ids_snapshot_and_sidecar_binding(tmp_path, offline_anchor):
     assert output["attempt_events"][0]["host_invoked_at_utc"] is None
     assert len(output["attempt_events"]) == 2  # The text-only query is not an image attempt.
     verify_host_attempts(run_file.parent, current, output, 1)
-    (run_file.parent / output["host_session_metadata"]).write_text("{}", encoding="utf-8")
+    canonical_sidecar = run_file.parent / output["host_session_metadata"]
+    changed = json.loads(canonical_sidecar.read_text(encoding="utf-8"))
+    changed["opaque_slot_id"] = "AAAAAA" if slot["blind_id"] != "AAAAAA" else "BBBBBB"
+    canonical_sidecar.write_text(json.dumps(changed), encoding="utf-8")
     with pytest.raises(ValueError, match="host-session metadata binding changed"):
         verify_host_attempts(run_file.parent, current, output, 1)
 
@@ -209,6 +314,64 @@ def test_v111_real_backend_binds_sidecar_without_real_generation(tmp_path, monke
     assert [c["record"]["event_type"] for c in state["checkpoints"]] == ["run_root", "attempt"]
     _, output = find_slot(current, slot["blind_id"])
     assert output["host_session_metadata_sha256"] == sha256_file(run_file.parent / output["host_session_metadata"])
+
+
+def test_coordinated_local_sidecar_rewrite_fails_remote_checkpoint(tmp_path, monkeypatch):
+    remote = tmp_path / "synthetic-remote.git"
+    subprocess.run(["git", "init", "--bare", "-q", str(remote)], check=True, capture_output=True)
+    monkeypatch.setenv("AIPF_EXP019_PROVENANCE_REMOTE", str(remote))
+    run_file = _run(tmp_path)
+    export_host_package(run_file)
+    slot = load_run_plan(run_file)["invocation_order"][0]
+    image, metadata = _stage(run_file, slot)
+    receipt = _receipt(run_file, slot, image, _sidecar(), tmp_path / "receipt.json")
+    import_output(run_file, blind_id=slot["blind_id"], image=image,
+                  host_metadata=metadata, receipt=receipt)
+    run = load_run_plan(run_file)
+    root = run_file.parent
+    _, output = find_slot(run, slot["blind_id"])
+    verify_external(run_file, run)
+
+    sidecar_path = root / output["host_session_metadata"]
+    sidecar = json.loads(sidecar_path.read_text(encoding="utf-8"))
+    sidecar.update(generation_id="locally-rewritten", generation_id_status="observed")
+    sidecar_path.write_text(json.dumps(sidecar) + "\n", encoding="utf-8")
+    new_hash = sha256_file(sidecar_path)
+    output["host_session_metadata_sha256"] = new_hash
+    event = output["attempt_events"][1]
+    event.update(host_session_metadata_sha256=new_hash,
+                 provider_generation_id="locally-rewritten")
+    event["event_sha256"] = _canonical_sha256({key: value for key, value in event.items()
+                                                if key != "event_sha256"})
+    binding = output["receipt_history"][0]
+    binding["host_session_metadata_sha256"] = new_hash
+    operator_path = root / binding["operator_file"]
+    operator = json.loads(operator_path.read_text(encoding="utf-8"))
+    operator.update(provider_generation_id="locally-rewritten",
+                    provider_generation_id_status="observed")
+    operator_path.write_text(json.dumps(operator) + "\n", encoding="utf-8")
+    binding["operator_sha256"] = sha256_file(operator_path)
+    metadata_path = root / "outputs" / output["metadata"]
+    output_metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    output_metadata.update(host_session_metadata_sha256=new_hash,
+                           provider_generation_id="locally-rewritten")
+    metadata_path.write_text(json.dumps(output_metadata) + "\n", encoding="utf-8")
+    output["metadata_sha256"] = sha256_file(metadata_path)
+    canonical_path = root / binding["file"]
+    canonical = json.loads(canonical_path.read_text(encoding="utf-8"))
+    canonical.update(host_session_metadata_sha256=new_hash,
+                     operator_receipt_sha256=binding["operator_sha256"],
+                     output_metadata_sha256=output["metadata_sha256"],
+                     attempt_events=output["attempt_events"])
+    canonical_path.write_text(json.dumps(canonical) + "\n", encoding="utf-8")
+    binding["sha256"] = sha256_file(canonical_path)
+    run_file.write_text(json.dumps(run) + "\n", encoding="utf-8")
+    state_path = root / ".provenance-private" / "anchor-state.json"
+    state = json.loads(state_path.read_text(encoding="utf-8"))
+    state["checkpoints"][1]["record"]["evidence_sha256"] = _attempt_digest(root, run, slot["blind_id"], 1)
+    state_path.write_text(json.dumps(state) + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="remote checkpoint differs"):
+        verify_external(run_file, run)
 
 
 def test_v111_synthetic_review_analysis_rules_unchanged(tmp_path, offline_anchor):

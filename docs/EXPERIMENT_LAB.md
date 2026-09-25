@@ -49,10 +49,15 @@ directory. After the one image is returned, ask the frozen text-only
 [metadata query](../experiments/templates/EXP-019.HOST-METADATA-QUERY.txt) in the
 same fresh ChatGPT generation conversation. The query requests directly
 observable metadata only and must not generate, edit, or repair an image. Save
-its structured answer as the slot's host-session metadata sidecar. Host request
+its structured answer as `host-import-staging/<slot-id>/host-session.json`. The
+per-slot query supplies an opaque slot ID as a protocol binding, not as a
+host-observed field. The importer requires the sidecar to echo that ID and
+rejects alternate or extra files in the slot staging directory. Host request
 and completion timestamps are exact ISO-8601 values only when directly observed;
 otherwise they are `null` with `not_observable` status. Repository import and
-receipt times cannot substitute for host times. The importer binds image and
+receipt times cannot substitute for host times. Known default timestamps are
+rejected; observed times must be broadly compatible with run creation and the
+repository receipt event, allowing one day for clock differences. The importer binds image and
 sidecar hashes in the private receipt and remote checkpoint; the sidecar is never
 reviewer-visible. Generation ID, file path, backend model, and model snapshot
 likewise remain `null` when the host does not expose them. The earlier v1.1.0

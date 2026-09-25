@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 from datetime import datetime, timezone
 from pathlib import Path
@@ -10,8 +11,9 @@ from PIL import Image
 
 from .exp019_protocol import HOST_VERSIONS, append_attempt_event, find_slot, frozen_protocol, validate_run
 from .exp019_host_metadata import (
-    QUERY_ATTESTATION, bind_sidecar_to_receipt, load_host_session_metadata,
-    validate_receipt_observation_fields,
+    QUERY_ATTESTATION, SIDECAR_NAME, bind_sidecar_to_receipt, load_host_session_metadata,
+    render_metadata_query, validate_receipt_observation_fields,
+    validate_run_timestamp_plausibility,
 )
 from .experiment_runs import sha256_file
 
@@ -91,7 +93,8 @@ def _staged_source(root: Path, blind_id: str, image: str | Path) -> Path:
 
 def _receipt_payload(path: Path, run: dict, slot: dict, variant: dict, attempt: int,
                      image_hash: str | None, failure: str | None,
-                     sidecar: dict | None = None) -> dict:
+                     sidecar: dict | None = None,
+                     repository_recorded_at_utc: str | None = None) -> dict:
     receipt = json.loads(path.read_text(encoding="utf-8"))
     version = run["experiment_version"]
     expected = {"experiment_id": "EXP-019", "experiment_version": version,
@@ -119,13 +122,21 @@ def _receipt_payload(path: Path, run: dict, slot: dict, variant: dict, attempt: 
         raise ValueError("EXP-019 host return count is invalid; multiple candidates cannot be selected")
     if version == "1.1.1":
         validate_receipt_observation_fields(receipt)
-        query_hash = frozen_protocol(version)[0]["host_evidence_contract"]["metadata_query_template_sha256"]
-        if receipt.get("metadata_query_template_sha256") != query_hash:
+        if repository_recorded_at_utc is None:
+            raise ValueError("EXP-019 repository evidence event time is missing")
+        validate_run_timestamp_plausibility(receipt, run["created_at_utc"], repository_recorded_at_utc)
+        from .io import repo_root
+        contract = frozen_protocol(version)[0]["host_evidence_contract"]
+        query_bytes = (repo_root() / contract["metadata_query_template_path"]).read_bytes()
+        rendered_hash = hashlib.sha256(render_metadata_query(query_bytes, slot["blind_id"])).hexdigest()
+        if (receipt.get("metadata_query_template_sha256") != contract["metadata_query_template_sha256"]
+                or receipt.get("metadata_query_sha256") != rendered_hash):
             raise ValueError("EXP-019 metadata query template binding mismatch")
         if image_hash is not None and sidecar is None:
             raise ValueError("EXP-019 v1.1.1 image requires a host-session metadata sidecar")
         if sidecar is not None:
-            bind_sidecar_to_receipt(sidecar, receipt, image_present=image_hash is not None)
+            bind_sidecar_to_receipt(sidecar, receipt, opaque_slot_id=slot["blind_id"],
+                                    image_present=image_hash is not None)
         elif receipt.get("metadata_query_attestation") != {key: False for key in QUERY_ATTESTATION}:
             raise ValueError("EXP-019 image-free attempt cannot attest a post-image metadata query")
     else:
@@ -178,10 +189,13 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
                       "operator_receipt_template": f"operator-receipt-templates/{slot['blind_id']}.json"}
         if query_bytes is not None:
             query_name = f"metadata-queries/{slot['blind_id']}.txt"
-            (destination / query_name).write_bytes(query_bytes)
-            task["metadata_query_template"] = query_name
+            rendered_query = render_metadata_query(query_bytes, slot["blind_id"])
+            rendered_hash = hashlib.sha256(rendered_query).hexdigest()
+            (destination / query_name).write_bytes(rendered_query)
+            task["metadata_query_file"] = query_name
             task["metadata_query_template_sha256"] = contract["metadata_query_template_sha256"]
-            task["host_metadata_staging_relative_path"] = f"host-import-staging/{slot['blind_id']}/host-session.json"
+            task["metadata_query_sha256"] = rendered_hash
+            task["host_metadata_staging_relative_path"] = f"host-import-staging/{slot['blind_id']}/{SIDECAR_NAME}"
         tasks.append(task)
         template = {
             "experiment_id": "EXP-019", "experiment_version": version, "run_id": run["run_id"],
@@ -203,6 +217,7 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
                             backend_snapshot=None, backend_snapshot_status="not_observable",
                             provider_generation_id_status="not_observable",
                             metadata_query_template_sha256=contract["metadata_query_template_sha256"],
+                            metadata_query_sha256=rendered_hash,
                             metadata_query_attestation={key: False for key in QUERY_ATTESTATION})
         _write_new(templates / f"{slot['blind_id']}.json", template)
     _write_new(destination / "manifest.json", {"experiment_id": "EXP-019",
@@ -270,7 +285,8 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
         _receipt_payload(operator_path, run,
                          next(s for s in run["invocation_order"] if s["blind_id"] == output["blind_id"]),
                          variant, index, outcome.get("image_sha256"),
-                         None if outcome["event"] == "success" else outcome["event"], sidecar)
+                         None if outcome["event"] == "success" else outcome["event"], sidecar,
+                         events[index * 2 - 2]["at_utc"] if version == "1.1.1" else None)
         if (record.get("experiment_id") != "EXP-019" or record.get("experiment_version") != version
                 or record.get("run_id") != run["run_id"]
                 or record.get("slot_id") != output["blind_id"] or record.get("slot_position") != position
@@ -393,14 +409,22 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
                       if host_metadata is not None else None)
     if sidecar_source is not None and sidecar_source == source:
         raise ValueError("EXP-019 image and metadata sidecar must be distinct files")
+    if sidecar_source is not None:
+        expected_sidecar = (root / STAGING_DIR / blind_id / SIDECAR_NAME).resolve()
+        if sidecar_source != expected_sidecar:
+            raise ValueError("EXP-019 host metadata must use the canonical sidecar filename")
+        entries = set(sidecar_source.parent.iterdir())
+        if entries != {source, sidecar_source}:
+            raise ValueError("EXP-019 slot staging contains ambiguous extra files")
     sidecar = load_host_session_metadata(sidecar_source) if sidecar_source else None
     sidecar_hash = sha256_file(sidecar_source) if sidecar_source else None
     raster = _raster(source) if source else None
     image_hash = sha256_file(source) if source else None
     attempt = len(output["attempt_events"]) // 2 + 1
-    operator_receipt = _receipt_payload(Path(receipt).expanduser().resolve(), run, slot, variant,
-                                        attempt, image_hash, failure, sidecar)
     recorded_at = datetime.now(timezone.utc).isoformat()
+    operator_receipt = _receipt_payload(Path(receipt).expanduser().resolve(), run, slot, variant,
+                                        attempt, image_hash, failure, sidecar,
+                                        recorded_at if version == "1.1.1" else None)
     event_time = operator_receipt["invoked_at_utc"] if version == "1.1.0" else recorded_at
     started = {"event": "started", "attempt_number": attempt,
                "at_utc": event_time, "prompt_sha256": variant["prompt_sha256"]}

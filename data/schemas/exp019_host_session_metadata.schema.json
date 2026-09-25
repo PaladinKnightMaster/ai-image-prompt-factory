@@ -4,6 +4,7 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "opaque_slot_id",
     "host_product",
     "generation_mode",
     "generation_id",
@@ -30,6 +31,10 @@
     "edit_or_regeneration_used_status"
   ],
   "properties": {
+    "opaque_slot_id": {
+      "type": "string",
+      "pattern": "^[A-HJ-NP-Z2-9]{6}$"
+    },
     "host_product": {
       "const": "ChatGPT Images"
     },

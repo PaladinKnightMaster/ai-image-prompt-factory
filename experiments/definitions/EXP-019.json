@@ -288,8 +288,10 @@
   "host_evidence_contract": {
     "version": "1.1.1",
     "metadata_query_template_path": "experiments/templates/EXP-019.HOST-METADATA-QUERY.txt",
-    "metadata_query_template_sha256": "dbbba861299c9c388f390bbadec01016a5724837d0ff0ec3a4984aa77b918392",
+    "metadata_query_template_sha256": "ef6f5530e7146db37b5271cc7cca1357b5e2ddf5c986c8c027f95549067b4287",
     "sidecar_format": "JSON",
+    "sidecar_filename": "host-session.json",
+    "opaque_slot_id_source": "protocol_provided_by_slot_query",
     "sidecar_required_per_generated_image": true,
     "sidecar_source": "same fresh ChatGPT generation conversation after the image is returned",
     "metadata_query_is_text_only": true,

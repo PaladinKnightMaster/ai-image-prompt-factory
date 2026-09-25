@@ -9,7 +9,7 @@ from pathlib import Path
 from .experiments import plan_experiment
 from .io import repo_root
 
-DEFINITION_SHA256 = "7600e11ad2e09dd05e7052956386f9bc0ba25650a55dddac333e61455de3312e"
+DEFINITION_SHA256 = "13df0c72ecae7b4c9213cd34a526ee15701826b5eb3c4098a9ca3c77a8951551"
 HOST_V110_DEFINITION_SHA256 = "aee92dc832b0ee45b341b7b819a90557ff8dfa1f4de23c5ae1029766afb315c6"
 LEGACY_DEFINITION_SHA256 = "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7"
 FIXTURE_SHA256 = "a47d5cb22b3ee0b83bc585db310cfe3e4a9facc2e9227777503248156d93a1b0"
@@ -83,9 +83,13 @@ def frozen_protocol(version: str = "1.1.1") -> tuple[dict, dict]:
     if definition["version"] != version or definition["status"] != "planned":
         raise ValueError("EXP-019 frozen version/status mismatch")
     if version == "1.1.1":
+        from .exp019_host_metadata import SIDECAR_NAME, SLOT_PLACEHOLDER
         contract = definition["host_evidence_contract"]
         template = (repo_root() / contract["metadata_query_template_path"]).read_bytes()
-        if _sha256(template) != contract["metadata_query_template_sha256"]:
+        if (_sha256(template) != contract["metadata_query_template_sha256"]
+                or contract["sidecar_filename"] != SIDECAR_NAME
+                or contract["opaque_slot_id_source"] != "protocol_provided_by_slot_query"
+                or template.count(SLOT_PLACEHOLDER.encode("ascii")) != 1):
             raise ValueError("EXP-019 host metadata query template hash mismatch")
     planned = {row["id"]: row["prompt"] for row in plan_experiment(definition)["variants"]}
     if set(planned) != {"C", "A", "B"}:
