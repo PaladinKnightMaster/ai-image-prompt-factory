@@ -35,7 +35,7 @@ private mappings, raw reviews, and private analysis stay there. Only sanitized
 results and interpretations may enter the public `experiments/results/` area.
 For EXP-019, point `AIPF_EXPERIMENT_OUTPUT_PATH` (or `experiment-run-plan --output`)
 at `<private-root>/experiments/generated-images` before creating a run.
-For EXP-019 v1.1.0, each opaque slot has its own `host-import-staging/<slot-id>/`
+For EXP-019 v1.1.0 and v1.1.1, each opaque slot has its own `host-import-staging/<slot-id>/`
 directory. Save its fresh ChatGPT Images output directly there, then import that
 file for that exact slot. Corpus, fixture, gallery, other-run, and other local
 asset paths are rejected. The operator also attests the file's fresh-host
@@ -43,6 +43,21 @@ origin; filesystem containment alone cannot prove it. A successful import
 atomically moves the staged bytes into canonical private `outputs/`. A failed
 intake does not authorize another generation; preserve and recover the original
 host output.
+
+EXP-019 v1.1.1 requires a second, JSON sidecar in the same slot staging
+directory. After the one image is returned, ask the frozen text-only
+[metadata query](../experiments/templates/EXP-019.HOST-METADATA-QUERY.txt) in the
+same fresh ChatGPT generation conversation. The query requests directly
+observable metadata only and must not generate, edit, or repair an image. Save
+its structured answer as the slot's host-session metadata sidecar. Host request
+and completion timestamps are exact ISO-8601 values only when directly observed;
+otherwise they are `null` with `not_observable` status. Repository import and
+receipt times cannot substitute for host times. The importer binds image and
+sidecar hashes in the private receipt and remote checkpoint; the sidecar is never
+reviewer-visible. Generation ID, file path, backend model, and model snapshot
+likewise remain `null` when the host does not expose them. The earlier v1.1.0
+run stopped before first import because exact request time was unavailable; its
+staged raster and root checkpoint remain historical and must not be reused.
 
 EXP-019 blind-review packages use new metadata-free PNGs made from decoded
 output pixels in their displayed EXIF orientation. Private mappings bind each raw output hash to its reviewer copy

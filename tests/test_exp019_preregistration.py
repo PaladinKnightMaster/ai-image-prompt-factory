@@ -11,10 +11,12 @@ from aipf.experiments import plan_experiment
 ROOT = Path(__file__).resolve().parents[1]
 DEFINITION_PATH = ROOT / "experiments/definitions/EXP-019.json"
 LEGACY_PATH = ROOT / "experiments/archive/EXP-019-v1.0.0.json"
+HOST_V110_PATH = ROOT / "experiments/archive/EXP-019-v1.1.0.json"
 FIXTURE_PATH = ROOT / "experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json"
 PREREG_PATH = ROOT / "experiments/preregistrations/EXP-019.PREREGISTRATION.md"
 FIXTURE_SHA256 = "a47d5cb22b3ee0b83bc585db310cfe3e4a9facc2e9227777503248156d93a1b0"
-DEFINITION_SHA256 = "aee92dc832b0ee45b341b7b819a90557ff8dfa1f4de23c5ae1029766afb315c6"
+DEFINITION_SHA256 = "7600e11ad2e09dd05e7052956386f9bc0ba25650a55dddac333e61455de3312e"
+HOST_V110_SHA256 = "aee92dc832b0ee45b341b7b819a90557ff8dfa1f4de23c5ae1029766afb315c6"
 LEGACY_SHA256 = "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7"
 PROMPT_BINDINGS = {
     "C": (883, 144, "481ecd1360a354f545c23a012525762d4505fa8e7df8a95b034c92dc9b45b6e4"),
@@ -31,11 +33,12 @@ def test_exp019_fixture_and_prompt_bindings() -> None:
     prereg = PREREG_PATH.read_text(encoding="utf-8")
 
     assert definition["experiment_id"] == "EXP-019"
-    assert definition["version"] == "1.1.0"
+    assert definition["version"] == "1.1.1"
     assert definition["status"] == "planned"
     assert sha256(LEGACY_PATH.read_bytes()).hexdigest() == LEGACY_SHA256
-    assert definition["protocol_amendment"]["predecessor_definition_sha256"] == LEGACY_SHA256
-    assert definition["protocol_amendment"]["predecessor_status"] == "preregistered_never_executed"
+    assert sha256(HOST_V110_PATH.read_bytes()).hexdigest() == HOST_V110_SHA256
+    assert definition["protocol_amendment"]["predecessor_definition_sha256"] == HOST_V110_SHA256
+    assert definition["protocol_amendment"]["predecessor_status"] == "root_anchored_stopped_before_first_import_due_to_host_evidence_contract"
     assert fixture["fixture_id"] == "EXP-019-BOKASHI-01"
     assert fixture["version"] == "1.0.0"
     assert fixture["status"] == "frozen"
@@ -84,3 +87,13 @@ def test_exp019_isolation_and_review_freeze() -> None:
     assert prereg["review"]["freeze_both_reviews_before_reveal"] is True
     assert prereg["review"]["post_reveal_adjudication"] is False
     assert prereg["execution_provenance"]["no_execution_receipt_or_result_created_by_this_freeze"] is True
+
+
+def test_v111_changes_host_evidence_only() -> None:
+    active = json.loads(DEFINITION_PATH.read_text(encoding="utf-8"))
+    predecessor = json.loads(HOST_V110_PATH.read_text(encoding="utf-8"))
+    assert set(active) - set(predecessor) == {"host_evidence_contract"}
+    for field in set(predecessor) - {"version", "protocol_amendment"}:
+        assert active[field] == predecessor[field], field
+    assert active["version"] == "1.1.1"
+    assert active["host_evidence_contract"]["version"] == "1.1.1"

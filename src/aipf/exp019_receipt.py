@@ -6,7 +6,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from .exp019_protocol import _canonical_sha256, find_slot, validate_run
+from .exp019_protocol import HOST_VERSIONS, _canonical_sha256, find_slot, validate_run
 from .experiment_runs import sha256_file
 from .io import load_json
 
@@ -15,15 +15,18 @@ RECEIPT_NAME = "exp019.run.receipt.json"
 
 
 def _receipt_location(path: Path, run: dict) -> tuple[Path, str | None]:
-    if run["experiment_version"] == "1.1.0":
+    if run["experiment_version"] in HOST_VERSIONS:
         from .exp019_host import RUN_RECEIPT
-        return path.parent / RUN_RECEIPT, "data/schemas/exp019_host_run_receipt.schema.json"
+        schema = ("data/schemas/exp019_host_run_receipt_v1_1_1.schema.json"
+                  if run["experiment_version"] == "1.1.1"
+                  else "data/schemas/exp019_host_run_receipt.schema.json")
+        return path.parent / RUN_RECEIPT, schema
     return path.parent / "receipts" / RECEIPT_NAME, "data/schemas/exp019_run_receipt.schema.json"
 
 
 def receipt_from_run(run: dict, root: Path) -> dict:
     """Derive evidence and completeness from the ledger, never from a caller's conclusion."""
-    if run["experiment_version"] == "1.1.0":
+    if run["experiment_version"] in HOST_VERSIONS:
         from .exp019_host import host_receipt_from_run
         return host_receipt_from_run(run, root)
     from .exp019_execution import _verify_prior_receipts

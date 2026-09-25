@@ -9,13 +9,16 @@ from pathlib import Path
 from .experiments import plan_experiment
 from .io import repo_root
 
-DEFINITION_SHA256 = "aee92dc832b0ee45b341b7b819a90557ff8dfa1f4de23c5ae1029766afb315c6"
+DEFINITION_SHA256 = "7600e11ad2e09dd05e7052956386f9bc0ba25650a55dddac333e61455de3312e"
+HOST_V110_DEFINITION_SHA256 = "aee92dc832b0ee45b341b7b819a90557ff8dfa1f4de23c5ae1029766afb315c6"
 LEGACY_DEFINITION_SHA256 = "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7"
 FIXTURE_SHA256 = "a47d5cb22b3ee0b83bc585db310cfe3e4a9facc2e9227777503248156d93a1b0"
 DEFINITION_PATH = "experiments/definitions/EXP-019.json"
 LEGACY_DEFINITION_PATH = "experiments/archive/EXP-019-v1.0.0.json"
+HOST_V110_DEFINITION_PATH = "experiments/archive/EXP-019-v1.1.0.json"
 FIXTURE_PATH = "experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json"
 REVIEWERS = ("R1", "R2")
+HOST_VERSIONS = frozenset({"1.1.0", "1.1.1"})
 
 
 def _sha256(data: bytes) -> str:
@@ -63,14 +66,15 @@ def _validate_attempt_events(output: dict) -> None:
         raise ValueError("EXP-019 failed slot lacks completed attempt")
 
 
-def frozen_protocol(version: str = "1.1.0") -> tuple[dict, dict]:
+def frozen_protocol(version: str = "1.1.1") -> tuple[dict, dict]:
     """Fail closed if either frozen byte artifact or prompt binding drifts."""
-    if version not in {"1.0.0", "1.1.0"}:
+    if version not in {"1.0.0", "1.1.0", "1.1.1"}:
         raise ValueError("unknown EXP-019 frozen protocol version")
-    definition_path, expected_hash = (
-        (LEGACY_DEFINITION_PATH, LEGACY_DEFINITION_SHA256) if version == "1.0.0"
-        else (DEFINITION_PATH, DEFINITION_SHA256)
-    )
+    definition_path, expected_hash = {
+        "1.0.0": (LEGACY_DEFINITION_PATH, LEGACY_DEFINITION_SHA256),
+        "1.1.0": (HOST_V110_DEFINITION_PATH, HOST_V110_DEFINITION_SHA256),
+        "1.1.1": (DEFINITION_PATH, DEFINITION_SHA256),
+    }[version]
     definition_bytes = (repo_root() / definition_path).read_bytes()
     fixture_bytes = (repo_root() / FIXTURE_PATH).read_bytes()
     if _sha256(definition_bytes) != expected_hash or _sha256(fixture_bytes) != FIXTURE_SHA256:
@@ -78,6 +82,11 @@ def frozen_protocol(version: str = "1.1.0") -> tuple[dict, dict]:
     definition, fixture = json.loads(definition_bytes), json.loads(fixture_bytes)
     if definition["version"] != version or definition["status"] != "planned":
         raise ValueError("EXP-019 frozen version/status mismatch")
+    if version == "1.1.1":
+        contract = definition["host_evidence_contract"]
+        template = (repo_root() / contract["metadata_query_template_path"]).read_bytes()
+        if _sha256(template) != contract["metadata_query_template_sha256"]:
+            raise ValueError("EXP-019 host metadata query template hash mismatch")
     planned = {row["id"]: row["prompt"] for row in plan_experiment(definition)["variants"]}
     if set(planned) != {"C", "A", "B"}:
         raise ValueError("EXP-019 condition set mismatch")
@@ -104,7 +113,7 @@ def _plan_core(run: dict) -> dict:
         "model_snapshot": run["model_snapshot"],
         "reference_inputs": run["reference_inputs"],
         "settings": run["settings"],
-        **({"private_layout": run["private_layout"]} if run.get("experiment_version") == "1.1.0" else {}),
+        **({"private_layout": run["private_layout"]} if run.get("experiment_version") in {"1.1.0", "1.1.1"} else {}),
         "variants": [
             {
                 "variant_id": v["variant_id"], "factor": v["factor"],
@@ -131,13 +140,13 @@ def configure_run(run: dict) -> None:
         expected = ("host_native", "ChatGPT Images", "unknown", "portrait_2:3", "unavailable", 4)
         actual = (run["generation_mode"], run["model"], run["model_snapshot"], run["settings"]["size"], run["settings"]["quality"], run["settings"]["replicates"])
         if actual != expected:
-            raise ValueError(f"EXP-019 v1.1.0 requires {expected}; received {actual}")
+            raise ValueError(f"EXP-019 {version} requires {expected}; received {actual}")
         run["settings"].update(background=None, seed=None, image_count_per_invocation=1)
         run["private_layout"] = "experiments/generated-images"
     run["fixture_sha256"] = FIXTURE_SHA256
     run["execution_provenance"] = {
         "receipt_required": True,
-        "receipt_schema_version": "1.0.0",
+        "receipt_schema_version": "1.1.1" if version == "1.1.1" else "1.0.0",
         "required_reviewers": list(REVIEWERS),
     }
     by_condition = {v["variant_id"]: v for v in run["variants"]}
@@ -163,7 +172,9 @@ def validate_run(run: dict) -> None:
     version = run.get("experiment_version")
     definition, _fixture = frozen_protocol(version)
     config = definition["generation_config"]
-    expected_hash = LEGACY_DEFINITION_SHA256 if version == "1.0.0" else DEFINITION_SHA256
+    expected_hash = {"1.0.0": LEGACY_DEFINITION_SHA256,
+                     "1.1.0": HOST_V110_DEFINITION_SHA256,
+                     "1.1.1": DEFINITION_SHA256}[version]
     if run.get("experiment_definition_sha256") != expected_hash or run.get("fixture_sha256") != FIXTURE_SHA256:
         raise ValueError("EXP-019 run frozen artifact binding mismatch")
     if version == "1.0.0":
@@ -174,13 +185,14 @@ def validate_run(run: dict) -> None:
         expected_settings = {"replicates": 4, "size": "portrait_2:3", "quality": "unavailable", "background": None, "seed": None, "image_count_per_invocation": 1}
         if run.get("private_layout") != "experiments/generated-images":
             raise ValueError("EXP-019 private layout mismatch")
-        if not re.fullmatch(r"EXP-019-1\.1\.0-\d{8}T\d{6}Z-[A-HJ-NP-Z2-9]{4}", str(run.get("run_id", ""))):
+        if not re.fullmatch(rf"EXP-019-{re.escape(version)}-\d{{8}}T\d{{6}}Z-[A-HJ-NP-Z2-9]{{4}}", str(run.get("run_id", ""))):
             raise ValueError("EXP-019 host run ID does not follow the frozen convention")
     if (run.get("generation_mode"), run.get("model"), run.get("model_snapshot")) != expected_mode:
         raise ValueError("EXP-019 run model/mode mismatch")
     if run.get("reference_inputs") != [] or run.get("settings") != expected_settings:
         raise ValueError("EXP-019 run generation configuration mismatch")
-    if run.get("execution_provenance") != {"receipt_required": True, "receipt_schema_version": "1.0.0", "required_reviewers": list(REVIEWERS)}:
+    receipt_version = "1.1.1" if version == "1.1.1" else "1.0.0"
+    if run.get("execution_provenance") != {"receipt_required": True, "receipt_schema_version": receipt_version, "required_reviewers": list(REVIEWERS)}:
         raise ValueError("EXP-019 run provenance policy mismatch")
     variants = run.get("variants", [])
     planned = plan_experiment(definition)["variants"]

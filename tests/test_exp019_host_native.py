@@ -20,8 +20,12 @@ from aipf.experiment_review import _canonical_sha256, create_review_package, fre
 from aipf.experiment_runs import create_run_plan, load_run_plan, sha256_file, write_run_plan
 
 
+HOST_V110_DEFINITION = Path(__file__).resolve().parents[1] / "experiments/archive/EXP-019-v1.1.0.json"
+
+
 def _run(tmp_path: Path) -> Path:
-    return write_run_plan(create_run_plan("EXP-019"), tmp_path / "private" / "experiments" / "generated-images")
+    return write_run_plan(create_run_plan(str(HOST_V110_DEFINITION)),
+                          tmp_path / "private" / "experiments" / "generated-images")
 
 
 def _receipt(run: dict, slot: dict, attempt: int, *, outcome: str, image_hash: str | None) -> dict:
@@ -97,11 +101,12 @@ def test_host_plan_and_export_are_opaque(tmp_path, offline_anchor):
 
 def test_host_profile_rejects_api_and_release_placement(tmp_path):
     with pytest.raises(ValueError, match="requires"):
-        create_run_plan("EXP-019", generation_mode="api")
+        create_run_plan(str(HOST_V110_DEFINITION), generation_mode="api")
     with pytest.raises(ValueError, match="requires"):
-        create_run_plan("EXP-019", model="gpt-image-2-2026-04-21")
+        create_run_plan(str(HOST_V110_DEFINITION), model="gpt-image-2-2026-04-21")
     with pytest.raises(ValueError, match="release directory"):
-        write_run_plan(create_run_plan("EXP-019"), tmp_path / "release" / "experiments" / "generated-images")
+        write_run_plan(create_run_plan(str(HOST_V110_DEFINITION)),
+                       tmp_path / "release" / "experiments" / "generated-images")
     run_file = _run(tmp_path)
     with pytest.raises(ValueError, match="host-native"):
         execute_run(run_file)

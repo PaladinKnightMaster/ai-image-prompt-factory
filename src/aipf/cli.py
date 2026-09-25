@@ -76,6 +76,7 @@ def main():
     p.add_argument("--blind-id", required=True)
     p.add_argument("--image", required=True)
     p.add_argument("--receipt")
+    p.add_argument("--host-metadata", help="same-session JSON sidecar for EXP-019 v1.1.1")
     p.add_argument("--provider", default="chatgpt")
     p.add_argument("--model")
     p.add_argument("--model-snapshot")
@@ -204,6 +205,7 @@ def main():
                 blind_id=args.blind_id,
                 image=args.image,
                 receipt=args.receipt,
+                host_metadata=args.host_metadata,
                 provider=args.provider,
                 model=args.model,
                 model_snapshot=args.model_snapshot,

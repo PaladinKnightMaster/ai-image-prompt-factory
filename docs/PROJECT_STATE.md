@@ -10,9 +10,9 @@
 
 **V3.3 Empirical Lab: CLOSED and latest stable release.** The release tag marks scientific closure and is integrated into `main`. Later `main` commits fixed CI portability and corrected an EXP-017 source-hash notation without changing the underlying result or conclusion. README and SKILL titles, package, and manifest retain the V3.3 release label; the compiler/evidence-snapshot lineage remains `3.2.0` by design. See the [release notes](RELEASE_NOTES_V3.3.md).
 
-**V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 was preregistered but never executed. The v1.1.0 host-native [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) supersedes its execution mechanics before generation, preserving the same frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json), prompts, and scientific rules. EXP-019 remains `planned` and unexecuted. No generation receipt or result exists, and no general image-generation benefit from domain-grounded lexical realization has been established.
+**V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 was preregistered but never executed. The active v1.1.1 [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) preserves the frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json), prompts, and scientific rules while allowing unavailable host timestamps to be recorded honestly. EXP-019 remains `planned` and scientifically unexecuted. No accepted generation attempt, execution receipt, review, or result exists, and no general image-generation benefit from domain-grounded lexical realization has been established.
 
-EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. The host-native freeze branch now constrains imports to per-slot private staging with source-origin attestation and builds metadata-free, pixel-equivalent blind-review copies. These corrective safeguards require final independent re-audit before publication or any real generation.
+EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. The first v1.1.0 real run has a root provenance checkpoint and one staged, unimported HADCEH raster; it stopped before the first accepted attempt because exact host request time was unavailable. Its image and run are excluded from any v1.1.1 execution. The v1.1.1 branch adds a text-only same-conversation metadata query and per-image sidecar; it requires independent review before publication or a new real run.
 
 ## Strongest established findings
 
@@ -28,7 +28,7 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Next scope
 
-Independently re-audit the corrected EXP-019 v1.1.0 host-native freeze before publication or generation. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
+Review and independently re-audit the EXP-019 v1.1.1 host-evidence amendment before publication or starting a new real run. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 

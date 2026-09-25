@@ -3,12 +3,16 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from PIL import Image
 
-from .exp019_protocol import append_attempt_event, find_slot, validate_run
+from .exp019_protocol import HOST_VERSIONS, append_attempt_event, find_slot, frozen_protocol, validate_run
+from .exp019_host_metadata import (
+    QUERY_ATTESTATION, bind_sidecar_to_receipt, load_host_session_metadata,
+    validate_receipt_observation_fields,
+)
 from .experiment_runs import sha256_file
 
 
@@ -86,9 +90,11 @@ def _staged_source(root: Path, blind_id: str, image: str | Path) -> Path:
 
 
 def _receipt_payload(path: Path, run: dict, slot: dict, variant: dict, attempt: int,
-                     image_hash: str | None, failure: str | None) -> dict:
+                     image_hash: str | None, failure: str | None,
+                     sidecar: dict | None = None) -> dict:
     receipt = json.loads(path.read_text(encoding="utf-8"))
-    expected = {"experiment_id": "EXP-019", "experiment_version": "1.1.0",
+    version = run["experiment_version"]
+    expected = {"experiment_id": "EXP-019", "experiment_version": version,
                 "run_id": run["run_id"], "slot_id": slot["blind_id"],
                 "attempt_number": attempt, "prompt_sha256": variant["prompt_sha256"],
                 "generation_mode": "host_native", "host_product": "ChatGPT Images",
@@ -111,11 +117,23 @@ def _receipt_payload(path: Path, run: dict, slot: dict, variant: dict, attempt: 
             or (image_hash is not None and returned != 1)
             or (failure != "protocol_failure" and image_hash is None and returned != 0)):
         raise ValueError("EXP-019 host return count is invalid; multiple candidates cannot be selected")
-    _timestamp(receipt.get("invoked_at_utc"))
-    if receipt.get("backend_snapshot", "unknown") != "unknown" and not receipt.get("backend_snapshot_exposed_by_host"):
-        raise ValueError("EXP-019 backend snapshot cannot be inferred")
-    if receipt.get("provider_generation_id") is not None and not receipt.get("provider_id_exposed_by_host"):
-        raise ValueError("EXP-019 provider ID cannot be inferred")
+    if version == "1.1.1":
+        validate_receipt_observation_fields(receipt)
+        query_hash = frozen_protocol(version)[0]["host_evidence_contract"]["metadata_query_template_sha256"]
+        if receipt.get("metadata_query_template_sha256") != query_hash:
+            raise ValueError("EXP-019 metadata query template binding mismatch")
+        if image_hash is not None and sidecar is None:
+            raise ValueError("EXP-019 v1.1.1 image requires a host-session metadata sidecar")
+        if sidecar is not None:
+            bind_sidecar_to_receipt(sidecar, receipt, image_present=image_hash is not None)
+        elif receipt.get("metadata_query_attestation") != {key: False for key in QUERY_ATTESTATION}:
+            raise ValueError("EXP-019 image-free attempt cannot attest a post-image metadata query")
+    else:
+        _timestamp(receipt.get("invoked_at_utc"))
+        if receipt.get("backend_snapshot", "unknown") != "unknown" and not receipt.get("backend_snapshot_exposed_by_host"):
+            raise ValueError("EXP-019 backend snapshot cannot be inferred")
+        if receipt.get("provider_generation_id") is not None and not receipt.get("provider_id_exposed_by_host"):
+            raise ValueError("EXP-019 provider ID cannot be inferred")
     if receipt.get("api_request_metadata") is not None:
         raise ValueError("EXP-019 host-native attempt has no API request metadata")
     return receipt
@@ -126,8 +144,8 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
     from .experiment_execution import load_run
     from .exp019_anchor import ensure_run_root
     path, run = load_run(run_file)
-    if run["experiment_version"] != "1.1.0" or run["status"] != "planned":
-        raise ValueError("EXP-019 host export requires a fresh v1.1.0 plan")
+    if run["experiment_version"] not in HOST_VERSIONS or run["status"] != "planned":
+        raise ValueError("EXP-019 host export requires a fresh host-native plan")
     root = path.parent
     destination = root / "packages" / "generation-inputs"
     if output is not None and Path(output).expanduser().resolve() != destination.resolve():
@@ -138,6 +156,13 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
     destination.mkdir(parents=True)
     templates = destination / "operator-receipt-templates"
     templates.mkdir()
+    version = run["experiment_version"]
+    query_bytes = None
+    if version == "1.1.1":
+        from .io import repo_root
+        contract = frozen_protocol(version)[0]["host_evidence_contract"]
+        query_bytes = (repo_root() / contract["metadata_query_template_path"]).read_bytes()
+        (destination / "metadata-queries").mkdir()
     tasks = []
     for slot in run["invocation_order"]:
         variant, _item = find_slot(run, slot["blind_id"])
@@ -145,14 +170,21 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
         prompt_path = root / "generation-inputs" / "prompts" / f"{slot['blind_id']}.txt"
         if not prompt_path.is_file() or prompt_path.read_bytes() != prompt.encode("utf-8"):
             raise ValueError("EXP-019 exported prompt bytes differ from frozen plan")
-        tasks.append({"ordinal": slot["position"], "opaque_slot_id": slot["blind_id"],
+        task = {"ordinal": slot["position"], "opaque_slot_id": slot["blind_id"],
                       "prompt": prompt, "prompt_sha256": variant["prompt_sha256"],
                       "host_product": "ChatGPT Images", "requested_aspect_ratio": "2:3",
                       "reference_count": 0, "requested_outputs": 1,
                       "staging_relative_dir": f"host-import-staging/{slot['blind_id']}",
-                      "operator_receipt_template": f"operator-receipt-templates/{slot['blind_id']}.json"})
-        _write_new(templates / f"{slot['blind_id']}.json", {
-            "experiment_id": "EXP-019", "experiment_version": "1.1.0", "run_id": run["run_id"],
+                      "operator_receipt_template": f"operator-receipt-templates/{slot['blind_id']}.json"}
+        if query_bytes is not None:
+            query_name = f"metadata-queries/{slot['blind_id']}.txt"
+            (destination / query_name).write_bytes(query_bytes)
+            task["metadata_query_template"] = query_name
+            task["metadata_query_template_sha256"] = contract["metadata_query_template_sha256"]
+            task["host_metadata_staging_relative_path"] = f"host-import-staging/{slot['blind_id']}/host-session.json"
+        tasks.append(task)
+        template = {
+            "experiment_id": "EXP-019", "experiment_version": version, "run_id": run["run_id"],
             "slot_id": slot["blind_id"], "attempt_number": 1, "prompt_sha256": variant["prompt_sha256"],
             "generation_mode": "host_native", "host_product": "ChatGPT Images",
             "observed_host_label": None, "backend_snapshot": "unknown", "provider_generation_id": None,
@@ -163,16 +195,28 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
             "source_kind": None,
             "source_origin_attestation": {name: False for name in SOURCE_ATTESTATIONS},
             "invoked_at_utc": None, "api_request_metadata": None,
-        })
+        }
+        if version == "1.1.1":
+            template.update(invoked_at_utc_status="not_observable",
+                            generation_completed_at_utc=None,
+                            generation_completed_at_utc_status="not_observable",
+                            backend_snapshot=None, backend_snapshot_status="not_observable",
+                            provider_generation_id_status="not_observable",
+                            metadata_query_template_sha256=contract["metadata_query_template_sha256"],
+                            metadata_query_attestation={key: False for key in QUERY_ATTESTATION})
+        _write_new(templates / f"{slot['blind_id']}.json", template)
     _write_new(destination / "manifest.json", {"experiment_id": "EXP-019",
-               "experiment_version": "1.1.0", "tasks": tasks})
+               "experiment_version": version, "tasks": tasks})
     (destination / "README.md").write_text(
         "Use a fresh ChatGPT Images conversation for each task, in manifest order. "
         "Paste only its exact prompt. Upload no images; do not edit, repair, or reroll a decodable result. "
         "Save the one new host output directly into that task's run-local staging directory; "
         "never import a prior local, research corpus, fixture, or gallery asset. "
         "An intake-path or receipt error does not authorize another generation: preserve and recover the original output. "
-        "Keep this generation package away from reviewers.\n", encoding="utf-8")
+        + ("After the image, ask only the bundled text-only metadata query in that same conversation. "
+           "Save its JSON response beside the image in this slot's staging directory; this is not another image request. "
+           if version == "1.1.1" else "")
+        + "Keep this generation package away from reviewers.\n", encoding="utf-8")
     return {"run_id": run["run_id"], "task_count": 12, "reference_count": 0,
             "output": str(destination), "manifest": str(destination / "manifest.json")}
 
@@ -197,6 +241,7 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
     variant, _ = find_slot(run, output["blind_id"])
     history = output.get("receipt_history", [])
     events = output["attempt_events"]
+    version = run["experiment_version"]
     if len(history) != len(events) // 2:
         raise ValueError("EXP-019 host attempt history incomplete")
     for index, binding in enumerate(history, 1):
@@ -209,11 +254,24 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
                 or record.get("operator_receipt_sha256") != binding["operator_sha256"]):
             raise ValueError("EXP-019 host operator attestation changed")
         outcome = events[index * 2 - 1]
+        sidecar = None
+        if version == "1.1.1":
+            sidecar_file = binding.get("host_session_metadata_file")
+            sidecar_hash = binding.get("host_session_metadata_sha256")
+            if outcome["event"] == "success":
+                expected_file = (RECEIPT_DIR / f"{output['blind_id']}.attempt-{index}.host-session.json").as_posix()
+                sidecar_path = root / str(sidecar_file)
+                if (sidecar_file != expected_file or not sidecar_path.is_file()
+                        or sha256_file(sidecar_path) != sidecar_hash):
+                    raise ValueError("EXP-019 host-session metadata binding changed")
+                sidecar = load_host_session_metadata(sidecar_path)
+            elif sidecar_file is not None or sidecar_hash is not None:
+                raise ValueError("EXP-019 failure has an unexpected host-session sidecar")
         _receipt_payload(operator_path, run,
                          next(s for s in run["invocation_order"] if s["blind_id"] == output["blind_id"]),
                          variant, index, outcome.get("image_sha256"),
-                         None if outcome["event"] == "success" else outcome["event"])
-        if (record.get("experiment_id") != "EXP-019" or record.get("experiment_version") != "1.1.0"
+                         None if outcome["event"] == "success" else outcome["event"], sidecar)
+        if (record.get("experiment_id") != "EXP-019" or record.get("experiment_version") != version
                 or record.get("run_id") != run["run_id"]
                 or record.get("slot_id") != output["blind_id"] or record.get("slot_position") != position
                 or record.get("prompt_sha256") != variant["prompt_sha256"]
@@ -222,6 +280,10 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
                 or record.get("attempt_number") != index
                 or record.get("status") != ("generated" if outcome["event"] == "success" else "failed")):
             raise ValueError("EXP-019 host receipt differs from attempt ledger")
+        if version == "1.1.1" and (
+                record.get("host_session_metadata_file") != binding.get("host_session_metadata_file")
+                or record.get("host_session_metadata_sha256") != binding.get("host_session_metadata_sha256")):
+            raise ValueError("EXP-019 host receipt/sidecar binding differs")
         if outcome["event"] == "success":
             metadata_path = root / "outputs" / str(output.get("metadata"))
             if (record.get("output_metadata_sha256") != output.get("metadata_sha256")
@@ -237,6 +299,12 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
                     or metadata.get("staging_disposition") != "moved_to_canonical_output"
                     or (root / str(record.get("staged_source_path"))).exists()):
                 raise ValueError("EXP-019 staged source or disposition differs from canonical output")
+            if version == "1.1.1" and (
+                    metadata.get("host_session_metadata_file") != binding["host_session_metadata_file"]
+                    or metadata.get("host_session_metadata_sha256") != binding["host_session_metadata_sha256"]
+                    or output.get("host_session_metadata") != binding["host_session_metadata_file"]
+                    or output.get("host_session_metadata_sha256") != binding["host_session_metadata_sha256"]):
+                raise ValueError("EXP-019 output/sidecar metadata binding differs")
     if output["status"] == "generated":
         image = root / "outputs" / str(output.get("image"))
         metadata = root / "outputs" / str(output.get("metadata"))
@@ -270,17 +338,21 @@ def host_receipt_from_run(run: dict, root: Path) -> dict:
                 raise ValueError("EXP-019 host receipt requires terminal state")
         elif output["status"] != "planned" or events:
             raise ValueError("EXP-019 host slot state mismatch")
-        slots.append({"position": slot["position"], "slot_id": slot["blind_id"],
+        slot_record = {"position": slot["position"], "slot_id": slot["blind_id"],
                       "condition": slot["variant_id"], "replicate": slot["replicate"],
                       "prompt_sha256": variant["prompt_sha256"], "status": output["status"],
                       "attempt_events": events, "receipt_history": output.get("receipt_history", []),
                       "output_image_sha256": output.get("image_sha256"),
-                      "output_metadata_sha256": output.get("metadata_sha256")})
+                      "output_metadata_sha256": output.get("metadata_sha256")}
+        if run["experiment_version"] == "1.1.1":
+            slot_record["host_session_metadata_sha256"] = output.get("host_session_metadata_sha256")
+        slots.append(slot_record)
     derived = "completed" if all(s["status"] == "generated" for s in slots) else "incomplete" if stopped else None
     if derived is None or run["status"] != derived:
         raise ValueError("EXP-019 host terminal status differs from attempt ledger")
     from .exp019_protocol import _canonical_sha256
-    core = {"schema_version": "1.1.0", "experiment_id": "EXP-019", "experiment_version": "1.1.0",
+    core = {"schema_version": run["experiment_version"], "experiment_id": "EXP-019",
+            "experiment_version": run["experiment_version"],
             "run_id": run["run_id"], "definition_sha256": run["experiment_definition_sha256"],
             "fixture_sha256": run["fixture_sha256"], "plan_commitment_sha256": run["plan_commitment_sha256"],
             "generation_mode": "host_native", "host_product": "ChatGPT Images",
@@ -291,13 +363,14 @@ def host_receipt_from_run(run: dict, root: Path) -> dict:
 
 
 def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
-                   image: str | Path | None = None, failure: str | None = None) -> dict:
+                   image: str | Path | None = None, failure: str | None = None,
+                   host_metadata: str | Path | None = None) -> dict:
     from .experiment_execution import _write_json_atomic, load_run
     from .exp019_anchor import append_attempt_checkpoint, verify_external
     from .exp019_receipt import write_run_receipt
     path, run = load_run(run_file)
-    if run["experiment_version"] != "1.1.0":
-        raise ValueError("host attempt requires EXP-019 v1.1.0")
+    if run["experiment_version"] not in HOST_VERSIONS:
+        raise ValueError("host attempt requires an EXP-019 host-native version")
     verify_external(path, run)
     slot, variant, output = _next_slot(run)
     if blind_id != slot["blind_id"]:
@@ -309,20 +382,50 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
     root = path.parent
     verify_host_attempts(root, run, output, slot["position"])
     source = _staged_source(root, blind_id, image) if image is not None else None
+    version = run["experiment_version"]
+    if version == "1.1.1" and source is not None and host_metadata is None:
+        raise ValueError("EXP-019 v1.1.1 image requires a same-slot host-session metadata sidecar")
+    if version == "1.1.0" and host_metadata is not None:
+        raise ValueError("EXP-019 v1.1.0 does not accept the v1.1.1 metadata sidecar")
+    if source is None and host_metadata is not None:
+        raise ValueError("EXP-019 host metadata sidecar requires a generated image")
+    sidecar_source = (_staged_source(root, blind_id, host_metadata)
+                      if host_metadata is not None else None)
+    if sidecar_source is not None and sidecar_source == source:
+        raise ValueError("EXP-019 image and metadata sidecar must be distinct files")
+    sidecar = load_host_session_metadata(sidecar_source) if sidecar_source else None
+    sidecar_hash = sha256_file(sidecar_source) if sidecar_source else None
     raster = _raster(source) if source else None
     image_hash = sha256_file(source) if source else None
     attempt = len(output["attempt_events"]) // 2 + 1
     operator_receipt = _receipt_payload(Path(receipt).expanduser().resolve(), run, slot, variant,
-                                        attempt, image_hash, failure)
+                                        attempt, image_hash, failure, sidecar)
+    recorded_at = datetime.now(timezone.utc).isoformat()
+    event_time = operator_receipt["invoked_at_utc"] if version == "1.1.0" else recorded_at
     started = {"event": "started", "attempt_number": attempt,
-               "at_utc": operator_receipt["invoked_at_utc"], "prompt_sha256": variant["prompt_sha256"]}
+               "at_utc": event_time, "prompt_sha256": variant["prompt_sha256"]}
+    if version == "1.1.1":
+        started.update(at_utc_source="repository_recorded_at_utc",
+                       host_invoked_at_utc=operator_receipt["invoked_at_utc"],
+                       host_invoked_at_utc_status=operator_receipt["invoked_at_utc_status"])
     append_attempt_event(output, started)
     outcome = {"event": failure or "success", "attempt_number": attempt,
-               "at_utc": operator_receipt["invoked_at_utc"], "prompt_sha256": variant["prompt_sha256"],
+               "at_utc": event_time, "prompt_sha256": variant["prompt_sha256"],
                "image_sha256": image_hash, "host_product": "ChatGPT Images",
                "backend_snapshot": operator_receipt.get("backend_snapshot", "unknown"),
                "provider_generation_id": operator_receipt.get("provider_generation_id")}
+    if version == "1.1.1":
+        outcome.update(at_utc_source="repository_recorded_at_utc",
+                       host_session_metadata_sha256=sidecar_hash,
+                       generation_completed_at_utc=operator_receipt["generation_completed_at_utc"],
+                       generation_completed_at_utc_status=operator_receipt["generation_completed_at_utc_status"])
     append_attempt_event(output, outcome)
+    canonical_sidecar = None
+    if sidecar_source is not None:
+        canonical_sidecar = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.host-session.json"
+        canonical_sidecar.parent.mkdir(parents=True, exist_ok=True)
+        if canonical_sidecar.exists():
+            raise FileExistsError(canonical_sidecar)
     if source:
         ext = {"PNG": ".png", "JPEG": ".jpg", "WEBP": ".webp"}[raster["format"]]
         image_path = root / "outputs" / f"{blind_id}{ext}"
@@ -333,6 +436,10 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
         source.rename(image_path)
         if sha256_file(image_path) != image_hash:
             raise ValueError("EXP-019 imported raster hash changed")
+        if canonical_sidecar is not None:
+            sidecar_source.rename(canonical_sidecar)
+            if sha256_file(canonical_sidecar) != sidecar_hash:
+                raise ValueError("EXP-019 imported host metadata sidecar hash changed")
         metadata_path = root / "outputs" / "metadata" / f"{blind_id}.json"
         metadata = {"slot_id": blind_id, "attempt_number": attempt,
                     "prompt_sha256": variant["prompt_sha256"], "image_sha256": image_hash,
@@ -342,14 +449,20 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
                     "staging_disposition": "moved_to_canonical_output",
                     "host_product": "ChatGPT Images", "backend_snapshot": outcome["backend_snapshot"],
                     "provider_generation_id": outcome["provider_generation_id"]}
+        if version == "1.1.1":
+            metadata.update(host_session_metadata_file=canonical_sidecar.relative_to(root).as_posix(),
+                            host_session_metadata_sha256=sidecar_hash)
         _write_new(metadata_path, metadata)
         output.update(status="generated", image=image_path.name, image_sha256=image_hash,
                       metadata=f"metadata/{metadata_path.name}", metadata_sha256=sha256_file(metadata_path), error=None)
+        if version == "1.1.1":
+            output.update(host_session_metadata=canonical_sidecar.relative_to(root).as_posix(),
+                          host_session_metadata_sha256=sidecar_hash)
     else:
         output.update(status="failed", error=operator_receipt.get("failure_detail"))
     operator_path = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.operator.json"
     _write_new(operator_path, operator_receipt)
-    record = {"experiment_id": "EXP-019", "experiment_version": "1.1.0",
+    record = {"experiment_id": "EXP-019", "experiment_version": version,
               "run_id": run["run_id"], "slot_id": blind_id, "slot_position": slot["position"],
               "attempt_number": attempt, "prompt_sha256": variant["prompt_sha256"],
               "operator_receipt_sha256": sha256_file(operator_path),
@@ -361,12 +474,22 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
               "staging_disposition": "moved_to_canonical_output" if source else None,
               "imported_at_utc": metadata["imported_at_utc"] if source else None,
               "actual_raster": raster, "status": output["status"]}
+    if version == "1.1.1":
+        record.update(host_session_metadata_file=(canonical_sidecar.relative_to(root).as_posix()
+                                                  if canonical_sidecar else None),
+                      host_session_metadata_sha256=sidecar_hash,
+                      receipt_created_at_utc=datetime.now(timezone.utc).isoformat())
     canonical_path = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.receipt.json"
     _write_new(canonical_path, record)
-    output.setdefault("receipt_history", []).append({"file": canonical_path.relative_to(root).as_posix(),
-                                                       "sha256": sha256_file(canonical_path),
-                                                       "operator_file": operator_path.relative_to(root).as_posix(),
-                                                       "operator_sha256": sha256_file(operator_path)})
+    history_binding = {"file": canonical_path.relative_to(root).as_posix(),
+                       "sha256": sha256_file(canonical_path),
+                       "operator_file": operator_path.relative_to(root).as_posix(),
+                       "operator_sha256": sha256_file(operator_path)}
+    if version == "1.1.1":
+        history_binding.update(host_session_metadata_file=(canonical_sidecar.relative_to(root).as_posix()
+                                                          if canonical_sidecar else None),
+                               host_session_metadata_sha256=sidecar_hash)
+    output.setdefault("receipt_history", []).append(history_binding)
     run["status"] = ("completed" if all(o["status"] == "generated" for v in run["variants"] for o in v["outputs"])
                      else "incomplete" if failure is not None and (failure != "technical_failure" or attempt == 3)
                      else "partial")

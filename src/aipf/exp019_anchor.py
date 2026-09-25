@@ -13,7 +13,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from .exp019_protocol import _canonical_sha256, _plan_core, find_slot, validate_run
+from .exp019_protocol import HOST_VERSIONS, _canonical_sha256, _plan_core, find_slot, validate_run
 from .experiment_runs import sha256_file
 
 REMOTE_ENV = "AIPF_EXP019_PROVENANCE_REMOTE"
@@ -165,7 +165,7 @@ def _save_state(root: Path, state: dict, *, new: bool = False) -> None:
 def _attempt_digest(root: Path, run: dict, slot_id: str, number: int) -> str:
     variant, output = find_slot(run, slot_id)
     position = next(s["position"] for s in run["invocation_order"] if s["blind_id"] == slot_id)
-    if run["experiment_version"] == "1.1.0":
+    if run["experiment_version"] in HOST_VERSIONS:
         from .exp019_host import verify_host_attempts
         verify_host_attempts(root, run, output, position)
     else:
@@ -181,8 +181,15 @@ def _attempt_digest(root: Path, run: dict, slot_id: str, number: int) -> str:
     evidence = {"run_id": run["run_id"], "slot_id": slot_id, "attempt_number": number,
                 "receipt_file_sha256": sha256_file(root / binding["file"]),
                 "attempt_events": events, "output_image_sha256": outcome.get("image_sha256")}
-    if run["experiment_version"] == "1.1.0":
+    if run["experiment_version"] in HOST_VERSIONS:
         evidence["operator_receipt_sha256"] = sha256_file(root / binding["operator_file"])
+        if run["experiment_version"] == "1.1.1":
+            sidecar_file = binding.get("host_session_metadata_file")
+            sidecar_hash = binding.get("host_session_metadata_sha256")
+            if sidecar_file is not None:
+                if sha256_file(root / sidecar_file) != sidecar_hash:
+                    raise ValueError("EXP-019 anchored sidecar hash mismatch")
+            evidence["host_session_metadata_sha256"] = sidecar_hash
     else:
         evidence["commitment_file_sha256"] = sha256_file(root / binding["commitment_file"])
     if outcome["event"] == "success":

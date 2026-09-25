@@ -6,7 +6,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from .exp019_protocol import REVIEWERS, find_slot, frozen_protocol
+from .exp019_protocol import HOST_VERSIONS, REVIEWERS, find_slot, frozen_protocol
 from .experiment_execution import load_run
 from .experiment_review import _verify_frozen_review
 from .experiment_runs import sha256_file
@@ -14,6 +14,14 @@ from .io import load_json
 
 DIMENSIONS = ("art_material_fidelity", "semantic_compliance", "aesthetic_quality", "technical_defects")
 LEVELS = ("contradicts", "weakly_contradicts", "inconclusive", "weakly_supports", "supports")
+
+
+def _result_schema(version: str) -> str:
+    if version == "1.1.1":
+        return "data/schemas/exp019_host_result_v1_1_1.schema.json"
+    if version == "1.1.0":
+        return "data/schemas/exp019_host_result.schema.json"
+    return "data/schemas/exp019_result.schema.json"
 
 
 def _band(delta: float) -> str:
@@ -120,7 +128,7 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
             raise ValueError("EXP-019 attempt provenance invalid")
         if len(source.get("receipt_history", [])) != len(outcomes):
             raise ValueError("EXP-019 receipt history incomplete")
-        if run["experiment_version"] == "1.1.0":
+        if run["experiment_version"] in HOST_VERSIONS:
             from .exp019_host import verify_host_attempts
             verify_host_attempts(root, run, source, slot["position"])
         else:
@@ -173,13 +181,17 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
                   "image_sha256": source["image_sha256"], "reviewers": reviews,
                   "averaged_scores": averaged}
         samples[slot["variant_id"]].append(sample)
-        generation_slots.append({
+        generation_slot = {
             "slot_id": slot["blind_id"], "position": slot["position"],
             "condition": slot["variant_id"], "replicate": slot["replicate"],
             "prompt_sha256": variant["prompt_sha256"], "attempt_events": events,
             "receipt_history": source["receipt_history"], "output_sha256": source["image_sha256"],
             "metadata_file": source["metadata"], "metadata_sha256": source["metadata_sha256"],
-        })
+        }
+        if run["experiment_version"] == "1.1.1":
+            generation_slot.update(host_session_metadata_file=source["host_session_metadata"],
+                                   host_session_metadata_sha256=source["host_session_metadata_sha256"])
+        generation_slots.append(generation_slot)
     if any(len(items) != 4 for items in samples.values()):
         raise ValueError("EXP-019 requires four samples per condition")
     means = {condition: {dimension: sum(item["averaged_scores"][dimension] for item in items) / 4 for dimension in DIMENSIONS} for condition, items in samples.items()}
@@ -209,7 +221,7 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         "generation": ({"host_product": "ChatGPT Images", "mode": "host_native",
                         "backend_snapshot": run["model_snapshot"], "settings": run["settings"],
                         "reference_inputs": [], "slots": generation_slots}
-                       if run["experiment_version"] == "1.1.0" else
+                       if run["experiment_version"] in HOST_VERSIONS else
                        {"provider": "openai", "mode": "generate", "requested_model": run["model"],
                         "recorded_model_snapshot": run["model_snapshot"], "settings": run["settings"],
                         "reference_inputs": [], "slots": generation_slots}),
@@ -225,13 +237,13 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         "evidence_classification": final,
         "statistical_significance_claim": False,
     }
-    schema = load_json("data/schemas/exp019_host_result.schema.json" if run["experiment_version"] == "1.1.0" else "data/schemas/exp019_result.schema.json")
+    schema = load_json(_result_schema(run["experiment_version"]))
     errors = list(Draft202012Validator(schema).iter_errors(result))
     if errors:
         raise ValueError("EXP-019 result schema invalid: " + "; ".join(error.message for error in errors))
     if output is not None:
         destination = Path(output).expanduser().resolve()
-        if run["experiment_version"] == "1.1.0" and destination != (root / "analysis-private" / "EXP-019.analysis.json").resolve():
+        if run["experiment_version"] in HOST_VERSIONS and destination != (root / "analysis-private" / "EXP-019.analysis.json").resolve():
             raise ValueError("EXP-019 v1.1 raw result must remain in its private analysis directory")
         destination.parent.mkdir(parents=True, exist_ok=True)
         with destination.open("x", encoding="utf-8", newline="\n") as handle:
@@ -244,7 +256,7 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
 def validate_exp019_result(run_file: str | Path, result_file: str | Path) -> dict:
     """Recompute all evidence and arithmetic; JSON-schema validity alone is insufficient."""
     persisted = json.loads(Path(result_file).expanduser().resolve().read_text(encoding="utf-8"))
-    schema = load_json("data/schemas/exp019_host_result.schema.json" if persisted.get("experiment_version") == "1.1.0" else "data/schemas/exp019_result.schema.json")
+    schema = load_json(_result_schema(persisted.get("experiment_version")))
     if list(Draft202012Validator(schema).iter_errors(persisted)):
         raise ValueError("EXP-019 persisted result schema invalid")
     expected = analyze_exp019(run_file)

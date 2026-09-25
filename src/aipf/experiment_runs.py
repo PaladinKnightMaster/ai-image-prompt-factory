@@ -259,7 +259,7 @@ def create_run_plan(
         )
 
     experiment = load_experiment(experiment_id)
-    is_exp019_host = experiment["experiment_id"] == "EXP-019" and experiment["version"] == "1.1.0"
+    is_exp019_host = experiment["experiment_id"] == "EXP-019" and experiment["version"] in {"1.1.0", "1.1.1"}
     size = size if size is not None else ("portrait_2:3" if is_exp019_host else "1024x1536")
     quality = quality if quality is not None else ("unavailable" if is_exp019_host else "medium")
     model = model if model is not None else ("ChatGPT Images" if is_exp019_host else DEFAULT_MODEL)
@@ -411,7 +411,7 @@ def write_run_plan(
         validate_run(run)
 
     root = resolve_run_root(output)
-    is_exp019_host = run.get("experiment_id") == "EXP-019" and run.get("experiment_version") == "1.1.0"
+    is_exp019_host = run.get("experiment_id") == "EXP-019" and run.get("experiment_version") in {"1.1.0", "1.1.1"}
     if is_exp019_host:
         from .io import repo_root
         if root.parts[-2:] != ("experiments", "generated-images"):
