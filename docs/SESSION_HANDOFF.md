@@ -1,16 +1,16 @@
 # Session Handoff
 
-Read [project state](PROJECT_STATE.md), [roadmap](ROADMAP.md), [decisions](DECISIONS.md), and the [frozen EXP-019 preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) before continuing.
+Read [project state](PROJECT_STATE.md), [experiment lab](EXPERIMENT_LAB.md), and the [EXP-019 v1.1.0 preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) before continuing.
 
-- Date: 2026-09-24
-- Branch: `codex/exp-019-execution-infrastructure`; base canonical `main`: `a5ee6e52e97f267d2ee69b2153e681227e5b9499` (PR #8 merge)
+- Date: 2026-09-25
+- Branch: `codex/exp-019-host-native-freeze`; base canonical `main`: `c0a90752fa34fd658a44f8c8b729ad744b92ba80` (PR #9 merge)
 - Stable release: V3.3; V3.4 implementation merged, empirical validation pending, unreleased
-- EXP-019 v1.0.0: frozen, `planned`, unexecuted; no generation, receipt, review, result, or empirical conclusion
+- EXP-019: v1.0.0 API-oriented predecessor archived and never executed; v1.1.0 host-native protocol frozen, `planned`, and unexecuted. No real run, generation, receipt, review, result, or lexical-effectiveness conclusion exists.
 
-## Implementation
+## Change
 
-This branch implements the frozen twelve-slot execution, full raster validation, attempt and run receipts, two blind reviews, two-freeze reveal, and deterministic three-condition analysis. The final corrective patch adds [remote Git provenance checkpoints](EXP-019_REMOTE_PROVENANCE.md) for the run root, every completed attempt, and each reviewer freeze. Retry, reveal, receipt validation, and result analysis fetch and verify the external chain. The fixture, definition, C/A/B prompts, V3.3 behavior, and scientific rules remain unchanged.
+The v1.1.0 amendment retains the exact C/A/B prompt bytes, fixture, twelve-slot order, two-human review, scoring, safeguards, and promotion limits. The audit's two isolation gaps are corrected: host imports require exact run/slot staging and structured fresh-source attestation; blind reviewers receive metadata-free PNGs with equal normalized source/reviewer pixels and privately committed raw/copy hashes. Canonical raw outputs are moved from staging into private `outputs/`. Remote Git checkpoints continue to bind attempts and both review freezes. Historical V3.3 private runs remain untouched; the archived v1.0.0 API path remains testable.
 
 ## Validation and next task
 
-PR #9 is open. Its first CI run exposed a test setup conflict: repository-local `.pytest_tmp` held synthetic rasters when the privacy test scanned the worktree. This branch now lets pytest use the system temporary directory; the privacy test and EXP-019 protocol remain unchanged. A clean Python 3.12 install passed all 266 tests and repository validation (19/19 regressions, 10 golden baselines, no errors). The four pre-existing EXP-016 `pattern_implications` schema errors are unchanged. Worktree: verify clean after commit. Next task: confirm PR #9 passes both CI runners, then review it through the normal merge workflow. Do not generate images until execution readiness is separately authorized.
+Offline synthetic safeguards and lifecycle passed. Full pytest: 292 passed (19 additional blocker cases). Repository validator: passed, 19/19 regressions and 10/10 golden baselines, with no generated diff or raw-image leak. Worktree should be clean after the corrective commit. **Next task:** independently re-audit the corrected v1.1.0 host-native freeze before pushing or executing EXP-019. No real run, generation, review, receipt, result, or empirical conclusion exists; V3.4 remains unreleased.

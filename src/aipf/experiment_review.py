@@ -466,8 +466,9 @@ def freeze_review(review_file: str | Path) -> dict:
         review_schema = load_json("data/schemas/experiment_review.schema.json")
         if list(Draft202012Validator(review_schema).iter_errors(review)):
             raise ValueError("EXP-019 review schema validation failed")
-        from .exp019_review import validate_review_details
+        from .exp019_review import validate_review_details, verify_review_copy_bindings
         validate_review_details(review, manifest)
+        verify_review_copy_bindings(path.parent.parent.parent, review["reviewer_id"])
 
     frozen_path = path.parent / REVIEW_FROZEN_NAME
     if frozen_path.exists():
@@ -487,7 +488,8 @@ def freeze_review(review_file: str | Path) -> dict:
         from .exp019_review import write_freeze_commitment
         from .exp019_anchor import append_review_checkpoint
         write_freeze_commitment(frozen_path)
-        run_path = path.parent.parent.parent / "run.json"
+        run_root = path.parent.parent.parent
+        run_path = run_root / ("run-private.json" if (run_root / "run-private.json").is_file() else "run.json")
         _path, exp019_run = load_run(run_path)
         append_review_checkpoint(run_path, exp019_run, review["reviewer_id"])
 

@@ -56,14 +56,14 @@ def main():
     p = sub.add_parser("experiment-run-plan")
     p.add_argument("experiment")
     p.add_argument("--replicates", type=int, default=4)
-    p.add_argument("--size", default="1024x1536")
-    p.add_argument("--quality", default="medium")
+    p.add_argument("--size")
+    p.add_argument("--quality")
     p.add_argument(
         "--generation-mode",
         choices=["host_native", "api", "manual_import"],
         default="host_native",
     )
-    p.add_argument("--model", default="gpt-image-2")
+    p.add_argument("--model")
     p.add_argument("--model-snapshot")
     p.add_argument("--output")
 
@@ -86,6 +86,7 @@ def main():
     p.add_argument("run_file")
     p.add_argument("--blind-id", required=True)
     p.add_argument("--error", required=True)
+    p.add_argument("--receipt")
 
     p = sub.add_parser("experiment-run")
     p.add_argument("run_file")
@@ -217,6 +218,7 @@ def main():
                 args.run_file,
                 blind_id=args.blind_id,
                 error=args.error,
+                receipt=args.receipt,
             )
         )
         return

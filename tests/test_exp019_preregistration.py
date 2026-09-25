@@ -10,10 +10,12 @@ from aipf.experiments import plan_experiment
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFINITION_PATH = ROOT / "experiments/definitions/EXP-019.json"
+LEGACY_PATH = ROOT / "experiments/archive/EXP-019-v1.0.0.json"
 FIXTURE_PATH = ROOT / "experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json"
 PREREG_PATH = ROOT / "experiments/preregistrations/EXP-019.PREREGISTRATION.md"
 FIXTURE_SHA256 = "a47d5cb22b3ee0b83bc585db310cfe3e4a9facc2e9227777503248156d93a1b0"
-DEFINITION_SHA256 = "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7"
+DEFINITION_SHA256 = "aee92dc832b0ee45b341b7b819a90557ff8dfa1f4de23c5ae1029766afb315c6"
+LEGACY_SHA256 = "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7"
 PROMPT_BINDINGS = {
     "C": (883, 144, "481ecd1360a354f545c23a012525762d4505fa8e7df8a95b034c92dc9b45b6e4"),
     "A": (788, 128, "96ec98c7ae489f2722139000bd2b6b04a040868ae1bbb4d7ec86dc7ac259bdf1"),
@@ -29,8 +31,11 @@ def test_exp019_fixture_and_prompt_bindings() -> None:
     prereg = PREREG_PATH.read_text(encoding="utf-8")
 
     assert definition["experiment_id"] == "EXP-019"
-    assert definition["version"] == "1.0.0"
+    assert definition["version"] == "1.1.0"
     assert definition["status"] == "planned"
+    assert sha256(LEGACY_PATH.read_bytes()).hexdigest() == LEGACY_SHA256
+    assert definition["protocol_amendment"]["predecessor_definition_sha256"] == LEGACY_SHA256
+    assert definition["protocol_amendment"]["predecessor_status"] == "preregistered_never_executed"
     assert fixture["fixture_id"] == "EXP-019-BOKASHI-01"
     assert fixture["version"] == "1.0.0"
     assert fixture["status"] == "frozen"
@@ -65,9 +70,9 @@ def test_exp019_isolation_and_review_freeze() -> None:
     assert definition["requires_reference_inputs"] == fixture["reference_inputs"] == []
     assert definition["transformation"] is fixture["transformation"] is None
     assert fixture["transformation_pack"] is fixture["era"] is fixture["identity"] is fixture["named_artist"] is None
-    assert definition["model_target"] == config["requested_model"] == "gpt-image-2-2026-04-21"
-    assert config["api_script_model_argument"] == "--model gpt-image-2-2026-04-21"
-    assert (config["width"], config["height"], config["quality"], config["background"]) == (1024, 1536, "high", "opaque")
+    assert definition["model_target"] == config["host_product"] == "ChatGPT Images"
+    assert config["mode"] == "host_native" and config["backend_model_snapshot"] == "unknown_unless_host_exposes"
+    assert config["requested_aspect_ratio"] == "2:3" and config["requested_dimensions"] is None
     assert config["reference_inputs"] == [] and config["seed"] is None
     assert config["image_count_per_invocation"] == 1 and config["total_images_planned"] == 12
     assert definition["evaluation_dimensions"] == ["art_material_fidelity", "semantic_compliance", "aesthetic_quality", "technical_defects"]

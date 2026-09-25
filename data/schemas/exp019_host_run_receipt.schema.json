@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/host_run_receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "experiment_version",
+    "run_id",
+    "definition_sha256",
+    "fixture_sha256",
+    "plan_commitment_sha256",
+    "generation_mode",
+    "host_product",
+    "settings",
+    "reference_inputs",
+    "ordered_slots",
+    "derived_run_status",
+    "external_provenance",
+    "evidence_sha256",
+    "backend_snapshot"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "experiment_id": {
+      "const": "EXP-019"
+    },
+    "experiment_version": {
+      "const": "1.1.0"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "definition_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "fixture_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "plan_commitment_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "settings": {
+      "type": "object",
+      "required": [
+        "replicates",
+        "size",
+        "quality",
+        "background",
+        "seed",
+        "image_count_per_invocation"
+      ],
+      "properties": {
+        "replicates": {
+          "const": 4
+        },
+        "size": {
+          "const": "portrait_2:3"
+        },
+        "quality": {
+          "const": "unavailable"
+        },
+        "background": {
+          "type": "null"
+        },
+        "seed": {
+          "type": "null"
+        },
+        "image_count_per_invocation": {
+          "const": 1
+        }
+      }
+    },
+    "reference_inputs": {
+      "const": []
+    },
+    "ordered_slots": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": [
+          "position",
+          "slot_id",
+          "condition",
+          "replicate",
+          "prompt_sha256",
+          "status",
+          "attempt_events",
+          "receipt_history",
+          "output_image_sha256",
+          "output_metadata_sha256"
+        ]
+      }
+    },
+    "derived_run_status": {
+      "enum": [
+        "completed",
+        "incomplete"
+      ]
+    },
+    "external_provenance": {
+      "type": "object",
+      "required": [
+        "backend",
+        "ref",
+        "root_anchor_commit",
+        "terminal_anchor_commit",
+        "checkpoints"
+      ],
+      "properties": {
+        "backend": {
+          "const": "remote_git"
+        },
+        "ref": {
+          "type": "string"
+        },
+        "root_anchor_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40,64}$"
+        },
+        "terminal_anchor_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40,64}$"
+        },
+        "checkpoints": {
+          "type": "array",
+          "minItems": 2
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "generation_mode": {
+      "const": "host_native"
+    },
+    "host_product": {
+      "const": "ChatGPT Images"
+    },
+    "backend_snapshot": {
+      "const": "unknown"
+    }
+  },
+  "$defs": {
+    "sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

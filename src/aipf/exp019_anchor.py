@@ -163,10 +163,14 @@ def _save_state(root: Path, state: dict, *, new: bool = False) -> None:
 
 
 def _attempt_digest(root: Path, run: dict, slot_id: str, number: int) -> str:
-    from .exp019_execution import _verify_prior_receipts
     variant, output = find_slot(run, slot_id)
     position = next(s["position"] for s in run["invocation_order"] if s["blind_id"] == slot_id)
-    _verify_prior_receipts(root, run, variant, output, position)
+    if run["experiment_version"] == "1.1.0":
+        from .exp019_host import verify_host_attempts
+        verify_host_attempts(root, run, output, position)
+    else:
+        from .exp019_execution import _verify_prior_receipts
+        _verify_prior_receipts(root, run, variant, output, position)
     if number < 1 or number > len(output.get("receipt_history", [])):
         raise ValueError("EXP-019 anchored attempt is absent from canonical ledger")
     binding = output["receipt_history"][number - 1]
@@ -176,8 +180,11 @@ def _attempt_digest(root: Path, run: dict, slot_id: str, number: int) -> str:
     outcome = events[-1]
     evidence = {"run_id": run["run_id"], "slot_id": slot_id, "attempt_number": number,
                 "receipt_file_sha256": sha256_file(root / binding["file"]),
-                "commitment_file_sha256": sha256_file(root / binding["commitment_file"]),
                 "attempt_events": events, "output_image_sha256": outcome.get("image_sha256")}
+    if run["experiment_version"] == "1.1.0":
+        evidence["operator_receipt_sha256"] = sha256_file(root / binding["operator_file"])
+    else:
+        evidence["commitment_file_sha256"] = sha256_file(root / binding["commitment_file"])
     if outcome["event"] == "success":
         image = root / "outputs" / str(output.get("image"))
         metadata = root / "outputs" / str(output.get("metadata"))

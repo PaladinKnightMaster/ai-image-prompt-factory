@@ -14,8 +14,18 @@ from .io import load_json
 RECEIPT_NAME = "exp019.run.receipt.json"
 
 
+def _receipt_location(path: Path, run: dict) -> tuple[Path, str | None]:
+    if run["experiment_version"] == "1.1.0":
+        from .exp019_host import RUN_RECEIPT
+        return path.parent / RUN_RECEIPT, "data/schemas/exp019_host_run_receipt.schema.json"
+    return path.parent / "receipts" / RECEIPT_NAME, "data/schemas/exp019_run_receipt.schema.json"
+
+
 def receipt_from_run(run: dict, root: Path) -> dict:
     """Derive evidence and completeness from the ledger, never from a caller's conclusion."""
+    if run["experiment_version"] == "1.1.0":
+        from .exp019_host import host_receipt_from_run
+        return host_receipt_from_run(run, root)
     from .exp019_execution import _verify_prior_receipts
     from .exp019_anchor import run_receipt_provenance
 
@@ -101,11 +111,11 @@ def validate_run_receipt(run_file: str | Path, run: dict | None = None) -> dict:
     if run is None:
         from .experiment_execution import load_run
         _path, run = load_run(path)
-    receipt_path = path.parent / "receipts" / RECEIPT_NAME
+    receipt_path, schema_name = _receipt_location(path, run)
     if not receipt_path.is_file():
         raise ValueError("EXP-019 run-level execution receipt missing")
     actual = json.loads(receipt_path.read_text(encoding="utf-8"))
-    schema = load_json("data/schemas/exp019_run_receipt.schema.json")
+    schema = load_json(schema_name)
     if list(Draft202012Validator(schema).iter_errors(actual)):
         raise ValueError("EXP-019 run-level receipt schema invalid")
     expected = receipt_from_run(run, path.parent)
@@ -117,7 +127,7 @@ def validate_run_receipt(run_file: str | Path, run: dict | None = None) -> dict:
 def write_run_receipt(run_file: str | Path, run: dict) -> dict:
     path = Path(run_file).expanduser().resolve()
     receipt = receipt_from_run(run, path.parent)
-    destination = path.parent / "receipts" / RECEIPT_NAME
+    destination, _schema_name = _receipt_location(path, run)
     if destination.exists():
         return validate_run_receipt(path, run)
     destination.parent.mkdir(parents=True, exist_ok=True)

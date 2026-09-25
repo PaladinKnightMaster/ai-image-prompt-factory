@@ -31,7 +31,7 @@ def _git(*args: str) -> str:
 
 
 def _new_run(root: Path) -> Path:
-    plan = create_run_plan("EXP-019", replicates=4, size="1024x1536", quality="high",
+    plan = create_run_plan("experiments/archive/EXP-019-v1.0.0.json", replicates=4, size="1024x1536", quality="high",
                            model="gpt-image-2-2026-04-21", model_snapshot="gpt-image-2-2026-04-21",
                            generation_mode="api")
     return write_run_plan(plan, root / "runs")
