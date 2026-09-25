@@ -2,9 +2,14 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import secrets
 import shutil
+import zlib
+from io import BytesIO
 from pathlib import Path
+
+from PIL import Image, ImageOps
 
 from .exp019_protocol import REVIEWERS, find_slot
 from .experiment_execution import load_run
@@ -13,6 +18,109 @@ from .experiment_review import (
     _canonical_sha256, _dimension_guidance, _new_review_id, _utc_now,
     _verify_frozen_review, _write_json_atomic,
 )
+
+
+def _normalized_pixels(path: Path) -> tuple[str, tuple[int, int], bytes]:
+    """Decode displayed pixels without carrying source metadata into a review copy."""
+    with Image.open(path) as image:
+        image.load()
+        oriented = ImageOps.exif_transpose(image)
+        mode = "RGBA" if "A" in oriented.getbands() or "transparency" in oriented.info else "RGB"
+        normalized = oriented.convert(mode)
+        return mode, normalized.size, normalized.tobytes()
+
+
+def _pixel_sha256(pixels: tuple[str, tuple[int, int], bytes]) -> str:
+    mode, size, data = pixels
+    header = f"{mode}:{size[0]}x{size[1]}\0".encode("ascii")
+    return hashlib.sha256(header + data).hexdigest()
+
+
+def _sanitized_png(source: Path) -> tuple[bytes, str]:
+    pixels = _normalized_pixels(source)
+    clean = Image.frombytes(*pixels)
+    buffer = BytesIO()
+    clean.save(buffer, format="PNG")
+    return buffer.getvalue(), _pixel_sha256(pixels)
+
+
+def _metadata_free_png(data: bytes) -> bool:
+    """Permit only image-defining PNG chunks, including no trailing bytes."""
+    if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return False
+    position = 8
+    seen_header = seen_pixels = False
+    while position + 12 <= len(data):
+        length = int.from_bytes(data[position:position + 4], "big")
+        kind = data[position + 4:position + 8]
+        end = position + 12 + length
+        if end > len(data) or kind not in {b"IHDR", b"IDAT", b"IEND"}:
+            return False
+        payload = data[position + 8:position + 8 + length]
+        if zlib.crc32(kind + payload) != int.from_bytes(data[end - 4:end], "big"):
+            return False
+        if kind == b"IHDR":
+            if seen_header or seen_pixels or position != 8 or length != 13:
+                return False
+            seen_header = True
+        elif kind == b"IDAT":
+            if not seen_header:
+                return False
+            seen_pixels = True
+        else:
+            return seen_header and seen_pixels and length == 0 and end == len(data)
+        position = end
+    return False
+
+
+def verify_review_copy_bindings(root: Path, reviewer_id: str) -> None:
+    """Rebuild every review raster from the anchored raw output and private mapping."""
+    run_path = root / "run-private.json"
+    if not run_path.is_file():  # The archived, never-executed v1.0 API path stays intact.
+        return
+    _path, run = load_run(run_path)
+    directory = root / "blind-review" / reviewer_id
+    manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+    mapping = json.loads((root / ".review-private" / f"{reviewer_id}.mapping.json").read_text(encoding="utf-8"))
+    from .experiment_review import _verify_review_manifest
+    _verify_review_manifest(manifest)
+    core = {key: mapping[key] for key in (
+        "run_id", "experiment_id", "reviewer_id", "review_batch_id", "entries"
+    )}
+    if (_canonical_sha256(core) != mapping.get("mapping_commitment_sha256")
+            or mapping.get("mapping_commitment_sha256") != manifest.get("mapping_commitment_sha256")
+            or mapping.get("review_package_sha256") != manifest.get("review_package_sha256")
+            or mapping.get("reviewer_id") != reviewer_id
+            or manifest.get("reviewer_id") != reviewer_id
+            or mapping.get("run_id") != run["run_id"]):
+        raise ValueError("EXP-019 sanitized review mapping commitment mismatch")
+    images = {item["review_id"]: item["image"] for item in manifest["items"]}
+    entries = {entry["blind_id"]: entry for entry in mapping["entries"]}
+    if (len(images) != 12 or len(entries) != 12 or len(mapping["entries"]) != 12
+            or set(entries) != {slot["blind_id"] for slot in run["invocation_order"]}
+            or set(images) != {entry["review_id"] for entry in mapping["entries"]}):
+        raise ValueError("EXP-019 sanitized review sample set mismatch")
+    for slot in run["invocation_order"]:
+        entry = entries[slot["blind_id"]]
+        _variant, output = find_slot(run, slot["blind_id"])
+        source = root / "outputs" / str(output.get("image"))
+        name = images[entry["review_id"]]
+        if Path(name).name != name or name != f"{entry['review_id']}.png":
+            raise ValueError("EXP-019 reviewer image filename is not opaque PNG")
+        review_copy = directory / name
+        if (not source.is_file() or not review_copy.is_file()
+                or sha256_file(source) != output.get("image_sha256")
+                or entry.get("image_sha256") != output.get("image_sha256")
+                or entry.get("reviewer_id") != reviewer_id):
+            raise ValueError("EXP-019 sanitized review source binding mismatch")
+        source_pixels = _pixel_sha256(_normalized_pixels(source))
+        reviewer_pixels = _pixel_sha256(_normalized_pixels(review_copy))
+        if (entry.get("source_pixel_sha256") != source_pixels
+                or entry.get("review_pixel_sha256") != reviewer_pixels
+                or source_pixels != reviewer_pixels
+                or entry.get("review_image_sha256") != sha256_file(review_copy)
+                or not _metadata_free_png(review_copy.read_bytes())):
+            raise ValueError("EXP-019 sanitized reviewer copy changed or differs from source pixels")
 
 
 def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path | None = None) -> dict:
@@ -49,16 +157,30 @@ def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path
         if not source.is_file() or sha256_file(source) != source_item["image_sha256"]:
             raise ValueError("EXP-019 source output hash mismatch")
         review_id = _new_review_id(used)
-        name = review_id + source.suffix.lower()
-        shutil.copy2(source, destination / name)
-        if sha256_file(destination / name) != source_item["image_sha256"]:
-            raise ValueError("EXP-019 copied review output hash mismatch")
+        if run["experiment_version"] == "1.1.0":
+            name = review_id + ".png"
+            png, source_pixel_sha256 = _sanitized_png(source)
+            with (destination / name).open("xb") as handle:
+                handle.write(png)
+            review_pixel_sha256 = _pixel_sha256(_normalized_pixels(destination / name))
+            if source_pixel_sha256 != review_pixel_sha256:
+                raise ValueError("EXP-019 reviewer pixels differ from canonical output")
+        else:
+            name = review_id + source.suffix.lower()
+            shutil.copy2(source, destination / name)
+            if sha256_file(destination / name) != source_item["image_sha256"]:
+                raise ValueError("EXP-019 copied review output hash mismatch")
         items.append({"review_id": review_id, "image": name})
-        mapping_entries.append({
+        entry = {
             "review_id": review_id, "blind_id": slot["blind_id"],
             "variant_id": variant["variant_id"], "replicate": slot["replicate"],
             "image_sha256": source_item["image_sha256"],
-        })
+        }
+        if run["experiment_version"] == "1.1.0":
+            entry.update(reviewer_id=reviewer_id, source_pixel_sha256=source_pixel_sha256,
+                         review_image_sha256=sha256_file(destination / name),
+                         review_pixel_sha256=review_pixel_sha256)
+        mapping_entries.append(entry)
     # Each package gets independently random IDs and an independent order.
     items.sort(key=lambda row: row["review_id"])
     mapping_entries.sort(key=lambda row: row["review_id"])
@@ -116,6 +238,8 @@ def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path
         "Do not inspect run files, prompts, generation metadata, or private mappings.\n",
         encoding="utf-8",
     )
+    if run["experiment_version"] == "1.1.0":
+        verify_review_copy_bindings(run_path.parent, reviewer_id)
     return {"reviewer_id": reviewer_id, "manifest": str(destination / "manifest.json"),
             "review": str(destination / "review.json"), "review_package_sha256": manifest_hash,
             "mapping_commitment_sha256": mapping_commitment}
@@ -164,6 +288,7 @@ def write_freeze_commitment(frozen_path: Path) -> dict:
     mapping_path = root / ".review-private" / f"{reviewer_id}.mapping.json"
     frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
     mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+    verify_review_copy_bindings(root, reviewer_id)
     _verify_frozen_review(frozen)
     commitment = {
         "reviewer_id": reviewer_id,
@@ -194,6 +319,7 @@ def verify_freeze_commitment(root: Path, reviewer_id: str) -> dict:
         raise ValueError("both EXP-019 reviews require independent freeze commitments")
     frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
     mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+    verify_review_copy_bindings(root, reviewer_id)
     commitment = json.loads(commitment_path.read_text(encoding="utf-8"))
     _verify_frozen_review(frozen)
     expected = {
@@ -324,7 +450,9 @@ def reveal(run_file: str | Path) -> dict:
             if not image_name or Path(image_name).name != image_name:
                 raise ValueError("EXP-019 reviewer image binding missing")
             review_image = directory / image_name
-            if not review_image.is_file() or sha256_file(review_image) != entry["image_sha256"]:
+            expected_image_hash = (entry["review_image_sha256"] if run["experiment_version"] == "1.1.0"
+                                   else entry["image_sha256"])
+            if not review_image.is_file() or sha256_file(review_image) != expected_image_hash:
                 raise ValueError("EXP-019 reviewer-visible image hash mismatch")
         for slot in run["invocation_order"]:
             _variant, output = find_slot(run, slot["blind_id"])

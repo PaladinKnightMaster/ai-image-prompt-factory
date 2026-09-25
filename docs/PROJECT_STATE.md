@@ -1,6 +1,6 @@
 # Current Project State
 
-- Last updated: 2026-09-24
+- Last updated: 2026-09-25
 - Canonical branch: `main`; V3.4 implementation merge commit: `aa6ae9bb57166d70840fb6ec6ca2a2f4a59b8a52` (PR #6)
 - Current stable release: V3.3 Empirical Lab
 - Stable tag: `v3.3.0` (annotated; closure commit `3c0119e`)
@@ -12,7 +12,7 @@
 
 **V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 was preregistered but never executed. The v1.1.0 host-native [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) supersedes its execution mechanics before generation, preserving the same frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json), prompts, and scientific rules. EXP-019 remains `planned` and unexecuted. No generation receipt or result exists, and no general image-generation benefit from domain-grounded lexical realization has been established.
 
-EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. Host-native execution and the V3.4+ private storage contract are being frozen on `codex/exp-019-host-native-freeze`; a fresh execution-readiness audit is required before any real generation.
+EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. The host-native freeze branch now constrains imports to per-slot private staging with source-origin attestation and builds metadata-free, pixel-equivalent blind-review copies. These corrective safeguards require final independent re-audit before publication or any real generation.
 
 ## Strongest established findings
 
@@ -28,7 +28,7 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Next scope
 
-Review the EXP-019 v1.1.0 host-native freeze and re-audit execution readiness before any generation. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
+Independently re-audit the corrected EXP-019 v1.1.0 host-native freeze before publication or generation. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 

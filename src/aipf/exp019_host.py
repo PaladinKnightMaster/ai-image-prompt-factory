@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -16,6 +17,12 @@ ATTESTATIONS = (
     "zero_reference_images", "no_prior_exp019_prompt", "no_prior_exp019_output",
     "no_edit", "no_follow_up_repair", "one_generation_request",
 )
+SOURCE_ATTESTATIONS = (
+    "saved_for_exact_slot", "fresh_chatgpt_generation", "not_from_private_corpus",
+    "not_from_fixtures_gallery_library", "not_reused_from_prior_run",
+    "not_edited", "not_a_prior_local_asset", "zero_references",
+)
+STAGING_DIR = Path("host-import-staging")
 RECEIPT_DIR = Path("provenance-freeze/execution-receipts")
 RUN_RECEIPT = Path("provenance-freeze/EXP-019.provenance-ledger.json")
 
@@ -48,6 +55,36 @@ def _raster(source: Path) -> dict:
                 "opaque": not has_alpha or image.convert("RGBA").getchannel("A").getextrema() == (255, 255)}
 
 
+def _staged_source(root: Path, blind_id: str, image: str | Path) -> Path:
+    """Only a regular file in this run and slot's staging directory may enter the ledger."""
+    from .io import repo_root
+    root = root.resolve(strict=True)
+    candidate = Path(image).expanduser()
+    if ".." in candidate.parts or candidate.is_symlink():
+        raise ValueError("EXP-019 host import path escapes its slot staging directory")
+    private_root = root.parents[2]
+    denied = [repo_root(), *(private_root / name for name in
+               ("source", "fixtures", "gallery")),
+              *(private_root.parent / name for name in
+                ("release", "release-artifacts", "release-build", "release-verify"))]
+    lexical = Path(os.path.abspath(candidate))
+    source = candidate.resolve(strict=True)
+    if any(path == boundary or boundary in path.parents
+           for path in (lexical, source) for boundary in denied):
+        raise ValueError("EXP-019 host import cannot use a corpus, public, or release source")
+    staging = root / STAGING_DIR
+    slot_dir = staging / blind_id
+    if (not staging.is_dir() or staging.is_symlink()
+            or staging.resolve(strict=True).parent != root
+            or not slot_dir.is_dir() or slot_dir.is_symlink()
+            or slot_dir.resolve(strict=True).parent != staging.resolve(strict=True)
+            or slot_dir.resolve(strict=True).name != blind_id
+            or source.parent != slot_dir.resolve(strict=True)
+            or not source.is_file()):
+        raise ValueError("EXP-019 host import requires this run and slot's staging directory")
+    return source
+
+
 def _receipt_payload(path: Path, run: dict, slot: dict, variant: dict, attempt: int,
                      image_hash: str | None, failure: str | None) -> dict:
     receipt = json.loads(path.read_text(encoding="utf-8"))
@@ -63,6 +100,12 @@ def _receipt_payload(path: Path, run: dict, slot: dict, variant: dict, attempt: 
         raise ValueError("EXP-019 host attempt differs from frozen slot or invocation")
     if receipt.get("fresh_chat_attestation") != {name: True for name in ATTESTATIONS}:
         raise ValueError("EXP-019 fresh-conversation attestation incomplete")
+    if image_hash is not None and (
+        receipt.get("source_kind") != "fresh_host_generation"
+        or receipt.get("source_origin_attestation") !=
+        {name: True for name in SOURCE_ATTESTATIONS}
+    ):
+        raise ValueError("EXP-019 source-origin attestation incomplete")
     returned = receipt.get("host_returned_output_count")
     if (type(returned) is not int or returned < 0
             or (image_hash is not None and returned != 1)
@@ -106,6 +149,7 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
                       "prompt": prompt, "prompt_sha256": variant["prompt_sha256"],
                       "host_product": "ChatGPT Images", "requested_aspect_ratio": "2:3",
                       "reference_count": 0, "requested_outputs": 1,
+                      "staging_relative_dir": f"host-import-staging/{slot['blind_id']}",
                       "operator_receipt_template": f"operator-receipt-templates/{slot['blind_id']}.json"})
         _write_new(templates / f"{slot['blind_id']}.json", {
             "experiment_id": "EXP-019", "experiment_version": "1.1.0", "run_id": run["run_id"],
@@ -116,6 +160,8 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
             "generation_request_count": 1, "host_returned_output_count": None,
             "output_count": None, "outcome": None, "output_sha256": None,
             "fresh_chat_attestation": {name: False for name in ATTESTATIONS},
+            "source_kind": None,
+            "source_origin_attestation": {name: False for name in SOURCE_ATTESTATIONS},
             "invoked_at_utc": None, "api_request_metadata": None,
         })
     _write_new(destination / "manifest.json", {"experiment_id": "EXP-019",
@@ -123,6 +169,9 @@ def export_host_package(run_file: str | Path, *, output: str | Path | None = Non
     (destination / "README.md").write_text(
         "Use a fresh ChatGPT Images conversation for each task, in manifest order. "
         "Paste only its exact prompt. Upload no images; do not edit, repair, or reroll a decodable result. "
+        "Save the one new host output directly into that task's run-local staging directory; "
+        "never import a prior local, research corpus, fixture, or gallery asset. "
+        "An intake-path or receipt error does not authorize another generation: preserve and recover the original output. "
         "Keep this generation package away from reviewers.\n", encoding="utf-8")
     return {"run_id": run["run_id"], "task_count": 12, "reference_count": 0,
             "output": str(destination), "manifest": str(destination / "manifest.json")}
@@ -177,8 +226,17 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
             metadata_path = root / "outputs" / str(output.get("metadata"))
             if (record.get("output_metadata_sha256") != output.get("metadata_sha256")
                     or record.get("imported_raster_path") != (Path("outputs") / str(output.get("image"))).as_posix()
-                    or not metadata_path.is_file() or record.get("actual_raster") != json.loads(metadata_path.read_text(encoding="utf-8")).get("actual_raster")):
+                    or not metadata_path.is_file()):
                 raise ValueError("EXP-019 host metadata binding differs")
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            if (record.get("actual_raster") != metadata.get("actual_raster")
+                    or record.get("staged_source_path") != metadata.get("staged_source_path")
+                    or record.get("staged_source_sha256") != outcome.get("image_sha256")
+                    or metadata.get("staged_source_sha256") != outcome.get("image_sha256")
+                    or record.get("staging_disposition") != "moved_to_canonical_output"
+                    or metadata.get("staging_disposition") != "moved_to_canonical_output"
+                    or (root / str(record.get("staged_source_path"))).exists()):
+                raise ValueError("EXP-019 staged source or disposition differs from canonical output")
     if output["status"] == "generated":
         image = root / "outputs" / str(output.get("image"))
         metadata = root / "outputs" / str(output.get("metadata"))
@@ -250,7 +308,7 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
         raise ValueError("provide exactly one image or one classified failure")
     root = path.parent
     verify_host_attempts(root, run, output, slot["position"])
-    source = Path(image).expanduser().resolve() if image is not None else None
+    source = _staged_source(root, blind_id, image) if image is not None else None
     raster = _raster(source) if source else None
     image_hash = sha256_file(source) if source else None
     attempt = len(output["attempt_events"]) // 2 + 1
@@ -269,14 +327,19 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
         ext = {"PNG": ".png", "JPEG": ".jpg", "WEBP": ".webp"}[raster["format"]]
         image_path = root / "outputs" / f"{blind_id}{ext}"
         image_path.parent.mkdir(parents=True, exist_ok=True)
-        with image_path.open("xb") as handle:
-            handle.write(source.read_bytes())
+        if image_path.exists():
+            raise FileExistsError(image_path)
+        staged_source_path = source.relative_to(root).as_posix()
+        source.rename(image_path)
         if sha256_file(image_path) != image_hash:
             raise ValueError("EXP-019 imported raster hash changed")
         metadata_path = root / "outputs" / "metadata" / f"{blind_id}.json"
         metadata = {"slot_id": blind_id, "attempt_number": attempt,
                     "prompt_sha256": variant["prompt_sha256"], "image_sha256": image_hash,
                     "actual_raster": raster, "imported_at_utc": datetime.now().astimezone().isoformat(),
+                    "staged_source_path": staged_source_path,
+                    "staged_source_sha256": image_hash,
+                    "staging_disposition": "moved_to_canonical_output",
                     "host_product": "ChatGPT Images", "backend_snapshot": outcome["backend_snapshot"],
                     "provider_generation_id": outcome["provider_generation_id"]}
         _write_new(metadata_path, metadata)
@@ -293,6 +356,9 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
               "attempt_events": output["attempt_events"], "output_image_sha256": image_hash,
               "output_metadata_sha256": output.get("metadata_sha256"),
               "imported_raster_path": image_path.relative_to(root).as_posix() if source else None,
+              "staged_source_path": staged_source_path if source else None,
+              "staged_source_sha256": image_hash,
+              "staging_disposition": "moved_to_canonical_output" if source else None,
               "imported_at_utc": metadata["imported_at_utc"] if source else None,
               "actual_raster": raster, "status": output["status"]}
     canonical_path = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.receipt.json"

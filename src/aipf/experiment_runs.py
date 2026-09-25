@@ -429,9 +429,12 @@ def write_run_plan(
     if is_exp019_host:
         prompts_dir = destination / "generation-inputs" / "prompts"
         prompts_dir.mkdir(parents=True)
+        staging_dir = destination / "host-import-staging"
+        staging_dir.mkdir()
         for variant in run["variants"]:
             for item in variant["outputs"]:
                 (prompts_dir / f"{item['blind_id']}.txt").write_bytes(variant["prompt"].encode("utf-8"))
+                (staging_dir / item["blind_id"]).mkdir()
         reference_dir = destination / "generation-inputs" / "reference-manifest"
         reference_dir.mkdir(parents=True)
         (reference_dir / "references.json").write_text("[]\n", encoding="utf-8")

@@ -23,7 +23,7 @@ from the public repository and from release/build directories:
 ```text
 <private-root>/experiments/
   generated-images/EXP-<id>-<version>-<timestamp>-<suffix>/
-    generation-inputs/  outputs/  provenance-freeze/  blind-review/
+    generation-inputs/  host-import-staging/  outputs/  provenance-freeze/  blind-review/
     .review-private/  .provenance-private/  analysis-private/  packages/
     run-private.json
   imports/
@@ -35,6 +35,19 @@ private mappings, raw reviews, and private analysis stay there. Only sanitized
 results and interpretations may enter the public `experiments/results/` area.
 For EXP-019, point `AIPF_EXPERIMENT_OUTPUT_PATH` (or `experiment-run-plan --output`)
 at `<private-root>/experiments/generated-images` before creating a run.
+For EXP-019 v1.1.0, each opaque slot has its own `host-import-staging/<slot-id>/`
+directory. Save its fresh ChatGPT Images output directly there, then import that
+file for that exact slot. Corpus, fixture, gallery, other-run, and other local
+asset paths are rejected. The operator also attests the file's fresh-host
+origin; filesystem containment alone cannot prove it. A successful import
+atomically moves the staged bytes into canonical private `outputs/`. A failed
+intake does not authorize another generation; preserve and recover the original
+host output.
+
+EXP-019 blind-review packages use new metadata-free PNGs made from decoded
+output pixels in their displayed EXIF orientation. Private mappings bind each raw output hash to its reviewer copy
+hash and equal normalized pixel digests. The raw output remains private; the
+reviewer-visible copy contains no inherited host metadata.
 The private run folder stores evidence; a separately configured Git provenance
 remote is the append-only trust root for EXP-019's plan, attempts, and review
 freezes. Historical V3.3 private runs retain their original layout and are not
