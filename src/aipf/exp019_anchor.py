@@ -190,6 +190,13 @@ def _attempt_digest(root: Path, run: dict, slot_id: str, number: int) -> str:
                 if sha256_file(root / sidecar_file) != sidecar_hash:
                     raise ValueError("EXP-019 anchored sidecar hash mismatch")
             evidence["host_session_metadata_sha256"] = sidecar_hash
+            if outcome["event"] == "success":
+                canonical = json.loads((root / binding["file"]).read_text(encoding="utf-8"))
+                query_file = canonical["frozen_metadata_query_file"]
+                query_hash = sha256_file(root / query_file)
+                if query_hash != canonical["frozen_metadata_query_sha256"]:
+                    raise ValueError("EXP-019 anchored metadata query hash mismatch")
+                evidence["frozen_metadata_query_sha256"] = query_hash
     else:
         evidence["commitment_file_sha256"] = sha256_file(root / binding["commitment_file"])
     if outcome["event"] == "success":

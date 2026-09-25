@@ -64,6 +64,19 @@ likewise remain `null` when the host does not expose them. The earlier v1.1.0
 run stopped before first import because exact request time was unavailable; its
 staged raster and root checkpoint remain historical and must not be reused.
 
+For each successful v1.1.1 import, the actual packaged
+`packages/generation-inputs/metadata-queries/<slot-id>.txt` bytes must match
+both that slot's manifest hash and the deterministic rendering of the frozen
+template. A missing, redirected, or extra query file blocks import before the
+image is promoted. Import copies the verified bytes into private
+`provenance-freeze/execution-receipts/` evidence and binds that copy's hash in
+the finalized receipt and external attempt checkpoint. After import, this
+frozen copy is authoritative; later changes to the mutable generation package
+do not change finalized evidence. The query text is excluded from remote
+checkpoints and reviewer packages. Same-conversation origin, truthful host
+response, and operator execution behavior remain operator-attested because
+the host supplies no signed receipt; file integrity cannot prove them.
+
 EXP-019 blind-review packages use new metadata-free PNGs made from decoded
 output pixels in their displayed EXIF orientation. Private mappings bind each raw output hash to its reviewer copy
 hash and equal normalized pixel digests. The raw output remains private; the

@@ -314,6 +314,65 @@ def test_v111_real_backend_binds_sidecar_without_real_generation(tmp_path, monke
     assert [c["record"]["event_type"] for c in state["checkpoints"]] == ["run_root", "attempt"]
     _, output = find_slot(current, slot["blind_id"])
     assert output["host_session_metadata_sha256"] == sha256_file(run_file.parent / output["host_session_metadata"])
+    binding = output["receipt_history"][0]
+    canonical = json.loads((run_file.parent / binding["file"]).read_text(encoding="utf-8"))
+    frozen = run_file.parent / canonical["frozen_metadata_query_file"]
+    packaged = (run_file.parent / "packages" / "generation-inputs" / "metadata-queries"
+                / f"{slot['blind_id']}.txt")
+    assert frozen.read_bytes() == packaged.read_bytes()
+    assert canonical["packaged_metadata_query_sha256"] == sha256_file(frozen)
+    assert canonical["frozen_metadata_query_sha256"] == sha256_file(frozen)
+    assert "Do not generate, edit, regenerate" not in json.dumps(state)
+    frozen_bytes = frozen.read_bytes()
+    packaged.write_bytes(b"A changed, non-authoritative package copy.\n")
+    assert verify_external(run_file, current)["checkpoints"][-1]["record"]["event_type"] == "attempt"
+    frozen.write_bytes(b"A changed frozen query.\n")
+    with pytest.raises(ValueError, match="frozen metadata query binding changed"):
+        verify_external(run_file, current)
+    frozen.write_bytes(frozen_bytes)
+    canonical["packaged_metadata_query_sha256"] = "0" * 64
+    (run_file.parent / binding["file"]).write_text(json.dumps(canonical) + "\n", encoding="utf-8")
+    binding["sha256"] = sha256_file(run_file.parent / binding["file"])
+    with pytest.raises(ValueError, match="frozen metadata query binding changed"):
+        verify_external(run_file, current)
+
+
+@pytest.mark.parametrize("damage", ["edited", "forged_manifest", "missing", "wrong_slot", "alternate"])
+def test_packaged_query_must_match_frozen_rendering_before_import(tmp_path, offline_anchor,
+                                                                   monkeypatch, damage):
+    import aipf.exp019_anchor as anchor
+    monkeypatch.setattr(anchor, "append_attempt_checkpoint",
+                        lambda *args: pytest.fail("rejected query advanced external provenance"))
+    run_file = _run(tmp_path)
+    export_host_package(run_file)
+    slot = load_run_plan(run_file)["invocation_order"][0]
+    root = run_file.parent
+    package = root / "packages" / "generation-inputs"
+    query = package / "metadata-queries" / f"{slot['blind_id']}.txt"
+    original = query.read_bytes()
+    if damage in {"edited", "forged_manifest"}:
+        assert b"Do not generate" in original
+        query.write_bytes(original.replace(b"Do not generate", b"Go not generate", 1))
+        if damage == "forged_manifest":
+            manifest_path = package / "manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["tasks"][0]["metadata_query_sha256"] = sha256_file(query)
+            manifest_path.write_text(json.dumps(manifest) + "\n", encoding="utf-8")
+    elif damage == "missing":
+        query.unlink()
+    elif damage == "wrong_slot":
+        other = load_run_plan(run_file)["invocation_order"][1]
+        query.write_bytes((query.parent / f"{other['blind_id']}.txt").read_bytes())
+    else:
+        (query.parent / f"{slot['blind_id']}.copy.txt").write_bytes(original)
+    image, metadata = _stage(run_file, slot)
+    receipt = _receipt(run_file, slot, image, _sidecar(), tmp_path / "receipt.json")
+    with pytest.raises(ValueError, match="metadata query"):
+        import_output(run_file, blind_id=slot["blind_id"], image=image,
+                      host_metadata=metadata, receipt=receipt)
+    assert image.exists() and metadata.exists()
+    assert load_run_plan(run_file)["status"] == "planned"
+    assert not list((root / "provenance-freeze" / "execution-receipts").glob("*.metadata-query.txt"))
 
 
 def test_coordinated_local_sidecar_rewrite_fails_remote_checkpoint(tmp_path, monkeypatch):
@@ -371,6 +430,51 @@ def test_coordinated_local_sidecar_rewrite_fails_remote_checkpoint(tmp_path, mon
     state["checkpoints"][1]["record"]["evidence_sha256"] = _attempt_digest(root, run, slot["blind_id"], 1)
     state_path.write_text(json.dumps(state) + "\n", encoding="utf-8")
     with pytest.raises(ValueError, match="remote checkpoint differs"):
+        verify_external(run_file, run)
+
+
+def test_coordinated_query_sidecar_receipt_rewrite_is_rejected(tmp_path, monkeypatch):
+    remote = tmp_path / "synthetic-remote.git"
+    subprocess.run(["git", "init", "--bare", "-q", str(remote)], check=True, capture_output=True)
+    monkeypatch.setenv("AIPF_EXP019_PROVENANCE_REMOTE", str(remote))
+    run_file = _run(tmp_path)
+    export_host_package(run_file)
+    slot = load_run_plan(run_file)["invocation_order"][0]
+    image, metadata = _stage(run_file, slot)
+    receipt = _receipt(run_file, slot, image, _sidecar(), tmp_path / "receipt.json")
+    import_output(run_file, blind_id=slot["blind_id"], image=image,
+                  host_metadata=metadata, receipt=receipt)
+    run = load_run_plan(run_file)
+    root = run_file.parent
+    _, output = find_slot(run, slot["blind_id"])
+    binding = output["receipt_history"][0]
+    canonical_path = root / binding["file"]
+    canonical = json.loads(canonical_path.read_text(encoding="utf-8"))
+    frozen = root / canonical["frozen_metadata_query_file"]
+    frozen.write_bytes(b"forged query bytes\n")
+    forged_hash = sha256_file(frozen)
+    sidecar_path = root / binding["host_session_metadata_file"]
+    sidecar_path.write_bytes(sidecar_path.read_bytes() + b"\n")
+    sidecar_hash = sha256_file(sidecar_path)
+    binding["host_session_metadata_sha256"] = sidecar_hash
+    output["host_session_metadata_sha256"] = sidecar_hash
+    event = output["attempt_events"][1]
+    event["host_session_metadata_sha256"] = sidecar_hash
+    event["event_sha256"] = _canonical_sha256({k: v for k, v in event.items() if k != "event_sha256"})
+    metadata_path = root / "outputs" / output["metadata"]
+    output_metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    output_metadata["host_session_metadata_sha256"] = sidecar_hash
+    metadata_path.write_text(json.dumps(output_metadata) + "\n", encoding="utf-8")
+    output["metadata_sha256"] = sha256_file(metadata_path)
+    canonical.update(packaged_metadata_query_sha256=forged_hash,
+                     frozen_metadata_query_sha256=forged_hash,
+                     host_session_metadata_sha256=sidecar_hash,
+                     output_metadata_sha256=output["metadata_sha256"],
+                     attempt_events=output["attempt_events"])
+    canonical_path.write_text(json.dumps(canonical) + "\n", encoding="utf-8")
+    binding["sha256"] = sha256_file(canonical_path)
+    run_file.write_text(json.dumps(run) + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="frozen metadata query binding changed"):
         verify_external(run_file, run)
 
 

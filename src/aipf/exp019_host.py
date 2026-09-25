@@ -33,6 +33,56 @@ RECEIPT_DIR = Path("provenance-freeze/execution-receipts")
 RUN_RECEIPT = Path("provenance-freeze/EXP-019.provenance-ledger.json")
 
 
+def _expected_query(blind_id: str) -> tuple[bytes, str]:
+    from .io import repo_root
+    contract = frozen_protocol("1.1.1")[0]["host_evidence_contract"]
+    template = (repo_root() / contract["metadata_query_template_path"]).read_bytes()
+    if hashlib.sha256(template).hexdigest() != contract["metadata_query_template_sha256"]:
+        raise ValueError("EXP-019 frozen metadata query template changed")
+    rendered = render_metadata_query(template, blind_id)
+    return rendered, hashlib.sha256(rendered).hexdigest()
+
+
+def _packaged_query(root: Path, run: dict, blind_id: str) -> tuple[bytes, str]:
+    """Read the sole canonical query file before a successful v1.1.1 import."""
+    package = root / "packages" / "generation-inputs"
+    directory = package / "metadata-queries"
+    manifest_path = package / "manifest.json"
+    expected_names = {f"{slot['blind_id']}.txt" for slot in run["invocation_order"]}
+    if (package.is_symlink() or not package.is_dir()
+            or (root / "packages").is_symlink()
+            or directory.is_symlink() or not directory.is_dir()
+            or manifest_path.is_symlink() or not manifest_path.is_file()):
+        raise ValueError("EXP-019 canonical metadata query package missing or redirected")
+    if ((root / "packages").resolve(strict=True).parent != root.resolve(strict=True)
+            or package.resolve(strict=True).parent != (root / "packages").resolve(strict=True)
+            or directory.resolve(strict=True).parent != package.resolve(strict=True)):
+        raise ValueError("EXP-019 metadata query package escapes its run")
+    if ({entry.name for entry in directory.iterdir()} != expected_names
+            or any(entry.is_symlink() or not entry.is_file() for entry in directory.iterdir())):
+        raise ValueError("EXP-019 metadata query package has missing or alternate files")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    tasks = manifest.get("tasks", [])
+    expected_ids = {slot["blind_id"] for slot in run["invocation_order"]}
+    if (manifest.get("experiment_id") != "EXP-019"
+            or manifest.get("experiment_version") != "1.1.1"
+            or len(tasks) != len(expected_ids)
+            or {task.get("opaque_slot_id") for task in tasks} != expected_ids):
+        raise ValueError("EXP-019 metadata query manifest differs from run")
+    task = next(task for task in tasks if task["opaque_slot_id"] == blind_id)
+    expected, expected_hash = _expected_query(blind_id)
+    contract = frozen_protocol("1.1.1")[0]["host_evidence_contract"]
+    if (task.get("metadata_query_file") != f"metadata-queries/{blind_id}.txt"
+            or task.get("metadata_query_sha256") != expected_hash
+            or task.get("metadata_query_template_sha256") != contract["metadata_query_template_sha256"]):
+        raise ValueError("EXP-019 metadata query manifest binding mismatch")
+    actual = (directory / f"{blind_id}.txt").read_bytes()
+    actual_hash = hashlib.sha256(actual).hexdigest()
+    if actual_hash != task["metadata_query_sha256"] or actual != expected:
+        raise ValueError("EXP-019 packaged metadata query bytes differ from frozen query")
+    return actual, actual_hash
+
+
 def _write_new(path: Path, value: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("x", encoding="utf-8", newline="\n") as handle:
@@ -274,13 +324,28 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
             sidecar_file = binding.get("host_session_metadata_file")
             sidecar_hash = binding.get("host_session_metadata_sha256")
             if outcome["event"] == "success":
+                expected_query_file = (RECEIPT_DIR / f"{output['blind_id']}.attempt-{index}.metadata-query.txt").as_posix()
+                query_path = root / expected_query_file
+                _, expected_query_hash = _expected_query(output["blind_id"])
+                if (record.get("frozen_metadata_query_file") != expected_query_file
+                        or record.get("packaged_metadata_query_sha256") != expected_query_hash
+                        or record.get("frozen_metadata_query_sha256") != expected_query_hash
+                        or query_path.parent.is_symlink() or query_path.is_symlink()
+                        or not query_path.is_file()
+                        or (root / "provenance-freeze").resolve(strict=True).parent != root.resolve(strict=True)
+                        or query_path.parent.resolve(strict=True).parent != (root / "provenance-freeze").resolve(strict=True)
+                        or sha256_file(query_path) != expected_query_hash):
+                    raise ValueError("EXP-019 frozen metadata query binding changed")
                 expected_file = (RECEIPT_DIR / f"{output['blind_id']}.attempt-{index}.host-session.json").as_posix()
                 sidecar_path = root / str(sidecar_file)
                 if (sidecar_file != expected_file or not sidecar_path.is_file()
                         or sha256_file(sidecar_path) != sidecar_hash):
                     raise ValueError("EXP-019 host-session metadata binding changed")
                 sidecar = load_host_session_metadata(sidecar_path)
-            elif sidecar_file is not None or sidecar_hash is not None:
+            elif (sidecar_file is not None or sidecar_hash is not None
+                  or record.get("frozen_metadata_query_file") is not None
+                  or record.get("frozen_metadata_query_sha256") is not None
+                  or record.get("packaged_metadata_query_sha256") is not None):
                 raise ValueError("EXP-019 failure has an unexpected host-session sidecar")
         _receipt_payload(operator_path, run,
                          next(s for s in run["invocation_order"] if s["blind_id"] == output["blind_id"]),
@@ -420,6 +485,9 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
     sidecar_hash = sha256_file(sidecar_source) if sidecar_source else None
     raster = _raster(source) if source else None
     image_hash = sha256_file(source) if source else None
+    query_bytes = query_hash = None
+    if version == "1.1.1" and source is not None:
+        query_bytes, query_hash = _packaged_query(root, run, blind_id)
     attempt = len(output["attempt_events"]) // 2 + 1
     recorded_at = datetime.now(timezone.utc).isoformat()
     operator_receipt = _receipt_payload(Path(receipt).expanduser().resolve(), run, slot, variant,
@@ -445,17 +513,34 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
                        generation_completed_at_utc_status=operator_receipt["generation_completed_at_utc_status"])
     append_attempt_event(output, outcome)
     canonical_sidecar = None
+    canonical_query = None
     if sidecar_source is not None:
         canonical_sidecar = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.host-session.json"
         canonical_sidecar.parent.mkdir(parents=True, exist_ok=True)
         if canonical_sidecar.exists():
             raise FileExistsError(canonical_sidecar)
+    if query_bytes is not None:
+        canonical_query = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.metadata-query.txt"
+        if ((root / "provenance-freeze").is_symlink()
+                or canonical_query.parent.is_symlink()
+                or (root / "provenance-freeze").resolve(strict=True).parent != root.resolve(strict=True)
+                or canonical_query.parent.resolve(strict=True).parent !=
+                (root / "provenance-freeze").resolve(strict=True)):
+            raise ValueError("EXP-019 frozen metadata query path escapes its run")
+        if canonical_query.exists() or canonical_query.is_symlink():
+            raise FileExistsError(canonical_query)
     if source:
         ext = {"PNG": ".png", "JPEG": ".jpg", "WEBP": ".webp"}[raster["format"]]
         image_path = root / "outputs" / f"{blind_id}{ext}"
         image_path.parent.mkdir(parents=True, exist_ok=True)
         if image_path.exists():
             raise FileExistsError(image_path)
+        if canonical_query is not None:
+            canonical_query.parent.mkdir(parents=True, exist_ok=True)
+            with canonical_query.open("xb") as handle:
+                handle.write(query_bytes)
+            if sha256_file(canonical_query) != query_hash:
+                raise ValueError("EXP-019 frozen metadata query hash changed")
         staged_source_path = source.relative_to(root).as_posix()
         source.rename(image_path)
         if sha256_file(image_path) != image_hash:
@@ -502,6 +587,10 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
         record.update(host_session_metadata_file=(canonical_sidecar.relative_to(root).as_posix()
                                                   if canonical_sidecar else None),
                       host_session_metadata_sha256=sidecar_hash,
+                      packaged_metadata_query_sha256=query_hash,
+                      frozen_metadata_query_file=(canonical_query.relative_to(root).as_posix()
+                                                  if canonical_query else None),
+                      frozen_metadata_query_sha256=query_hash,
                       receipt_created_at_utc=datetime.now(timezone.utc).isoformat())
     canonical_path = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.receipt.json"
     _write_new(canonical_path, record)
