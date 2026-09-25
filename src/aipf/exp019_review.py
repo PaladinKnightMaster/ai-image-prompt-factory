@@ -36,7 +36,7 @@ def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path
 
     from .exp019_protocol import frozen_protocol
     from .io import load_json
-    definition, _fixture = frozen_protocol()
+    definition, _fixture = frozen_protocol(run["experiment_version"])
     prereg = definition["preregistration"]
     available_failure_classes = sorted(set(load_json("evaluation/failure_taxonomy.json")["classes"]) - {"TERM_REALIZATION_FAILURE"})
     items, mapping_entries, used = [], [], set()

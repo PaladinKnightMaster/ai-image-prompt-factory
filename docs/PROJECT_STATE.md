@@ -10,9 +10,9 @@
 
 **V3.3 Empirical Lab: CLOSED and latest stable release.** The release tag marks scientific closure and is integrated into `main`. Later `main` commits fixed CI portability and corrected an EXP-017 source-hash notation without changing the underlying result or conclusion. README and SKILL titles, package, and manifest retain the V3.3 release label; the compiler/evidence-snapshot lineage remains `3.2.0` by design. See the [release notes](RELEASE_NOTES_V3.3.md).
 
-**V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 now has a frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json) and [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md), while its definition remains `planned` and unexecuted. No generation receipt or result exists, and no general image-generation benefit from domain-grounded lexical realization has been established.
+**V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 was preregistered but never executed. The v1.1.0 host-native [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) supersedes its execution mechanics before generation, preserving the same frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json), prompts, and scientific rules. EXP-019 remains `planned` and unexecuted. No generation receipt or result exists, and no general image-generation benefit from domain-grounded lexical realization has been established.
 
-EXP-019 execution infrastructure hardening is under review on `codex/exp-019-execution-infrastructure`. Its offline synthetic rehearsal is not empirical evidence. A fresh execution-readiness audit is required before any real generation.
+EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. Host-native execution and the V3.4+ private storage contract are being frozen on `codex/exp-019-host-native-freeze`; a fresh execution-readiness audit is required before any real generation.
 
 ## Strongest established findings
 
@@ -28,7 +28,7 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Next scope
 
-Re-audit the EXP-019 execution infrastructure against the frozen protocol before any generation. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
+Review the EXP-019 v1.1.0 host-native freeze and re-audit execution readiness before any generation. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 

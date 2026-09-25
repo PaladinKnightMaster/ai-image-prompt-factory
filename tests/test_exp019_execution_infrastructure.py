@@ -57,7 +57,7 @@ def _jpeg() -> bytes:
 
 def _run(tmp_path: Path):
     plan = create_run_plan(
-        "EXP-019", replicates=4, size="1024x1536", quality="high",
+        "experiments/archive/EXP-019-v1.0.0.json", replicates=4, size="1024x1536", quality="high",
         model="gpt-image-2-2026-04-21", model_snapshot="gpt-image-2-2026-04-21",
         generation_mode="api",
     )
@@ -140,7 +140,7 @@ def test_exp019_plan_exact_order_and_tamper_rejection(tmp_path):
 
 def test_exp019_rejects_nonfrozen_plan_config():
     with pytest.raises(ValueError, match="exact generation settings"):
-        create_run_plan("EXP-019")
+        create_run_plan("experiments/archive/EXP-019-v1.0.0.json")
 
 
 def test_exp019_manual_import_cannot_bypass_attempt_provenance(tmp_path):

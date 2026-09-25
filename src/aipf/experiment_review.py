@@ -487,7 +487,8 @@ def freeze_review(review_file: str | Path) -> dict:
         from .exp019_review import write_freeze_commitment
         from .exp019_anchor import append_review_checkpoint
         write_freeze_commitment(frozen_path)
-        run_path = path.parent.parent.parent / "run.json"
+        run_root = path.parent.parent.parent
+        run_path = run_root / ("run-private.json" if (run_root / "run-private.json").is_file() else "run.json")
         _path, exp019_run = load_run(run_path)
         append_review_checkpoint(run_path, exp019_run, review["reviewer_id"])
 

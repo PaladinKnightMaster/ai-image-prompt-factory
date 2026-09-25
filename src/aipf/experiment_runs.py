@@ -236,9 +236,9 @@ def create_run_plan(
     experiment_id: str,
     *,
     replicates: int = 4,
-    size: str = "1024x1536",
-    quality: str = "medium",
-    model: str = DEFAULT_MODEL,
+    size: str | None = None,
+    quality: str | None = None,
+    model: str | None = None,
     model_snapshot: str | None = None,
     generation_mode: str = "host_native",
 ) -> dict:
@@ -258,14 +258,13 @@ def create_run_plan(
             + ", ".join(sorted(ALLOWED_GENERATION_MODES))
         )
 
-    if model_snapshot is None:
-        model_snapshot = (
-            DEFAULT_API_SNAPSHOT
-            if generation_mode == "api"
-            else UNKNOWN_SNAPSHOT
-        )
-
     experiment = load_experiment(experiment_id)
+    is_exp019_host = experiment["experiment_id"] == "EXP-019" and experiment["version"] == "1.1.0"
+    size = size if size is not None else ("portrait_2:3" if is_exp019_host else "1024x1536")
+    quality = quality if quality is not None else ("unavailable" if is_exp019_host else "medium")
+    model = model if model is not None else ("ChatGPT Images" if is_exp019_host else DEFAULT_MODEL)
+    if model_snapshot is None:
+        model_snapshot = UNKNOWN_SNAPSHOT if is_exp019_host or generation_mode != "api" else DEFAULT_API_SNAPSHOT
 
     execution_readiness = (
         experiment
@@ -290,7 +289,8 @@ def create_run_plan(
             "supported through host_native/manual_import only"
         )
 
-    source_path = definition_path(experiment["experiment_id"])
+    explicit_path = Path(experiment_id)
+    source_path = explicit_path if explicit_path.is_file() else definition_path(experiment["experiment_id"])
 
     if not source_path.exists():
         raise FileNotFoundError(
@@ -411,10 +411,36 @@ def write_run_plan(
         validate_run(run)
 
     root = resolve_run_root(output)
+    is_exp019_host = run.get("experiment_id") == "EXP-019" and run.get("experiment_version") == "1.1.0"
+    if is_exp019_host:
+        from .io import repo_root
+        if root.parts[-2:] != ("experiments", "generated-images"):
+            raise ValueError("EXP-019 private run root must end with experiments/generated-images")
+        if root == repo_root() or repo_root() in root.parents:
+            raise ValueError("EXP-019 private run root must be outside the public repository")
+        if any(part.lower() in {"release", "release-artifacts", "release-build", "release-verify"}
+               for part in root.parts):
+            raise ValueError("EXP-019 empirical evidence cannot use a release directory")
     root.mkdir(parents=True, exist_ok=True)
 
     destination = root / run["run_id"]
     destination.mkdir(parents=True, exist_ok=False)
+
+    if is_exp019_host:
+        prompts_dir = destination / "generation-inputs" / "prompts"
+        prompts_dir.mkdir(parents=True)
+        for variant in run["variants"]:
+            for item in variant["outputs"]:
+                (prompts_dir / f"{item['blind_id']}.txt").write_bytes(variant["prompt"].encode("utf-8"))
+        reference_dir = destination / "generation-inputs" / "reference-manifest"
+        reference_dir.mkdir(parents=True)
+        (reference_dir / "references.json").write_text("[]\n", encoding="utf-8")
+        hashes = sorted(f"{sha256_file(path)}  {path.relative_to(destination).as_posix()}"
+                        for path in (destination / "generation-inputs").rglob("*") if path.is_file())
+        (destination / "generation-inputs" / "generation-inputs.sha256.txt").write_text("\n".join(hashes) + "\n", encoding="utf-8")
+        run_path = destination / "run-private.json"
+        run_path.write_text(json.dumps(run, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return run_path
 
     for variant in run["variants"]:
         variant_dir = destination / variant["variant_id"]

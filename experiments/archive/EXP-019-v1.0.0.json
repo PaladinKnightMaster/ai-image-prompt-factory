@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-019",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "hypothesis": "Domain-Grounded Lexical Realization: in this no-reference Japanese woodblock isolation fixture, canonical bokashi terminology plus the same visible explanation may improve art/material fidelity over generic visible wording and terminology alone; superiority is unverified.",
   "experiment_layer": "isolation_bench",
   "target_concept_id": "woodblock.bokashi",
@@ -63,7 +63,7 @@
     "same upper sky treatment region and indigo/light-blue inks",
     "same flat color regions outside the upper sky",
     "same zero-reference, no-identity, no-era, no-artist, no-transformation setup",
-    "same ChatGPT Images host product, portrait 2:3 request, zero references, and one-image independent invocation rule",
+    "same requested model, size, quality, background, and one-image invocation settings",
     "all common prompt text byte-for-byte"
   ],
   "evaluation_dimensions": [
@@ -73,32 +73,29 @@
     "technical_defects"
   ],
   "primary_dimension": "art_material_fidelity",
-  "model_target": "ChatGPT Images",
+  "model_target": "gpt-image-2-2026-04-21",
   "status": "planned",
   "requires_reference_inputs": [],
   "transformation": null,
   "generation_config": {
-    "mode": "host_native",
-    "host_product": "ChatGPT Images",
-    "conversation_policy": "fresh conversation for each slot; only its exact frozen prompt; no prior EXP-019 context",
-    "requested_aspect_ratio": "2:3",
-    "requested_dimensions": null,
-    "actual_raster_width": "measure_after_import",
-    "actual_raster_height": "measure_after_import",
-    "raster_format": "measure_after_import",
-    "alpha_opacity": "measure_after_import",
+    "mode": "generate",
+    "requested_model": "gpt-image-2-2026-04-21",
+    "model_snapshot": "gpt-image-2-2026-04-21",
+    "aspect_ratio": "2:3",
+    "width": 1024,
+    "height": 1536,
+    "size": "1024x1536",
+    "quality": "high",
+    "background": "opaque",
     "reference_inputs": [],
     "seed": null,
-    "seed_support": "unsupported_or_unavailable",
+    "seed_support": "unsupported; replicates are not paired by seed",
     "image_count_per_invocation": 1,
     "independent_invocations_required": true,
     "total_images_planned": 12,
-    "edits_allowed": false,
-    "follow_up_repair_allowed": false,
-    "ordinary_rerolls_allowed": false,
-    "backend_model_snapshot": "unknown_unless_host_exposes",
-    "provider_generation_id": "null_unless_host_exposes",
-    "api_request_metadata": "not_applicable"
+    "api_script_model_argument": "--model gpt-image-2-2026-04-21",
+    "api_script_model_snapshot_argument": "--model-snapshot gpt-image-2-2026-04-21",
+    "effective_or_revised_prompt_metadata": "Retain provider-returned metadata if available; never infer or invent it."
   },
   "preregistration": {
     "status": "frozen",
@@ -133,7 +130,7 @@
         "C"
       ]
     ],
-    "replicate_independence": "Twelve independent fresh ChatGPT Images conversations; one request and one image per slot; no seed pairing.",
+    "replicate_independence": "Twelve independent invocations; no seed pairing; one image per invocation.",
     "primary_rubric": {
       "5": "Clearly localized darker-to-lighter gradation in the target sky; visually integrated as a printed pigment field; surrounding regions remain predominantly flat; no meaningful global photographic/3D shading or obvious airbrushed overlay.",
       "4": "Clear localized print-like gradation with one noticeable minor weakness, such as slightly over-smooth rendering, minor spill, or imperfect integration.",
@@ -243,12 +240,13 @@
         "fixture SHA-256",
         "definition SHA-256",
         "exact prompt SHA-256",
-        "ChatGPT Images host label and observed backend snapshot only when exposed",
-        "fresh-conversation attestations",
-        "zero references",
+        "requested model",
+        "model snapshot",
+        "generation config",
+        "empty reference set",
         "timestamps",
-        "host generation identifier when available",
-        "measured raster properties and output SHA-256",
+        "host/provider generation identifier when available",
+        "output SHA-256",
         "attempt and failure history",
         "treatment/sample mapping",
         "mapping commitment",
@@ -261,10 +259,11 @@
       "no_execution_receipt_or_result_created_by_this_freeze": true
     },
     "readiness_gates_before_generation": [
-      "Verify fixture and definition hashes and exact C/A/B prompt bindings.",
-      "Verify twelve independent fresh ChatGPT Images conversations in frozen order, one output per invocation, and zero references.",
-      "Verify private run storage and external Git provenance anchoring for every finalized attempt.",
-      "Verify two independent blind reviews can be separately frozen and externally anchored before reveal."
+      "Verify fixture and definition file hashes and exact C/A/B prompt bindings.",
+      "Verify the exact dated --model argument, 1024x1536 size, high quality, opaque background, and zero references can be sent without silent substitution.",
+      "Verify twelve independent single-image invocations and attempt-history capture.",
+      "Verify two independent blind review records can be separately frozen before any mapping reveal.",
+      "Verify mapping commitment, provenance bindings, and provider-returned effective/revised-prompt retention where available."
     ],
     "promotion_boundaries": {
       "automatic_lexical_realizer_default_change": false,
@@ -276,12 +275,5 @@
       "global_lexical_superiority_claim": false,
       "positive_result_next_step": "mechanism-specific retention/review and independent transfer experiments only"
     }
-  },
-  "protocol_amendment": {
-    "supersedes_version": "1.0.0",
-    "predecessor_definition_sha256": "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7",
-    "predecessor_status": "preregistered_never_executed",
-    "predecessor_empirical_evidence": false,
-    "amendment_scope": "host-native execution, private storage, and provenance mechanics only; scientific treatments and scoring unchanged"
   }
 }

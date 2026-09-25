@@ -15,6 +15,35 @@ not required for normal experiment planning, host export, import, or review.
 Exact model snapshots must remain `unknown` when the host does not expose them;
 the project must not invent snapshot metadata.
 
+## V3.4+ private experiment storage
+
+New empirical runs from EXP-019 onward use a configured private root, separate
+from the public repository and from release/build directories:
+
+```text
+<private-root>/experiments/
+  generated-images/EXP-<id>-<version>-<timestamp>-<suffix>/
+    generation-inputs/  outputs/  provenance-freeze/  blind-review/
+    .review-private/  .provenance-private/  analysis-private/  packages/
+    run-private.json
+  imports/
+```
+
+An artifact class uses its canonical directory when it exists; empty placeholder
+artifacts are not required. Actual rasters, generation inputs, operator receipts,
+private mappings, raw reviews, and private analysis stay there. Only sanitized
+results and interpretations may enter the public `experiments/results/` area.
+For EXP-019, point `AIPF_EXPERIMENT_OUTPUT_PATH` (or `experiment-run-plan --output`)
+at `<private-root>/experiments/generated-images` before creating a run.
+The private run folder stores evidence; a separately configured Git provenance
+remote is the append-only trust root for EXP-019's plan, attempts, and review
+freezes. Historical V3.3 private runs retain their original layout and are not
+migrated. Private identity/outfit/pose fixtures, gallery materials, and the
+collected source Image Library are separate from EXP-019, which has zero image
+references. Other creators' images or prompt text cannot be copied into this
+experiment or a public gallery case; public gallery material requires first-party
+or rights-cleared inputs and human approval.
+
 ## V3.3 double-blind review hardening
 
 Generation blind IDs are not reviewer IDs. Imported outputs are stored in the
