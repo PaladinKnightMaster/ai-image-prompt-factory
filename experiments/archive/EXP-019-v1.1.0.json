@@ -1,6 +1,6 @@
 {
   "experiment_id": "EXP-019",
-  "version": "1.1.1",
+  "version": "1.1.0",
   "hypothesis": "Domain-Grounded Lexical Realization: in this no-reference Japanese woodblock isolation fixture, canonical bokashi terminology plus the same visible explanation may improve art/material fidelity over generic visible wording and terminology alone; superiority is unverified.",
   "experiment_layer": "isolation_bench",
   "target_concept_id": "woodblock.bokashi",
@@ -278,34 +278,10 @@
     }
   },
   "protocol_amendment": {
-    "supersedes_version": "1.1.0",
-    "predecessor_definition_sha256": "aee92dc832b0ee45b341b7b819a90557ff8dfa1f4de23c5ae1029766afb315c6",
-    "predecessor_status": "root_anchored_stopped_before_first_import_due_to_host_evidence_contract",
+    "supersedes_version": "1.0.0",
+    "predecessor_definition_sha256": "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7",
+    "predecessor_status": "preregistered_never_executed",
     "predecessor_empirical_evidence": false,
-    "v1_0_definition_sha256": "c5ced96c0357fbecb43169b96ea438aa7fd7e7fd739f1fb34381a3fded72bfe7",
-    "amendment_scope": "host-evidence representation and same-session metadata sidecar only; scientific fixture, treatments, order, review, scoring, safeguards, and promotion rules unchanged"
-  },
-  "host_evidence_contract": {
-    "version": "1.1.1",
-    "metadata_query_template_path": "experiments/templates/EXP-019.HOST-METADATA-QUERY.txt",
-    "metadata_query_template_sha256": "ef6f5530e7146db37b5271cc7cca1357b5e2ddf5c986c8c027f95549067b4287",
-    "sidecar_format": "JSON",
-    "sidecar_filename": "host-session.json",
-    "opaque_slot_id_source": "protocol_provided_by_slot_query",
-    "sidecar_required_per_generated_image": true,
-    "sidecar_source": "same fresh ChatGPT generation conversation after the image is returned",
-    "metadata_query_is_text_only": true,
-    "availability_statuses": [
-      "observed",
-      "not_observable"
-    ],
-    "unavailable_value": null,
-    "metadata_precedence": [
-      "direct_host_observation",
-      "protocol_or_operator_declaration",
-      "unknown"
-    ],
-    "host_request_and_completion_timestamps_nullable": true,
-    "image_and_sidecar_sha256_required": true
+    "amendment_scope": "host-native execution, private storage, and provenance mechanics only; scientific treatments and scoring unchanged"
   }
 }

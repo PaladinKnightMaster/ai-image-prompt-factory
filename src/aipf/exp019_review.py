@@ -11,7 +11,7 @@ from pathlib import Path
 
 from PIL import Image, ImageOps
 
-from .exp019_protocol import REVIEWERS, find_slot
+from .exp019_protocol import HOST_VERSIONS, REVIEWERS, find_slot
 from .experiment_execution import load_run
 from .experiment_runs import sha256_file
 from .experiment_review import (
@@ -157,7 +157,7 @@ def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path
         if not source.is_file() or sha256_file(source) != source_item["image_sha256"]:
             raise ValueError("EXP-019 source output hash mismatch")
         review_id = _new_review_id(used)
-        if run["experiment_version"] == "1.1.0":
+        if run["experiment_version"] in HOST_VERSIONS:
             name = review_id + ".png"
             png, source_pixel_sha256 = _sanitized_png(source)
             with (destination / name).open("xb") as handle:
@@ -176,7 +176,7 @@ def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path
             "variant_id": variant["variant_id"], "replicate": slot["replicate"],
             "image_sha256": source_item["image_sha256"],
         }
-        if run["experiment_version"] == "1.1.0":
+        if run["experiment_version"] in HOST_VERSIONS:
             entry.update(reviewer_id=reviewer_id, source_pixel_sha256=source_pixel_sha256,
                          review_image_sha256=sha256_file(destination / name),
                          review_pixel_sha256=review_pixel_sha256)
@@ -238,7 +238,7 @@ def create_package(run_file: str | Path, *, reviewer_id: str, output: str | Path
         "Do not inspect run files, prompts, generation metadata, or private mappings.\n",
         encoding="utf-8",
     )
-    if run["experiment_version"] == "1.1.0":
+    if run["experiment_version"] in HOST_VERSIONS:
         verify_review_copy_bindings(run_path.parent, reviewer_id)
     return {"reviewer_id": reviewer_id, "manifest": str(destination / "manifest.json"),
             "review": str(destination / "review.json"), "review_package_sha256": manifest_hash,
@@ -450,7 +450,7 @@ def reveal(run_file: str | Path) -> dict:
             if not image_name or Path(image_name).name != image_name:
                 raise ValueError("EXP-019 reviewer image binding missing")
             review_image = directory / image_name
-            expected_image_hash = (entry["review_image_sha256"] if run["experiment_version"] == "1.1.0"
+            expected_image_hash = (entry["review_image_sha256"] if run["experiment_version"] in HOST_VERSIONS
                                    else entry["image_sha256"])
             if not review_image.is_file() or sha256_file(review_image) != expected_image_hash:
                 raise ValueError("EXP-019 reviewer-visible image hash mismatch")

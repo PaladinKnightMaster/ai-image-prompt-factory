@@ -171,7 +171,7 @@ def export_host_package(
 ) -> dict:
     path, run = load_run(run_file)
     if run.get("experiment_id") == "EXP-019":
-        if run.get("experiment_version") == "1.1.0":
+        if run.get("experiment_version") in {"1.1.0", "1.1.1"}:
             from .exp019_host import export_host_package as export_exp019_host_package
             return export_exp019_host_package(run_file, output=output)
         raise ValueError("EXP-019 v1.0.0 requires its frozen OpenAI API execution path")
@@ -316,15 +316,17 @@ def import_output(
     model_snapshot: str | None = None,
     notes: str | None = None,
     receipt: str | Path | None = None,
+    host_metadata: str | Path | None = None,
     overwrite: bool = False,
 ) -> dict:
     path, run = load_run(run_file)
     if run.get("experiment_id") == "EXP-019":
-        if run.get("experiment_version") == "1.1.0":
+        if run.get("experiment_version") in {"1.1.0", "1.1.1"}:
             if receipt is None:
                 raise ValueError("EXP-019 host import requires an operator receipt")
             from .exp019_host import record_attempt
-            return record_attempt(run_file, blind_id=blind_id, receipt=receipt, image=image)
+            return record_attempt(run_file, blind_id=blind_id, receipt=receipt,
+                                  image=image, host_metadata=host_metadata)
         raise ValueError("EXP-019 v1.0.0 requires receipt-bound API execution; manual import is disabled")
     source = Path(image).expanduser().resolve()
 
@@ -492,7 +494,7 @@ def record_failed_output(
     """Record a host/manual generation failure without dropping the slot."""
     path, run = load_run(run_file)
     if run.get("experiment_id") == "EXP-019":
-        if run.get("experiment_version") == "1.1.0":
+        if run.get("experiment_version") in {"1.1.0", "1.1.1"}:
             if receipt is None:
                 raise ValueError("EXP-019 host failure requires an operator receipt")
             from .exp019_host import record_attempt
@@ -560,8 +562,8 @@ def execute_run(
     """
     path, run = load_run(run_file)
     if run.get("experiment_id") == "EXP-019":
-        if run.get("experiment_version") == "1.1.0":
-            raise ValueError("EXP-019 v1.1.0 is host-native; use experiment-export/import, not direct API execution")
+        if run.get("experiment_version") in {"1.1.0", "1.1.1"}:
+            raise ValueError("EXP-019 host-native runs use experiment-export/import, not direct API execution")
         if limit is not None:
             raise ValueError("EXP-019 frozen invocation sequence cannot be limited")
         from .exp019_execution import execute_exp019_run
