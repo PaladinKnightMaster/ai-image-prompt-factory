@@ -89,6 +89,18 @@ def main():
     p.add_argument("--error", required=True)
     p.add_argument("--receipt")
 
+    p = sub.add_parser("experiment-metadata-recovery-prepare",
+                       help="reserve one text-only v1.1.1 metadata replay; never generate an image")
+    p.add_argument("run_file")
+    p.add_argument("--blind-id", required=True)
+    p.add_argument("--original-conversation-available", action="store_true")
+    p.add_argument("--no-image-change", action="store_true")
+
+    p = sub.add_parser("experiment-metadata-recovery-stage",
+                       help="record the first and only recovery response from the private incoming area")
+    p.add_argument("run_file")
+    p.add_argument("--blind-id", required=True)
+
     p = sub.add_parser("experiment-run")
     p.add_argument("run_file")
     p.add_argument("--limit", type=int)
@@ -113,6 +125,19 @@ def main():
     p.add_argument("run_file")
 
     args=ap.parse_args()
+    if args.cmd == "experiment-metadata-recovery-prepare":
+        from .exp019_metadata_recovery import prepare_metadata_recovery
+        _dump(prepare_metadata_recovery(args.run_file, blind_id=args.blind_id,
+              original_conversation_available=args.original_conversation_available,
+              no_image_change=args.no_image_change))
+        return
+    if args.cmd == "experiment-metadata-recovery-stage":
+        from .exp019_metadata_recovery import stage_metadata_recovery
+        result = stage_metadata_recovery(args.run_file, blind_id=args.blind_id)
+        _dump(result)
+        if result["status"] != "accepted":
+            raise SystemExit(2)
+        return
     if args.cmd=='classify': print(classify(args.request,args.has_reference)); return
     if args.cmd=='compile':
         r=compile_result(_load(args.spec),args.profile); _dump(r) if args.as_json else print(r['prompt'],end=''); return
