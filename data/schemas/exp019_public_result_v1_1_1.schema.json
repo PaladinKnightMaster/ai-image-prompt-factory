@@ -1,0 +1,463 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "experiment_version",
+    "condition_means",
+    "contrasts",
+    "safeguards",
+    "initial_evidence_classification",
+    "evidence_classification",
+    "statistical_significance_claim",
+    "host_provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "experiment_id": {
+      "const": "EXP-019"
+    },
+    "experiment_version": {
+      "const": "1.1.1"
+    },
+    "condition_means": {
+      "type": "object",
+      "required": [
+        "C",
+        "A",
+        "B"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "C": {
+          "$ref": "#/$defs/scores"
+        },
+        "A": {
+          "$ref": "#/$defs/scores"
+        },
+        "B": {
+          "$ref": "#/$defs/scores"
+        }
+      }
+    },
+    "contrasts": {
+      "type": "object",
+      "required": [
+        "B-C",
+        "B-A"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "B-C": {
+          "$ref": "#/$defs/contrast"
+        },
+        "B-A": {
+          "$ref": "#/$defs/contrast"
+        }
+      }
+    },
+    "safeguards": {
+      "type": "object",
+      "required": [
+        "ceiling",
+        "floor",
+        "reviewer_ambiguity",
+        "reviewer_ambiguity_sample_count",
+        "side_effect_veto",
+        "side_effects"
+      ],
+      "properties": {
+        "ceiling": {
+          "type": "boolean"
+        },
+        "floor": {
+          "type": "boolean"
+        },
+        "reviewer_ambiguity": {
+          "type": "boolean"
+        },
+        "reviewer_ambiguity_sample_count": {
+          "type": "integer"
+        },
+        "side_effect_veto": {
+          "type": "boolean"
+        },
+        "side_effects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "dimension",
+              "comparator",
+              "delta_B_minus_comparator"
+            ],
+            "properties": {
+              "dimension": {
+                "enum": [
+                  "semantic_compliance",
+                  "aesthetic_quality",
+                  "technical_defects"
+                ]
+              },
+              "comparator": {
+                "enum": [
+                  "C",
+                  "A"
+                ]
+              },
+              "delta_B_minus_comparator": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "initial_evidence_classification": {
+      "$ref": "#/$defs/classification"
+    },
+    "evidence_classification": {
+      "$ref": "#/$defs/classification"
+    },
+    "statistical_significance_claim": {
+      "const": false
+    },
+    "host_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "normal_sample_count",
+        "degraded_sample_count",
+        "binding_integrity_valid",
+        "raw_sidecar_schema_conformant",
+        "amendment_ids",
+        "qualification"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "normal_host_provenance",
+            "degraded_host_provenance"
+          ]
+        },
+        "normal_sample_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "degraded_sample_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "binding_integrity_valid": {
+          "const": true
+        },
+        "raw_sidecar_schema_conformant": {
+          "type": "boolean"
+        },
+        "amendment_ids": {
+          "type": "array"
+        },
+        "qualification": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "degraded_host_provenance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "degraded_sample_count": {
+                "minimum": 1
+              },
+              "normal_sample_count": {
+                "maximum": 11
+              },
+              "raw_sidecar_schema_conformant": {
+                "const": false
+              },
+              "amendment_ids": {
+                "const": [
+                  "EXP-019-DHP-20260928-01"
+                ]
+              },
+              "qualification": {
+                "const": "This amended run used a second post-start degraded-host-provenance addendum. Affected original rasters and image/query/receipt/treatment bindings were preserved and verified. The unchanged initial host response had an invalid empty observed output path; the original conversation was permanently unavailable. Host-output-path traceability and provenance strength are reduced. Numerical weights and registered interpretation rules are unchanged; any supportive interpretation is qualified as evidence from an amended run with degraded-host-provenance samples."
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "degraded_sample_count": {
+                "const": 0
+              },
+              "normal_sample_count": {
+                "const": 12
+              },
+              "raw_sidecar_schema_conformant": {
+                "const": true
+              },
+              "amendment_ids": {
+                "const": []
+              },
+              "qualification": {
+                "const": "Normal host provenance; all admitted raw sidecars pass canonical validation."
+              }
+            }
+          }
+        }
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 12
+            },
+            "degraded_sample_count": {
+              "const": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 11
+            },
+            "degraded_sample_count": {
+              "const": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 10
+            },
+            "degraded_sample_count": {
+              "const": 2
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 9
+            },
+            "degraded_sample_count": {
+              "const": 3
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 8
+            },
+            "degraded_sample_count": {
+              "const": 4
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 7
+            },
+            "degraded_sample_count": {
+              "const": 5
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 6
+            },
+            "degraded_sample_count": {
+              "const": 6
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 5
+            },
+            "degraded_sample_count": {
+              "const": 7
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 4
+            },
+            "degraded_sample_count": {
+              "const": 8
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 3
+            },
+            "degraded_sample_count": {
+              "const": 9
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 2
+            },
+            "degraded_sample_count": {
+              "const": 10
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 1
+            },
+            "degraded_sample_count": {
+              "const": 11
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 0
+            },
+            "degraded_sample_count": {
+              "const": 12
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sanitized aggregate EXP-019 v1.1.1 result",
+  "$defs": {
+    "scores": {
+      "type": "object",
+      "required": [
+        "art_material_fidelity",
+        "semantic_compliance",
+        "aesthetic_quality",
+        "technical_defects"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "art_material_fidelity": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "semantic_compliance": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "aesthetic_quality": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "technical_defects": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        }
+      }
+    },
+    "contrast": {
+      "type": "object",
+      "required": [
+        "contrast",
+        "delta",
+        "raw_classification",
+        "classification",
+        "pairwise",
+        "moved_one_level_toward_inconclusive"
+      ],
+      "properties": {
+        "contrast": {
+          "enum": [
+            "B-C",
+            "B-A"
+          ]
+        },
+        "delta": {
+          "type": "number"
+        },
+        "raw_classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "pairwise": {
+          "type": "object",
+          "required": [
+            "B_wins",
+            "B_losses",
+            "ties",
+            "direction_wins",
+            "non_tied"
+          ],
+          "properties": {
+            "B_wins": {
+              "type": "integer"
+            },
+            "B_losses": {
+              "type": "integer"
+            },
+            "ties": {
+              "type": "integer"
+            },
+            "direction_wins": {
+              "type": "integer"
+            },
+            "non_tied": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        },
+        "moved_one_level_toward_inconclusive": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "classification": {
+      "enum": [
+        "supports",
+        "weakly_supports",
+        "inconclusive",
+        "weakly_contradicts",
+        "contradicts"
+      ]
+    }
+  }
+}

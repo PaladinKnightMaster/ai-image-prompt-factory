@@ -12,7 +12,7 @@
 
 **V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 was preregistered but never executed. The active v1.1.1 [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) preserves the frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json), prompts, and scientific rules while allowing unavailable host timestamps to be recorded honestly. The definition remains `planned`; the private v1.1.1 run has two finalized host-native outputs, no reviewer scoring, and no result or analysis. Execution is paused before import of the third raster because its host sidecar failed validation. No general image-generation benefit from domain-grounded lexical realization has been established.
 
-EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. The first v1.1.0 real run has a root provenance checkpoint and one staged, unimported HADCEH raster; it stopped before the first accepted attempt because exact host request time was unavailable. Its image and run are excluded from any v1.1.1 execution. PR #11 merged the v1.1.1 text-only metadata-query and sidecar contract. The prospective [post-start metadata recovery addendum](../experiments/amendments/EXP-019.v1.1.1.METADATA-RECOVERY-01.md) resolves the rejected-response ambiguity through one bounded exact-query replay, preserves earlier evidence, and must be reviewed/published before recovery. It does not change the frozen scientific definition.
+EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. The first v1.1.0 real run has a root provenance checkpoint and one staged, unimported HADCEH raster; it stopped before the first accepted attempt because exact host request time was unavailable. Its image and run are excluded from any v1.1.1 execution. PR #11 merged the v1.1.1 text-only metadata-query and sidecar contract. PR #12 merged the [post-start metadata recovery addendum](../experiments/amendments/EXP-019.v1.1.1.METADATA-RECOVERY-01.md), which permits one bounded exact-query replay in the original conversation. Permanent conversation loss prevents that path for the next unimported raster; a separate degraded-host addendum is prepared for publication review. Both preserve the frozen scientific definition.
 
 ## Strongest established findings
 
@@ -28,7 +28,14 @@ A prompt-first compiler uses structured request/case data, explicit locks and re
 
 ## Next scope
 
-Review and publish the EXP-019-MR-20260928-01 procedural recovery addendum before any real metadata replay. Preserve the current raster and rejected response; do not generate a replacement. Do not treat infrastructure tests as an empirical result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
+PR #12 merged the unchanged EXP-019-MR-20260928-01 addendum. Permanent original-conversation loss
+prevents its replay path for the blocked next slot. Review and publish the separate
+[EXP-019-DHP-20260928-01](../experiments/amendments/EXP-019.v1.1.1.DEGRADED-HOST-PROVENANCE-01.md)
+publication candidate before any explicit degraded preparation/import. It preserves raw rejected
+evidence and permits only the exact empty observed host-path defect, with qualified provenance and
+unchanged scientific rules. No real preparation/import, image generation, scoring, reveal, analysis
+or checkpoint occurred during this implementation. Do not treat synthetic checks as an empirical
+result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.md).
 
 ## Open questions
 

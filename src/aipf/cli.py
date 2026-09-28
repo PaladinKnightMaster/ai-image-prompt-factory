@@ -101,6 +101,23 @@ def main():
     p.add_argument("run_file")
     p.add_argument("--blind-id", required=True)
 
+    p = sub.add_parser("experiment-degraded-host-prepare")
+    p.add_argument("run_file")
+    p.add_argument("--blind-id", required=True)
+    p.add_argument("--expected-image-sha256", required=True)
+    p.add_argument("--expected-raw-sha256", required=True)
+    p.add_argument("--attestations", required=True)
+    p.add_argument("--amendment-id", required=True)
+
+    p = sub.add_parser("experiment-degraded-host-import")
+    p.add_argument("run_file")
+    for flag in ("blind-id", "image", "host-metadata", "receipt", "wrapper", "amendment-id"):
+        p.add_argument("--" + flag, required=True)
+
+    p = sub.add_parser("experiment-sanitize-exp019")
+    p.add_argument("run_file")
+    p.add_argument("--output", required=True)
+
     p = sub.add_parser("experiment-run")
     p.add_argument("run_file")
     p.add_argument("--limit", type=int)
@@ -125,6 +142,23 @@ def main():
     p.add_argument("run_file")
 
     args=ap.parse_args()
+    if args.cmd == "experiment-degraded-host-prepare":
+        from .exp019_degraded_host import prepare_degraded_host
+        _dump(prepare_degraded_host(args.run_file, blind_id=args.blind_id,
+              expected_image_sha256=args.expected_image_sha256,
+              expected_raw_sha256=args.expected_raw_sha256,
+              attestations=args.attestations, amendment_id=args.amendment_id))
+        return
+    if args.cmd == "experiment-degraded-host-import":
+        from .exp019_degraded_host import import_degraded_host
+        _dump(import_degraded_host(args.run_file, blind_id=args.blind_id, image=args.image,
+              host_metadata=args.host_metadata, receipt=args.receipt, wrapper=args.wrapper,
+              amendment_id=args.amendment_id))
+        return
+    if args.cmd == "experiment-sanitize-exp019":
+        from .exp019_degraded_host import sanitize_exp019_result
+        _dump(sanitize_exp019_result(args.run_file, output=args.output))
+        return
     if args.cmd == "experiment-metadata-recovery-prepare":
         from .exp019_metadata_recovery import prepare_metadata_recovery
         _dump(prepare_metadata_recovery(args.run_file, blind_id=args.blind_id,

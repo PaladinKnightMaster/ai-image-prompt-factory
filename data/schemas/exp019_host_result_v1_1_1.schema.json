@@ -348,8 +348,7 @@
         "reviewer_ambiguity",
         "reviewer_ambiguity_sample_count",
         "side_effect_veto",
-        "side_effects",
-        "provenance_valid"
+        "side_effects"
       ],
       "properties": {
         "ceiling": {
@@ -375,6 +374,9 @@
         },
         "provenance_valid": {
           "const": true
+        },
+        "binding_integrity_valid": {
+          "const": true
         }
       }
     },
@@ -386,6 +388,230 @@
     },
     "statistical_significance_claim": {
       "const": false
+    },
+    "host_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "normal_sample_count",
+        "degraded_sample_count",
+        "binding_integrity_valid",
+        "raw_sidecar_schema_conformant",
+        "amendment_ids",
+        "qualification"
+      ],
+      "properties": {
+        "state": {
+          "const": "degraded_host_provenance"
+        },
+        "normal_sample_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "degraded_sample_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "binding_integrity_valid": {
+          "const": true
+        },
+        "raw_sidecar_schema_conformant": {
+          "type": "boolean"
+        },
+        "amendment_ids": {
+          "type": "array"
+        },
+        "qualification": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "degraded_host_provenance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "degraded_sample_count": {
+                "minimum": 1
+              },
+              "normal_sample_count": {
+                "maximum": 11
+              },
+              "raw_sidecar_schema_conformant": {
+                "const": false
+              },
+              "amendment_ids": {
+                "const": [
+                  "EXP-019-DHP-20260928-01"
+                ]
+              },
+              "qualification": {
+                "const": "This amended run used a second post-start degraded-host-provenance addendum. Affected original rasters and image/query/receipt/treatment bindings were preserved and verified. The unchanged initial host response had an invalid empty observed output path; the original conversation was permanently unavailable. Host-output-path traceability and provenance strength are reduced. Numerical weights and registered interpretation rules are unchanged; any supportive interpretation is qualified as evidence from an amended run with degraded-host-provenance samples."
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "degraded_sample_count": {
+                "const": 0
+              },
+              "normal_sample_count": {
+                "const": 12
+              },
+              "raw_sidecar_schema_conformant": {
+                "const": true
+              },
+              "amendment_ids": {
+                "const": []
+              },
+              "qualification": {
+                "const": "Normal host provenance; all admitted raw sidecars pass canonical validation."
+              }
+            }
+          }
+        }
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 12
+            },
+            "degraded_sample_count": {
+              "const": 0
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 11
+            },
+            "degraded_sample_count": {
+              "const": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 10
+            },
+            "degraded_sample_count": {
+              "const": 2
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 9
+            },
+            "degraded_sample_count": {
+              "const": 3
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 8
+            },
+            "degraded_sample_count": {
+              "const": 4
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 7
+            },
+            "degraded_sample_count": {
+              "const": 5
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 6
+            },
+            "degraded_sample_count": {
+              "const": 6
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 5
+            },
+            "degraded_sample_count": {
+              "const": 7
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 4
+            },
+            "degraded_sample_count": {
+              "const": 8
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 3
+            },
+            "degraded_sample_count": {
+              "const": 9
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 2
+            },
+            "degraded_sample_count": {
+              "const": 10
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 1
+            },
+            "degraded_sample_count": {
+              "const": 11
+            }
+          }
+        },
+        {
+          "properties": {
+            "normal_sample_count": {
+              "const": 0
+            },
+            "degraded_sample_count": {
+              "const": 12
+            }
+          }
+        }
+      ]
     }
   },
   "$defs": {
@@ -619,5 +845,42 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "host_provenance"
+        ]
+      },
+      "then": {
+        "properties": {
+          "safeguards": {
+            "required": [
+              "binding_integrity_valid"
+            ],
+            "not": {
+              "required": [
+                "provenance_valid"
+              ]
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "safeguards": {
+            "required": [
+              "provenance_valid"
+            ],
+            "not": {
+              "required": [
+                "binding_integrity_valid"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
 }

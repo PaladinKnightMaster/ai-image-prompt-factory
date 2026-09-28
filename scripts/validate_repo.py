@@ -220,8 +220,10 @@ def check_v32_artifacts(errors):
 def main():
     errors=[]
     from aipf.exp019_metadata_recovery import frozen_amendment
+    from aipf.exp019_degraded_host import frozen_amendment as frozen_degraded_amendment
     try:
         frozen_amendment()
+        frozen_degraded_amendment()
     except (ValueError, OSError) as exc:
         errors.append(f'EXP-019 recovery addendum: {exc}')
     json_count=check_json_files(errors); check_schemas(errors); check_registry_targets(errors); check_modules(errors); check_evaluation_example(errors)

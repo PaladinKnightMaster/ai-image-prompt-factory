@@ -237,6 +237,13 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         "evidence_classification": final,
         "statistical_significance_claim": False,
     }
+    if run["experiment_version"] == "1.1.1":
+        from .exp019_degraded_host import result_provenance
+        provenance = result_provenance(root, run)
+        if provenance["degraded_sample_count"]:
+            del result["safeguards"]["provenance_valid"]
+            result["safeguards"]["binding_integrity_valid"] = True
+            result["host_provenance"] = provenance
     schema = load_json(_result_schema(run["experiment_version"]))
     errors = list(Draft202012Validator(schema).iter_errors(result))
     if errors:

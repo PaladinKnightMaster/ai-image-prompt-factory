@@ -344,7 +344,12 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
                 if (sidecar_file != expected_file or not sidecar_path.is_file()
                         or sha256_file(sidecar_path) != sidecar_hash):
                     raise ValueError("EXP-019 host-session metadata binding changed")
-                sidecar = load_host_session_metadata(sidecar_path)
+                if (record.get("host_provenance_state") is not None
+                        or record.get("degraded_host_provenance") is not None):
+                    from .exp019_degraded_host import verify_degraded_receipt
+                    sidecar = verify_degraded_receipt(root, run, record, path)
+                else:
+                    sidecar = load_host_session_metadata(sidecar_path)
             elif (sidecar_file is not None or sidecar_hash is not None
                   or record.get("frozen_metadata_query_file") is not None
                   or record.get("frozen_metadata_query_sha256") is not None
@@ -448,7 +453,8 @@ def host_receipt_from_run(run: dict, root: Path) -> dict:
 
 def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
                    image: str | Path | None = None, failure: str | None = None,
-                   host_metadata: str | Path | None = None) -> dict:
+                   host_metadata: str | Path | None = None,
+                   degraded_evidence: str | Path | None = None) -> dict:
     from .experiment_execution import _write_json_atomic, load_run
     from .exp019_anchor import append_attempt_checkpoint, verify_external
     from .exp019_receipt import write_run_receipt
@@ -465,6 +471,17 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
         raise ValueError("provide exactly one image or one classified failure")
     root = path.parent
     from .exp019_metadata_recovery import RECOVERY_DIR, recovery_binding
+    from .exp019_degraded_host import (
+        DEGRADED_DIR, STATE, _no_outcome_evidence, degraded_binding, finalize_binding,
+    )
+    if (root / DEGRADED_DIR / blind_id).exists() and degraded_evidence is None:
+        raise ValueError("EXP-019 reserved degraded evidence requires explicit degraded import")
+    if degraded_evidence is not None:
+        if (run["experiment_version"] != "1.1.1" or failure is not None
+                or output["status"] != "planned" or output["attempt_events"]
+                or output.get("receipt_history")):
+            raise ValueError("EXP-019 degraded import requires attempt 1 with zero prior attempts")
+        _no_outcome_evidence(root)
     if failure is not None and (root / RECOVERY_DIR / blind_id).exists():
         raise ValueError("EXP-019 metadata recovery cannot consume an image failure attempt")
     verify_host_attempts(root, run, output, slot["position"])
@@ -487,10 +504,17 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
         entries = set(sidecar_source.parent.iterdir())
         if entries != {source, sidecar_source}:
             raise ValueError("EXP-019 slot staging contains ambiguous extra files")
-    sidecar = load_host_session_metadata(sidecar_source) if sidecar_source else None
     sidecar_hash = sha256_file(sidecar_source) if sidecar_source else None
     raster = _raster(source) if source else None
     image_hash = sha256_file(source) if source else None
+    degraded = None
+    if degraded_evidence is not None:
+        if source is None or sidecar_source is None:
+            raise ValueError("EXP-019 degraded import requires image and raw sidecar")
+        sidecar, degraded = degraded_binding(root, run, blind_id, image_hash, sidecar_hash,
+                                             degraded_evidence)
+    else:
+        sidecar = load_host_session_metadata(sidecar_source) if sidecar_source else None
     query_bytes = query_hash = None
     if version == "1.1.1" and source is not None:
         query_bytes, query_hash = _packaged_query(root, run, blind_id)
@@ -603,7 +627,11 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
     canonical_path = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.receipt.json"
     if metadata_recovery is not None:
         record["metadata_recovery"] = metadata_recovery
+    if degraded is not None:
+        record.update(host_provenance_state=STATE, degraded_host_provenance=degraded)
     _write_new(canonical_path, record)
+    if degraded is not None:
+        finalize_binding(root, record, canonical_path)
     history_binding = {"file": canonical_path.relative_to(root).as_posix(),
                        "sha256": sha256_file(canonical_path),
                        "operator_file": operator_path.relative_to(root).as_posix(),
