@@ -140,6 +140,9 @@ def prepare_metadata_recovery(run_file: str | Path, *, blind_id: str,
     if original_conversation_available is not True or no_image_change is not True:
         raise ValueError("EXP-019 recovery requires original-conversation and unchanged-image attestations")
     root, run, image, sidecar = _eligible(run_file, blind_id)
+    from .exp019_degraded_host import DEGRADED_DIR
+    if (root / DEGRADED_DIR / blind_id).exists():
+        raise ValueError("EXP-019 degraded evidence already reserved; no metadata path switching")
     area = root / RECOVERY_DIR / blind_id
     if area.exists() or area.is_symlink():
         raise ValueError("EXP-019 metadata recovery was already reserved; no additional replay")

@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Repository-derived EXP-019 degraded evidence (never a host response)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_kind",
+    "host_provenance_state",
+    "run_id",
+    "slot_id",
+    "prepared_at_utc",
+    "attempt_number",
+    "prior_attempts",
+    "raw_sidecar_schema_valid",
+    "scientific_bindings_valid",
+    "image_sha256",
+    "raw_sidecar_sha256",
+    "query_sha256",
+    "amendment",
+    "preceding_amendment",
+    "intended_attempt_receipt",
+    "files"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "source_kind": {
+      "const": "repository_derived"
+    },
+    "host_provenance_state": {
+      "const": "degraded_host_provenance"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slot_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]{6}$"
+    },
+    "prepared_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "attempt_number": {
+      "const": 1
+    },
+    "prior_attempts": {
+      "const": 0
+    },
+    "raw_sidecar_schema_valid": {
+      "const": false
+    },
+    "scientific_bindings_valid": {
+      "const": true
+    },
+    "image_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "raw_sidecar_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "query_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "amendment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "file",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "preceding_amendment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "file",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "intended_attempt_receipt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw.host-session.json",
+        "metadata-query.txt",
+        "attestations.json",
+        "rejection.json"
+      ],
+      "properties": {
+        "raw.host-session.json": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "metadata-query.txt": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "attestations.json": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "rejection.json": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

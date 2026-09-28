@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Private EXP-019 degraded-host operator attestations",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "opaque_slot_id",
+    "original_conversation_permanently_unavailable",
+    "initial_query_same_original_generation_interaction",
+    "raw_is_unchanged_initial_host_response",
+    "original_raster_unchanged",
+    "no_metadata_replay_or_replacement",
+    "no_manual_metadata_repair",
+    "no_image_regeneration_edit_or_replacement",
+    "trusted_original_capture_hashes",
+    "admission_not_informed_by_treatment_review_or_analysis"
+  ],
+  "properties": {
+    "opaque_slot_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]{6}$"
+    },
+    "original_conversation_permanently_unavailable": {
+      "const": true
+    },
+    "initial_query_same_original_generation_interaction": {
+      "const": true
+    },
+    "raw_is_unchanged_initial_host_response": {
+      "const": true
+    },
+    "original_raster_unchanged": {
+      "const": true
+    },
+    "no_metadata_replay_or_replacement": {
+      "const": true
+    },
+    "no_manual_metadata_repair": {
+      "const": true
+    },
+    "no_image_regeneration_edit_or_replacement": {
+      "const": true
+    },
+    "trusted_original_capture_hashes": {
+      "const": true
+    },
+    "admission_not_informed_by_treatment_review_or_analysis": {
+      "const": true
+    }
+  }
+}

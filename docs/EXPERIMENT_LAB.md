@@ -88,6 +88,22 @@ blocks execution pending another explicit protocol decision. The addendum gives
 the exact operator steps, private evidence paths, attestation boundary, and
 timing exception. It does not retroactively change the frozen v1.1.1 plan.
 
+The second post-start [degraded-host addendum](../experiments/amendments/EXP-019.v1.1.1.DEGRADED-HOST-PROVENANCE-01.md)
+is a publication candidate for permanent original-conversation loss and the exact empty observed
+host-path defect. After reviewed merge, `experiment-degraded-host-prepare` requires trusted original
+image/raw hashes, strict truthful attestations and its explicit amendment ID. Preparation preserves
+private evidence and consumes no attempt/checkpoint. `experiment-degraded-host-import` requires the
+wrapper and ordinary operator receipt, finalizes the original raster as attempt 1, and commits the
+qualification through the existing six-field checkpoint. It cannot follow a metadata-recovery
+reservation or accept arbitrary invalid metadata. Ordinary import stays strict.
+
+Degraded evidence retains normal blind pixel review and equal numerical weight. Private analysis
+uses verified binding integrity plus an aggregate provenance qualification; it cannot claim
+unqualified full provenance. `experiment-sanitize-exp019` recomputes verified analysis and exports
+only aggregate numbers, safeguards and the mandatory affected-count/traceability limitation.
+See the [publication audit](EXP-019_DEGRADED_HOST_PUBLICATION_AUDIT.md). No real degraded operation
+was performed during implementation.
+
 EXP-019 blind-review packages use new metadata-free PNGs made from decoded
 output pixels in their displayed EXIF orientation. Private mappings bind each raw output hash to its reviewer copy
 hash and equal normalized pixel digests. The raw output remains private; the

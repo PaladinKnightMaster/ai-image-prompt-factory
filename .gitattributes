@@ -4,3 +4,4 @@ experiments/archive/EXP-019-v1.1.0.json text eol=lf
 experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json text eol=lf
 experiments/templates/EXP-019.HOST-METADATA-QUERY.txt text eol=lf
 experiments/amendments/EXP-019.v1.1.1.METADATA-RECOVERY-01.md text eol=lf
+experiments/amendments/EXP-019.v1.1.1.DEGRADED-HOST-PROVENANCE-01.md text eol=lf
