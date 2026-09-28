@@ -314,6 +314,9 @@ def verify_host_attempts(root: Path, run: dict, output: dict, position: int) -> 
         if not path.is_file() or sha256_file(path) != binding["sha256"]:
             raise ValueError("EXP-019 host attempt receipt changed")
         record = json.loads(path.read_text(encoding="utf-8"))
+        if record.get("metadata_recovery") is not None:
+            from .exp019_metadata_recovery import verify_recovery_receipt
+            verify_recovery_receipt(root, run, output["blind_id"], record)
         operator_path = root / binding["operator_file"]
         if (not operator_path.is_file() or sha256_file(operator_path) != binding["operator_sha256"]
                 or record.get("operator_receipt_sha256") != binding["operator_sha256"]):
@@ -461,6 +464,9 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
     if (image is None) == (failure is None):
         raise ValueError("provide exactly one image or one classified failure")
     root = path.parent
+    from .exp019_metadata_recovery import RECOVERY_DIR, recovery_binding
+    if failure is not None and (root / RECOVERY_DIR / blind_id).exists():
+        raise ValueError("EXP-019 metadata recovery cannot consume an image failure attempt")
     verify_host_attempts(root, run, output, slot["position"])
     source = _staged_source(root, blind_id, image) if image is not None else None
     version = run["experiment_version"]
@@ -493,6 +499,8 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
     operator_receipt = _receipt_payload(Path(receipt).expanduser().resolve(), run, slot, variant,
                                         attempt, image_hash, failure, sidecar,
                                         recorded_at if version == "1.1.1" else None)
+    metadata_recovery = (recovery_binding(root, run, blind_id, image_hash, sidecar_hash)
+                         if version == "1.1.1" and source is not None else None)
     event_time = operator_receipt["invoked_at_utc"] if version == "1.1.0" else recorded_at
     started = {"event": "started", "attempt_number": attempt,
                "at_utc": event_time, "prompt_sha256": variant["prompt_sha256"]}
@@ -593,6 +601,8 @@ def record_attempt(run_file: str | Path, *, blind_id: str, receipt: str | Path,
                       frozen_metadata_query_sha256=query_hash,
                       receipt_created_at_utc=datetime.now(timezone.utc).isoformat())
     canonical_path = root / RECEIPT_DIR / f"{blind_id}.attempt-{attempt}.receipt.json"
+    if metadata_recovery is not None:
+        record["metadata_recovery"] = metadata_recovery
     _write_new(canonical_path, record)
     history_binding = {"file": canonical_path.relative_to(root).as_posix(),
                        "sha256": sha256_file(canonical_path),

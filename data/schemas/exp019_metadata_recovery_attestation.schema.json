@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["opaque_slot_id", "replayed_query_sha256", "same_original_conversation", "same_original_image", "no_subsequent_image_generation", "no_image_modification", "exact_query_unchanged", "no_coaching_or_error_disclosure", "first_and_only_recovery_response"],
+  "properties": {
+    "opaque_slot_id": {"type": "string", "pattern": "^[A-HJ-NP-Z2-9]{6}$"},
+    "replayed_query_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "same_original_conversation": {"const": true},
+    "same_original_image": {"const": true},
+    "no_subsequent_image_generation": {"const": true},
+    "no_image_modification": {"const": true},
+    "exact_query_unchanged": {"const": true},
+    "no_coaching_or_error_disclosure": {"const": true},
+    "first_and_only_recovery_response": {"const": true}
+  }
+}

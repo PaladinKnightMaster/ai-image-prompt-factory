@@ -77,6 +77,17 @@ checkpoints and reviewer packages. Same-conversation origin, truthful host
 response, and operator execution behavior remain operator-attested because
 the host supplies no signed receipt; file integrity cannot prove them.
 
+The post-start [EXP-019-MR-20260928-01 addendum](../experiments/amendments/EXP-019.v1.1.1.METADATA-RECOVERY-01.md)
+permits one exact text-only replay for an eligible rejected pre-import sidecar
+after publication/merge. Use `experiment-metadata-recovery-prepare` to preserve
+the rejected bytes and reserve the sole replay, then `experiment-metadata-recovery-stage`
+to retain and validate its first response. These operations never generate an
+image, modify the run ledger, or append a checkpoint. The original raster is
+retained; valid metadata and finalized slots are ineligible. A second rejection
+blocks execution pending another explicit protocol decision. The addendum gives
+the exact operator steps, private evidence paths, attestation boundary, and
+timing exception. It does not retroactively change the frozen v1.1.1 plan.
+
 EXP-019 blind-review packages use new metadata-free PNGs made from decoded
 output pixels in their displayed EXIF orientation. Private mappings bind each raw output hash to its reviewer copy
 hash and equal normalized pixel digests. The raw output remains private; the

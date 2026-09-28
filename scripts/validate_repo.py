@@ -219,6 +219,11 @@ def check_v32_artifacts(errors):
 
 def main():
     errors=[]
+    from aipf.exp019_metadata_recovery import frozen_amendment
+    try:
+        frozen_amendment()
+    except (ValueError, OSError) as exc:
+        errors.append(f'EXP-019 recovery addendum: {exc}')
     json_count=check_json_files(errors); check_schemas(errors); check_registry_targets(errors); check_modules(errors); check_evaluation_example(errors)
     sources,claims,relationships=check_evidence(errors)
     golden,compiled,reg_cases=check_cases(errors)
