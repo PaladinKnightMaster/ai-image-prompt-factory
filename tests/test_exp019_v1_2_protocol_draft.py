@@ -9,6 +9,7 @@ They authorize no experiment and create nothing.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -143,6 +144,65 @@ def test_freeze_sequencing_gates_activation_after_pilot_and_freeze() -> None:
     assert sequencing.index("Gate G4") < sequencing.index("## Stage 5")
     assert "incapable of\nstarting an experimental run" in sequencing or (
         "incapable of" in sequencing)
+
+
+def test_cited_digests_resolve_to_the_frozen_sources() -> None:
+    """Every SHA-256 cited in the drafts must recompute against its source."""
+    definition = json.loads(DEFINITION_DRAFT.read_text(encoding="utf-8"))
+    source = definition["scientific_source"]
+    for path_key, digest_key in (
+        ("definition_path", "definition_sha256"),
+        ("fixture_path", "fixture_sha256"),
+        ("preregistration_path", "preregistration_sha256"),
+    ):
+        actual = hashlib.sha256(
+            (ROOT / source[path_key]).read_bytes()).hexdigest()
+        assert actual == source[digest_key], path_key
+    prereg = (ROOT / "experiments/drafts/EXP-019-v1.2.0.PREREGISTRATION-DRAFT.md"
+              ).read_text(encoding="utf-8")
+    for digest_key in ("definition_sha256", "fixture_sha256",
+                       "preregistration_sha256"):
+        assert source[digest_key] in prereg
+
+
+def test_per_disposition_evidence_matrix_is_defined() -> None:
+    policy = _draft_text("EXP-019-v1.2.0.ADMISSION-FAILURE-POLICY-DRAFT.md")
+    assert "Per-disposition evidence requirements (Q1–Q5)" in policy
+    assert "never rests on a response capture alone" in policy
+
+
+def test_all_four_checkpoint_kinds_persist() -> None:
+    policy = _draft_text("EXP-019-v1.2.0.ADMISSION-FAILURE-POLICY-DRAFT.md")
+    for kind in ("run-root checkpoint", "terminal attempt checkpoint",
+                 "reviewer-freeze checkpoints", "run_disposition` checkpoint"):
+        assert kind in policy
+    assert "supplements — never replaces" in policy
+
+
+def test_retry_waits_for_external_anchoring() -> None:
+    policy = _draft_text("EXP-019-v1.2.0.ADMISSION-FAILURE-POLICY-DRAFT.md")
+    assert "externally anchored" in policy
+    assert "Each started attempt must reach exactly one terminal" in policy
+
+
+def test_unavailable_field_label_is_an_expected_class_not_authority() -> None:
+    contract = _draft_text("EXP-019-v1.2.0.EVIDENCE-CONTRACT-DRAFT.md")
+    assert "expected source class" in contract
+    assert "attaches no authority" in contract
+
+
+def test_allocation_custody_and_reveal_act_are_assigned() -> None:
+    roles = _draft_text("EXP-019-v1.2.0.ROLES-BLINDING-DRAFT.md")
+    assert "sole custodian" in roles
+    assert "reveal act" in roles
+    assert "never takes custody of the allocation" in roles
+
+
+def test_pilot_changes_require_revalidation_and_possible_repeat_pilot() -> None:
+    pilot = _draft_text("EXP-019-v1.2.0.PILOT-READINESS-DRAFT.md")
+    sequencing = _draft_text("EXP-019-v1.2.0.FREEZE-SEQUENCING-DRAFT.md")
+    assert "repeat pilot" in pilot
+    assert "repeat\n  pilot" in sequencing or "repeat pilot" in sequencing
 
 
 def test_v1_2_is_still_not_registered() -> None:
