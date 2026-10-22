@@ -23,6 +23,7 @@ DRAFT_DOCS = (
     ROOT / "docs/drafts/EXP-019-v1.2.0.ROLES-BLINDING-DRAFT.md",
     ROOT / "docs/drafts/EXP-019-v1.2.0.PILOT-READINESS-DRAFT.md",
     ROOT / "docs/drafts/EXP-019-v1.2.0.PROPOSED-DECISIONS-H1-H3.md",
+    ROOT / "docs/drafts/EXP-019-v1.2.0.FREEZE-SEQUENCING-DRAFT.md",
 )
 DEFINITION_DRAFT = ROOT / "experiments/drafts/EXP-019-v1.2.0.DEFINITION-DRAFT.json"
 
@@ -70,6 +71,56 @@ def test_decisions_h1_h3_remain_unapproved() -> None:
     assert "NOT APPROVED" in text
     assert text.count("*(pending)*") == 3
     assert "operator_evidenced_host_provenance" in text
+
+
+def _draft_text(name: str) -> str:
+    return (ROOT / "docs/drafts" / name).read_text(encoding="utf-8")
+
+
+def test_qualifying_requirements_are_labelled_q1_to_q5_and_referenced() -> None:
+    contract = _draft_text("EXP-019-v1.2.0.EVIDENCE-CONTRACT-DRAFT.md")
+    for label in ("Q1", "Q2", "Q3", "Q4", "Q5"):
+        assert f"**{label}**" in contract
+    policy = _draft_text("EXP-019-v1.2.0.ADMISSION-FAILURE-POLICY-DRAFT.md")
+    assert "Q1–Q5" in policy
+
+
+def test_terminal_disposition_vocabulary_is_consistent() -> None:
+    policy = _draft_text("EXP-019-v1.2.0.ADMISSION-FAILURE-POLICY-DRAFT.md")
+    for terminal in ("`ADMIT`", "`FAILURE`", "`INDETERMINATE_FINAL`"):
+        assert terminal in policy
+    assert "`PENDING_UNKNOWN`, a started invocation" in policy
+    # Unknown outcomes must not be retryable as technical failures.
+    assert "never\npermitted after `PENDING_UNKNOWN`" in policy or (
+        "never" in policy and "PENDING_UNKNOWN" in policy)
+
+
+def test_terminal_receipt_and_external_checkpoint_rules_are_defined() -> None:
+    policy = _draft_text("EXP-019-v1.2.0.ADMISSION-FAILURE-POLICY-DRAFT.md")
+    assert "terminal attempt receipt" in policy
+    assert "Externally anchored" in policy
+    assert "six-field checkpoint format" in policy
+    assert "recorded-unanchored" in policy
+
+
+def test_coordinator_role_has_an_explicit_boundary() -> None:
+    roles = _draft_text("EXP-019-v1.2.0.ROLES-BLINDING-DRAFT.md")
+    assert "Coordinator" in roles
+    assert "identifier-to-treatment link" in roles
+
+
+def test_freeze_sequencing_gates_activation_after_pilot_and_freeze() -> None:
+    sequencing = _draft_text("EXP-019-v1.2.0.FREEZE-SEQUENCING-DRAFT.md")
+    for stage in ("Stage 1", "Stage 2", "Stage 3", "Stage 4", "Stage 5"):
+        assert stage in sequencing
+    for pr in ("PR-5", "PR-12", "PR-13", "PR-14", "PR-15"):
+        assert pr in sequencing
+    # Pilot acceptance (G3) and the scientific freeze (G4) must precede
+    # first generation (Stage 5) in the document's own ordering.
+    assert sequencing.index("Gate G3") < sequencing.index("## Stage 5")
+    assert sequencing.index("Gate G4") < sequencing.index("## Stage 5")
+    assert "incapable of\nstarting an experimental run" in sequencing or (
+        "incapable of" in sequencing)
 
 
 def test_v1_2_is_still_not_registered() -> None:
