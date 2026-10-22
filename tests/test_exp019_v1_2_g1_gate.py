@@ -45,29 +45,68 @@ def _is_v12_scoped(path: Path) -> bool:
         return False
 
 
+_REGISTRATION_NAMES = {"frozen_protocol", "register_frozen_protocol"}
+_DYNAMIC_DISPATCH = {"getattr", "eval", "exec", "__import__"}
+
+
 def prohibited_v12_capabilities(path: Path) -> list:
     """Prohibited activation capabilities in a v1.2-scoped module.
 
     Detects, by AST rather than filename: executable protocol
-    registration for v1.2, run-root/allocation/generation/checkpoint/
-    reveal functionality, and any call registering or activating v1.2.
+    registration for v1.2 under any calling convention (positional,
+    keyword, aliased, or via module-level constants — a v1.2-scoped
+    module must not call the registration API at all), run-root /
+    allocation / generation / checkpoint / reveal functionality whether
+    defined, assigned, imported-and-called, or dynamically dispatched.
     """
     tree = ast.parse(path.read_text(encoding="utf-8"))
     found = []
+
+    # Resolve simple import aliases so `fp("1.2.0")` is still `fp` ->
+    # `frozen_protocol`.
+    aliases = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            for alias in node.names:
+                if alias.asname:
+                    aliases[alias.asname] = alias.name
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.asname:
+                    aliases[alias.asname] = alias.name
+
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef,
                              ast.ClassDef)):
             if _PROHIBITED_DEF.search(node.name):
                 found.append(f"definition:{node.name}")
-        if isinstance(node, ast.Call):
+        elif isinstance(node, ast.Assign):
+            # e.g. `generate_image = lambda: ...`
+            for target in node.targets:
+                if isinstance(target, ast.Name) and \
+                        _PROHIBITED_DEF.search(target.id):
+                    found.append(f"assignment:{target.id}")
+        elif isinstance(node, ast.Call):
             func = node.func
-            name = func.attr if isinstance(func, ast.Attribute) else \
-                getattr(func, "id", "")
-            if name in {"frozen_protocol", "register_frozen_protocol"} and \
-                    any(isinstance(a, ast.Constant) and a.value == "1.2.0"
-                        for a in node.args):
+            if isinstance(func, ast.Attribute):
+                name = func.attr
+            elif isinstance(func, ast.Name):
+                name = func.id
+            else:
+                name = ""
+            resolved = aliases.get(name, name)
+            if resolved in _REGISTRATION_NAMES:
+                # Any registration call from a v1.2-scoped module is
+                # prohibited, whatever argument form it uses.
                 found.append("call:register-v1.2")
-    return found
+            elif name in _DYNAMIC_DISPATCH:
+                found.append(f"call:dynamic-dispatch:{name}")
+            elif _PROHIBITED_DEF.search(name):
+                # Call-only capability: importing and calling an
+                # allocation/generation/checkpoint function defined
+                # elsewhere is still activation.
+                found.append(f"call:{name}")
+    return sorted(set(found))
 
 
 def _norm(path: Path) -> str:
@@ -136,9 +175,10 @@ def test_v1_2_remains_scientifically_inactive() -> None:
     # Authorized non-executing evidence validation is explicitly
     # permitted under clear v1.2 naming; activation capability is not.
     assert (package / "exp019_v1_2_evidence.py").exists()
-    for module in sorted(package.glob("*.py")):
+    for module in sorted(package.rglob("*.py")):
         if _is_v12_scoped(module):
-            assert prohibited_v12_capabilities(module) == [], module.name
+            assert prohibited_v12_capabilities(module) == [], str(
+                module.relative_to(package))
 
 
 def test_activation_guard_detects_prohibited_code_under_any_filename(
@@ -164,6 +204,36 @@ def test_activation_guard_detects_prohibited_code_under_any_filename(
         "def validate_evidence_bundle(bundle):\n    return bundle\n",
         encoding="utf-8")
     assert prohibited_v12_capabilities(validator_like) == []
+
+
+@pytest.mark.parametrize("source,expected", [
+    # Keyword-argument registration (the idiomatic calling form).
+    ('"""v1_2."""\nfrom aipf.exp019_protocol import frozen_protocol\n'
+     'frozen_protocol(version="1.2.0")\n', ["call:register-v1.2"]),
+    # Aliased import.
+    ('"""v1_2."""\nfrom aipf.exp019_protocol import frozen_protocol as fp\n'
+     'fp("1.2.0")\n', ["call:register-v1.2"]),
+    # Non-constant argument via module-level constant.
+    ('"""v1_2."""\nfrom aipf.exp019_protocol import frozen_protocol\n'
+     'VERSION = "1.2.0"\nfrozen_protocol(VERSION)\n',
+     ["call:register-v1.2"]),
+    # Call-only capability imported from elsewhere.
+    ('"""v1_2."""\nfrom elsewhere import generate_image\n'
+     "generate_image()\n", ["call:generate_image"]),
+    # Lambda assigned to a prohibited name.
+    ('"""v1_2."""\ngenerate_image = lambda: None\n',
+     ["assignment:generate_image"]),
+    # Dynamic dispatch.
+    ('"""v1_2."""\nimport aipf.exp019_protocol as p\n'
+     'getattr(p, "frozen_protocol")("1.2.0")\n',
+     ["call:dynamic-dispatch:getattr"]),
+])
+def test_activation_guard_resists_evasion_forms(tmp_path, source,
+                                                expected) -> None:
+    module = tmp_path / "subpackage" / "innocent.py"
+    module.parent.mkdir()
+    module.write_text(source, encoding="utf-8")
+    assert prohibited_v12_capabilities(module) == expected
 
 
 def test_authorized_v12_validator_exposes_validation_only() -> None:

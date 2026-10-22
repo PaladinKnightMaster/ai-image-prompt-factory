@@ -255,6 +255,18 @@ def test_output_digest_binding_is_a_verified_binding() -> None:
 
 def test_artifact_commitments_bind_complete_serialized_artifacts() -> None:
     bundle = make_evidence_bundle("qualifying_class_b")
+    # Bind claims to the committed artifacts as Q5 resolution requires:
+    # attested claims resolve to the attestation, recorded claims to a
+    # contemporaneous record.
+    fields = bundle["observation"]["observations"]
+    attestation_commitment = canonical_artifact_digest(bundle["attestation"])
+    log_commitment = canonical_artifact_digest(bundle["action_log"])
+    for field in fields.values():
+        if field["status"] == "operator_attested":
+            field["source_ref"] = attestation_commitment
+        elif field["status"] == "operator_recorded" and \
+                field["source_ref"] is not None:
+            field["source_ref"] = log_commitment
     commitments = {
         name: canonical_artifact_digest(bundle[name])
         for name in ("observation", "attestation", "action_log",
@@ -269,6 +281,22 @@ def test_artifact_commitments_bind_complete_serialized_artifacts() -> None:
         bundle, artifact_commitments=commitments)
     assert not report.evidence_eligible
     assert "ARTIFACT_COMMITMENT_MISMATCH" in _codes(report)
+
+
+def test_commitments_expose_unresolved_attested_source() -> None:
+    """With commitments supplied, a synthetic label digest cannot stand
+    in for resolution to the attestation artifact (Q5)."""
+    bundle = make_evidence_bundle("qualifying_class_b")
+    commitments = {
+        name: canonical_artifact_digest(bundle[name])
+        for name in ("observation", "attestation", "action_log",
+                     "request_capture", "response_capture")
+    }
+    report = validate_evidence_bundle(
+        bundle, artifact_commitments=commitments)
+    assert not report.evidence_eligible
+    assert "ATTESTED_SOURCE_UNRESOLVED" in _codes(report)
+    assert _q(report, "Q5").passed is False
 
 
 # =============================================================================
@@ -364,6 +392,49 @@ def test_no_result_with_fabricated_artifact_id_is_rejected() -> None:
     assert not report.evidence_eligible
     assert "FABRICATED_ARTIFACT_ID" in _codes(report)
     assert report.outcome_classification != "no_result_evidenced"
+
+
+def test_more_than_one_returned_image_is_a_violation() -> None:
+    bundle = make_evidence_bundle("qualifying_class_b")
+    bundle["response_capture"]["returned_image_count"] = 3
+    bundle["observation"]["observations"]["returned_output_count"][
+        "value"] = 3
+    report = validate_evidence_bundle(bundle)
+    assert not report.evidence_eligible
+    assert _q(report, "Q2").passed is False
+
+
+def test_returned_count_disagreement_between_capture_and_observation() -> None:
+    bundle = make_evidence_bundle("qualifying_class_b")
+    bundle["observation"]["observations"]["returned_output_count"][
+        "value"] = 2
+    report = validate_evidence_bundle(bundle)
+    assert not report.evidence_eligible
+    assert "RETURNED_COUNT_MISMATCH" in _codes(report)
+
+
+def test_action_log_required_actions_out_of_order_fails_q3() -> None:
+    bundle = make_evidence_bundle("qualifying_class_b")
+    entries = bundle["action_log"]["entries"]
+    # artifact_downloaded before response_captured is impossible.
+    downloaded = next(e for e in entries
+                      if e["action"] == "artifact_downloaded")
+    entries.remove(downloaded)
+    entries.insert(3, downloaded)
+    for seq, entry in enumerate(entries, start=1):
+        entry["seq"] = seq
+    report = validate_evidence_bundle(bundle)
+    assert not report.evidence_eligible
+    assert _q(report, "Q3").passed is False
+
+
+def test_attestation_predating_response_fails_q5() -> None:
+    bundle = make_evidence_bundle("qualifying_class_b")
+    bundle["attestation"]["attested_at_utc"] = "2026-01-01T00:00:01+00:00"
+    report = validate_evidence_bundle(bundle)
+    assert not report.evidence_eligible
+    assert "ATTESTATION_TIMING" in _codes(report)
+    assert _q(report, "Q5").passed is False
 
 
 def test_bc_material_conflict_is_reported_separately() -> None:

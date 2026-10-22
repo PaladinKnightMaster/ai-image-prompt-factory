@@ -182,24 +182,6 @@ class ValidationReport:
     def evidence_eligible_with_conflict(self) -> bool:
         return self.evidence_eligibility == "evidence_eligible_with_conflict"
 
-    # Backwards-compatible aliases: these describe *evidence* eligibility
-    # for admission, never an admission decision.
-    @property
-    def admit_eligible(self) -> bool:
-        return self.evidence_eligible
-
-    @property
-    def admit_with_conflict(self) -> bool:
-        return self.evidence_eligible_with_conflict
-
-    @property
-    def admission_eligibility(self) -> str:
-        return {
-            "evidence_eligible": "eligible_for_admit",
-            "evidence_eligible_with_conflict":
-                "eligible_for_admit_with_conflict",
-            "not_evidence_eligible": "not_eligible_for_admit",
-        }[self.evidence_eligibility]
 
 
 def canonical_artifact_digest(artifact: Mapping) -> str:
@@ -250,7 +232,7 @@ def _decode_raster(data: bytes):
             if image.format not in _DECODABLE_FORMATS:
                 return ("failed", image.format, None)
             return ("passed", image.format, (image.width, image.height))
-    except (OSError, ValueError, SyntaxError):
+    except Exception:  # hostile or corrupt bytes must fail, never crash
         return ("failed", None, None)
 
 
@@ -492,10 +474,25 @@ def validate_evidence_bundle(
         if "SCHEMA_INVALID" in out.codes_for("response_capture"):
             q2_codes.append("Q2_RESPONSE_SCHEMA_INVALID")
         if image_returned is True:
-            if response_capture.get("returned_image_count", 0) < 1:
+            # Exactly one returned image: more than one is a demonstrated
+            # protocol violation, not a successful return.
+            if response_capture.get("returned_image_count") != 1:
                 q2_codes.append("Q2_RETURNED_COUNT")
             if not response_capture.get("artifact_id"):
                 q2_codes.append("Q2_MISSING_ARTIFACT_ID")
+            # Returned-count agreement with the authoritative observation
+            # (authenticated class-C disagreement is reported separately
+            # as a B/C material conflict below).
+            count_field = obs_fields.get("returned_output_count", {})
+            if count_field.get("value") is not None and \
+                    count_field.get("status") != "host_observed" and \
+                    count_field.get("value") != \
+                    response_capture.get("returned_image_count"):
+                q2_codes.append("Q2_RETURNED_COUNT_MISMATCH")
+                out.error("RETURNED_COUNT_MISMATCH", "response_capture",
+                          "returned_image_count",
+                          "response capture and authoritative observation "
+                          "disagree on the returned count")
         elif image_returned is False:
             if response_capture.get("artifact_id") is not None:
                 q2_codes.append("Q2_FABRICATED_ARTIFACT_ID")
@@ -528,6 +525,15 @@ def validate_evidence_bundle(
             required += ["response_captured", "slot_closed"]
         if any(a not in actions for a in required):
             q3_codes.append("Q3_ACTION_LOG_INCOMPLETE")
+        else:
+            # The required sequence must appear in order (first
+            # occurrences strictly increasing), not merely be present
+            # somewhere in the log.
+            positions = [actions.index(a) for a in required]
+            if any(b <= a for a, b in zip(positions, positions[1:])):
+                q3_codes.append("Q3_ACTION_LOG_ORDER")
+                out.error("ACTION_LOG_ORDER", "action_log", "entries.action",
+                          "required actions are present but out of order")
     q["Q3"] = QResult("Q3", Q_DEFINITIONS["Q3"], not q3_codes,
                       tuple(q3_codes))
 
@@ -613,6 +619,49 @@ def validate_evidence_bundle(
         else:
             if "SCHEMA_INVALID" in out.codes_for("attestation"):
                 q5_codes.append("Q5_ATTESTATION_SCHEMA_INVALID")
+            # Attestation timing: the attestation is made for this
+            # invocation after its outcome, so it cannot predate the
+            # response capture it attests about.
+            attested_time = _parse_time(attestation.get("attested_at_utc"))
+            if attested_time is None:
+                q5_codes.append("Q5_ATTESTATION_TIME_UNPARSEABLE")
+                out.error("TIMESTAMP_UNPARSEABLE", "attestation",
+                          "attested_at_utc",
+                          "attestation timestamp cannot be parsed")
+            elif response_time is not None and attested_time < response_time:
+                q5_codes.append("Q5_ATTESTATION_PREDATES_RESPONSE")
+                out.error("ATTESTATION_TIMING", "attestation",
+                          "attested_at_utc",
+                          "attestation predates the response capture for "
+                          "this invocation")
+            # Where external commitments are supplied, attested claims
+            # must resolve to the committed attestation artifact, and
+            # recorded claims to a committed contemporaneous record.
+            if artifact_commitments:
+                attestation_commitment = artifact_commitments.get(
+                    "attestation")
+                for field_name in attested_field_names:
+                    if obs_fields[field_name].get("source_ref") != \
+                            attestation_commitment:
+                        q5_codes.append("Q5_ATTESTED_SOURCE_UNRESOLVED")
+                        out.error("ATTESTED_SOURCE_UNRESOLVED",
+                                  "observation", field_name,
+                                  "attested claim does not resolve to the "
+                                  "committed attestation artifact")
+                record_commitments = {
+                    artifact_commitments.get(name) for name in
+                    ("request_capture", "response_capture", "action_log")
+                } - {None}
+                if record_commitments:
+                    for field_name in recorded_field_names:
+                        if obs_fields[field_name].get("source_ref") not in \
+                                record_commitments:
+                            q5_codes.append(
+                                "Q5_RECORDED_SOURCE_UNRESOLVED")
+                            out.error("RECORDED_SOURCE_UNRESOLVED",
+                                      "observation", field_name,
+                                      "recorded claim does not resolve to "
+                                      "a committed contemporaneous record")
             if raster_sha is not None and \
                     attestation.get("artifact_digest_sha256") != raster_sha:
                 q5_codes.append("Q5_ATTESTATION_DIGEST_MISMATCH")
