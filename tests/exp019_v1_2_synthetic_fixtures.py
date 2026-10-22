@@ -84,7 +84,15 @@ def make_observation(*, raster: bytes | None = None,
                      contradictory_model_reports: bool = False,
                      digest_mismatch: bool = False,
                      no_output: bool = False) -> dict:
-    """Synthetic observation artifact (draft schema shape)."""
+    """Synthetic observation artifact (draft schema shape).
+
+    With ``simulated_class_c=True`` the class-C fields are a *simulation of
+    shape only*: detached from the labelled bundle they are indistinguishable
+    in form from class-C fields, but their synthetic digests authenticate
+    nothing and can never satisfy production authentication, which the draft
+    schemas reserve for runtime validation. Use them only inside a bundle
+    whose scenario label records the simulation.
+    """
     if raster is None:
         raster = synthetic_raster_bytes()
     output_digest = sha256_hex(b"different synthetic bytes" if digest_mismatch
@@ -146,7 +154,7 @@ def make_observation(*, raster: bytes | None = None,
         "protocol_constants": {
             "experiment_id": "EXP-019",
             "experiment_version": "1.2.0",
-            "prompt_sha256": _digest("frozen-prompt"),
+            "prompt_sha256": _digest("prompt-paste"),
             "requested_reference_count": 0,
             "requested_output_count": 1,
             "aspect_ratio_request": "2:3",
@@ -204,7 +212,9 @@ def make_action_log(*, interrupted: bool = False) -> dict:
         "executable": False,
         "opaque_slot_id": SLOT,
         "attempt_number": ATTEMPT,
-        "closed_at_utc": T_CLOSE,
+        # An interrupted log was never closed at slot close; its closed_at
+        # is the last recorded action rather than a closure time.
+        "closed_at_utc": T_SUBMIT if interrupted else T_CLOSE,
         "log_digest_sha256": _digest("action-log"),
         "entries": entries,
     }
@@ -370,16 +380,52 @@ def make_evidence_bundle(scenario: str = "qualifying_class_b") -> dict:
         bundle["observation"] = make_observation(no_output=True)
         bundle["response_capture"] = make_response_capture(no_result=True)
         bundle["raster_bytes"] = None
+        # Nothing was returned, so there is no artifact to attest about:
+        # no attestation exists and nothing may claim operator_attested.
+        bundle["attestation"] = None
+        bundle["observation"]["observations"]["edit_or_regeneration_used"] = (
+            _unavailable("B"))
+        # The action log for a no-output invocation records the submission
+        # and the no-result response capture, but no download or hashing of
+        # an artifact that does not exist.
+        bundle["action_log"]["entries"] = [
+            {"seq": 1, "at_utc": "2026-01-01T00:00:01+00:00",
+             "action": "conversation_created"},
+            {"seq": 2, "at_utc": T_SUBMIT, "action": "prompt_pasted",
+             "artifact_sha256": _digest("prompt-paste")},
+            {"seq": 3, "at_utc": T_SUBMIT,
+             "action": "generation_request_submitted"},
+            {"seq": 4, "at_utc": T_RETURN, "action": "response_captured"},
+            {"seq": 5, "at_utc": T_CLOSE, "action": "slot_closed"},
+        ]
     elif scenario == "invalid_raster":
         bundle["raster_bytes"] = invalid_raster_bytes()
         bundle["observation"] = make_observation(
             raster=invalid_raster_bytes())
+        # Isolate raster-format invalidity as the sole defect: every digest
+        # that refers to the returned artifact must digest the invalid
+        # bytes, exactly as in the qualifying bundle.
+        invalid_digest = sha256_hex(invalid_raster_bytes())
+        bundle["attestation"]["artifact_digest_sha256"] = invalid_digest
+        for entry in bundle["action_log"]["entries"]:
+            if entry["action"] in ("artifact_downloaded", "artifact_hashed"):
+                entry["artifact_sha256"] = invalid_digest
     elif scenario == "interrupted_unknown":
         # The invocation was interrupted: no response was ever captured and
         # the log stops after submission. Outcome is unknown, not a failure.
         bundle["response_capture"] = None
         bundle["action_log"] = make_action_log(interrupted=True)
         bundle["observation"]["observations"]["returned_output_count"] = (
+            _unavailable("B"))
+        bundle["observation"]["observations"]["output_sha256"] = (
+            _unavailable("B"))
+        bundle["observation"]["observations"]["output_artifact_id"] = (
+            _unavailable("B"))
+        # No artifact arrived and no attestation was made for an invocation
+        # whose outcome is unknown.
+        bundle["attestation"] = None
+        bundle["raster_bytes"] = None
+        bundle["observation"]["observations"]["edit_or_regeneration_used"] = (
             _unavailable("B"))
     elif scenario == "digest_mismatch":
         bundle["observation"] = make_observation(digest_mismatch=True)

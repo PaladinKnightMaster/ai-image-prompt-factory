@@ -197,6 +197,10 @@ def test_no_output_failure_bundle() -> None:
     assert response["image_returned"] is False
     assert response["no_result_evidence"] == "host_error_recorded"
     assert response["artifact_id"] is None
+    # Nothing was returned, so there is nothing to attest about.
+    assert bundle["attestation"] is None
+    for field in bundle["observation"]["observations"].values():
+        assert field["status"] != "operator_attested"
 
 
 def test_interrupted_unknown_bundle_is_not_a_failure() -> None:
@@ -208,6 +212,11 @@ def test_interrupted_unknown_bundle_is_not_a_failure() -> None:
     assert "generation_request_submitted" in actions
     assert "response_captured" not in actions
     assert "slot_closed" not in actions
+    # Unknown outcome: no artifact, no attestation, no attested claims.
+    assert bundle["raster_bytes"] is None
+    assert bundle["attestation"] is None
+    for field in bundle["observation"]["observations"].values():
+        assert field["status"] != "operator_attested"
 
 
 # =============================================================================
@@ -293,6 +302,78 @@ def test_builders_use_only_the_synthetic_slot() -> None:
     for key in ARTIFACT_VALIDATORS:
         assert bundle[key]["opaque_slot_id"] == SLOT
     assert make_reviewer_artifact()["opaque_slot_id"] == SLOT
+
+
+def test_prompt_digests_agree_across_the_qualifying_bundle() -> None:
+    """Frozen, pasted, and rendered digests describe the same synthetic bytes."""
+    bundle = make_evidence_bundle("qualifying_class_b")
+    frozen = bundle["observation"]["protocol_constants"]["prompt_sha256"]
+    pasted_field = bundle["observation"]["observations"][
+        "prompt_bytes_pasted_sha256"]["value"]
+    rendered_field = bundle["observation"]["observations"][
+        "prompt_text_rendered_sha256"]["value"]
+    assert frozen == pasted_field == bundle["request_capture"]["paste_sha256"]
+    assert rendered_field == bundle["request_capture"][
+        "rendered_request_text_sha256"]
+
+
+def test_no_output_action_log_records_no_artifact_handling() -> None:
+    bundle = make_evidence_bundle("no_output_failure")
+    actions = [e["action"] for e in bundle["action_log"]["entries"]]
+    assert "artifact_downloaded" not in actions
+    assert "artifact_hashed" not in actions
+    assert "response_captured" in actions
+
+
+def test_invalid_raster_bundle_has_no_other_digest_defect() -> None:
+    """Raster invalidity is the sole defect in the invalid-raster bundle."""
+    bundle = make_evidence_bundle("invalid_raster")
+    actual = hashlib.sha256(bundle["raster_bytes"]).hexdigest()
+    assert bundle["attestation"]["artifact_digest_sha256"] == actual
+    assert bundle["observation"]["observations"]["output_sha256"]["value"] == actual
+    for entry in bundle["action_log"]["entries"]:
+        if entry["action"] in ("artifact_downloaded", "artifact_hashed"):
+            assert entry["artifact_sha256"] == actual
+
+
+def test_repeated_builder_calls_do_not_share_mutable_state() -> None:
+    """Mutating one builder result must never affect a later call."""
+    first = make_evidence_bundle("qualifying_class_b")
+    first["observation"]["observations"]["returned_output_count"]["value"] = 99
+    first["action_log"]["entries"].clear()
+    first["observation"]["model_reports"].append({"tampered": True})
+
+    second = make_evidence_bundle("qualifying_class_b")
+    assert second["observation"]["observations"]["returned_output_count"]["value"] == 1
+    assert len(second["action_log"]["entries"]) == 8
+    assert second["observation"]["model_reports"] == []
+    _assert_bundle_schema_valid(second)
+
+
+def test_invalid_fixtures_fail_at_the_intended_field() -> None:
+    """Each invalid fixture must fail for its stated reason, not incidentally."""
+    request_paths = {
+        kind: [list(e.absolute_path) for e in
+               REQUEST.iter_errors(make_invalid_request_capture(kind))]
+        for kind in ("bad_paste_digest", "zero_generation_requests",
+                     "authenticated_bytes_not_a_digest",
+                     "missing_rendered_digest")
+    }
+    assert ["paste_sha256"] in request_paths["bad_paste_digest"]
+    assert ["generation_request_count"] in request_paths["zero_generation_requests"]
+    assert ["host_authenticated_request_bytes"] in request_paths[
+        "authenticated_bytes_not_a_digest"]
+
+    response_paths = {
+        kind: [list(e.absolute_path) for e in
+               RESPONSE.iter_errors(make_invalid_response_capture(kind))]
+        for kind in ("no_result_without_evidence", "no_result_operator_belief",
+                     "no_result_with_artifact_id", "returned_with_zero_count")
+    }
+    assert ["no_result_evidence"] in response_paths["no_result_without_evidence"]
+    assert ["no_result_evidence"] in response_paths["no_result_operator_belief"]
+    assert ["artifact_id"] in response_paths["no_result_with_artifact_id"]
+    assert ["returned_image_count"] in response_paths["returned_with_zero_count"]
 
 
 def test_observation_builder_defaults_to_missing_class_c() -> None:
