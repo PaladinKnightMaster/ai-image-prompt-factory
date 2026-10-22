@@ -10,8 +10,10 @@ created. They authorize and create nothing.
 
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -20,6 +22,52 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "docs/EXP-019-v1.2.0.ENGINEERING-CONTRACT.md"
 GATE_RECORD = ROOT / "docs/EXP-019-v1.2.0.GATE-G1-RECORD.md"
 DEFINITION_DRAFT = ROOT / "experiments/drafts/EXP-019-v1.2.0.DEFINITION-DRAFT.json"
+
+# Authorized, non-executing v1.2 modules. Authorization is by explicit
+# name and by capability scan below, never by avoiding a filename: any
+# other v1.2-scoped module, under any filename, is held to the same
+# prohibition scan.
+AUTHORIZED_V12_MODULES = {"exp019_v1_2_evidence.py"}
+
+_V12_SCOPE = re.compile(r"1\.2\.0|v1_2|EXP-019 v1\.2")
+_PROHIBITED_DEF = re.compile(
+    r"allocat|generat|checkpoint|reveal|run_root|create_run|make_run|"
+    r"activate|register_protocol|host_request|execute_attempt",
+    re.IGNORECASE)
+
+
+def _is_v12_scoped(path: Path) -> bool:
+    if "v1_2" in path.name:
+        return True
+    try:
+        return bool(_V12_SCOPE.search(path.read_text(encoding="utf-8")))
+    except (OSError, UnicodeDecodeError):
+        return False
+
+
+def prohibited_v12_capabilities(path: Path) -> list:
+    """Prohibited activation capabilities in a v1.2-scoped module.
+
+    Detects, by AST rather than filename: executable protocol
+    registration for v1.2, run-root/allocation/generation/checkpoint/
+    reveal functionality, and any call registering or activating v1.2.
+    """
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    found = []
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef,
+                             ast.ClassDef)):
+            if _PROHIBITED_DEF.search(node.name):
+                found.append(f"definition:{node.name}")
+        if isinstance(node, ast.Call):
+            func = node.func
+            name = func.attr if isinstance(func, ast.Attribute) else \
+                getattr(func, "id", "")
+            if name in {"frozen_protocol", "register_frozen_protocol"} and \
+                    any(isinstance(a, ast.Constant) and a.value == "1.2.0"
+                        for a in node.args):
+                found.append("call:register-v1.2")
+    return found
 
 
 def _norm(path: Path) -> str:
@@ -85,7 +133,45 @@ def test_v1_2_remains_scientifically_inactive() -> None:
         frozen_protocol("1.2.0")
     package = ROOT / "src" / "aipf"
     assert not (package / "exp019_v12").exists()
-    assert not list(package.glob("exp019_v1_2*.py"))
+    # Authorized non-executing evidence validation is explicitly
+    # permitted under clear v1.2 naming; activation capability is not.
+    assert (package / "exp019_v1_2_evidence.py").exists()
+    for module in sorted(package.glob("*.py")):
+        if _is_v12_scoped(module):
+            assert prohibited_v12_capabilities(module) == [], module.name
+
+
+def test_activation_guard_detects_prohibited_code_under_any_filename(
+        tmp_path) -> None:
+    """The capability scan fails on activation code, whatever its name."""
+    innocent_name = tmp_path / "totally_innocent_name.py"
+    innocent_name.write_text(
+        '"""EXP-019 v1.2 helper."""\n\n'
+        "def generate_image():\n    return None\n", encoding="utf-8")
+    assert prohibited_v12_capabilities(innocent_name) == [
+        "definition:generate_image"]
+
+    registrar = tmp_path / "another_innocent_name.py"
+    registrar.write_text(
+        '"""v1_2 helper."""\n'
+        "from aipf.exp019_protocol import frozen_protocol\n"
+        'frozen_protocol("1.2.0")\n', encoding="utf-8")
+    assert prohibited_v12_capabilities(registrar) == ["call:register-v1.2"]
+
+    validator_like = tmp_path / "evidence_check.py"
+    validator_like.write_text(
+        '"""EXP-019 v1.2 evidence validation."""\n\n'
+        "def validate_evidence_bundle(bundle):\n    return bundle\n",
+        encoding="utf-8")
+    assert prohibited_v12_capabilities(validator_like) == []
+
+
+def test_authorized_v12_validator_exposes_validation_only() -> None:
+    import aipf.exp019_v1_2_evidence as validator
+
+    public = {name for name in vars(validator) if not name.startswith("_")}
+    assert "validate_evidence_bundle" in public
+    assert not {name for name in public if _PROHIBITED_DEF.search(name)}
 
 
 def test_contract_clarifies_indeterminate_authorization_and_dual_role() -> None:
