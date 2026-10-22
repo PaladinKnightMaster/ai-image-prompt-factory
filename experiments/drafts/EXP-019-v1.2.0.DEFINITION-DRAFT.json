@@ -1,0 +1,52 @@
+{
+  "status": "draft",
+  "executable": false,
+  "experiment_id": "EXP-019",
+  "experiment_version": "1.2.0-draft",
+  "description": "DRAFT machine-readable companion to EXP-019-v1.2.0.PREREGISTRATION-DRAFT.md. Not a frozen definition, not registered in frozen_protocol(), and not executable. It records references and design constants only: it contains no prompt text, no treatment text, no treatment allocation, no invocation order, and no run root.",
+  "scientific_source": {
+    "preserved_by_reference": true,
+    "treatment_text_copied": false,
+    "prompt_text_copied": false,
+    "definition_path": "experiments/definitions/EXP-019.json",
+    "definition_sha256": "13df0c72ecae7b4c9213cd34a526ee15701826b5eb3c4098a9ca3c77a8951551",
+    "fixture_path": "experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json",
+    "fixture_sha256": "a47d5cb22b3ee0b83bc585db310cfe3e4a9facc2e9227777503248156d93a1b0",
+    "preregistration_path": "experiments/preregistrations/EXP-019.PREREGISTRATION.md",
+    "preregistration_sha256": "842487a9d093cc04d45891d4eff94c2ec55ab39e53618893561bca9eb80f65df"
+  },
+  "design": {
+    "conditions": 3,
+    "replicates_per_condition": 4,
+    "planned_generations": 12,
+    "outputs_per_invocation": 1,
+    "first_technically_evaluable_image_retained": true,
+    "quality_based_rerolls_allowed": false
+  },
+  "allocation": {
+    "randomization_committed": false,
+    "invocation_order_committed": false,
+    "opaque_identifiers_committed": false,
+    "note": "Any future allocation is generated privately at activation time and held only in the private provenance store. It must never appear in public code, tests, documents, or pull-request artifacts."
+  },
+  "run": {
+    "run_root_created": false,
+    "run_id_issued": false,
+    "checkpoints_created": false
+  },
+  "evidence_contract": {
+    "draft_schemas": [
+      "data/schemas/exp019_v1_2_observation.schema.json",
+      "data/schemas/exp019_v1_2_attestation.schema.json",
+      "data/schemas/exp019_v1_2_action_log.schema.json",
+      "data/schemas/exp019_v1_2_request_capture.schema.json",
+      "data/schemas/exp019_v1_2_response_capture.schema.json"
+    ],
+    "synthetic_fixtures": "tests/exp019_v1_2_synthetic_fixtures.py",
+    "dispositions": ["ADMIT", "FAILURE", "INDETERMINATE"],
+    "mandatory_model_metadata_query": false,
+    "metadata_recovery_workflow": false,
+    "delivery_mode": "direct_paste_no_attachment"
+  },
+  "proposed_decisions_pending_owner_approval": ["H1", "H2", "H3"]
+}
