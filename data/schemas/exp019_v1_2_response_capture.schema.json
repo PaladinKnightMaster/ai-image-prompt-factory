@@ -38,6 +38,7 @@
     },
     "captured_at_utc": {
       "type": "string",
+      "format": "date-time",
       "minLength": 1
     },
     "capture_digest_sha256": {

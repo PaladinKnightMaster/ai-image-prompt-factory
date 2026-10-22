@@ -39,6 +39,7 @@
     },
     "recorded_at_utc": {
       "type": "string",
+      "format": "date-time",
       "minLength": 1
     },
     "protocol_constants": {
@@ -96,49 +97,49 @@
       ],
       "properties": {
         "output_sha256": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "output_artifact_id": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "attachment_count_at_request": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "generation_request_count": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "returned_output_count": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "edit_or_regeneration_used": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "conversation_ref": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "prompt_bytes_pasted_sha256": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "prompt_text_rendered_sha256": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "provider_generation_id": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "backend_model": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "backend_model_snapshot": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "request_message_id": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "invoked_at_utc": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         },
         "generation_completed_at_utc": {
-          "$ref": "#/$defs/observedField"
+          "$ref": "#/$defs/authoritativeField"
         }
       }
     },
@@ -182,6 +183,7 @@
           },
           "captured_at_utc": {
             "type": "string",
+            "format": "date-time",
             "minLength": 1
           }
         }
@@ -197,8 +199,8 @@
       "description": "A: frozen protocol requirement. B: operator-controlled action, contemporaneous record, or operator attestation. C: authenticated host-observed evidence, if genuinely available. D: model-generated description of events.",
       "enum": ["A", "B", "C", "D"]
     },
-    "observedField": {
-      "description": "A single observation. source_ref must be a digest of the supporting artifact for every status other than not_observable or not_applicable. Digest integrity proves the artifact was not altered; it does not establish factual truth.",
+    "authoritativeField": {
+      "description": "A single authoritative observation. Only class B or C evidence may occupy an authoritative field: model_reported is deliberately absent, because a class-D model claim may never occupy an authoritative field and lives only in model_reports. source_ref must be a digest of the supporting artifact for every status other than not_observable or not_applicable. Digest integrity proves the artifact was not altered; it does not establish factual truth and does not by itself establish authenticated class-C evidence.",
       "type": "object",
       "additionalProperties": false,
       "required": ["value", "status", "source_class", "source_ref"],
@@ -211,7 +213,6 @@
             "host_observed",
             "operator_recorded",
             "operator_attested",
-            "model_reported",
             "not_observable",
             "not_applicable"
           ]
@@ -261,7 +262,7 @@
           "if": {
             "properties": {
               "status": {
-                "enum": ["host_observed", "operator_recorded", "operator_attested", "model_reported"]
+                "enum": ["host_observed", "operator_recorded", "operator_attested"]
               }
             },
             "required": ["status"]
@@ -335,23 +336,6 @@
               },
               "source_ref": {
                 "$ref": "#/$defs/sha256"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "status": {
-                "const": "model_reported"
-              }
-            },
-            "required": ["status"]
-          },
-          "then": {
-            "properties": {
-              "source_class": {
-                "const": "D"
               }
             }
           }

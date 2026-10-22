@@ -137,7 +137,6 @@ def test_valid_observation_artifact_is_accepted() -> None:
     ("host_observed", "C"),
     ("operator_recorded", "B"),
     ("operator_attested", "B"),
-    ("model_reported", "D"),
 ])
 def test_each_status_requires_its_matching_source_class(status: str, source_class: str) -> None:
     """A status may only be paired with its own source class."""
@@ -461,7 +460,6 @@ def test_returned_image_requires_a_positive_count() -> None:
     ("host_observed", "C"),
     ("operator_recorded", "B"),
     ("operator_attested", "B"),
-    ("model_reported", "D"),
 ])
 def test_available_status_requires_a_non_null_value(status: str, source_class: str) -> None:
     """An available observation carrying null is missing telemetry in disguise."""
@@ -472,13 +470,15 @@ def test_available_status_requires_a_non_null_value(status: str, source_class: s
     assert errors, f"{status} with a null value must be rejected"
 
 
-def test_model_reported_observation_requires_a_source_ref() -> None:
-    """model_reported is an available status and needs its supporting digest."""
-    observation = _observation()
-    observation["observations"]["backend_model"] = _field(
-        "some-model", status="model_reported", source_class="D", source_ref=None)
-    errors = list(_validator(OBSERVATION_SCHEMA).iter_errors(observation))
-    assert errors, "model_reported without a source_ref must be rejected"
+def test_model_reported_may_not_occupy_an_authoritative_field() -> None:
+    """Class-D claims live only in model_reports, never in observations."""
+    for source_ref in (SHA, None):
+        observation = _observation()
+        observation["observations"]["backend_model"] = _field(
+            "some-model", status="model_reported", source_class="D",
+            source_ref=source_ref)
+        errors = list(_validator(OBSERVATION_SCHEMA).iter_errors(observation))
+        assert errors, "model_reported in an authoritative field must be rejected"
 
 
 @pytest.mark.parametrize("source_class", ["A", "D"])

@@ -36,6 +36,7 @@
     },
     "closed_at_utc": {
       "type": "string",
+      "format": "date-time",
       "minLength": 1
     },
     "log_digest_sha256": {
@@ -57,6 +58,7 @@
           },
           "at_utc": {
             "type": "string",
+            "format": "date-time",
             "minLength": 1
           },
           "action": {
