@@ -242,24 +242,30 @@ def private_run() -> Path:
     for candidate in sorted(base.iterdir() if base.is_dir() else []):
         if not candidate.is_dir():
             continue
-        # Detect the run by its private evidence layout, so that a deleted or
-        # corrupted ledger is still recognised as evidence loss rather than
-        # being mistaken for "this machine has no private evidence".
-        if not (candidate / ".metadata-recovery-private").is_dir():
-            continue
         run_file = candidate / "run-private.json"
-        if not run_file.is_file():
-            v111_runs.append(candidate)
+        # Fall back to the ledger itself, so that a run whose recovery-evidence
+        # directory was deleted is still recognised as evidence loss rather
+        # than becoming invisible.
+        if run_file.is_file():
+            try:
+                run = json.loads(run_file.read_text(encoding="utf-8"))
+            except (ValueError, UnicodeError):
+                v111_runs.append(candidate)
+                continue
+            if run.get("experiment_id") != "EXP-019" or run.get("experiment_version") != "1.1.1":
+                continue
+        elif not (candidate / ".metadata-recovery-private").is_dir():
+            # Neither a readable ledger nor the recovery layout: not this run.
             continue
-        try:
-            run = json.loads(run_file.read_text(encoding="utf-8"))
-        except (ValueError, UnicodeError):
+        else:
             v111_runs.append(candidate)
-            continue
-        if run.get("experiment_id") != "EXP-019" or run.get("experiment_version") != "1.1.1":
             continue
         v111_runs.append(candidate)
-        candidates.append(candidate)
+        if (candidate / ".metadata-recovery-private").is_dir():
+            candidates.append(candidate)
+        else:
+            # The run is identified but its bounded-recovery evidence is gone.
+            v111_runs.append(candidate)
     if not candidates:
         if v111_runs:
             # The run exists but its ledger is missing, unreadable, or its
@@ -268,10 +274,10 @@ def private_run() -> Path:
             # indistinguishable from "no private evidence", which is the wrong
             # failure mode for a preservation suite.
             pytest.fail(
-                "a private EXP-019 v1.1.1 run with recovery-evidence layout was "
-                "found but its ledger or bounded-recovery evidence is missing or "
-                "unreadable; the private evidence appears to have been removed "
-                "rather than merely unavailable"
+                "a private EXP-019 v1.1.1 run was found but its ledger or "
+                "bounded-recovery evidence is missing or unreadable; the private "
+                "evidence appears to have been removed rather than merely "
+                "unavailable"
             )
         pytest.skip("no private EXP-019 v1.1.1 run was found on this machine")
     if len(candidates) > 1:
