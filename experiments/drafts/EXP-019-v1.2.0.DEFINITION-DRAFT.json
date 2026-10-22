@@ -27,7 +27,7 @@
     "randomization_committed": false,
     "invocation_order_committed": false,
     "opaque_identifiers_committed": false,
-    "note": "Any future allocation is generated privately at activation time and held only in the private provenance store. It must never appear in public code, tests, documents, or pull-request artifacts."
+    "note": "Any future allocation is generated privately at the final scientific freeze (gate G4) and held only in the private provenance store. It must never appear in public code, tests, documents, or pull-request artifacts."
   },
   "run": {
     "run_root_created": false,
@@ -43,7 +43,7 @@
       "data/schemas/exp019_v1_2_response_capture.schema.json"
     ],
     "synthetic_fixtures": "tests/exp019_v1_2_synthetic_fixtures.py",
-    "dispositions": ["ADMIT", "FAILURE", "INDETERMINATE"],
+    "dispositions": ["ADMIT", "FAILURE", "INDETERMINATE_FINAL"],
     "mandatory_model_metadata_query": false,
     "metadata_recovery_workflow": false,
     "delivery_mode": "direct_paste_no_attachment"

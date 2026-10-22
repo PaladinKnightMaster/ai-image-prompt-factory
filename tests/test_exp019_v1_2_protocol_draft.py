@@ -95,6 +95,28 @@ def test_terminal_disposition_vocabulary_is_consistent() -> None:
         "never" in policy and "PENDING_UNKNOWN" in policy)
 
 
+def test_disposition_vocabulary_is_consistent_across_all_drafts() -> None:
+    """No draft may use bare INDETERMINATE as a terminal disposition."""
+    definition = json.loads(DEFINITION_DRAFT.read_text(encoding="utf-8"))
+    assert definition["evidence_contract"]["dispositions"] == [
+        "ADMIT", "FAILURE", "INDETERMINATE_FINAL"]
+    prereg = (ROOT / "experiments/drafts/EXP-019-v1.2.0.PREREGISTRATION-DRAFT.md"
+              ).read_text(encoding="utf-8")
+    assert "`INDETERMINATE_FINAL`" in prereg
+    assert "`INDETERMINATE`" not in prereg
+
+
+def test_allocation_timing_is_the_g4_freeze_everywhere() -> None:
+    """Allocation timing must not drift between draft artifacts."""
+    for path in (*DRAFT_DOCS,
+                 ROOT / "experiments/drafts/EXP-019-v1.2.0.PREREGISTRATION-DRAFT.md",
+                 DEFINITION_DRAFT):
+        text = path.read_text(encoding="utf-8")
+        assert "at activation time" not in text, path.name
+    definition = json.loads(DEFINITION_DRAFT.read_text(encoding="utf-8"))
+    assert "gate G4" in definition["allocation"]["note"]
+
+
 def test_terminal_receipt_and_external_checkpoint_rules_are_defined() -> None:
     policy = _draft_text("EXP-019-v1.2.0.ADMISSION-FAILURE-POLICY-DRAFT.md")
     assert "terminal attempt receipt" in policy
