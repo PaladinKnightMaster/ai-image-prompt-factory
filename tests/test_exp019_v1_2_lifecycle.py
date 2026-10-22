@@ -404,6 +404,42 @@ def test_safety_refusal_failure_never_authorizes_retry(tmp_path) -> None:
         life.request_retry(SLOT)
 
 
+def test_safety_refusal_cannot_be_relabelled_technical(tmp_path) -> None:
+    """Evidence and classification are bound: the mismatched pairing is
+    rejected at confirmation, and after reload it still cannot retry."""
+    life = _started(tmp_path)
+    with pytest.raises(InvalidTransitionError, match="inconsistent"):
+        life.confirm_no_result(
+            SLOT, evidence="safety_refusal_recorded",
+            failure_classification="host_technical_error")
+    life.confirm_no_result(SLOT, evidence="safety_refusal_recorded",
+                           failure_classification="safety_refusal")
+    record = life.finalize_attempt(SLOT, "FAILURE")
+    assert record["failure_evidence"] == "safety_refusal_recorded"
+
+    reloaded = AttemptLifecycle(life.store,
+                                anchor_verifier=_verify_anchor)
+    reloaded.record_external_anchor(SLOT, 1, "anchor-1")
+    with pytest.raises(InvalidTransitionError, match="technical"):
+        reloaded.request_retry(SLOT)
+
+
+def test_indeterminate_authorization_is_persisted_for_audit(
+        tmp_path) -> None:
+    life = _started(tmp_path)
+    life.mark_pending_unknown(SLOT)
+    life.finalize_attempt(SLOT, "INDETERMINATE_FINAL",
+                          authorization=_auth())
+    reloaded = AttemptLifecycle(life.store)
+    record = reloaded.slot_state(SLOT)["attempts"][1]
+    assert record["disposition"] == "INDETERMINATE_FINAL"
+    events = [e for e in reloaded.store.events
+              if e["type"] == "attempt_terminal"]
+    persisted = events[0]["terminal_record"]["authorization"]
+    assert persisted["authorization_id"] == "synthetic-auth-1"
+    assert persisted["authorized_by"] == "synthetic-owner"
+
+
 def test_anchoring_blocked_without_trusted_verifier(tmp_path) -> None:
     """Production advancement stays blocked: no verifier, no anchor."""
     life = AttemptLifecycle(LifecycleStore(tmp_path / "plain"))

@@ -82,6 +82,17 @@ NON_RETRYABLE_FAILURES = frozenset({
 KNOWN_FAILURE_CLASSIFICATIONS = \
     RETRYABLE_TECHNICAL_FAILURES | NON_RETRYABLE_FAILURES
 
+#: Evidence and classification are bound together: a safety refusal can
+#: never be relabelled a technical failure, and only the technical
+#: pairings below can ever authorize a retry.
+EVIDENCE_FAILURE_CLASSIFICATIONS = {
+    "host_error_recorded": RETRYABLE_TECHNICAL_FAILURES,
+    "host_completed_no_image": RETRYABLE_TECHNICAL_FAILURES,
+    "request_not_accepted": RETRYABLE_TECHNICAL_FAILURES
+        | {"policy_refusal"},
+    "safety_refusal_recorded": frozenset({"safety_refusal"}),
+}
+
 #: The H3-authorized procedure for terminalizing unresolved outcomes.
 INDETERMINATE_PROCEDURE = "H3-indeterminate-disposition"
 
@@ -265,6 +276,7 @@ class AttemptLifecycle:
         elif kind == "no_result_confirmed":
             attempt = slot["attempts"][event["attempt_number"]]
             attempt["state"] = "no_result_confirmed"
+            attempt["failure_evidence"] = event["evidence"]
             attempt["failure_classification"] = \
                 event["failure_classification"]
         elif kind == "pending_unknown_marked":
@@ -298,6 +310,7 @@ class AttemptLifecycle:
             "state": "opened",
             "retained_artifact_sha256": None,
             "technically_evaluable": None,
+            "failure_evidence": None,
             "failure_classification": None,
             "terminal_record": None,
         }
@@ -420,6 +433,13 @@ class AttemptLifecycle:
             raise InvalidTransitionError(
                 "no-result confirmation requires an explicit, known "
                 "failure classification")
+        if failure_classification not in \
+                EVIDENCE_FAILURE_CLASSIFICATIONS[evidence]:
+            raise InvalidTransitionError(
+                "the failure classification is inconsistent with the "
+                "affirmative evidence; a safety refusal or other "
+                "nontechnical outcome cannot be relabelled a technical "
+                "failure")
         self._emit({"type": "no_result_confirmed", "slot_id": slot_id,
                     "attempt_number": attempt["attempt_number"],
                     "evidence": evidence,
@@ -530,9 +550,17 @@ class AttemptLifecycle:
             "attempt_number": attempt["attempt_number"],
             "predecessor_attempt": attempt["predecessor_attempt"],
             "disposition": disposition,
+            "failure_evidence":
+                attempt["failure_evidence"]
+                if disposition == "FAILURE" else None,
             "failure_classification":
                 attempt["failure_classification"]
                 if disposition == "FAILURE" else None,
+            "authorization": (
+                {"authorization_id": authorization["authorization_id"],
+                 "authorized_by": authorization["authorized_by"],
+                 "reason": authorization["reason"]}
+                if disposition == "INDETERMINATE_FINAL" else None),
             "retained_artifact_sha256":
                 attempt["retained_artifact_sha256"],
             "evidence_digests": sorted(evidence_digests),
@@ -659,12 +687,15 @@ class AttemptLifecycle:
             raise InvalidTransitionError(
                 "a retry is permitted only after terminal FAILURE")
         if record.get("failure_classification") not in \
-                RETRYABLE_TECHNICAL_FAILURES:
+                RETRYABLE_TECHNICAL_FAILURES or \
+                record.get("failure_classification") not in \
+                EVIDENCE_FAILURE_CLASSIFICATIONS.get(
+                    record.get("failure_evidence"), frozenset()):
             raise InvalidTransitionError(
                 "a retry requires an explicit, validated technical-"
-                "failure classification; a generic FAILURE, a safety "
-                "refusal, or another nontechnical failure never "
-                "authorizes a retry")
+                "failure classification consistent with the recorded "
+                "evidence; a generic FAILURE, a safety refusal, or "
+                "another nontechnical failure never authorizes a retry")
         if attempt["attempt_number"] >= MAX_ATTEMPTS:
             raise InvalidTransitionError(
                 "the frozen retry ceiling of two retries is exhausted")
@@ -724,11 +755,18 @@ class AttemptLifecycle:
             raise InvalidTransitionError(
                 "the run may close only when every slot is closed; "
                 "unresolved slots remain open and visibly incomplete")
+        # A run is complete only when every slot admitted an attempt
+        # and every terminal record is externally anchored: an attempt
+        # counts as committed only when both states hold.
         complete = all(
             any(a["terminal_record"] and
                 a["terminal_record"]["disposition"] == "ADMIT"
                 for a in slot["attempts"].values())
-            for slot in self._slots.values())
+            for slot in self._slots.values()) and all(
+            a["terminal_record"]["anchor_state"] == ANCHOR_ANCHORED
+            for slot in self._slots.values()
+            for a in slot["attempts"].values()
+            if a["terminal_record"])
         self._emit({"type": "run_closed", "slot_id": None,
                     "complete": complete, "at_utc": at_utc})
         return self.run_summary()
