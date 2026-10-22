@@ -27,7 +27,7 @@
     "randomization_committed": false,
     "invocation_order_committed": false,
     "opaque_identifiers_committed": false,
-    "note": "Any future allocation is generated privately at the final scientific freeze (gate G4) and held only in the private provenance store. It must never appear in public code, tests, documents, or pull-request artifacts."
+    "note": "Any future allocation is generated privately at the final scientific freeze (gate G4) by the allocation custodian and held only in the private provenance store under that custodian's sole custody. It must never appear in public code, tests, documents, or pull-request artifacts."
   },
   "run": {
     "run_root_created": false,
@@ -48,5 +48,11 @@
     "metadata_recovery_workflow": false,
     "delivery_mode": "direct_paste_no_attachment"
   },
-  "proposed_decisions_pending_owner_approval": ["H1", "H2", "H3"]
+  "owner_decisions": {
+    "H1": "approved",
+    "H2": "approved",
+    "H3": "approved",
+    "approved_date": "2026-10-22",
+    "approval_scope": "protocol drafting and engineering preparation only; not scientific activation, experimental randomization, image generation, or closure of EXP-019 v1.1.1"
+  }
 }

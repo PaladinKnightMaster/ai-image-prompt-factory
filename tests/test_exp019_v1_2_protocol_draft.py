@@ -66,12 +66,35 @@ def test_definition_draft_preserves_science_by_reference_only() -> None:
     }
 
 
-def test_decisions_h1_h3_remain_unapproved() -> None:
+def test_decisions_h1_h3_are_owner_approved_with_limited_scope() -> None:
     text = (ROOT / "docs/drafts/EXP-019-v1.2.0.PROPOSED-DECISIONS-H1-H3.md"
             ).read_text(encoding="utf-8")
-    assert "NOT APPROVED" in text
-    assert text.count("*(pending)*") == 3
+    assert text.count("APPROVED by the experiment owner, 2026-10-22") == 3
+    assert text.count("APPROVED as proposed in PR #17") == 3
+    assert "*(pending)*" not in text
+    # Approval is for drafting/engineering only, never activation.
+    assert "do **not**\n> authorize scientific activation" in text or (
+        "not** authorize scientific activation" in text.replace("\n> ", " "))
     assert "operator_evidenced_host_provenance" in text
+    definition = json.loads(DEFINITION_DRAFT.read_text(encoding="utf-8"))
+    decisions = definition["owner_decisions"]
+    assert decisions["H1"] == decisions["H2"] == decisions["H3"] == "approved"
+    assert decisions["approved_date"] == "2026-10-22"
+    assert "not scientific activation" in decisions["approval_scope"]
+
+
+def test_allocation_custodian_is_separate_from_mapping_blind_coordinator() -> None:
+    roles = " ".join(
+        _draft_text("EXP-019-v1.2.0.ROLES-BLINDING-DRAFT.md").split())
+    assert "Allocation custodian (private)" in roles
+    assert "generating the fresh treatment allocation at the final freeze" in roles
+    assert "sole custody of the private slot-to-condition mapping" in roles
+    assert "preparing treatment-specific prompt packets" in roles
+    assert "reviewer-image mapping integrity" in roles
+    assert "No reviewer ever receives treatment-bearing" in roles
+    # The coordinator remains mapping-blind and never custodies allocation.
+    assert "separate from the mapping-blind coordinator" in roles
+    assert "never exercises custodian knowledge while acting as coordinator" in roles
 
 
 def _draft_text(name: str) -> str:
@@ -197,10 +220,11 @@ def test_unavailable_field_label_is_an_expected_class_not_authority() -> None:
 
 
 def test_allocation_custody_and_reveal_act_are_assigned() -> None:
-    roles = _draft_text("EXP-019-v1.2.0.ROLES-BLINDING-DRAFT.md")
-    assert "sole custodian" in roles
-    assert "reveal act" in roles
-    assert "never takes custody of the allocation" in roles
+    roles = " ".join(
+        _draft_text("EXP-019-v1.2.0.ROLES-BLINDING-DRAFT.md").split())
+    assert "sole custody of the private slot-to-condition mapping" in roles
+    assert "performs the reveal" in roles
+    assert "separate from the mapping-blind coordinator" in roles
 
 
 def test_pilot_changes_require_revalidation_and_possible_repeat_pilot() -> None:
