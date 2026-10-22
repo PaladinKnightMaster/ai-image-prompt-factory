@@ -88,6 +88,18 @@ def test_v1_2_remains_scientifically_inactive() -> None:
     assert not list(package.glob("exp019_v1_2*.py"))
 
 
+def test_contract_clarifies_indeterminate_authorization_and_dual_role() -> None:
+    text = _norm(CONTRACT)
+    assert "only through the indeterminate-disposition procedure" in text
+    assert "authorized by H3" in text
+    assert "recorded-unanchored" in text
+    assert "never represented as personal blindness" in text
+    assert "require distinct" in text and "persons for an independence claim" in text
+    for field in ("schema_version", "run_id", "sequence", "event_type",
+                  "evidence_sha256", "previous_anchor_commit"):
+        assert f"`{field}`" in text
+
+
 def test_gate_record_creates_no_activation_artifacts() -> None:
     text = _norm(GATE_RECORD)
     assert "No allocation exists" in text
