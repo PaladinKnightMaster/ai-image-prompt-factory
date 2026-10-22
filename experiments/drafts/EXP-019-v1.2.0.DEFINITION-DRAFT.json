@@ -13,7 +13,7 @@
     "fixture_path": "experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json",
     "fixture_sha256": "a47d5cb22b3ee0b83bc585db310cfe3e4a9facc2e9227777503248156d93a1b0",
     "preregistration_path": "experiments/preregistrations/EXP-019.PREREGISTRATION.md",
-    "preregistration_sha256": "842487a9d093cc04d45891d4eff94c2ec55ab39e53618893561bca9eb80f65df"
+    "preregistration_sha256": "559a096c17afba90108eec728d8bc9aeb90345ed2ef4e81ca930afa6f532e153"
   },
   "design": {
     "conditions": 3,

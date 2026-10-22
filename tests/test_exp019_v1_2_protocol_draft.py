@@ -155,8 +155,13 @@ def test_cited_digests_resolve_to_the_frozen_sources() -> None:
         ("fixture_path", "fixture_sha256"),
         ("preregistration_path", "preregistration_sha256"),
     ):
-        actual = hashlib.sha256(
-            (ROOT / source[path_key]).read_bytes()).hexdigest()
+        # Cited digests are over the canonical repository (LF) bytes, so a
+        # Windows checkout's CRLF working-tree conversion must be undone
+        # before hashing; otherwise this test passes on one OS and fails on
+        # the other.
+        canonical = (ROOT / source[path_key]).read_bytes().replace(
+            b"\r\n", b"\n")
+        actual = hashlib.sha256(canonical).hexdigest()
         assert actual == source[digest_key], path_key
     prereg = (ROOT / "experiments/drafts/EXP-019-v1.2.0.PREREGISTRATION-DRAFT.md"
               ).read_text(encoding="utf-8")
