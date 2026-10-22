@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/exp019_v1_2_request_capture.schema.json",
+  "title": "EXP-019 v1.2 DRAFT request capture artifact (non-executable)",
+  "description": "DRAFT schema for the prospective EXP-019 v1.2 evidence contract. NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(). This records the contemporaneous capture taken AT REQUEST SUBMISSION, before any image could have been returned. It therefore cannot evidence a returned image; that is the separate response capture. A capture is a rendering of the operator's client view: it is NOT authenticated host-received request bytes, and it must never be described as such.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "executable",
+    "opaque_slot_id",
+    "attempt_number",
+    "captured_at_utc",
+    "attachment_count",
+    "generation_request_count",
+    "paste_sha256",
+    "rendered_request_text_sha256",
+    "rendered_request_comparison",
+    "capture_digest_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0-draft"
+    },
+    "status": {
+      "const": "draft"
+    },
+    "executable": {
+      "const": false
+    },
+    "opaque_slot_id": {
+      "type": "string",
+      "pattern": "^[A-HJ-NP-Z2-9]{6}$"
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "captured_at_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capture_digest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "attachment_count": {
+      "description": "Number of files attached to the generation request. The v1.2 requirement is zero.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "generation_request_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "paste_sha256": {
+      "description": "Digest of the operator's clipboard bytes before submission. This is the byte-exact claim, compared against the frozen prompt digest.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rendered_request_text_sha256": {
+      "description": "Digest of the request text as rendered by the client interface.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "rendered_request_comparison": {
+      "description": "How the rendered request text was compared with the paste bytes. Only a textual comparison is achievable; a byte-identity claim against a host-internal request payload is NOT available for ChatGPT Images.",
+      "enum": ["textual_match", "textual_mismatch", "not_compared"]
+    },
+    "host_authenticated_request_bytes": {
+      "description": "Present only when the interface genuinely exposes an authenticated request record. Absent otherwise; it is never fabricated.",
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}
