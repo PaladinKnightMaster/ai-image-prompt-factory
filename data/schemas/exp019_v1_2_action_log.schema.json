@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.org/aipf/exp019/exp019_v1_2_action_log.schema.json",
+  "$comment": "RESERVED FOR RUNTIME VALIDATION (JSON Schema cannot enforce these): entry seq values must be contiguous starting at 1; entry timestamps must parse and be monotonically non-decreasing; closed_at_utc must be at or after the last entry; the required operator-action sequence for an invocation must be present in order; per-entry artifact_sha256 values and log_digest_sha256 must be recomputed against actual artifact/log bytes; and cross-artifact binding of opaque_slot_id and attempt_number. This log is class-B operator evidence about the operator's own actions; it can never establish host-internal behaviour or authenticated class-C evidence. A runtime validator must reject artifacts failing any of these even if they satisfy this schema.",
   "title": "EXP-019 v1.2 DRAFT operator action log (non-executable)",
   "description": "DRAFT schema for the prospective EXP-019 v1.2 evidence contract. NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(). This records the append-only, timestamped log of operator actions for one slot, closed at the end of the invocation. The log is the class-B backbone: it records what the operator did, and never establishes host-internal behavior.",
   "type": "object",

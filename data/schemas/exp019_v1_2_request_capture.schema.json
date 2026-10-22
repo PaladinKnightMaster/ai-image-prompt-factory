@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.org/aipf/exp019/exp019_v1_2_request_capture.schema.json",
+  "$comment": "RESERVED FOR RUNTIME VALIDATION (JSON Schema cannot enforce these): captured_at_utc must precede (or coincide with submission before) the matching response capture for the same opaque_slot_id and attempt_number, and this request capture may never stand in for a response capture; paste_sha256 must be recomputed and compared with the frozen prompt digest; capture_digest_sha256 must be recomputed against the actual capture bytes; and host_authenticated_request_bytes, when present, must be verified as a genuinely authenticated host record - the mere presence of a digest never establishes authentication. A screenshot or transcript of the operator's client view remains class-B operator evidence. A runtime validator must reject artifacts failing any of these even if they satisfy this schema.",
   "title": "EXP-019 v1.2 DRAFT request capture artifact (non-executable)",
   "description": "DRAFT schema for the prospective EXP-019 v1.2 evidence contract. NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(). This records the contemporaneous capture taken AT REQUEST SUBMISSION, before any image could have been returned. It therefore cannot evidence a returned image; that is the separate response capture. A capture is a rendering of the operator's client view: it is NOT authenticated host-received request bytes, and it must never be described as such.",
   "type": "object",

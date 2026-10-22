@@ -434,6 +434,7 @@ def test_response_capture_distinguishes_no_result_from_unknown() -> None:
     capture = _response_capture()
     capture["image_returned"] = False
     capture["returned_image_count"] = 0
+    capture["artifact_id"] = None
     capture["no_result_evidence"] = "host_error_recorded"
     assert not list(_validator(RESPONSE_CAPTURE_SCHEMA).iter_errors(capture))
 
@@ -454,6 +455,62 @@ def test_returned_image_requires_a_positive_count() -> None:
     capture["returned_image_count"] = 0
     errors = list(_validator(RESPONSE_CAPTURE_SCHEMA).iter_errors(capture))
     assert errors, "image_returned=true requires returned_image_count >= 1"
+
+
+@pytest.mark.parametrize("status,source_class", [
+    ("host_observed", "C"),
+    ("operator_recorded", "B"),
+    ("operator_attested", "B"),
+    ("model_reported", "D"),
+])
+def test_available_status_requires_a_non_null_value(status: str, source_class: str) -> None:
+    """An available observation carrying null is missing telemetry in disguise."""
+    observation = _observation()
+    observation["observations"]["backend_model"] = _field(
+        None, status=status, source_class=source_class)
+    errors = list(_validator(OBSERVATION_SCHEMA).iter_errors(observation))
+    assert errors, f"{status} with a null value must be rejected"
+
+
+def test_model_reported_observation_requires_a_source_ref() -> None:
+    """model_reported is an available status and needs its supporting digest."""
+    observation = _observation()
+    observation["observations"]["backend_model"] = _field(
+        "some-model", status="model_reported", source_class="D", source_ref=None)
+    errors = list(_validator(OBSERVATION_SCHEMA).iter_errors(observation))
+    assert errors, "model_reported without a source_ref must be rejected"
+
+
+@pytest.mark.parametrize("source_class", ["A", "D"])
+def test_unavailable_status_may_not_use_protocol_or_model_class(source_class: str) -> None:
+    """not_observable describes authoritative B/C evidence, never A or D."""
+    observation = _observation()
+    observation["observations"]["backend_model"] = _field(
+        None, status="not_observable", source_class=source_class, source_ref=None)
+    errors = list(_validator(OBSERVATION_SCHEMA).iter_errors(observation))
+    assert errors, f"not_observable with class {source_class} must be rejected"
+
+
+def test_no_result_capture_must_not_invent_an_artifact_id() -> None:
+    """A no-result capture has no artifact; its handle must be null."""
+    capture = _response_capture()
+    capture["image_returned"] = False
+    capture["returned_image_count"] = 0
+    capture["no_result_evidence"] = "host_error_recorded"
+    # artifact_id still carries the returned-image handle from the fixture.
+    errors = list(_validator(RESPONSE_CAPTURE_SCHEMA).iter_errors(capture))
+    assert errors, "a no-result capture must not carry an artifact_id"
+
+    capture["artifact_id"] = None
+    assert not list(_validator(RESPONSE_CAPTURE_SCHEMA).iter_errors(capture))
+
+
+def test_every_schema_reserves_cross_artifact_checks_for_runtime() -> None:
+    """Checks JSON Schema cannot enforce must be explicitly runtime-reserved."""
+    for path in ALL_DRAFT_SCHEMAS:
+        comment = _load(path).get("$comment", "")
+        assert "RESERVED FOR RUNTIME VALIDATION" in comment, path.name
+        assert "JSON Schema cannot enforce" in comment, path.name
 
 
 def test_request_and_response_captures_are_distinct_artifacts() -> None:

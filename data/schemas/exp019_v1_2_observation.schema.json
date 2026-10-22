@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.org/aipf/exp019/exp019_v1_2_observation.schema.json",
+  "$comment": "RESERVED FOR RUNTIME VALIDATION (JSON Schema cannot enforce these): recomputation of every digest against the actual referenced artifact bytes; verification that a source artifact is genuinely authenticated host evidence before any field may be treated as class C (a SHA-256 digest alone never creates class-C evidence and never establishes factual truth); distinction between operator_attested fields (whose source_ref must resolve to the attestation artifact) and operator_recorded fields (whose source_ref must resolve to a contemporaneous record created at action time); cross-artifact binding of opaque_slot_id and attempt_number across observation, attestation, action log, and captures; temporal ordering of recorded/invoked/completed timestamps; agreement of returned_output_count with actual artifacts; and confirmation that model_reports never replace or shadow observations. A runtime validator must reject artifacts failing any of these even if they satisfy this schema.",
   "title": "EXP-019 v1.2 DRAFT operator observation artifact (non-executable)",
   "description": "DRAFT schema for the prospective EXP-019 v1.2 evidence contract. This document is NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(), and no runtime code reads this schema. It records the proposed operator observation artifact: frozen protocol constants, per-field observations with an explicit source class and observation status, and any optional model-generated report held in a separate namespace. This schema does not authorize an experiment, a generation, a metadata query, or a recovery replay.",
   "type": "object",
@@ -247,8 +248,35 @@
               },
               "source_ref": {
                 "type": "null"
+              },
+              "source_class": {
+                "description": "An unavailable observation is a statement about authoritative (class B/C) evidence. It may not be labelled class A (a protocol constant, not an observation) or class D (a model claim).",
+                "enum": ["B", "C"]
               }
-            }
+            },
+            "required": ["value", "source_ref", "source_class"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["host_observed", "operator_recorded", "operator_attested", "model_reported"]
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "description": "An available observation must carry an actual value; missing telemetry must use not_observable/not_applicable instead.",
+                "type": ["string", "number", "integer", "boolean"]
+              },
+              "source_ref": {
+                "$ref": "#/$defs/sha256"
+              }
+            },
+            "required": ["value", "source_ref"]
           }
         },
         {
