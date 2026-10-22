@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/exp019_v1_2_response_capture.schema.json",
+  "$comment": "RESERVED FOR RUNTIME VALIDATION (JSON Schema cannot enforce these): captured_at_utc must be at or after the matching request capture for the same opaque_slot_id and attempt_number (the request and response captures are temporally distinct artifacts and one may never stand in for the other); timestamp parsing and ordering; recomputation of capture_digest_sha256 against the actual capture bytes; binding of artifact_id to the downloaded artifact bytes whose digest appears in the observation artifact; agreement of returned_image_count with actual artifacts; and corroboration that recorded no_result_evidence is affirmative host-side evidence rather than an operator belief. A runtime validator must reject artifacts failing any of these even if they satisfy this schema.",
+  "title": "EXP-019 v1.2 DRAFT response capture artifact (non-executable)",
+  "description": "DRAFT schema for the prospective EXP-019 v1.2 evidence contract. NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(). This records the contemporaneous capture taken WHEN THE IMAGE APPEARS, establishing that a result was returned and where it sat in the conversation. It is distinct from the request capture, which is taken before any image exists. A capture is a rendering of the operator's client view; it is not authenticated host telemetry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "executable",
+    "opaque_slot_id",
+    "attempt_number",
+    "captured_at_utc",
+    "image_returned",
+    "returned_image_count",
+    "artifact_id",
+    "capture_digest_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0-draft"
+    },
+    "status": {
+      "const": "draft"
+    },
+    "executable": {
+      "const": false
+    },
+    "opaque_slot_id": {
+      "type": "string",
+      "pattern": "^[A-HJ-NP-Z2-9]{6}$"
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "captured_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 1
+    },
+    "capture_digest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "image_returned": {
+      "type": "boolean"
+    },
+    "returned_image_count": {
+      "description": "Images returned by the request. The v1.2 requirement is exactly one; more than one is a demonstrated protocol violation.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "artifact_id": {
+      "description": "Opaque handle binding the returned artifact to this request and to the downloaded bytes. Must be a non-empty string when an image was returned and must be null when no image was returned: a no-result capture must not invent an artifact handle.",
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "no_result_evidence": {
+      "description": "Affirmative evidence that the host completed no image, required when image_returned is false. An operator statement that no image was seen is NOT sufficient and must not be recorded here.",
+      "anyOf": [
+        {
+          "enum": [
+            "host_error_recorded",
+            "host_completed_no_image",
+            "request_not_accepted"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "image_returned": {
+            "const": false
+          }
+        },
+        "required": ["image_returned"]
+      },
+      "then": {
+        "required": ["no_result_evidence"],
+        "properties": {
+          "no_result_evidence": {
+            "enum": [
+              "host_error_recorded",
+              "host_completed_no_image",
+              "request_not_accepted"
+            ]
+          },
+          "returned_image_count": {
+            "const": 0
+          },
+          "artifact_id": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "image_returned": {
+            "const": true
+          }
+        },
+        "required": ["image_returned"]
+      },
+      "then": {
+        "properties": {
+          "returned_image_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "no_result_evidence": {
+            "type": "null"
+          },
+          "artifact_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ]
+}

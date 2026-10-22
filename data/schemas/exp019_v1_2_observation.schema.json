@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/exp019_v1_2_observation.schema.json",
+  "$comment": "RESERVED FOR RUNTIME VALIDATION (JSON Schema cannot enforce these): recomputation of every digest against the actual referenced artifact bytes; verification that a source artifact is genuinely authenticated host evidence before any field may be treated as class C (a SHA-256 digest alone never creates class-C evidence and never establishes factual truth); distinction between operator_attested fields (whose source_ref must resolve to the attestation artifact) and operator_recorded fields (whose source_ref must resolve to a contemporaneous record created at action time); cross-artifact binding of opaque_slot_id and attempt_number across observation, attestation, action log, and captures; temporal ordering of recorded/invoked/completed timestamps; agreement of returned_output_count with actual artifacts; and confirmation that model_reports never replace or shadow observations. A runtime validator must reject artifacts failing any of these even if they satisfy this schema.",
+  "title": "EXP-019 v1.2 DRAFT operator observation artifact (non-executable)",
+  "description": "DRAFT schema for the prospective EXP-019 v1.2 evidence contract. This document is NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(), and no runtime code reads this schema. It records the proposed operator observation artifact: frozen protocol constants, per-field observations with an explicit source class and observation status, and any optional model-generated report held in a separate namespace. This schema does not authorize an experiment, a generation, a metadata query, or a recovery replay.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "executable",
+    "opaque_slot_id",
+    "attempt_number",
+    "protocol_constants",
+    "observations",
+    "model_reports",
+    "recorded_at_utc"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0-draft"
+    },
+    "status": {
+      "description": "Draft marker. A frozen artifact would carry a different value.",
+      "const": "draft"
+    },
+    "executable": {
+      "description": "False while the schema is a draft. No runtime may consume an artifact with executable=false.",
+      "const": false
+    },
+    "opaque_slot_id": {
+      "type": "string",
+      "pattern": "^[A-HJ-NP-Z2-9]{6}$"
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "recorded_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 1
+    },
+    "protocol_constants": {
+      "description": "Frozen requested behavior. These are protocol labels, not observations, and carry no observation status.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "experiment_id",
+        "experiment_version",
+        "prompt_sha256",
+        "requested_reference_count",
+        "requested_output_count",
+        "aspect_ratio_request",
+        "delivery_mode"
+      ],
+      "properties": {
+        "experiment_id": {
+          "const": "EXP-019"
+        },
+        "experiment_version": {
+          "const": "1.2.0"
+        },
+        "prompt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "requested_reference_count": {
+          "const": 0
+        },
+        "requested_output_count": {
+          "const": 1
+        },
+        "aspect_ratio_request": {
+          "const": "2:3"
+        },
+        "delivery_mode": {
+          "description": "v1.2 prospective change: exact prompt bytes pasted directly, no file attached to the generation request, and no chat-starter wrapper.",
+          "const": "direct_paste_no_attachment"
+        }
+      }
+    },
+    "observations": {
+      "description": "Per-field observations. Each field names its authoritative source class and its observation status. A class-D model claim may never occupy an authoritative field.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_sha256",
+        "output_artifact_id",
+        "attachment_count_at_request",
+        "generation_request_count",
+        "returned_output_count",
+        "edit_or_regeneration_used",
+        "conversation_ref",
+        "prompt_bytes_pasted_sha256",
+        "prompt_text_rendered_sha256"
+      ],
+      "properties": {
+        "output_sha256": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "output_artifact_id": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "attachment_count_at_request": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "generation_request_count": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "returned_output_count": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "edit_or_regeneration_used": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "conversation_ref": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "prompt_bytes_pasted_sha256": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "prompt_text_rendered_sha256": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "provider_generation_id": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "backend_model": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "backend_model_snapshot": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "request_message_id": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "invoked_at_utc": {
+          "$ref": "#/$defs/authoritativeField"
+        },
+        "generation_completed_at_utc": {
+          "$ref": "#/$defs/authoritativeField"
+        }
+      }
+    },
+    "model_reports": {
+      "description": "Optional, unsolicited model-generated reports. Held in a separate namespace so they can never impersonate authenticated telemetry or overwrite class A/B/C evidence.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "field",
+          "claimed_value",
+          "claimed_status",
+          "raw_bytes_sha256",
+          "raw_bytes_base64",
+          "captured_at_utc"
+        ],
+        "properties": {
+          "source": {
+            "const": "model"
+          },
+          "field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claimed_value": {
+            "type": ["string", "number", "integer", "boolean", "null"]
+          },
+          "claimed_status": {
+            "description": "A model claim may only ever be model_reported.",
+            "const": "model_reported"
+          },
+          "raw_bytes_sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "raw_bytes_base64": {
+            "description": "The original model response bytes, preserved verbatim.",
+            "type": "string",
+            "minLength": 1
+          },
+          "captured_at_utc": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sourceClass": {
+      "description": "A: frozen protocol requirement. B: operator-controlled action, contemporaneous record, or operator attestation. C: authenticated host-observed evidence, if genuinely available. D: model-generated description of events.",
+      "enum": ["A", "B", "C", "D"]
+    },
+    "authoritativeField": {
+      "description": "A single authoritative observation. Only class B or C evidence may occupy an authoritative field: model_reported is deliberately absent, because a class-D model claim may never occupy an authoritative field and lives only in model_reports. source_ref must be a digest of the supporting artifact for every status other than not_observable or not_applicable. Digest integrity proves the artifact was not altered; it does not establish factual truth and does not by itself establish authenticated class-C evidence.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "status", "source_class", "source_ref"],
+      "properties": {
+        "value": {
+          "type": ["string", "number", "integer", "boolean", "null"]
+        },
+        "status": {
+          "enum": [
+            "host_observed",
+            "operator_recorded",
+            "operator_attested",
+            "not_observable",
+            "not_applicable"
+          ]
+        },
+        "source_class": {
+          "$ref": "#/$defs/sourceClass"
+        },
+        "source_ref": {
+          "description": "Digest of the supporting artifact, or null when the value is not_observable or not_applicable.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["not_observable", "not_applicable"]
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "source_ref": {
+                "type": "null"
+              },
+              "source_class": {
+                "description": "An unavailable observation is a statement about authoritative (class B/C) evidence. It may not be labelled class A (a protocol constant, not an observation) or class D (a model claim).",
+                "enum": ["B", "C"]
+              }
+            },
+            "required": ["value", "source_ref", "source_class"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["host_observed", "operator_recorded", "operator_attested"]
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "description": "An available observation must carry an actual value; missing telemetry must use not_observable/not_applicable instead.",
+                "type": ["string", "number", "integer", "boolean"]
+              },
+              "source_ref": {
+                "$ref": "#/$defs/sha256"
+              }
+            },
+            "required": ["value", "source_ref"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "host_observed"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "source_class": {
+                "const": "C"
+              },
+              "source_ref": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "operator_recorded"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "source_class": {
+                "const": "B"
+              },
+              "source_ref": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "operator_attested"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "source_class": {
+                "const": "B"
+              },
+              "source_ref": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

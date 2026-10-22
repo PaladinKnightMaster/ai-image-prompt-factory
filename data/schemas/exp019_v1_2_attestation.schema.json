@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/exp019_v1_2_attestation.schema.json",
+  "$comment": "RESERVED FOR RUNTIME VALIDATION (JSON Schema cannot enforce these): recomputation and target-binding of artifact_digest_sha256 (the digest must resolve to the specific artifact being attested; digest integrity proves only that bytes were not altered, never that attested facts are true and never that evidence is authenticated host telemetry); attester identity and attestation timing relative to the invocation; cross-artifact binding of opaque_slot_id and attempt_number; and the rule that an attestation (made after the fact) is operator_attested class-B evidence and may never be re-labelled operator_recorded, which is reserved for contemporaneous records. A runtime validator must reject artifacts failing any of these even if they satisfy this schema.",
+  "title": "EXP-019 v1.2 DRAFT operator attestation artifact (non-executable)",
+  "description": "DRAFT schema for the prospective EXP-019 v1.2 evidence contract. NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(). This records the hash-bound operator attestation for one slot. IMPORTANT: the digest that binds this artifact proves the artifact was not altered after creation; it does NOT establish that the attested facts are true. The attested facts remain operator evidence, not authenticated host telemetry.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "executable",
+    "opaque_slot_id",
+    "attempt_number",
+    "attested_by",
+    "attested_at_utc",
+    "assertions",
+    "artifact_digest_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.2.0-draft"
+    },
+    "status": {
+      "const": "draft"
+    },
+    "executable": {
+      "const": false
+    },
+    "opaque_slot_id": {
+      "type": "string",
+      "pattern": "^[A-HJ-NP-Z2-9]{6}$"
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "attested_by": {
+      "description": "Identifier of the attesting operator. Not a treatment-bearing value.",
+      "type": "string",
+      "minLength": 1
+    },
+    "attested_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 1
+    },
+    "artifact_digest_sha256": {
+      "description": "Digest binding this artifact. Integrity only, not truth.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "assertions": {
+      "description": "The operator's attested account of their own conduct.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "no_edit_or_regeneration_performed",
+        "first_returned_image_retained",
+        "no_subsequent_generation_in_conversation",
+        "artifact_is_fresh_host_output_for_slot"
+      ],
+      "properties": {
+        "no_edit_or_regeneration_performed": {
+          "const": true
+        },
+        "first_returned_image_retained": {
+          "const": true
+        },
+        "no_subsequent_generation_in_conversation": {
+          "const": true
+        },
+        "artifact_is_fresh_host_output_for_slot": {
+          "const": true
+        },
+        "original_conversation_reused": {
+          "const": true
+        },
+        "no_reference_image_attached": {
+          "const": true
+        },
+        "no_prior_exp019_context_in_conversation": {
+          "const": true
+        }
+      }
+    }
+  }
+}
