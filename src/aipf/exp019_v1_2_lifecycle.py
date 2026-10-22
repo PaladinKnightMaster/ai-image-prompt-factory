@@ -58,7 +58,29 @@ AFFIRMATIVE_NO_RESULT_EVIDENCE = frozenset({
     "host_error_recorded",
     "host_completed_no_image",
     "request_not_accepted",
+    "safety_refusal_recorded",
 })
+
+#: Failure classifications that may authorize a retry: confirmed
+#: technical failures only. A generic terminal ``FAILURE`` without one
+#: of these explicit classifications never authorizes a retry.
+RETRYABLE_TECHNICAL_FAILURES = frozenset({
+    "host_technical_error",
+    "transport_failure",
+    "host_timeout",
+    "provider_transient_error",
+})
+
+#: Known failure classifications that never authorize a retry.
+NON_RETRYABLE_FAILURES = frozenset({
+    "safety_refusal",
+    "policy_refusal",
+    "operator_abort",
+    "protocol_violation",
+})
+
+KNOWN_FAILURE_CLASSIFICATIONS = \
+    RETRYABLE_TECHNICAL_FAILURES | NON_RETRYABLE_FAILURES
 
 #: The H3-authorized procedure for terminalizing unresolved outcomes.
 INDETERMINATE_PROCEDURE = "H3-indeterminate-disposition"
@@ -172,10 +194,30 @@ class LifecycleStore:
 
 
 class AttemptLifecycle:
-    """Attempt lifecycle state machine over a :class:`LifecycleStore`."""
+    """Attempt lifecycle state machine over a :class:`LifecycleStore`.
 
-    def __init__(self, store: LifecycleStore) -> None:
+    ``run_id`` and ``contract_version`` bind every authorization record
+    and terminal record. ``anchor_verifier`` is the trusted external-
+    anchoring boundary for PR-9: a callable receiving the terminal
+    record and a proposed anchor reference, returning ``True`` only when
+    the reference was verified against actual external publication.
+    Without a verifier, anchoring — and therefore retry advancement —
+    remains blocked; a caller-supplied ``anchored=True``-style assertion
+    or bare reference string is never accepted as proof.
+    """
+
+    def __init__(self, store: LifecycleStore, *, run_id: str = "synthetic-run",
+                 contract_version: str = "1.2.0",
+                 anchor_verifier=None) -> None:
+        if anchor_verifier is not None and not callable(anchor_verifier):
+            raise TypeError(
+                "anchor_verifier must be a callable from a trusted "
+                "anchoring implementation; a bare assertion cannot "
+                "verify external publication")
         self.store = store
+        self.run_id = run_id
+        self.contract_version = contract_version
+        self._anchor_verifier = anchor_verifier
         self._slots: dict = {}
         self._run_closed = False
         self._run_complete = False
@@ -221,8 +263,10 @@ class AttemptLifecycle:
             attempt["technically_evaluable"] = \
                 event["technically_evaluable"]
         elif kind == "no_result_confirmed":
-            slot["attempts"][event["attempt_number"]]["state"] = \
-                "no_result_confirmed"
+            attempt = slot["attempts"][event["attempt_number"]]
+            attempt["state"] = "no_result_confirmed"
+            attempt["failure_classification"] = \
+                event["failure_classification"]
         elif kind == "pending_unknown_marked":
             slot["attempts"][event["attempt_number"]]["state"] = \
                 "PENDING_UNKNOWN"
@@ -254,6 +298,7 @@ class AttemptLifecycle:
             "state": "opened",
             "retained_artifact_sha256": None,
             "technically_evaluable": None,
+            "failure_classification": None,
             "terminal_record": None,
         }
 
@@ -268,8 +313,9 @@ class AttemptLifecycle:
         try:
             return self._slots[slot_id]
         except KeyError:
-            raise InvalidTransitionError(
-                f"unknown slot: {slot_id!r}") from None
+            # Identifiers are deliberately not echoed into exceptions,
+            # which may be logged.
+            raise InvalidTransitionError("unknown slot") from None
 
     def _attempt(self, slot: dict, attempt_number=None) -> dict:
         number = slot["current_attempt"] if attempt_number is None \
@@ -351,7 +397,14 @@ class AttemptLifecycle:
         return self.slot_state(slot_id)
 
     def confirm_no_result(self, slot_id, *, evidence: str,
+                          failure_classification: str,
                           at_utc=None) -> dict:
+        """Confirm a no-result outcome with an explicit classification.
+
+        The classification is validated here and bound into the terminal
+        record; only a confirmed technical classification can later
+        authorize a retry (see :meth:`request_retry`).
+        """
         slot = self._slot(slot_id)
         attempt = self._attempt(slot)
         if attempt["state"] != "opened":
@@ -363,9 +416,15 @@ class AttemptLifecycle:
                 "no-result confirmation requires affirmative evidence; "
                 "an operator statement that no image was seen is not, by "
                 "itself, affirmative evidence")
+        if failure_classification not in KNOWN_FAILURE_CLASSIFICATIONS:
+            raise InvalidTransitionError(
+                "no-result confirmation requires an explicit, known "
+                "failure classification")
         self._emit({"type": "no_result_confirmed", "slot_id": slot_id,
                     "attempt_number": attempt["attempt_number"],
-                    "evidence": evidence, "at_utc": at_utc})
+                    "evidence": evidence,
+                    "failure_classification": failure_classification,
+                    "at_utc": at_utc})
         return self.slot_state(slot_id)
 
     def mark_pending_unknown(self, slot_id, *, reason: str = "",
@@ -462,12 +521,18 @@ class AttemptLifecycle:
                 raise InvalidTransitionError(
                     "INDETERMINATE_FINAL requires an unresolved "
                     "(PENDING_UNKNOWN or pending-review) outcome")
-            self._require_indeterminate_authorization(authorization)
+            self._require_indeterminate_authorization(
+                authorization, slot_id, attempt["attempt_number"])
         record = {
+            "run_id": self.run_id,
+            "contract_version": self.contract_version,
             "slot_id": slot_id,
             "attempt_number": attempt["attempt_number"],
             "predecessor_attempt": attempt["predecessor_attempt"],
             "disposition": disposition,
+            "failure_classification":
+                attempt["failure_classification"]
+                if disposition == "FAILURE" else None,
             "retained_artifact_sha256":
                 attempt["retained_artifact_sha256"],
             "evidence_digests": sorted(evidence_digests),
@@ -480,22 +545,47 @@ class AttemptLifecycle:
                     "terminal_record": record, "at_utc": at_utc})
         return copy.deepcopy(record)
 
-    @staticmethod
-    def _require_indeterminate_authorization(authorization) -> None:
-        if not isinstance(authorization, dict) or not authorization.get(
-                "authorization_id") or not authorization.get(
-                "authorized_by") or authorization.get(
-                "procedure") != INDETERMINATE_PROCEDURE:
+    def _require_indeterminate_authorization(self, authorization,
+                                             slot_id,
+                                             attempt_number) -> None:
+        """Validate a scope-bound H3 authorization record.
+
+        The record must bind this run, slot, attempt, the
+        ``INDETERMINATE_FINAL`` action, the authorizing identity, a
+        reason, and the applicable contract version. Anything less is
+        not authorization. Field values are never echoed into the
+        exception, which may be logged.
+        """
+        required = {
+            "authorization_id": None,
+            "authorized_by": None,
+            "reason": None,
+            "procedure": INDETERMINATE_PROCEDURE,
+            "action": "INDETERMINATE_FINAL",
+            "run_id": self.run_id,
+            "slot_id": slot_id,
+            "attempt_number": attempt_number,
+            "contract_version": self.contract_version,
+        }
+        if not isinstance(authorization, dict) or any(
+                not authorization.get(key) if expected is None
+                else authorization.get(key) != expected
+                for key, expected in required.items()):
             raise AuthorizationError(
-                "INDETERMINATE_FINAL requires an explicit authorization "
-                "record under the H3 indeterminate-disposition procedure")
+                "INDETERMINATE_FINAL requires an explicit, scope-bound "
+                "authorization record under the H3 "
+                "indeterminate-disposition procedure")
 
     def record_external_anchor(self, slot_id, attempt_number, anchor_ref,
                                *, at_utc=None) -> dict:
         """Mark a local terminal record externally anchored (idempotent).
 
-        This records anchor *state* only; the external checkpoint
-        publisher itself belongs to a later PR.
+        The anchor must be verified by the trusted ``anchor_verifier``
+        boundary (PR-9's publisher/verifier). Without a verifier, or
+        when verification fails, anchoring is refused and the record
+        stays visibly ``recorded-unanchored``: an arbitrary caller
+        assertion is never proof of external publication. This method
+        publishes nothing itself.
         """
         slot = self._slot(slot_id)
         attempt = self._attempt(slot, attempt_number)
@@ -509,12 +599,41 @@ class AttemptLifecycle:
             raise InvalidTransitionError(
                 "terminal record is already anchored under a different "
                 "reference; it is never anchored twice")
+        if self._anchor_verifier is None:
+            raise AuthorizationError(
+                "external anchoring cannot be verified in this "
+                "configuration; advancement remains blocked until a "
+                "trusted anchoring implementation (PR-9) is supplied")
+        if not self._anchor_verifier(copy.deepcopy(record), anchor_ref):
+            raise AuthorizationError(
+                "the proposed anchor reference was not verified as "
+                "externally published")
         self._emit({"type": "external_anchor_recorded",
                     "slot_id": slot_id, "attempt_number": attempt_number,
                     "anchor_ref": anchor_ref, "at_utc": at_utc})
         return copy.deepcopy(
             self._attempt(self._slot(slot_id), attempt_number)[
                 "terminal_record"])
+
+    def external_anchor_pending(self) -> tuple:
+        """Terminal records locally committed but externally pending.
+
+        Recovery distinguishes three states: *prepared* (a staged write
+        that was never committed — recovery debris, discarded),
+        *locally committed* (the terminal event is durable), and
+        *externally pending* (a locally committed record still
+        ``recorded-unanchored``). This returns the third state.
+        """
+        pending = []
+        for slot_id in sorted(self._slots):
+            for number, attempt in sorted(
+                    self._slots[slot_id]["attempts"].items()):
+                record = attempt["terminal_record"]
+                if record and record["anchor_state"] == ANCHOR_RECORDED:
+                    pending.append({
+                        "slot_id": slot_id, "attempt_number": number,
+                        "disposition": record["disposition"]})
+        return tuple(pending)
 
     # -- retry -----------------------------------------------------------------------
 
@@ -539,6 +658,13 @@ class AttemptLifecycle:
         if record["disposition"] != "FAILURE":
             raise InvalidTransitionError(
                 "a retry is permitted only after terminal FAILURE")
+        if record.get("failure_classification") not in \
+                RETRYABLE_TECHNICAL_FAILURES:
+            raise InvalidTransitionError(
+                "a retry requires an explicit, validated technical-"
+                "failure classification; a generic FAILURE, a safety "
+                "refusal, or another nontechnical failure never "
+                "authorizes a retry")
         if attempt["attempt_number"] >= MAX_ATTEMPTS:
             raise InvalidTransitionError(
                 "the frozen retry ceiling of two retries is exhausted")

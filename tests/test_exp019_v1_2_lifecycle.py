@@ -24,15 +24,38 @@ from aipf.exp019_v1_2_lifecycle import (
 
 SLOT = "ZZZZZZ"
 SLOT_B = "YYYYYY"
-AUTH = {
-    "authorization_id": "synthetic-auth-1",
-    "authorized_by": "synthetic-owner",
-    "procedure": INDETERMINATE_PROCEDURE,
-}
+
+
+def _auth(slot=SLOT, attempt=1, **overrides) -> dict:
+    """A scope-bound H3 authorization record for one attempt."""
+    record = {
+        "authorization_id": "synthetic-auth-1",
+        "authorized_by": "synthetic-owner",
+        "reason": "synthetic unresolved outcome",
+        "procedure": INDETERMINATE_PROCEDURE,
+        "action": "INDETERMINATE_FINAL",
+        "run_id": "synthetic-run",
+        "slot_id": slot,
+        "attempt_number": attempt,
+        "contract_version": "1.2.0",
+    }
+    record.update(overrides)
+    return record
+
+
+def _verify_anchor(record, anchor_ref) -> bool:
+    """Synthetic trusted-verifier stub at the PR-9 boundary.
+
+    Stands in for verification against actual external publication,
+    which does not exist in this PR; production configurations without
+    a verifier cannot anchor at all.
+    """
+    return isinstance(anchor_ref, str) and "anchor" in anchor_ref
 
 
 def _lifecycle(tmp_path, name="store") -> AttemptLifecycle:
-    return AttemptLifecycle(LifecycleStore(tmp_path / name))
+    return AttemptLifecycle(LifecycleStore(tmp_path / name),
+                            anchor_verifier=_verify_anchor)
 
 
 def _started(tmp_path, name="store", slot=SLOT) -> AttemptLifecycle:
@@ -43,7 +66,8 @@ def _started(tmp_path, name="store", slot=SLOT) -> AttemptLifecycle:
 
 
 def _failed_attempt(life: AttemptLifecycle, slot=SLOT) -> dict:
-    life.confirm_no_result(slot, evidence="host_error_recorded")
+    life.confirm_no_result(slot, evidence="host_error_recorded",
+                           failure_classification="host_technical_error")
     return life.finalize_attempt(slot, "FAILURE")
 
 
@@ -179,10 +203,17 @@ def test_indeterminate_closure_requires_h3_authorization(tmp_path) -> None:
     with pytest.raises(AuthorizationError):
         life.finalize_attempt(
             SLOT, "INDETERMINATE_FINAL",
-            authorization={"authorization_id": "x", "authorized_by": "y",
-                           "procedure": "some-other-procedure"})
+            authorization=_auth(procedure="some-other-procedure"))
+    # Scope binding: another slot, attempt, run, action, or contract
+    # version is not authorization for this attempt.
+    for overrides in ({"slot_id": SLOT_B}, {"attempt_number": 2},
+                      {"run_id": "another-run"}, {"action": "ADMIT"},
+                      {"contract_version": "9.9.9"}, {"reason": ""}):
+        with pytest.raises(AuthorizationError):
+            life.finalize_attempt(SLOT, "INDETERMINATE_FINAL",
+                                  authorization=_auth(**overrides))
     record = life.finalize_attempt(SLOT, "INDETERMINATE_FINAL",
-                                   authorization=AUTH)
+                                   authorization=_auth())
     assert record["disposition"] == "INDETERMINATE_FINAL"
     life.close_invocation(SLOT)
     life.close_slot(SLOT)
@@ -202,7 +233,8 @@ def test_contract_violation_goes_to_pending_review_then_indeterminate(
     # The artifact is preserved, never silently replaced by a retry.
     with pytest.raises(InvalidTransitionError):
         life.request_retry(SLOT)
-    life.finalize_attempt(SLOT, "INDETERMINATE_FINAL", authorization=AUTH)
+    life.finalize_attempt(SLOT, "INDETERMINATE_FINAL",
+                          authorization=_auth())
 
 
 # =============================================================================
@@ -303,8 +335,15 @@ def test_failure_requires_affirmative_no_result_evidence(tmp_path) -> None:
         life.finalize_attempt(SLOT, "FAILURE")
     # An operator statement that no image was seen is not affirmative.
     with pytest.raises(InvalidTransitionError, match="affirmative"):
-        life.confirm_no_result(SLOT, evidence="operator_saw_no_image")
-    life.confirm_no_result(SLOT, evidence="host_completed_no_image")
+        life.confirm_no_result(
+            SLOT, evidence="operator_saw_no_image",
+            failure_classification="host_technical_error")
+    with pytest.raises(InvalidTransitionError, match="classification"):
+        life.confirm_no_result(
+            SLOT, evidence="host_completed_no_image",
+            failure_classification="something_unclassified")
+    life.confirm_no_result(SLOT, evidence="host_completed_no_image",
+                           failure_classification="host_technical_error")
     assert life.finalize_attempt(SLOT, "FAILURE")["disposition"] == "FAILURE"
 
 
@@ -335,7 +374,8 @@ def test_multiple_slots_close_independently_and_run_accounts_for_all(
     with pytest.raises(InvalidTransitionError):
         life.close_run()  # second slot still unresolved
     life.mark_pending_unknown(SLOT_B)
-    life.finalize_attempt(SLOT_B, "INDETERMINATE_FINAL", authorization=AUTH)
+    life.finalize_attempt(SLOT_B, "INDETERMINATE_FINAL",
+                          authorization=_auth(slot=SLOT_B))
     life.close_invocation(SLOT_B)
     life.close_slot(SLOT_B)
     summary = life.close_run()
@@ -346,6 +386,131 @@ def test_multiple_slots_close_independently_and_run_accounts_for_all(
     assert life.close_run() == summary
     run_events = [e for e in life.store.events if e["type"] == "run_closed"]
     assert len(run_events) == 1
+
+
+# =============================================================================
+# Technical-failure classification, anchoring proof, and crash recovery
+# =============================================================================
+
+
+def test_safety_refusal_failure_never_authorizes_retry(tmp_path) -> None:
+    life = _started(tmp_path)
+    life.confirm_no_result(SLOT, evidence="safety_refusal_recorded",
+                           failure_classification="safety_refusal")
+    record = life.finalize_attempt(SLOT, "FAILURE")
+    assert record["failure_classification"] == "safety_refusal"
+    life.record_external_anchor(SLOT, 1, "anchor-1")
+    with pytest.raises(InvalidTransitionError, match="technical"):
+        life.request_retry(SLOT)
+
+
+def test_anchoring_blocked_without_trusted_verifier(tmp_path) -> None:
+    """Production advancement stays blocked: no verifier, no anchor."""
+    life = AttemptLifecycle(LifecycleStore(tmp_path / "plain"))
+    life.plan_slot(SLOT)
+    life.start_invocation(SLOT)
+    life.confirm_no_result(SLOT, evidence="host_error_recorded",
+                           failure_classification="host_technical_error")
+    life.finalize_attempt(SLOT, "FAILURE")
+    with pytest.raises(AuthorizationError, match="cannot be verified"):
+        life.record_external_anchor(SLOT, 1, "claimed-anchor")
+    with pytest.raises(InvalidTransitionError, match="externally anchored"):
+        life.request_retry(SLOT)
+    assert life.external_anchor_pending() == (
+        {"slot_id": SLOT, "attempt_number": 1, "disposition": "FAILURE"},)
+
+
+def test_forged_anchor_reference_is_rejected(tmp_path) -> None:
+    life = _started(tmp_path)
+    _failed_attempt(life)
+    with pytest.raises(AuthorizationError, match="not verified"):
+        life.record_external_anchor(SLOT, 1, "forged-ref")
+    assert life.slot_state(SLOT)["attempts"][1]["anchor_state"] == \
+        "recorded-unanchored"
+
+
+def test_indeterminate_closure_preserves_retained_output(tmp_path) -> None:
+    life = _started(tmp_path)
+    digest = life.record_output(SLOT, b"preserved bytes")
+    life.record_contract_violation(SLOT, detail="synthetic")
+    record = life.finalize_attempt(SLOT, "INDETERMINATE_FINAL",
+                                   authorization=_auth())
+    # Retained output is bound into the record, never discarded, and an
+    # indeterminate closure is not an admission or a retry grant.
+    assert record["retained_artifact_sha256"] == digest
+    assert life.store.read_output(digest) == b"preserved bytes"
+    with pytest.raises(InvalidTransitionError):
+        life.request_retry(SLOT)
+    assert life.slot_state(SLOT)["state"] == "invocation_started"
+
+
+def test_crash_at_terminal_write_boundary_recovers_without_duplicate(
+        tmp_path, monkeypatch) -> None:
+    life = _started(tmp_path)
+    life.record_output(SLOT, b"bytes")
+    real_replace = lifecycle_module.os.replace
+
+    def exploding_replace(src, dst):
+        raise OSError("synthetic crash at commit boundary")
+
+    monkeypatch.setattr(lifecycle_module.os, "replace", exploding_replace)
+    with pytest.raises(OSError):
+        life.finalize_attempt(SLOT, "ADMIT")
+    monkeypatch.setattr(lifecycle_module.os, "replace", real_replace)
+
+    reloaded = AttemptLifecycle(life.store)  # recover() already ran
+    assert reloaded.slot_state(SLOT)["attempts"][1]["disposition"] is None
+    record = reloaded.finalize_attempt(SLOT, "ADMIT")
+    assert reloaded.finalize_attempt(SLOT, "ADMIT") == record
+    terminal = [e for e in reloaded.store.events
+                if e["type"] == "attempt_terminal"]
+    assert len(terminal) == 1
+
+
+def test_crash_at_invocation_start_leaves_no_duplicate(tmp_path,
+                                                       monkeypatch) -> None:
+    life = _lifecycle(tmp_path)
+    life.plan_slot(SLOT)
+    monkeypatch.setattr(
+        lifecycle_module.os, "replace",
+        lambda src, dst: (_ for _ in ()).throw(
+            OSError("synthetic crash")))
+    with pytest.raises(OSError):
+        life.start_invocation(SLOT)
+    monkeypatch.undo()
+
+    reloaded = AttemptLifecycle(life.store)
+    reloaded.start_invocation(SLOT)
+    with pytest.raises(InvalidTransitionError):
+        reloaded.start_invocation(SLOT)
+    started = [e for e in reloaded.store.events
+               if e["type"] == "invocation_started"]
+    assert len(started) == 1
+
+
+def test_recovery_fails_closed_on_corrupt_event_sequence(tmp_path) -> None:
+    store = LifecycleStore(tmp_path / "corrupt")
+    store.events_dir.joinpath("fake.json").write_text(
+        '{"type": "slot_planned", "slot_id": "ZZZZZZ", "seq": 42, '
+        '"event_id": "fake"}', encoding="utf-8")
+    with pytest.raises(InvalidTransitionError, match="contiguous"):
+        LifecycleStore(tmp_path / "corrupt")
+
+
+def test_pending_unknown_cannot_be_relabelled_technical_failure(
+        tmp_path) -> None:
+    life = _started(tmp_path)
+    life.mark_pending_unknown(SLOT)
+    with pytest.raises(InvalidTransitionError):
+        life.confirm_no_result(SLOT, evidence="host_error_recorded",
+                               failure_classification="host_technical_error")
+
+
+def test_exception_output_does_not_echo_identifiers(tmp_path) -> None:
+    life = _lifecycle(tmp_path)
+    with pytest.raises(InvalidTransitionError) as excinfo:
+        life.slot_state("SECRET1")
+    assert "SECRET1" not in str(excinfo.value)
 
 
 # =============================================================================
