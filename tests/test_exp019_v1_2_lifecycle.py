@@ -160,7 +160,7 @@ def test_no_retry_after_admit_or_indeterminate(tmp_path) -> None:
     life = _started(tmp_path)
     life.record_output(SLOT, b"bytes")
     life.finalize_attempt(SLOT, "ADMIT")
-    life.record_external_anchor(SLOT, 1, "a")
+    life.record_external_anchor(SLOT, 1, "anchor-a")
     with pytest.raises(InvalidTransitionError, match="only after"):
         life.request_retry(SLOT)
 
