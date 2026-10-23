@@ -117,10 +117,9 @@ def test_v1_2_is_not_registered_as_an_executable_protocol() -> None:
 
 
 def test_only_authorized_non_executing_v1_2_runtime_module_exists() -> None:
-    """PR-6 authorizes one non-executing evidence validator under clear
-    v1.2 naming; no other v1.2 runtime module may exist yet, and the
-    authorized module must carry no activation capability (the full
-    capability scan lives in the G1 gate tests)."""
+    """Only modules listed in AUTHORIZED_V12_MODULES may exist under
+    exp019_v1_2*.py; each must pass the G1 capability scan under its
+    granted boundaries (full scan lives in the G1 gate tests)."""
     from test_exp019_v1_2_g1_gate import (
         AUTHORIZED_V12_MODULES,
         prohibited_v12_capabilities,
@@ -129,7 +128,7 @@ def test_only_authorized_non_executing_v1_2_runtime_module_exists() -> None:
     package = ROOT / "src" / "aipf"
     assert not (package / "exp019_v12").exists()
     modules = {p.name for p in package.glob("exp019_v1_2*.py")}
-    assert modules == AUTHORIZED_V12_MODULES
+    assert modules == set(AUTHORIZED_V12_MODULES)
     for name in modules:
         assert prohibited_v12_capabilities(package / name) == []
 

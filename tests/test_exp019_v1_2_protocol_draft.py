@@ -242,8 +242,8 @@ def test_v1_2_is_still_not_registered() -> None:
 
 
 def test_only_authorized_non_executing_v1_2_runtime_module_exists() -> None:
-    """See the draft-schema suite: PR-6's authorized validator is the
-    only permitted v1.2 runtime module, with no activation capability."""
+    """Authorized v1.2 modules only (evidence through checkpoints); each
+    must pass the G1 capability scan under its granted boundaries."""
     from test_exp019_v1_2_g1_gate import (
         AUTHORIZED_V12_MODULES,
         prohibited_v12_capabilities,
@@ -252,6 +252,6 @@ def test_only_authorized_non_executing_v1_2_runtime_module_exists() -> None:
     package = ROOT / "src" / "aipf"
     assert not (package / "exp019_v12").exists()
     modules = {p.name for p in package.glob("exp019_v1_2*.py")}
-    assert modules == AUTHORIZED_V12_MODULES
+    assert modules == set(AUTHORIZED_V12_MODULES)
     for name in modules:
         assert prohibited_v12_capabilities(package / name) == []
