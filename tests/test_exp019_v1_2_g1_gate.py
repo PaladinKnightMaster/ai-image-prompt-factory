@@ -39,6 +39,7 @@ AUTHORIZED_V12_MODULES = {
     "exp019_v1_2_receipts.py": frozenset(),
     "exp019_v1_2_checkpoints.py": frozenset({"checkpoint", "run_root"}),
     "exp019_v1_2_admission.py": frozenset(),  # PR-10: pure decision engine
+    "exp019_v1_2_operator.py": frozenset(),  # PR-11: operator capture (inactive)
 }
 
 _V12_SCOPE = re.compile(r"1\.2\.0|v1_2|EXP-019 v1\.2")
