@@ -27,7 +27,10 @@ DEFINITION_DRAFT = ROOT / "experiments/drafts/EXP-019-v1.2.0.DEFINITION-DRAFT.js
 # name and by capability scan below, never by avoiding a filename: any
 # other v1.2-scoped module, under any filename, is held to the same
 # prohibition scan.
-AUTHORIZED_V12_MODULES = {"exp019_v1_2_evidence.py"}
+AUTHORIZED_V12_MODULES = {
+    "exp019_v1_2_evidence.py",   # PR-6: non-executing evidence validation
+    "exp019_v1_2_lifecycle.py",  # PR-7: local attempt lifecycle (inactive)
+}
 
 _V12_SCOPE = re.compile(r"1\.2\.0|v1_2|EXP-019 v1\.2")
 _PROHIBITED_DEF = re.compile(
