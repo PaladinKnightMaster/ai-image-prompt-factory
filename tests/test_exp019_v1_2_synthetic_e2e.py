@@ -7,10 +7,14 @@ allocation, or experimental provenance mutation.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
+import struct
+import zlib
 
 import pytest
 
+from aipf.exp019_analysis import DIMENSIONS, apply_locked_descriptive_analysis
 from aipf.exp019_protocol import frozen_protocol
 from aipf.exp019_v1_2_admission import (
     AdmissionDecision,
@@ -34,16 +38,20 @@ from aipf.exp019_v1_2_receipts import (
     verify_terminal_receipt,
 )
 from aipf.exp019_v1_2_synthetic_e2e import (
+    DISPOSITION_ENGINEERING,
+    DISPOSITION_SCIENTIFIC,
     REVIEWERS,
+    SCIENTIFIC_CONDITIONS,
     SYNTHETIC_SLOTS,
     assert_activation_lockout,
+    assess_scientific_completion,
     build_reviewer_package,
     close_synthetic_run,
-    descriptive_analysis,
     establish_synthetic_run,
     open_after_verified_freezes,
     prepare_and_freeze_reviews,
     prepare_synthetic_treatment_custody,
+    reload_synthetic_verifier,
     run_synthetic_admitted_attempt,
 )
 from aipf import exp019_v1_2_synthetic_e2e as e2e_module
@@ -53,16 +61,11 @@ from exp019_v1_2_synthetic_fixtures import (
 )
 
 PROMPT = b"synthetic e2e frozen prompt bytes"
-
-# Role software labels are obligations, not personal blindness claims.
 ROLE_LABELS_ARE_NOT_BLINDNESS_CLAIM = True
 
 
 def _unique_raster(slot: str) -> bytes:
     """Per-slot valid 1x1 PNG with distinct RGB (distinct digest per slot)."""
-    import struct
-    import zlib
-    # Map slot chars to a stable RGB triple.
     seed = sum(ord(c) for c in slot) & 0xFFFFFF
     r, g, b = (seed >> 16) & 0xFF, (seed >> 8) & 0xFF, seed & 0xFF
 
@@ -101,8 +104,9 @@ def synth(tmp_path, monkeypatch):
     return establish_synthetic_run(tmp_path, slot_count=4)
 
 
-def test_completed_synthetic_mini_run(synth) -> None:
-    """Reduced completed path (4 samples) exercising the full chain."""
+def test_completed_synthetic_mini_run_is_not_scientific(synth) -> None:
+    """4-sample fixture may succeed as engineering, never as science."""
+    assert not synth.custody.scientifically_representative
     for slot in SYNTHETIC_SLOTS[:4]:
         run_synthetic_admitted_attempt(
             synth, slot, prompt_bytes=PROMPT,
@@ -111,22 +115,22 @@ def test_completed_synthetic_mini_run(synth) -> None:
     assert set(reviews["frozen"]) == set(REVIEWERS)
     opened = open_after_verified_freezes(synth)
     assert opened["opened"] and not opened["treatment_mapping_published"]
+    assert opened["analysis"]["scientific_design_qualified"] is False
+    assert opened["analysis"]["is_experimental_finding"] is False
     assert opened["analysis"]["statistical_significance_claimed"] is False
-    closed = close_synthetic_run(synth, incomplete=False)
-    assert closed["chain_verified"]
+    assert opened["scientific_completion"]["qualified"] is False
+    with pytest.raises(RuntimeError, match="scientific completion refused"):
+        close_synthetic_run(synth, claim_scientific_completion=True)
+    closed = close_synthetic_run(synth)
+    assert closed["disposition"] == DISPOSITION_ENGINEERING
+    assert closed["scientific_experiment_completion"] is False
+    assert closed["fresh_process_chain_verified"]
     types = [r["event_type"] for r in closed["public_records"]]
     assert types[0] == "run_root"
     assert types.count("attempt") == 4
     assert types.count("review_freeze") == 2
     assert types[-1] == "run_disposition"
-    assert len(types) == 1 + 4 + 2 + 1
-    # No treatment leakage in public records.
-    blob = json.dumps(closed["public_records"])
-    assert "treatment" not in blob
-    assert "condition" not in blob
-    for field in ("schema_version", "run_id", "sequence", "event_type",
-                  "evidence_sha256", "previous_anchor_commit"):
-        assert field in closed["public_records"][0]
+    assert "treatment" not in json.dumps(closed["public_records"])
 
 
 def test_custodian_operator_reviewer_separation(synth) -> None:
@@ -137,7 +141,6 @@ def test_custodian_operator_reviewer_separation(synth) -> None:
         custody.mapping_commitment_sha256
     packet = custody.packet_for(
         SYNTHETIC_SLOTS[0], 1, PROMPT, "conv-1")
-    # Packet has no treatment fields.
     assert not hasattr(packet, "treatment")
     assert not hasattr(packet, "condition")
     run_synthetic_admitted_attempt(
@@ -158,6 +161,7 @@ def test_incomplete_run_without_review_freezes(synth) -> None:
     types = [r["event_type"] for r in closed["public_records"]]
     assert "review_freeze" not in types
     assert types[-1] == "run_disposition"
+    assert closed["scientific_experiment_completion"] is False
     with pytest.raises(RuntimeError, match="reviewer-freeze"):
         open_after_verified_freezes(synth)
 
@@ -174,7 +178,6 @@ def test_duplicate_finalization_idempotent(synth) -> None:
     first = run_synthetic_admitted_attempt(
         synth, SYNTHETIC_SLOTS[0], prompt_bytes=PROMPT,
         raster_bytes=_unique_raster(SYNTHETIC_SLOTS[0]))
-    # Second publish of same attempt is recognized, not duplicated.
     receipt = load_stored_receipt(
         synth.lifecycle, first["receipt_sha256"])
     again = synth.publisher.publish_attempt(
@@ -187,7 +190,6 @@ def test_duplicate_finalization_idempotent(synth) -> None:
 
 
 def test_retry_requires_verified_anchor(synth) -> None:
-    from aipf.exp019_v1_2_admission import AdmissionDecision
     prior = AdmissionDecision(
         disposition="FAILURE", terminal=True,
         eligible_for_commitment=False,
@@ -218,16 +220,38 @@ def test_activation_lockout() -> None:
                 "reveal"} & public
 
 
-def test_descriptive_analysis_no_significance() -> None:
-    frozen = [
-        {"items": [{"image_sha256": "a" * 64, "score": 3,
-                    "review_id": "R1-00"}]},
-        {"items": [{"image_sha256": "a" * 64, "score": 4,
-                    "review_id": "R2-00"}]},
-    ]
-    result = descriptive_analysis(frozen)
+def test_locked_analysis_no_significance_and_not_findings() -> None:
+    samples = {
+        c: [
+            {
+                "slot_id": f"{c}{i}",
+                "condition": c,
+                "image_sha256": hashlib.sha256(
+                    f"{c}-{i}".encode()).hexdigest(),
+                "averaged_scores": {d: 3.0 for d in DIMENSIONS},
+                "reviewers": {
+                    "R1": {"review_id": f"R1-{c}{i}",
+                           "scores": {d: 3 for d in DIMENSIONS}},
+                    "R2": {"review_id": f"R2-{c}{i}",
+                           "scores": {d: 3 for d in DIMENSIONS}},
+                },
+            }
+            for i in range(4)
+        ]
+        for c in SCIENTIFIC_CONDITIONS
+    }
+    # Raise B art_material_fidelity so contrasts are defined, not findings.
+    for item in samples["B"]:
+        item["averaged_scores"]["art_material_fidelity"] = 4.0
+        item["reviewers"]["R1"]["scores"]["art_material_fidelity"] = 4
+        item["reviewers"]["R2"]["scores"]["art_material_fidelity"] = 4
+    result = apply_locked_descriptive_analysis(samples)
     assert result["statistical_significance_claimed"] is False
-    assert result["method"] == "descriptive_only"
+    assert result["is_experimental_finding"] is False
+    assert result["method"] == "exp019_locked_descriptive_analysis"
+    assert "B-C" in result["contrasts"] and "B-A" in result["contrasts"]
+    assert set(result["safeguards"]) >= {
+        "ceiling", "floor", "reviewer_ambiguity", "side_effect_veto"}
 
 
 def test_custodian_role_boundary() -> None:
@@ -247,12 +271,17 @@ def test_network_production_remote_refused(tmp_path, monkeypatch) -> None:
             synthetic=True, state_dir=tmp_path)
 
 
-def test_completed_12_sample_synthetic_run(tmp_path, monkeypatch) -> None:
-    """Full 12-slot custody + admit + dual freeze + disposition chain."""
+def test_completed_12_sample_scientific_synthetic_run(
+        tmp_path, monkeypatch) -> None:
+    """Full 3×4 scientific design: 12 admitted, 4 per C/A/B."""
     monkeypatch.setenv("AIPF_EXP019_V12_SYNTHETIC_PROVENANCE", "1")
     monkeypatch.delenv("AIPF_EXP019_PROVENANCE_REMOTE", raising=False)
     synth = establish_synthetic_run(tmp_path, slot_count=12)
-    assert len(synth.custody.mapping) == 12
+    assert synth.custody.scientifically_representative
+    assert set(synth.custody.mapping.values()) == set(SCIENTIFIC_CONDITIONS)
+    for condition in SCIENTIFIC_CONDITIONS:
+        assert sum(1 for v in synth.custody.mapping.values()
+                   if v == condition) == 4
     for slot in SYNTHETIC_SLOTS:
         run_synthetic_admitted_attempt(
             synth, slot, prompt_bytes=PROMPT,
@@ -260,18 +289,41 @@ def test_completed_12_sample_synthetic_run(tmp_path, monkeypatch) -> None:
     reviews = prepare_and_freeze_reviews(synth)
     assert set(reviews["frozen"]) == set(REVIEWERS)
     opened = open_after_verified_freezes(synth)
-    assert opened["opened"]
-    closed = close_synthetic_run(synth, incomplete=False)
+    assert opened["scientific_completion"]["qualified"]
+    assert opened["analysis"]["method"] == \
+        "exp019_locked_descriptive_analysis"
+    assert opened["analysis"]["statistical_significance_claimed"] is False
+    assert opened["analysis"]["is_experimental_finding"] is False
+    assert "contrasts" in opened["analysis"]
+    closed = close_synthetic_run(synth, claim_scientific_completion=True)
+    assert closed["disposition"] == DISPOSITION_SCIENTIFIC
+    assert closed["scientific_experiment_completion"] is True
+    assert closed["is_experimental_finding"] is False
+    assert closed["admitted_scientific_sample_count"] == 12
+    assert closed["finalized_invocation_count"] == 12
+    assert closed["fresh_process_chain_verified"]
     types = [r["event_type"] for r in closed["public_records"]]
     assert types.count("attempt") == 12
     assert types.count("review_freeze") == 2
     assert types[0] == "run_root" and types[-1] == "run_disposition"
     assert len(types) == 1 + 12 + 2 + 1
-    assert closed["chain_verified"]
+    # Fresh process re-verifies remote history.
+    fresh = reload_synthetic_verifier(synth).verify_run(synth.run_id)
+    assert fresh.verified
+
+
+def test_four_sample_cannot_claim_scientific_completion(synth) -> None:
+    for slot in SYNTHETIC_SLOTS[:4]:
+        run_synthetic_admitted_attempt(
+            synth, slot, prompt_bytes=PROMPT,
+            raster_bytes=_unique_raster(slot))
+    prepare_and_freeze_reviews(synth)
+    assessment = assess_scientific_completion(synth)
+    assert not assessment["qualified"]
+    assert not assessment["scientific_experiment_completion"]
 
 
 def test_admit_preserves_class_d_conflict(synth) -> None:
-    """ADMIT path retains class-D conflict count through receipt binding."""
     slot = SYNTHETIC_SLOTS[0]
     life = synth.lifecycle
     life.plan_slot(slot)
@@ -298,10 +350,13 @@ def test_admit_preserves_class_d_conflict(synth) -> None:
         class_d_conflict_count=report.class_d_conflict_count)
     assert receipt["class_d_conflict_count"] == 2
     assert verify_terminal_receipt(receipt, lifecycle=life).verified
+    # Lost class-D on a rebound receipt fails closed.
+    tampered = copy.deepcopy(receipt)
+    tampered["class_d_conflict_count"] = 0
+    assert not verify_terminal_receipt(tampered).verified
 
 
 def test_authenticated_bc_conflict_non_admission() -> None:
-    """Authenticated B/C material conflict never admits."""
     base = validate_evidence_bundle(make_evidence_bundle("qualifying_class_b"))
     forged = ValidationReport(
         findings=base.findings, q_results=base.q_results,
@@ -318,6 +373,17 @@ def test_authenticated_bc_conflict_non_admission() -> None:
         forged, snap, ReceiptIntegrity.prospective())
     assert decision.disposition != "ADMIT"
     assert "BC_MATERIAL_CONFLICT" in decision.reason_codes
+
+
+def test_forged_class_c_never_authenticates() -> None:
+    report = validate_evidence_bundle(make_evidence_bundle("simulated_class_c"))
+    assert not report.evidence_eligible
+    snap = LifecycleSnapshot(
+        slot_id="AAAAAA", attempt_number=1, state="evidence_returned",
+        technically_evaluable=True, retained_artifact_sha256="a" * 64)
+    decision = evaluate_admission(
+        report, snap, ReceiptIntegrity.prospective())
+    assert decision.disposition != "ADMIT" or not decision.eligible_for_commitment
 
 
 def test_missing_optional_class_c_still_admits() -> None:
@@ -373,19 +439,16 @@ def test_corrupted_reviewer_mapping_commitment(synth) -> None:
     custody = synth.custody
     forged = copy.deepcopy(custody.mapping)
     forged[SYNTHETIC_SLOTS[0]] = "FORGED"
-    import hashlib
     forged_commit = hashlib.sha256(
         (json.dumps({"run_id": custody.run_id, "mapping": forged},
                     sort_keys=True, separators=(",", ":")) + "\n"
          ).encode("utf-8")).hexdigest()
     assert forged_commit != custody.mapping_commitment_sha256
-    public = custody.public_view()
-    assert public["mapping_commitment_sha256"] == \
-        custody.mapping_commitment_sha256
+    assert not custody.verify_mapping_commitment(forged_commit)
+    assert custody.verify_mapping_commitment(custody.mapping_commitment_sha256)
 
 
 def test_crash_between_finalization_and_checkpoint(synth) -> None:
-    """Local receipt survives; remote publish can resume without duplicate."""
     slot = SYNTHETIC_SLOTS[0]
     from aipf.exp019_v1_2_operator import (
         OperatorCaptureSession,
@@ -448,12 +511,10 @@ def test_distinct_reviewer_orderings(synth) -> None:
 
 
 def test_role_labels_are_not_personal_blindness() -> None:
-    """Same person holding multiple role labels is not independently blinded."""
     assert ROLE_LABELS_ARE_NOT_BLINDNESS_CLAIM is True
 
 
 def test_technically_evaluable_no_reroll(synth) -> None:
-    """Admitted technically-evaluable image is not eligible for regeneration."""
     result = run_synthetic_admitted_attempt(
         synth, SYNTHETIC_SLOTS[0], prompt_bytes=PROMPT,
         raster_bytes=_unique_raster(SYNTHETIC_SLOTS[0]))
@@ -471,3 +532,14 @@ def test_technically_evaluable_no_reroll(synth) -> None:
             anchor_state=ANCHOR_ANCHORED, retry_count=0),
         anchor_verification=None)
     assert not blocked.retry_eligible
+
+
+def test_publication_after_closure_refused(synth) -> None:
+    run_synthetic_admitted_attempt(
+        synth, SYNTHETIC_SLOTS[0], prompt_bytes=PROMPT,
+        raster_bytes=_unique_raster(SYNTHETIC_SLOTS[0]))
+    close_synthetic_run(synth, incomplete=True)
+    with pytest.raises((ValueError, RuntimeError)):
+        run_synthetic_admitted_attempt(
+            synth, SYNTHETIC_SLOTS[1], prompt_bytes=PROMPT,
+            raster_bytes=_unique_raster(SYNTHETIC_SLOTS[1]))

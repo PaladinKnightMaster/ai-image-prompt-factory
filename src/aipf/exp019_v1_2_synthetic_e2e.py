@@ -14,8 +14,12 @@ Role labels are software obligations, not personal blindness claims: the
 same person holding multiple roles is never represented as independently
 blinded merely because labels differ.
 
-Descriptive analysis on synthetic scores only — no statistical
-significance claims.
+Scientific completion requires the frozen 3-condition × 4-replicate design
+(12 admitted samples, four per C/A/B). Miniature engineering fixtures may
+exercise the workflow but must never report scientific experiment
+completion. Analysis uses ``apply_locked_descriptive_analysis`` from
+``exp019_analysis`` — not a simplified substitute — and never claims
+experimental findings or statistical significance.
 """
 
 from __future__ import annotations
@@ -28,12 +32,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Mapping, Optional, Sequence
 
+from .exp019_analysis import (
+    DIMENSIONS,
+    apply_locked_descriptive_analysis,
+)
 from .exp019_v1_2_admission import (
     LifecycleSnapshot,
-    ProtocolContext,
     ReceiptIntegrity,
     evaluate_admission,
-    evaluate_retry_advancement,
 )
 from .exp019_v1_2_checkpoints import (
     SYNTHETIC_ENV,
@@ -42,13 +48,11 @@ from .exp019_v1_2_checkpoints import (
 )
 from .exp019_v1_2_evidence import validate_evidence_bundle
 from .exp019_v1_2_lifecycle import (
-    ANCHOR_ANCHORED,
     AttemptLifecycle,
     LifecycleStore,
 )
 from .exp019_v1_2_operator import (
     ROLE_CUSTODIAN,
-    ROLE_OPERATOR,
     OperatorCaptureSession,
     make_opaque_prompt_packet,
     workflow_valid_returned_image,
@@ -61,6 +65,9 @@ from .exp019_v1_2_receipts import (
 
 EXPERIMENT_VERSION = "1.2.0"
 REVIEWERS = ("R1", "R2")
+SCIENTIFIC_CONDITIONS = ("C", "A", "B")
+REPLICATES_PER_CONDITION = 4
+SCIENTIFIC_SAMPLE_COUNT = 12
 
 # Synthetic opaque slot ids (Crockford base32, six chars) — not real run ids.
 SYNTHETIC_SLOTS = (
@@ -68,6 +75,14 @@ SYNTHETIC_SLOTS = (
     "EEEEEE", "FFFFFF", "GGGGGG", "HHHHHH",
     "JJJJJJ", "KKKKKK", "LLLLLL", "MMMMMM",
 )
+
+# Engineering-fixture condition labels are deliberately not C/A/B so a
+# miniature run cannot be mistaken for the scientific design.
+ENGINEERING_CONDITIONS = ("ENG0", "ENG1")
+
+DISPOSITION_INCOMPLETE = "incomplete"
+DISPOSITION_ENGINEERING = "engineering_scenario_closed"
+DISPOSITION_SCIENTIFIC = "completed"
 
 
 def _sha256(data: bytes) -> str:
@@ -89,6 +104,7 @@ class PrivateTreatmentCustody:
     run_id: str
     mapping: dict  # opaque_slot_id -> condition label (private)
     mapping_commitment_sha256: str
+    scientifically_representative: bool = False
     role: str = ROLE_CUSTODIAN
 
     def packet_for(self, opaque_slot_id: str, attempt_number: int,
@@ -110,19 +126,33 @@ class PrivateTreatmentCustody:
             "run_id": self.run_id,
             "mapping_commitment_sha256": self.mapping_commitment_sha256,
             "slot_count": len(self.mapping),
+            "scientifically_representative":
+                self.scientifically_representative,
         }
+
+    def verify_mapping_commitment(self, claimed_sha256: str) -> bool:
+        recomputed = _sha256(_canonical({
+            "run_id": self.run_id, "mapping": self.mapping}))
+        return (
+            recomputed == self.mapping_commitment_sha256
+            and claimed_sha256 == self.mapping_commitment_sha256
+        )
 
 
 def prepare_synthetic_treatment_custody(
         run_id: str, *,
         slots: Sequence[str] = SYNTHETIC_SLOTS,
-        conditions: Sequence[str] = ("A", "B"),
+        conditions: Sequence[str] | None = None,
         role: str = ROLE_CUSTODIAN) -> PrivateTreatmentCustody:
     """Create a synthetic private mapping (custodian only)."""
     if role != ROLE_CUSTODIAN:
         raise PermissionError(
             "only the allocation custodian may prepare treatment custody; "
             "this is a role-label check, not personal blindness")
+    if conditions is None:
+        conditions = (
+            SCIENTIFIC_CONDITIONS if len(slots) == SCIENTIFIC_SAMPLE_COUNT
+            else ENGINEERING_CONDITIONS)
     if len(slots) % len(conditions) != 0:
         raise ValueError("slot count must divide evenly across conditions")
     mapping = {}
@@ -130,9 +160,19 @@ def prepare_synthetic_treatment_custody(
     for i, slot in enumerate(slots):
         mapping[slot] = conditions[i // per]
     commitment = _sha256(_canonical({"run_id": run_id, "mapping": mapping}))
+    scientific = (
+        tuple(conditions) == SCIENTIFIC_CONDITIONS
+        and len(slots) == SCIENTIFIC_SAMPLE_COUNT
+        and per == REPLICATES_PER_CONDITION
+        and all(
+            sum(1 for v in mapping.values() if v == c)
+            == REPLICATES_PER_CONDITION
+            for c in SCIENTIFIC_CONDITIONS)
+    )
     return PrivateTreatmentCustody(
         run_id=run_id, mapping=mapping,
-        mapping_commitment_sha256=commitment)
+        mapping_commitment_sha256=commitment,
+        scientifically_representative=scientific)
 
 
 @dataclass
@@ -174,9 +214,7 @@ def build_reviewer_package(
     """Coordinator-distributable package: digests + randomized order only."""
     if reviewer_id not in REVIEWERS:
         raise ValueError("unknown reviewer identity")
-    # Deterministic shuffle from seed (no treatment labels).
     ordered = list(admitted_output_digests)
-    # Simple deterministic permutation.
     n = len(ordered)
     idx = list(range(n))
     state = rng_seed
@@ -198,17 +236,28 @@ def build_reviewer_package(
 
 
 def freeze_reviewer_record(package: ReviewerPackage,
-                           scores: Mapping[str, int]) -> dict:
-    """Freeze independent reviewer scores (synthetic)."""
+                           scores: Mapping[str, Mapping[str, int] | int]
+                           ) -> dict:
+    """Freeze independent reviewer scores (synthetic).
+
+    ``scores`` maps review_id → either a full dimension dict or a single
+    integer applied to every locked dimension (engineering convenience).
+    """
     items = []
     for entry in package.items:
         rid = entry["review_id"]
         if rid not in scores:
             raise ValueError("missing score for review item")
+        raw = scores[rid]
+        if isinstance(raw, Mapping):
+            dim_scores = {d: int(raw[d]) for d in DIMENSIONS}
+        else:
+            value = int(raw)
+            dim_scores = {d: value for d in DIMENSIONS}
         items.append({
             "review_id": rid,
             "image_sha256": entry["image_sha256"],
-            "score": int(scores[rid]),
+            "scores": dim_scores,
         })
     frozen = {
         "reviewer_id": package.reviewer_id,
@@ -219,30 +268,105 @@ def freeze_reviewer_record(package: ReviewerPackage,
     return frozen
 
 
-def descriptive_analysis(frozen_reviews: Sequence[Mapping]) -> dict:
-    """Apply frozen descriptive analysis to synthetic scores only.
+def assess_scientific_completion(ctx: "SyntheticRunContext") -> dict:
+    """Whether the synthetic run qualifies as a completed scientific design.
 
-    No statistical significance claims.
+    Requires: scientifically representative custody, exactly 12 distinct
+    admitted digests, four admitted samples per C/A/B, both reviewer
+    freezes present. Technical retries are separate invocations and do not
+    increase the admitted scientific sample count.
     """
-    by_image: dict = {}
-    for frozen in frozen_reviews:
-        for item in frozen["items"]:
-            by_image.setdefault(item["image_sha256"], []).append(
-                item["score"])
-    rows = []
-    for digest, scores in sorted(by_image.items()):
-        rows.append({
-            "image_sha256": digest,
-            "scores": scores,
-            "mean": sum(scores) / len(scores) if scores else None,
-            "agree": len(set(scores)) == 1,
-        })
+    reasons = []
+    if not ctx.custody.scientifically_representative:
+        reasons.append("custody_not_scientifically_representative")
+    admitted_unique = list(dict.fromkeys(ctx.admitted))
+    if len(admitted_unique) != SCIENTIFIC_SAMPLE_COUNT:
+        reasons.append("admitted_count_not_12")
+    by_condition: dict[str, list[str]] = {c: [] for c in SCIENTIFIC_CONDITIONS}
+    slot_by_digest = {
+        digest: slot for slot, digest in ctx.admitted_by_slot.items()}
+    for digest in admitted_unique:
+        slot = slot_by_digest.get(digest)
+        if slot is None:
+            reasons.append("admitted_digest_missing_slot")
+            continue
+        condition = ctx.custody.mapping.get(slot)
+        if condition not in by_condition:
+            reasons.append(f"non_scientific_condition:{condition}")
+            continue
+        by_condition[condition].append(digest)
+    for condition in SCIENTIFIC_CONDITIONS:
+        if len(by_condition[condition]) != REPLICATES_PER_CONDITION:
+            reasons.append(f"condition_{condition}_not_4")
+    if set(ctx.frozen_reviews) != set(REVIEWERS):
+        reasons.append("missing_reviewer_freezes")
+    qualified = not reasons
     return {
-        "method": "descriptive_only",
-        "statistical_significance_claimed": False,
-        "n_images": len(rows),
-        "rows": rows,
+        "qualified": qualified,
+        "reasons": tuple(reasons),
+        "admitted_count": len(admitted_unique),
+        "per_condition": {c: len(by_condition[c]) for c in SCIENTIFIC_CONDITIONS},
+        "scientific_experiment_completion": qualified,
+        "is_experimental_finding": False,
     }
+
+
+def build_synthetic_analysis_samples(
+        ctx: "SyntheticRunContext") -> dict[str, list[dict]]:
+    """Assemble C/A/B samples with averaged multi-dimension scores."""
+    if set(ctx.frozen_reviews) != set(REVIEWERS):
+        raise RuntimeError("both reviewer freezes required for locked analysis")
+    by_image: dict[str, dict] = {}
+    for reviewer_id, frozen in ctx.frozen_reviews.items():
+        for item in frozen["items"]:
+            digest = item["image_sha256"]
+            entry = by_image.setdefault(
+                digest, {"image_sha256": digest, "reviewers": {}})
+            entry["reviewers"][reviewer_id] = {
+                "review_id": item["review_id"],
+                "scores": dict(item["scores"]),
+            }
+    samples: dict[str, list[dict]] = {c: [] for c in SCIENTIFIC_CONDITIONS}
+    for slot, digest in ctx.admitted_by_slot.items():
+        condition = ctx.custody.mapping[slot]
+        if condition not in samples:
+            continue
+        entry = by_image.get(digest)
+        if entry is None or set(entry["reviewers"]) != set(REVIEWERS):
+            raise RuntimeError("incomplete reviewer coverage for admitted image")
+        averaged = {
+            dim: (
+                entry["reviewers"]["R1"]["scores"][dim]
+                + entry["reviewers"]["R2"]["scores"][dim]
+            ) / 2
+            for dim in DIMENSIONS
+        }
+        samples[condition].append({
+            "slot_id": slot,
+            "condition": condition,
+            "image_sha256": digest,
+            "reviewers": entry["reviewers"],
+            "averaged_scores": averaged,
+        })
+    return samples
+
+
+def apply_synthetic_locked_analysis(ctx: "SyntheticRunContext") -> dict:
+    """Run the frozen descriptive rules on a scientifically complete synthetic run.
+
+    Output is explicitly not an experimental finding.
+    """
+    assessment = assess_scientific_completion(ctx)
+    if not assessment["qualified"]:
+        raise RuntimeError(
+            "locked scientific analysis requires a qualified 3×4 design: "
+            + ",".join(assessment["reasons"]))
+    samples = build_synthetic_analysis_samples(ctx)
+    locked = apply_locked_descriptive_analysis(samples)
+    locked["scientific_design_qualified"] = True
+    locked["is_experimental_finding"] = False
+    locked["synthetic_only"] = True
+    return locked
 
 
 @dataclass
@@ -258,17 +382,21 @@ class SyntheticRunContext:
     custody: PrivateTreatmentCustody
     plan_commitment_sha256: str
     admitted: list = field(default_factory=list)
+    admitted_by_slot: dict = field(default_factory=dict)
     receipts: dict = field(default_factory=dict)
     reviewer_packages: dict = field(default_factory=dict)
     frozen_reviews: dict = field(default_factory=dict)
     closed: bool = False
     incomplete: bool = False
+    scientific_completion: bool = False
+    finalized_invocation_count: int = 0
 
 
 def establish_synthetic_run(
         root: Path, *, run_id: str = "synthetic-e2e-001",
         slot_count: int = 12) -> SyntheticRunContext:
     """Establish a synthetic run context without activating science."""
+    assert_activation_lockout()
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     remote = root / "remote.git"
@@ -310,6 +438,8 @@ def establish_synthetic_run(
         "slots": list(slots),
         "mapping_commitment_sha256": custody.mapping_commitment_sha256,
         "scientifically_active": False,
+        "scientifically_representative_design":
+            custody.scientifically_representative,
     }
     plan_digest = _sha256(_canonical(plan))
     pub = publisher.publish_run_root(run_id, plan_digest)
@@ -319,6 +449,13 @@ def establish_synthetic_run(
         run_id=run_id, root=root, remote=remote,
         publisher=publisher, verifier=verifier, lifecycle=life,
         custody=custody, plan_commitment_sha256=plan_digest)
+
+
+def reload_synthetic_verifier(ctx: SyntheticRunContext) -> CheckpointVerifier:
+    """Fresh-process verifier bound to the same temp remote + private state."""
+    publisher = CheckpointPublisher(
+        str(ctx.remote), synthetic=True, state_dir=ctx.root / "private")
+    return CheckpointVerifier(publisher)
 
 
 def run_synthetic_admitted_attempt(
@@ -391,13 +528,20 @@ def run_synthetic_admitted_attempt(
         life, receipt["receipt_sha256"], verified_anchor=True)
 
     output_sha = receipt["output"]["output_sha256"]
-    ctx.admitted.append(output_sha)
+    # Scientific sample count tracks admitted digests per slot once;
+    # retries are additional invocations (finalized_invocation_count) but
+    # do not invent extra scientific samples for the same slot.
+    if opaque_slot_id not in ctx.admitted_by_slot:
+        ctx.admitted.append(output_sha)
+        ctx.admitted_by_slot[opaque_slot_id] = output_sha
     ctx.receipts[opaque_slot_id] = receipt
+    ctx.finalized_invocation_count += 1
     return {
         "decision": decision.to_public_dict(),
         "receipt_sha256": receipt["receipt_sha256"],
         "checkpoint_commit": pub.commit,
         "output_sha256": output_sha,
+        "attempt_number": attempt_number,
     }
 
 
@@ -407,8 +551,6 @@ def prepare_and_freeze_reviews(
     """Build treatment-free packages and freeze two independent reviews."""
     if not ctx.admitted:
         raise RuntimeError("no admitted samples for review")
-    # Private reviewer-image binding (pixel-equivalent digests in synthetic
-    # tests: same digest stands in for a metadata-stripped PNG).
     bindings = {d: d for d in ctx.admitted}
     private_binding = PrivateReviewerImageBinding(
         bindings=bindings,
@@ -424,14 +566,17 @@ def prepare_and_freeze_reviews(
     for i, reviewer_id in enumerate(REVIEWERS):
         pkg = build_reviewer_package(
             reviewer_id, ctx.admitted, rng_seed=1000 + i)
-        # Coordinator may distribute packages — never the custody map.
         packages[reviewer_id] = pkg.to_public_dict()
         scores = {}
         for item in pkg.items:
             if score_fn:
                 scores[item["review_id"]] = score_fn(reviewer_id, item)
             else:
-                scores[item["review_id"]] = 3 + (i % 2)
+                # Distinct R1/R2 primary scores within ambiguity threshold.
+                base = 3 + (i % 2)
+                scores[item["review_id"]] = {
+                    dim: base for dim in DIMENSIONS
+                }
         fr = freeze_reviewer_record(pkg, scores)
         frozen[reviewer_id] = fr
         pub = ctx.publisher.publish_review_freeze(
@@ -441,7 +586,6 @@ def prepare_and_freeze_reviews(
                 f"review freeze checkpoint failed: {pub.message}")
     ctx.reviewer_packages = packages
     ctx.frozen_reviews = frozen
-    # Verify both freezes before any open-after-freeze.
     chain = ctx.verifier.verify_run(ctx.run_id)
     if not chain.verified:
         raise RuntimeError(f"chain verify failed after freezes: {chain.codes}")
@@ -469,21 +613,71 @@ def open_after_verified_freezes(ctx: SyntheticRunContext) -> dict:
     chain = ctx.verifier.verify_run(ctx.run_id)
     if not chain.verified:
         raise RuntimeError("remote chain not verified")
-    analysis = descriptive_analysis(list(ctx.frozen_reviews.values()))
+    assessment = assess_scientific_completion(ctx)
+    if assessment["qualified"]:
+        analysis = apply_synthetic_locked_analysis(ctx)
+    else:
+        analysis = {
+            "method": "engineering_fixture_summary_only",
+            "statistical_significance_claimed": False,
+            "scientific_design_qualified": False,
+            "is_experimental_finding": False,
+            "reasons": list(assessment["reasons"]),
+            "message": (
+                "miniature or incomplete synthetic fixture — locked "
+                "scientific analysis not applied"),
+        }
     return {
         "opened": True,
         "treatment_mapping_published": False,
+        "mapping_reveal_authorized": False,
         "analysis": analysis,
+        "scientific_completion": assessment,
     }
 
 
-def close_synthetic_run(ctx: SyntheticRunContext, *,
-                        incomplete: bool = False) -> dict:
-    disposition = "incomplete" if incomplete else "completed"
+def close_synthetic_run(
+        ctx: SyntheticRunContext, *,
+        incomplete: bool = False,
+        claim_scientific_completion: bool = False) -> dict:
+    """Close the synthetic run with an explicit disposition class.
+
+    * ``incomplete`` — approved incomplete closure (no fabricated freezes).
+    * ``claim_scientific_completion=True`` — only if the 3×4 design qualifies;
+      publishes disposition ``completed``.
+    * otherwise — ``engineering_scenario_closed`` (scenario success only).
+    """
+    if claim_scientific_completion and incomplete:
+        raise ValueError(
+            "incomplete runs cannot claim scientific experiment completion")
+    if claim_scientific_completion:
+        assessment = assess_scientific_completion(ctx)
+        if not assessment["qualified"]:
+            raise RuntimeError(
+                "scientific completion refused: "
+                + ",".join(assessment["reasons"]))
+        disposition = DISPOSITION_SCIENTIFIC
+        scientific = True
+    elif incomplete:
+        disposition = DISPOSITION_INCOMPLETE
+        scientific = False
+        assessment = assess_scientific_completion(ctx)
+    else:
+        disposition = DISPOSITION_ENGINEERING
+        scientific = False
+        assessment = assess_scientific_completion(ctx)
+        if assessment["qualified"]:
+            # Qualified designs must opt into scientific completion explicitly.
+            raise RuntimeError(
+                "qualified 3×4 synthetic run must close via "
+                "claim_scientific_completion=True or incomplete=True")
+
     closure = _sha256(_canonical({
         "run_id": ctx.run_id,
         "disposition": disposition,
-        "admitted_count": len(ctx.admitted),
+        "admitted_count": len(ctx.admitted_by_slot),
+        "scientific_experiment_completion": scientific,
+        "is_experimental_finding": False,
     }))
     pub = ctx.publisher.publish_run_disposition(
         ctx.run_id, disposition, closure, incomplete=incomplete)
@@ -491,18 +685,27 @@ def close_synthetic_run(ctx: SyntheticRunContext, *,
         raise RuntimeError(f"run_disposition failed: {pub.message}")
     ctx.closed = True
     ctx.incomplete = incomplete
+    ctx.scientific_completion = scientific
     chain = ctx.verifier.verify_run(ctx.run_id)
+    fresh = reload_synthetic_verifier(ctx).verify_run(ctx.run_id)
     return {
         "disposition": disposition,
+        "scientific_experiment_completion": scientific,
+        "is_experimental_finding": False,
         "commit": pub.commit,
         "chain_verified": chain.verified,
+        "fresh_process_chain_verified": fresh.verified,
+        "assessment": assessment,
         "public_records": [
             c["record"] for c in
             (ctx.publisher.load_state(ctx.run_id).checkpoints or [])],
+        "finalized_invocation_count": ctx.finalized_invocation_count,
+        "admitted_scientific_sample_count": len(ctx.admitted_by_slot),
     }
 
 
 def assert_activation_lockout() -> None:
+    """Runtime activation guard (not merely an AST scan)."""
     from .exp019_protocol import frozen_protocol
     try:
         frozen_protocol("1.2.0")

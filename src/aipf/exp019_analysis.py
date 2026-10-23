@@ -73,6 +73,94 @@ def _overall(first: str, second: str) -> str:
     return "inconclusive"
 
 
+def apply_locked_descriptive_analysis(
+        samples: dict[str, list[dict]], *,
+        reviewer_ambiguity_sample_count: int | None = None,
+        provenance_valid: bool = True) -> dict:
+    """Apply the frozen EXP-019 descriptive analysis math to scored samples.
+
+    Requires exactly four samples per condition ``C``/``A``/``B``, each with
+    ``averaged_scores`` covering ``DIMENSIONS``. This is the same arithmetic
+    used by ``analyze_exp019`` after reveal — it does **not** load a run,
+    does **not** claim experimental findings, and always reports
+    ``statistical_significance_claimed=False``.
+    """
+    if set(samples) != {"C", "A", "B"}:
+        raise ValueError("locked analysis requires conditions C, A, and B")
+    if any(len(items) != 4 for items in samples.values()):
+        raise ValueError("EXP-019 requires four samples per condition")
+    for items in samples.values():
+        for item in items:
+            scores = item.get("averaged_scores") or {}
+            if set(scores) != set(DIMENSIONS):
+                raise ValueError("EXP-019 averaged scores must cover all dimensions")
+    if reviewer_ambiguity_sample_count is None:
+        reviewer_ambiguity_sample_count = 0
+        for items in samples.values():
+            for item in items:
+                reviewers = item.get("reviewers") or {}
+                if "R1" in reviewers and "R2" in reviewers:
+                    gap = abs(
+                        reviewers["R1"]["scores"]["art_material_fidelity"]
+                        - reviewers["R2"]["scores"]["art_material_fidelity"])
+                    reviewer_ambiguity_sample_count += gap >= 2
+    means = {
+        condition: {
+            dimension: sum(item["averaged_scores"][dimension]
+                           for item in items) / 4
+            for dimension in DIMENSIONS
+        }
+        for condition, items in samples.items()
+    }
+    contrasts = {
+        name: _contrast(samples, comparator, means)
+        for name, comparator in (("B-C", "C"), ("B-A", "A"))
+    }
+    ceiling = all(
+        item["averaged_scores"]["art_material_fidelity"] >= 4.5
+        for item in samples["C"])
+    floor = (
+        all(means[c]["art_material_fidelity"] <= 2.0
+            for c in ("C", "A", "B"))
+        and not any(
+            item["averaged_scores"]["art_material_fidelity"] > 3.0
+            for items in samples.values() for item in items))
+    reviewer_ambiguity = reviewer_ambiguity_sample_count >= 4
+    side_effects = [
+        {"dimension": dimension, "comparator": comparator,
+         "delta_B_minus_comparator":
+             means["B"][dimension] - means[comparator][dimension]}
+        for dimension in DIMENSIONS[1:] for comparator in ("C", "A")
+        if means["B"][dimension] - means[comparator][dimension] <= -1.0
+    ]
+    initial = _overall(
+        contrasts["B-C"]["classification"], contrasts["B-A"]["classification"])
+    # The three registered experiment-level safeguards cap the whole result.
+    # The side-effect veto limits supportive evidence, while a negative primary
+    # result remains reportable as negative evidence.
+    final = "inconclusive" if ceiling or floor or reviewer_ambiguity else initial
+    if side_effects and final in {"supports", "weakly_supports"}:
+        final = "inconclusive"
+    return {
+        "method": "exp019_locked_descriptive_analysis",
+        "statistical_significance_claimed": False,
+        "condition_means": means,
+        "contrasts": contrasts,
+        "safeguards": {
+            "ceiling": ceiling,
+            "floor": floor,
+            "reviewer_ambiguity": reviewer_ambiguity,
+            "reviewer_ambiguity_sample_count": reviewer_ambiguity_sample_count,
+            "side_effect_veto": bool(side_effects),
+            "side_effects": side_effects,
+            "provenance_valid": provenance_valid,
+        },
+        "initial_evidence_classification": initial,
+        "evidence_classification": final,
+        "is_experimental_finding": False,
+    }
+
+
 def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) -> dict:
     run_path, run = load_run(run_file)
     if run.get("experiment_id") != "EXP-019" or run.get("status") != "completed":
@@ -194,22 +282,8 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         generation_slots.append(generation_slot)
     if any(len(items) != 4 for items in samples.values()):
         raise ValueError("EXP-019 requires four samples per condition")
-    means = {condition: {dimension: sum(item["averaged_scores"][dimension] for item in items) / 4 for dimension in DIMENSIONS} for condition, items in samples.items()}
-    contrasts = {name: _contrast(samples, comparator, means) for name, comparator in (("B-C", "C"), ("B-A", "A"))}
-    ceiling = all(item["averaged_scores"]["art_material_fidelity"] >= 4.5 for item in samples["C"])
-    floor = all(means[c]["art_material_fidelity"] <= 2.0 for c in ("C", "A", "B")) and not any(item["averaged_scores"]["art_material_fidelity"] > 3.0 for items in samples.values() for item in items)
-    reviewer_ambiguity = reviewer_ambiguity_count >= 4
-    side_effects = [{"dimension": dimension, "comparator": comparator,
-                     "delta_B_minus_comparator": means["B"][dimension] - means[comparator][dimension]}
-                    for dimension in DIMENSIONS[1:] for comparator in ("C", "A")
-                    if means["B"][dimension] - means[comparator][dimension] <= -1.0]
-    initial = _overall(contrasts["B-C"]["classification"], contrasts["B-A"]["classification"])
-    # The three registered experiment-level safeguards cap the whole result.
-    # The side-effect veto limits supportive evidence, while a negative primary
-    # result remains reportable as negative evidence.
-    final = "inconclusive" if ceiling or floor or reviewer_ambiguity else initial
-    if side_effects and final in {"supports", "weakly_supports"}:
-        final = "inconclusive"
+    locked = apply_locked_descriptive_analysis(
+        samples, reviewer_ambiguity_sample_count=reviewer_ambiguity_count)
     result = {
         "schema_version": run["experiment_version"], "result_id": run["run_id"] + ".result",
         "experiment_id": "EXP-019", "experiment_version": run["experiment_version"], "run_id": run["run_id"],
@@ -228,13 +302,10 @@ def analyze_exp019(run_file: str | Path, *, output: str | Path | None = None) ->
         "review": {"records": reveal["reviews"], "reveal_file_sha256": sha256_file(reveal_path),
                    "revealed_at_utc": reveal["revealed_at_utc"]},
         "samples": sum((samples[c] for c in ("C", "A", "B")), []),
-        "condition_means": means, "contrasts": contrasts,
-        "safeguards": {"ceiling": ceiling, "floor": floor, "reviewer_ambiguity": reviewer_ambiguity,
-                       "reviewer_ambiguity_sample_count": reviewer_ambiguity_count,
-                       "side_effect_veto": bool(side_effects), "side_effects": side_effects,
-                       "provenance_valid": True},
-        "initial_evidence_classification": initial,
-        "evidence_classification": final,
+        "condition_means": locked["condition_means"], "contrasts": locked["contrasts"],
+        "safeguards": locked["safeguards"],
+        "initial_evidence_classification": locked["initial_evidence_classification"],
+        "evidence_classification": locked["evidence_classification"],
         "statistical_significance_claim": False,
     }
     if run["experiment_version"] == "1.1.1":
