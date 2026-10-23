@@ -438,6 +438,8 @@ def test_indeterminate_authorization_is_persisted_for_audit(
     persisted = events[0]["terminal_record"]["authorization"]
     assert persisted["authorization_id"] == "synthetic-auth-1"
     assert persisted["authorized_by"] == "synthetic-owner"
+    assert persisted["procedure"] == INDETERMINATE_PROCEDURE
+    assert persisted["action"] == "INDETERMINATE_FINAL"
 
 
 def test_anchoring_blocked_without_trusted_verifier(tmp_path) -> None:

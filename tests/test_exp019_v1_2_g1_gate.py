@@ -30,6 +30,7 @@ DEFINITION_DRAFT = ROOT / "experiments/drafts/EXP-019-v1.2.0.DEFINITION-DRAFT.js
 AUTHORIZED_V12_MODULES = {
     "exp019_v1_2_evidence.py",   # PR-6: non-executing evidence validation
     "exp019_v1_2_lifecycle.py",  # PR-7: local attempt lifecycle (inactive)
+    "exp019_v1_2_receipts.py",   # PR-8: terminal attempt receipts (local)
 }
 
 _V12_SCOPE = re.compile(r"1\.2\.0|v1_2|EXP-019 v1\.2")
