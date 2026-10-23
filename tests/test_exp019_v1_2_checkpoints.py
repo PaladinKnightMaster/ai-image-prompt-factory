@@ -20,6 +20,9 @@ from aipf.exp019_v1_2_checkpoints import (
     PUBLIC_FIELDS,
     CheckpointPublisher,
     CheckpointVerifier,
+    PublicationResult,
+    SyntheticGitBackend,
+    _normalize_remote_identity,
     attempt_evidence_digest,
     assert_production_publication_refused,
     build_public_record,
@@ -153,7 +156,8 @@ def test_duplicate_append_requests(synthetic_remote) -> None:
 
 
 def test_interrupted_push_remote_succeeded(synthetic_remote) -> None:
-    publisher, remote, _ = synthetic_remote
+    """Remote commit succeeded but local state did not advance — recognize."""
+    publisher, _, _ = synthetic_remote
     publisher.publish_run_root("run-a", _digest("plan"))
     receipt = _digest("r")
     publisher.register_finalized_attempt("run-a", "S1", 1, receipt)
@@ -162,18 +166,20 @@ def test_interrupted_push_remote_succeeded(synthetic_remote) -> None:
     record = build_public_record(
         run_id="run-a", sequence=1, event_type="attempt",
         evidence_sha256=evidence, previous_anchor_commit=state.head_commit)
-    # Simulate remote already holding the intended commit while local
-    # state has not yet advanced: publish via backend recognition path.
-    real_append = publisher.backend.append
-
-    def append_once(ref, expected_head, rec):
-        result = real_append(ref, expected_head, rec)
-        # Second call: pretend expected_head is stale but remote has tip.
-        return result
-
+    # Push the intended checkpoint at the backend layer only (local
+    # private state still at run_root).
+    pushed = publisher.backend.append(state.ref, state.head_commit, record)
+    assert pushed.published and pushed.commit
+    # Publisher re-entry must recognize the existing remote tip rather
+    # than appending a duplicate attempt checkpoint.
+    recognized = publisher.backend.append(
+        state.ref, state.head_commit, record)
+    assert recognized.recognized_existing
+    assert recognized.commit == pushed.commit
+    # Completing through the publisher API also stays exactly-once.
     result = publisher.publish_attempt("run-a", "S1", 1, receipt)
     assert result.published
-    # Replay after "interrupt": local already saved; idempotent.
+    assert result.commit == pushed.commit
     replay = publisher.publish_attempt("run-a", "S1", 1, receipt)
     assert replay.recognized_existing
 
@@ -392,8 +398,61 @@ def test_no_real_generation_or_experimental_mutation(synthetic_remote) -> None:
     """Suite must not import generation or mutate historical provenance."""
     publisher, _, _ = synthetic_remote
     publisher.publish_run_root("run-a", _digest("plan"))
-    import sys
-    assert "aipf.exp019_host" not in sys.modules or True  # may be imported elsewhere
     # Explicit: publisher public API has no generate/allocate.
     assert not hasattr(publisher, "generate")
     assert not hasattr(publisher, "allocate")
+
+
+def test_network_remote_cannot_bypass_synthetic_boundary(
+        tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("AIPF_EXP019_V12_SYNTHETIC_PROVENANCE", "1")
+    monkeypatch.setenv(
+        "AIPF_EXP019_PROVENANCE_REMOTE",
+        "https://github.com/example/exp019-anchors.git")
+    # URL-form mismatch previously bypassed Path.resolve equality.
+    with pytest.raises(PermissionError, match="network Git remotes"):
+        CheckpointPublisher(
+            "git@github.com:example/exp019-anchors.git",
+            synthetic=True, state_dir=tmp_path)
+    with pytest.raises(PermissionError, match="network Git remotes"):
+        SyntheticGitBackend("https://github.com/example/exp019-anchors.git")
+    # Local temp remote is still allowed.
+    remote = tmp_path / "ok.git"
+    _git("init", "--bare", "-q", str(remote))
+    publisher = CheckpointPublisher(
+        str(remote), synthetic=True, state_dir=tmp_path)
+    assert publisher.remote == str(remote)
+
+
+def test_production_path_alias_refused(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("AIPF_EXP019_V12_SYNTHETIC_PROVENANCE", "1")
+    prod = tmp_path / "production-provenance.git"
+    _git("init", "--bare", "-q", str(prod))
+    monkeypatch.setenv("AIPF_EXP019_PROVENANCE_REMOTE", str(prod))
+    with pytest.raises(PermissionError, match="production"):
+        CheckpointPublisher(str(prod), synthetic=True, state_dir=tmp_path)
+
+
+def test_normalize_remote_identity_collapses_url_forms() -> None:
+    a = _normalize_remote_identity(
+        "https://github.com/example/exp019-anchors.git")
+    b = _normalize_remote_identity(
+        "git@github.com:example/exp019-anchors.git")
+    c = _normalize_remote_identity(
+        "ssh://git@github.com/example/exp019-anchors.git")
+    assert a == b == c
+
+
+def test_completed_disposition_requires_attempt_checkpoints(
+        synthetic_remote) -> None:
+    publisher, _, _ = synthetic_remote
+    publisher.publish_run_root("run-a", _digest("plan"))
+    receipt = _digest("r")
+    publisher.register_finalized_attempt("run-a", "S1", 1, receipt)
+    with pytest.raises(ValueError, match="every finalized attempt"):
+        publisher.publish_run_disposition(
+            "run-a", "completed", _digest("c"), incomplete=False)
+    # Incomplete may still close without publishing the attempt.
+    done = publisher.publish_run_disposition(
+        "run-a", "incomplete", _digest("c"), incomplete=True)
+    assert done.published

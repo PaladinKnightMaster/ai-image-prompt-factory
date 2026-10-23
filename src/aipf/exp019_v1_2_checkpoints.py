@@ -103,6 +103,98 @@ def _ref(run_id: str) -> str:
     return f"refs/heads/exp-provenance/{run_id}"
 
 
+def _normalize_remote_identity(remote: str) -> str:
+    """Normalize Git remote URLs/paths for equivalence comparison.
+
+    Collapses https/ssh/scp-style forms of the same host+path so that
+    ``https://github.com/org/repo.git`` and ``git@github.com:org/repo.git``
+    compare equal. Local filesystem paths are resolved canonically.
+    """
+    value = (remote or "").strip()
+    if not value:
+        return ""
+    lowered = value.replace("\\", "/")
+    # Strip credentials: scheme://user:pass@host/...
+    if "://" in lowered:
+        scheme, rest = lowered.split("://", 1)
+        if "@" in rest and "/" in rest.split("@", 1)[1]:
+            rest = rest.split("@", 1)[1]
+        lowered = f"{scheme}://{rest}"
+    # scp-style: git@host:path
+    if "://" not in lowered and "@" in lowered and ":" in lowered.split(
+            "@", 1)[1]:
+        user_host, path = lowered.split(":", 1)
+        host = user_host.split("@", 1)[-1]
+        lowered = f"ssh://{host}/{path.lstrip('/')}"
+    # https://host/path or ssh://host/path
+    if "://" in lowered:
+        _, rest = lowered.split("://", 1)
+        host_path = rest.lower().rstrip("/")
+        if host_path.endswith(".git"):
+            host_path = host_path[:-4]
+        return host_path
+    # Local filesystem path — resolve when possible.
+    try:
+        return str(Path(value).expanduser().resolve()).replace("\\", "/").lower()
+    except OSError:
+        return lowered.lower()
+
+
+def _is_network_remote(remote: str) -> bool:
+    lowered = (remote or "").strip().lower().replace("\\", "/")
+    if "://" in lowered:
+        scheme = lowered.split("://", 1)[0]
+        return scheme in {"http", "https", "ssh", "git"}
+    if "@" in lowered and ":" in lowered.split("@", 1)[-1]:
+        return True
+    return False
+
+
+def _assert_synthetic_remote_allowed(remote: str) -> None:
+    """Refuse network/production remotes for pre-G5 synthetic publication.
+
+    Synthetic exercise is limited to existing local bare Git directories.
+    Network URLs (including URL-form mismatches against the production
+    env) cannot bypass this boundary. The AST activation guard is
+    defense-in-depth only — this check is mandatory.
+    """
+    if not remote or remote.startswith("-"):
+        raise ValueError(
+            "EXP-019 v1.2 requires an explicit synthetic Git remote")
+    if _is_network_remote(remote):
+        raise PermissionError(
+            "synthetic v1.2 publication refuses network Git remotes; "
+            "use an isolated local temporary bare repository only")
+    path = Path(remote).expanduser()
+    try:
+        resolved = path.resolve()
+    except OSError as exc:
+        raise PermissionError(
+            "synthetic v1.2 remote path cannot be resolved") from exc
+    if not resolved.exists() or not resolved.is_dir():
+        raise PermissionError(
+            "synthetic v1.2 remote must be an existing local bare Git "
+            "directory")
+    # Refuse if the path identity matches the configured production remote
+    # under any URL/path normalization.
+    production = os.environ.get(PRODUCTION_REMOTE_ENV)
+    if production:
+        if _normalize_remote_identity(str(resolved)) == \
+                _normalize_remote_identity(production):
+            raise PermissionError(
+                "refusing to publish v1.2 checkpoints to the configured "
+                "production EXP-019 provenance remote")
+        # Also refuse when production is a local path that is the same dir.
+        try:
+            prod_path = Path(production).expanduser().resolve()
+            if prod_path == resolved:
+                raise PermissionError(
+                    "refusing to publish v1.2 checkpoints to the configured "
+                    "production EXP-019 provenance remote")
+        except OSError:
+            pass
+
+
 def v12_scientifically_active() -> bool:
     """True only when a frozen v1.2 protocol is registered (G5)."""
     try:
@@ -340,15 +432,7 @@ class SyntheticGitBackend:
     """Fast-forward Git backend for isolated temporary remotes only."""
 
     def __init__(self, remote: str):
-        if not remote or remote.startswith("-"):
-            raise ValueError(
-                "EXP-019 v1.2 requires an explicit synthetic Git remote")
-        # Refuse obvious production GitHub provenance targets.
-        lowered = remote.lower().replace("\\", "/")
-        if "github.com" in lowered and "provenance" in lowered:
-            raise PermissionError(
-                "synthetic v1.2 backend refuses production-like GitHub "
-                "provenance remotes")
+        _assert_synthetic_remote_allowed(remote)
         self.remote = remote
 
     def head(self, ref: str) -> Optional[str]:
@@ -648,12 +732,9 @@ class CheckpointPublisher:
         if os.environ.get(SYNTHETIC_ENV) != "1":
             raise PermissionError(
                 f"synthetic v1.2 publication requires {SYNTHETIC_ENV}=1")
-        # Never publish through the production v1.1.1 remote env by mistake.
-        production = os.environ.get(PRODUCTION_REMOTE_ENV)
-        if production and Path(remote).resolve() == Path(production).resolve():
-            raise PermissionError(
-                "refusing to publish v1.2 checkpoints to the configured "
-                "production EXP-019 provenance remote")
+        # Local-only synthetic remote; never a network URL and never the
+        # production provenance target under any URL-form alias.
+        _assert_synthetic_remote_allowed(remote)
         self.backend = SyntheticGitBackend(remote)
         self.remote = remote
         self.state_dir = Path(state_dir) if state_dir else None
@@ -865,12 +946,22 @@ class CheckpointPublisher:
             raise ValueError("run disposition must be completed or incomplete")
         if incomplete != (disposition == "incomplete"):
             raise ValueError("incomplete flag disagrees with disposition")
-        # Closing incomplete must never invent admitted samples.
-        if incomplete:
-            if any(
-                    (e.get("private_binding") or {}).get("admitted")
-                    for e in state.checkpoints):
-                pass  # admitted only via prior attempt receipts, not here
+        # Completed closure requires every finalized attempt checkpointed.
+        # Incomplete closure may omit review-freeze and unpublished slots,
+        # but never invents admitted samples (admission lives in receipts).
+        published_attempts = [
+            (e["private_binding"]["slot_id"],
+             e["private_binding"]["attempt_number"])
+            for e in state.checkpoints
+            if e["record"]["event_type"] == "attempt"]
+        expected_attempts = [
+            (a[0], a[1]) for a in state.finalized_attempts]
+        if not incomplete and published_attempts != expected_attempts:
+            raise ValueError(
+                "completed run_disposition requires every finalized "
+                "attempt checkpoint before closure")
+        # Incomplete closure may omit unpublished attempts and review-freeze;
+        # this publisher never invents attempt checkpoints or ADMIT samples.
         evidence = run_disposition_evidence_digest(
             run_id, disposition, closure_commitment_sha256)
         record = build_public_record(
