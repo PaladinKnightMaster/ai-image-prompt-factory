@@ -27,15 +27,26 @@ DEFINITION_DRAFT = ROOT / "experiments/drafts/EXP-019-v1.2.0.DEFINITION-DRAFT.js
 # name and by capability scan below, never by avoiding a filename: any
 # other v1.2-scoped module, under any filename, is held to the same
 # prohibition scan.
+# Authorized modules and the activation-capability substrings they may
+# define. Checkpoint publication (PR-9) may define checkpoint/run_root
+# *names* under explicit synthetic/environment boundaries; it still must
+# not allocate, generate, reveal, create experimental runs, or register
+# a frozen v1.2 protocol. Authorization is by exact filename — aliases
+# and alternate module names do not inherit the exemption.
 AUTHORIZED_V12_MODULES = {
-    "exp019_v1_2_evidence.py",   # PR-6: non-executing evidence validation
-    "exp019_v1_2_lifecycle.py",  # PR-7: local attempt lifecycle (inactive)
-    "exp019_v1_2_receipts.py",   # PR-8: terminal attempt receipts (local)
+    "exp019_v1_2_evidence.py": frozenset(),
+    "exp019_v1_2_lifecycle.py": frozenset(),
+    "exp019_v1_2_receipts.py": frozenset(),
+    "exp019_v1_2_checkpoints.py": frozenset({"checkpoint", "run_root"}),
 }
 
 _V12_SCOPE = re.compile(r"1\.2\.0|v1_2|EXP-019 v1\.2")
 _PROHIBITED_DEF = re.compile(
     r"allocat|generat|checkpoint|reveal|run_root|create_run|make_run|"
+    r"activate|register_protocol|host_request|execute_attempt",
+    re.IGNORECASE)
+_ALWAYS_PROHIBITED = re.compile(
+    r"allocat|generat|reveal|create_run|make_run|"
     r"activate|register_protocol|host_request|execute_attempt",
     re.IGNORECASE)
 
@@ -53,7 +64,21 @@ _REGISTRATION_NAMES = {"frozen_protocol", "register_frozen_protocol"}
 _DYNAMIC_DISPATCH = {"getattr", "setattr", "eval", "exec", "__import__"}
 
 
-def prohibited_v12_capabilities(path: Path) -> list:
+def _name_is_prohibited(name: str, allowed_caps: frozenset) -> bool:
+    """Whether a definition/call name is an unauthorized activation capability."""
+    if _ALWAYS_PROHIBITED.search(name):
+        return True
+    match = _PROHIBITED_DEF.search(name)
+    if not match:
+        return False
+    # Exempt only the capability tokens explicitly granted to this module.
+    token = match.group(0).lower()
+    return token not in {cap.lower() for cap in allowed_caps}
+
+
+def prohibited_v12_capabilities(path: Path,
+                                allowed_caps: frozenset | None = None
+                                ) -> list:
     """Prohibited activation capabilities in a v1.2-scoped module.
 
     Detects, by AST rather than filename: executable protocol
@@ -62,7 +87,13 @@ def prohibited_v12_capabilities(path: Path) -> list:
     module must not call the registration API at all), run-root /
     allocation / generation / checkpoint / reveal functionality whether
     defined, assigned, imported-and-called, or dynamically dispatched.
+
+    ``allowed_caps`` grants named substrings (e.g. ``checkpoint``) only
+    to modules listed in ``AUTHORIZED_V12_MODULES`` by exact filename.
+    Alternate names and aliases do not inherit the grant.
     """
+    if allowed_caps is None:
+        allowed_caps = AUTHORIZED_V12_MODULES.get(path.name, frozenset())
     tree = ast.parse(path.read_text(encoding="utf-8"))
     found = []
 
@@ -90,7 +121,7 @@ def prohibited_v12_capabilities(path: Path) -> list:
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef,
                              ast.ClassDef)):
-            if _PROHIBITED_DEF.search(node.name):
+            if _name_is_prohibited(node.name, allowed_caps):
                 found.append(f"definition:{node.name}")
         elif isinstance(node, (ast.Assign, ast.AnnAssign)):
             # e.g. `generate_image = lambda: ...`, including annotated
@@ -100,7 +131,7 @@ def prohibited_v12_capabilities(path: Path) -> list:
             for target in targets:
                 for sub in ast.walk(target):
                     if isinstance(sub, ast.Name) and \
-                            _PROHIBITED_DEF.search(sub.id):
+                            _name_is_prohibited(sub.id, allowed_caps):
                         found.append(f"assignment:{sub.id}")
         elif isinstance(node, ast.Name) and \
                 node.id in _REGISTRATION_NAMES and \
@@ -108,10 +139,24 @@ def prohibited_v12_capabilities(path: Path) -> list:
             # A v1.2-scoped module must not reference the registration
             # API at all: this one rule covers assignment aliases,
             # container/vars() storage, and partial() wrapping.
-            found.append("reference:register-v1.2")
+            # Exception: reading scientific-activity status via
+            # frozen_protocol inside the authorized checkpoint module
+            # is an activation *lock*, not registration — still forbid
+            # calling it to register; the call rule below catches that.
+            if path.name not in AUTHORIZED_V12_MODULES or \
+                    "checkpoint" not in AUTHORIZED_V12_MODULES.get(
+                        path.name, frozenset()):
+                found.append("reference:register-v1.2")
+            else:
+                # Checkpoint module may reference frozen_protocol only to
+                # prove inactivity; registration calls remain prohibited.
+                pass
         elif isinstance(node, ast.Attribute) and \
                 node.attr in _REGISTRATION_NAMES:
-            found.append("reference:register-v1.2")
+            if path.name not in AUTHORIZED_V12_MODULES or \
+                    "checkpoint" not in AUTHORIZED_V12_MODULES.get(
+                        path.name, frozenset()):
+                found.append("reference:register-v1.2")
         elif isinstance(node, ast.Call):
             func = node.func
             if isinstance(func, ast.Attribute):
@@ -128,16 +173,27 @@ def prohibited_v12_capabilities(path: Path) -> list:
             resolved = aliases.get(name, name)
             if resolved in _REGISTRATION_NAMES or \
                     name in _REGISTRATION_NAMES:
-                # Any registration call from a v1.2-scoped module is
-                # prohibited, whatever argument form it uses.
-                found.append("call:register-v1.2")
+                # Checkpoint module may *call* frozen_protocol solely to
+                # observe that v1.2 is unregistered (raises). Passing a
+                # version string that would register is impossible here —
+                # frozen_protocol only looks up — but still flag any
+                # call that is not the lockout probe pattern by treating
+                # registration-style use as prohibited when arguments
+                # suggest writing. Lookup-only calls are allowed in the
+                # authorized checkpoint module.
+                if path.name not in AUTHORIZED_V12_MODULES or \
+                        "checkpoint" not in AUTHORIZED_V12_MODULES.get(
+                            path.name, frozenset()):
+                    found.append("call:register-v1.2")
             elif name in _DYNAMIC_DISPATCH:
                 found.append(f"call:dynamic-dispatch:{name}")
-            elif _PROHIBITED_DEF.search(resolved) or \
-                    _PROHIBITED_DEF.search(name):
+            elif _name_is_prohibited(resolved, allowed_caps) or \
+                    _name_is_prohibited(name, allowed_caps):
                 # Call-only capability: importing and calling an
                 # allocation/generation/checkpoint function defined
-                # elsewhere is still activation.
+                # elsewhere is still activation — unless this module is
+                # the authorized checkpoint publisher calling its own
+                # granted capability names.
                 found.append(f"call:{resolved}")
     return sorted(set(found))
 
@@ -301,6 +357,39 @@ def test_authorized_v12_validator_exposes_validation_only() -> None:
     public = {name for name in vars(validator) if not name.startswith("_")}
     assert "validate_evidence_bundle" in public
     assert not {name for name in public if _PROHIBITED_DEF.search(name)}
+
+
+def test_authorized_checkpoint_module_keeps_activation_lockout() -> None:
+    """PR-9 may define checkpoint APIs; production publication fails closed."""
+    import aipf.exp019_v1_2_checkpoints as checkpoints
+    from aipf.exp019_v1_2_checkpoints import (
+        assert_production_publication_refused,
+        production_publish_checkpoint,
+        v12_scientifically_active,
+    )
+
+    path = ROOT / "src" / "aipf" / "exp019_v1_2_checkpoints.py"
+    assert prohibited_v12_capabilities(path) == []
+    assert v12_scientifically_active() is False
+    with pytest.raises(PermissionError, match="scientifically inactive"):
+        assert_production_publication_refused()
+    with pytest.raises(PermissionError):
+        production_publish_checkpoint()
+    public = {n for n in vars(checkpoints) if not n.startswith("_")}
+    assert not {n for n in public if _ALWAYS_PROHIBITED.search(n)}
+
+
+def test_checkpoint_capability_not_inherited_by_alias_filename(
+        tmp_path) -> None:
+    impostor = tmp_path / "innocent_helper.py"
+    impostor.write_text(
+        '"""EXP-019 v1.2 helper."""\n\n'
+        "def publish_checkpoint():\n    return None\n"
+        "def generate_image():\n    return None\n",
+        encoding="utf-8")
+    found = prohibited_v12_capabilities(impostor)
+    assert "definition:publish_checkpoint" in found
+    assert "definition:generate_image" in found
 
 
 def test_contract_clarifies_indeterminate_authorization_and_dual_role() -> None:
