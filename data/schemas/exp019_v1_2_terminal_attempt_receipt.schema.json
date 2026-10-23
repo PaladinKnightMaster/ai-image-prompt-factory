@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/exp019/exp019_v1_2_terminal_attempt_receipt.schema.json",
+  "$comment": "RESERVED FOR RUNTIME VALIDATION (JSON Schema cannot enforce these): receipt_sha256 recomputation over the canonical core (excluding receipt_sha256 and local_finalization_status, so the binding is never self-referential); agreement of run, slot, attempt, disposition, and event history with the durable lifecycle record; recomputation of every evidence-artifact commitment against the actual artifacts; retained-output and admitted-output digest recomputation against actual bytes; the outcome/output-state matrix; authorization binding for INDETERMINATE_FINAL; and consistency of local_finalization_status with the lifecycle anchor state. A digest proves byte integrity only, never evidence truth or authenticated host provenance.",
+  "title": "EXP-019 v1.2 DRAFT terminal attempt receipt (non-executable)",
+  "description": "DRAFT schema for the prospective EXP-019 v1.2 terminal attempt receipt. NOT a frozen protocol and NOT executable: v1.2 is not registered in frozen_protocol(). Exactly one such receipt is built per terminal attempt. It binds the attempt's identity, event history, evidence commitments, outcome-dependent output state, class-D conflict count, and provenance qualification. It contains no treatment assignment and no legacy model metadata-query or metadata-recovery fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "experiment_id",
+    "experiment_version",
+    "evidence_contract_version",
+    "run_id",
+    "opaque_slot_id",
+    "slot_position",
+    "attempt_number",
+    "predecessor_attempt",
+    "frozen_prompt_sha256",
+    "disposition",
+    "failure_evidence",
+    "failure_classification",
+    "authorization",
+    "attempt_event_history",
+    "evidence_artifacts",
+    "evidence_validation",
+    "operator_observations",
+    "attestation_commitment_sha256",
+    "class_d_conflict_count",
+    "provenance_qualification",
+    "output",
+    "local_finalization_status",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.2.0-draft" },
+    "receipt_type": { "const": "terminal_attempt_receipt" },
+    "experiment_id": { "const": "EXP-019" },
+    "experiment_version": { "const": "1.2.0" },
+    "evidence_contract_version": { "const": "1.2.0" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "opaque_slot_id": { "type": "string", "pattern": "^[A-HJ-NP-Z2-9]{6}$" },
+    "slot_position": { "type": "integer", "minimum": 1 },
+    "attempt_number": { "type": "integer", "minimum": 1 },
+    "predecessor_attempt": {
+      "anyOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }]
+    },
+    "frozen_prompt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "disposition": {
+      "enum": ["ADMIT", "FAILURE", "INDETERMINATE_FINAL"]
+    },
+    "failure_evidence": {
+      "anyOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+    },
+    "failure_classification": {
+      "anyOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }]
+    },
+    "authorization": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["authorization_id", "authorized_by", "reason"],
+          "properties": {
+            "authorization_id": { "type": "string", "minLength": 1 },
+            "authorized_by": { "type": "string", "minLength": 1 },
+            "reason": { "type": "string", "minLength": 1 }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "attempt_event_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["seq", "event_type", "event_id"],
+        "properties": {
+          "seq": { "type": "integer", "minimum": 1 },
+          "event_type": { "type": "string", "minLength": 1 },
+          "event_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "evidence_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "commitment_sha256"],
+        "properties": {
+          "kind": {
+            "enum": ["observation", "attestation", "action_log",
+                     "request_capture", "response_capture"]
+          },
+          "commitment_sha256": {
+            "type": "string", "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "evidence_validation": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["outcome_classification", "evidence_eligibility",
+                       "technical_validation", "checks"],
+          "properties": {
+            "outcome_classification": { "type": "string", "minLength": 1 },
+            "evidence_eligibility": { "type": "string", "minLength": 1 },
+            "technical_validation": { "type": "string", "minLength": 1 },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["check", "definition", "passed"],
+                "properties": {
+                  "check": {
+                    "enum": ["Q1", "Q2", "Q3", "Q4", "Q5"]
+                  },
+                  "definition": {
+                    "enum": ["request capture", "response capture",
+                             "action log", "artifact digests",
+                             "operator attestation"]
+                  },
+                  "passed": {
+                    "anyOf": [{ "type": "boolean" }, { "type": "null" }]
+                  }
+                }
+              }
+            }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "operator_observations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator_attested_fields", "operator_recorded_fields"],
+      "properties": {
+        "operator_attested_fields": {
+          "type": "array", "items": { "type": "string" }
+        },
+        "operator_recorded_fields": {
+          "type": "array", "items": { "type": "string" }
+        }
+      }
+    },
+    "attestation_commitment_sha256": {
+      "anyOf": [
+        { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        { "type": "null" }
+      ]
+    },
+    "class_d_conflict_count": { "type": "integer", "minimum": 0 },
+    "provenance_qualification": {
+      "enum": ["operator_evidenced",
+               "operator_evidenced_with_class_d_conflict",
+               "authenticated_class_c_supported"]
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["output_state", "output_sha256",
+                   "admitted_output_sha256", "no_output_reason",
+                   "output_location"],
+      "properties": {
+        "output_state": {
+          "enum": ["admitted", "absent_no_output", "retained_invalid",
+                   "retained_protocol_failure", "retained_indeterminate"]
+        },
+        "output_sha256": {
+          "anyOf": [
+            { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            { "type": "null" }
+          ]
+        },
+        "admitted_output_sha256": {
+          "anyOf": [
+            { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            { "type": "null" }
+          ]
+        },
+        "no_output_reason": {
+          "anyOf": [{ "type": "string", "minLength": 1 },
+                    { "type": "null" }]
+        },
+        "output_location": {
+          "enum": ["canonical_admitted", "retained_non_admitted", "none"]
+        }
+      }
+    },
+    "local_finalization_status": {
+      "enum": ["prepared", "locally_finalized",
+               "awaiting_external_anchor", "externally_verified"]
+    },
+    "receipt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}
