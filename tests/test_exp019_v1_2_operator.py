@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import copy
+
 import pytest
 
 from aipf.exp019_protocol import frozen_protocol
@@ -96,6 +98,17 @@ def test_rendered_text_differs_despite_matching_clipboard(tmp_path) -> None:
         "textual_mismatch"
 
 
+def test_omitted_rendered_text_is_not_compared(tmp_path) -> None:
+    """Unobserved rendered text must not be inferred from paste/frozen digests."""
+    session = _session(tmp_path)
+    session.record_pre_send_paste(PROMPT)  # no rendered_request_text
+    assert session._rendered_comparison == "not_compared"
+    session.record_request_capture()
+    capture = session._request_capture
+    assert capture["rendered_request_comparison"] == "not_compared"
+    assert capture["rendered_request_text_sha256"] != capture["paste_sha256"]
+
+
 def test_missing_request_capture(tmp_path) -> None:
     session = _session(tmp_path)
     session.record_pre_send_paste(PROMPT)
@@ -129,15 +142,10 @@ def test_valid_affirmative_no_result_evidence(tmp_path) -> None:
 def test_unknown_host_outcome(tmp_path) -> None:
     session = _session(tmp_path)
     bundle = workflow_unknown_host_result(session, PROMPT)
-    assert bundle["response_capture"]["no_result_evidence"] is None
+    assert bundle["response_capture"] is None
     assert session.outcome_kind == "unknown"
     report = validate_evidence_bundle(bundle)
-    # Without affirmative evidence, not a confirmed technical failure.
-    assert report.outcome_classification in (
-        "unknown_outcome", "invalid_evidence", "no_result_evidenced")
-    if report.outcome_classification == "no_result_evidenced":
-        # Must not invent affirmative evidence from operator belief.
-        assert bundle["response_capture"].get("no_result_evidence") is None
+    assert report.outcome_classification == "unknown_outcome"
 
 
 def test_incorrect_returned_image_count(tmp_path) -> None:
@@ -201,7 +209,8 @@ def test_action_log_sequence_and_timestamp_violations(tmp_path) -> None:
 
 def test_interruption_and_resume_same_invocation(tmp_path) -> None:
     session = _session(tmp_path)
-    session.record_pre_send_paste(PROMPT)
+    session.record_pre_send_paste(
+        PROMPT, rendered_request_text=PROMPT.decode("utf-8"))
     session.record_request_capture()
     session.mark_interrupted()
     session.resume_same_invocation()
@@ -282,8 +291,36 @@ def test_no_mutation_of_source_packet(tmp_path) -> None:
     packet = _packet()
     original = packet.frozen_prompt_bytes
     session = _session(tmp_path, packet=packet)
-    session.record_pre_send_paste(PROMPT)
+    session.record_pre_send_paste(
+        PROMPT, rendered_request_text=PROMPT.decode("utf-8"))
     assert packet.frozen_prompt_bytes == original
+
+
+def test_export_reload_verify_and_tamper_rejection(tmp_path) -> None:
+    session = _session(tmp_path)
+    bundle = workflow_valid_returned_image(
+        session, PROMPT, synthetic_raster_bytes(),
+        artifact_id="synthetic-artifact-1")
+    assert validate_evidence_bundle(bundle).evidence_eligible
+    # Mutating export must not mutate session source bytes.
+    bundle["raster_bytes"] = b"tampered"
+    assert session._output_bytes == synthetic_raster_bytes()
+    # Tampered capture / log / attestation fail validation.
+    bad_req = copy.deepcopy(bundle)
+    bad_req["request_capture"]["paste_sha256"] = "0" * 64
+    assert not validate_evidence_bundle(bad_req).evidence_eligible
+    bad_log = copy.deepcopy(bundle)
+    bad_log["action_log"]["log_digest_sha256"] = "0" * 64
+    assert not validate_evidence_bundle(bad_log).evidence_eligible
+    bad_att = copy.deepcopy(bundle)
+    bad_att["attestation"]["artifact_digest_sha256"] = "0" * 64
+    assert not validate_evidence_bundle(bad_att).evidence_eligible
+    # Repeated export commitments are stable.
+    again = session.export_evidence_bundle()
+    assert again["request_capture"]["capture_digest_sha256"] == \
+        bundle["request_capture"]["capture_digest_sha256"]
+    assert again["action_log"]["log_digest_sha256"] == \
+        bundle["action_log"]["log_digest_sha256"]
 
 
 def test_activation_lockout() -> None:

@@ -61,8 +61,12 @@ class OperatorCaptureError(ValueError):
     """Operator workflow violation or incomplete capture."""
 
 
-class RoleBoundaryError(PermissionError):
-    """Role-specific access or action denied."""
+class RoleBoundaryError(OperatorCaptureError):
+    """Caller-supplied role label rejected.
+
+    This is a software role check, not an enforceable OS/ACL permission.
+    Holding a role label does not imply treatment-content blindness.
+    """
 
 
 def _sha256(data: bytes) -> str:
@@ -239,17 +243,18 @@ class OperatorCaptureSession:
             raise OperatorCaptureError("duplicate pre-send paste refused")
         pasted = bytes(pasted_bytes)
         self._paste_sha256 = _sha256(pasted)
+        # Q4: frozen↔paste is byte-digest equality (frozen_vs_paste_match).
+        # Q1: rendered_request_comparison is a separate textual comparison
+        # of rendered client text vs paste text — never inferred from
+        # frozen/paste byte digests, and never fabricated when unobserved.
         if rendered_request_text is None:
-            self._rendered_text_sha256 = self._paste_sha256
-            self._rendered_comparison = (
-                "textual_match"
-                if self._paste_sha256 == self.packet.frozen_prompt_sha256
-                else "textual_mismatch")
+            self._rendered_comparison = "not_compared"
+            # Schema requires a digest field; bind the empty observation
+            # explicitly rather than copying the paste digest.
+            self._rendered_text_sha256 = _sha256(b"")
         else:
             self._rendered_text_sha256 = _sha256(
                 rendered_request_text.encode("utf-8"))
-            # Rendered text comparison is textual, never byte equality
-            # against the frozen prompt digest.
             self._rendered_comparison = (
                 "textual_match"
                 if rendered_request_text == pasted.decode("utf-8", "replace")
@@ -609,7 +614,8 @@ class OperatorCaptureSession:
             "action_log": self.export_action_log(),
             "request_capture": copy.deepcopy(self._request_capture),
             "response_capture": copy.deepcopy(self._response_capture),
-            "raster_bytes": self._output_bytes,
+            "raster_bytes": (bytes(self._output_bytes)
+                             if self._output_bytes is not None else None),
             "protocol_violation": self._protocol_violation,
             "interrupted": self._interrupted,
             "operator_role_log": copy.deepcopy(self._log),
@@ -633,12 +639,20 @@ class OperatorCaptureSession:
 # -- Distinct outcome workflows (B3) -----------------------------------------
 
 
+def _default_rendered_text(pasted_bytes: bytes) -> str:
+    """Decode paste bytes for an explicit textual comparison when available."""
+    return bytes(pasted_bytes).decode("utf-8", "replace")
+
+
 def workflow_valid_returned_image(
         session: OperatorCaptureSession, pasted_bytes: bytes,
         output_bytes: bytes, *, artifact_id: str,
         rendered_request_text: Optional[str] = None) -> dict:
+    rendered = (rendered_request_text
+                if rendered_request_text is not None
+                else _default_rendered_text(pasted_bytes))
     session.record_pre_send_paste(
-        pasted_bytes, rendered_request_text=rendered_request_text)
+        pasted_bytes, rendered_request_text=rendered)
     session.record_request_capture()
     session.record_response_capture(
         image_returned=True, returned_image_count=1, artifact_id=artifact_id)
@@ -655,7 +669,8 @@ def workflow_confirmed_no_result(
     if evidence not in AFFIRMATIVE_NO_RESULT:
         raise OperatorCaptureError(
             "confirmed no-result requires affirmative evidence")
-    session.record_pre_send_paste(pasted_bytes)
+    session.record_pre_send_paste(
+        pasted_bytes, rendered_request_text=_default_rendered_text(pasted_bytes))
     session.record_request_capture()
     session.record_response_capture(
         image_returned=False, returned_image_count=0,
@@ -673,7 +688,8 @@ def workflow_technically_invalid_file(
 
 def workflow_interrupted_unknown(
         session: OperatorCaptureSession, pasted_bytes: bytes) -> dict:
-    session.record_pre_send_paste(pasted_bytes)
+    session.record_pre_send_paste(
+        pasted_bytes, rendered_request_text=_default_rendered_text(pasted_bytes))
     session.record_request_capture()
     session.mark_interrupted()
     # Interrupted export without inventing a response capture.
@@ -682,20 +698,31 @@ def workflow_interrupted_unknown(
 
 def workflow_unknown_host_result(
         session: OperatorCaptureSession, pasted_bytes: bytes) -> dict:
-    session.record_pre_send_paste(pasted_bytes)
+    """Operator-observed absence without authenticated confirmation.
+
+    Does not invent a no-result response capture (that would become
+    invalid_evidence under PR-6). Leaves the response absent so the
+    validator classifies ``unknown_outcome`` — never an affirmative
+    technical failure from operator testimony alone.
+    """
+    session.record_pre_send_paste(
+        pasted_bytes, rendered_request_text=_default_rendered_text(pasted_bytes))
     session.record_request_capture()
-    # Operator non-observation must not become affirmative failure.
-    session.record_response_capture(
-        image_returned=False, returned_image_count=0,
-        no_result_evidence="operator_saw_no_image")
-    session.close_invocation()
+    session._outcome_kind = "unknown"
+    session._log.append({
+        "role": ROLE_OPERATOR,
+        "action": "operator_observed_absence_unconfirmed",
+        "at_utc": _utc_now(),
+    })
+    session.mark_interrupted()
     return session.export_evidence_bundle()
 
 
 def workflow_multiple_returned_candidates(
         session: OperatorCaptureSession, pasted_bytes: bytes, *,
         artifact_id: str) -> dict:
-    session.record_pre_send_paste(pasted_bytes)
+    session.record_pre_send_paste(
+        pasted_bytes, rendered_request_text=_default_rendered_text(pasted_bytes))
     session.record_request_capture()
     session.record_response_capture(
         image_returned=True, returned_image_count=2, artifact_id=artifact_id)
@@ -705,7 +732,8 @@ def workflow_multiple_returned_candidates(
 
 def workflow_accidental_attachment(
         session: OperatorCaptureSession, pasted_bytes: bytes) -> dict:
-    session.record_pre_send_paste(pasted_bytes)
+    session.record_pre_send_paste(
+        pasted_bytes, rendered_request_text=_default_rendered_text(pasted_bytes))
     session.record_request_capture(attachment_count=1)
     session.record_protocol_violation("attachment_used")
     session.close_invocation()
