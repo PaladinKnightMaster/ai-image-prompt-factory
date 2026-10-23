@@ -28,6 +28,7 @@
     "operator_observations",
     "attestation_commitment_sha256",
     "class_d_conflict_count",
+    "class_d_records_commitment_sha256",
     "provenance_qualification",
     "output",
     "local_finalization_status",
@@ -61,13 +62,23 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": ["authorization_id", "authorized_by", "reason"],
+          "required": ["authorization_id", "authorized_by", "reason",
+                       "procedure", "action"],
           "properties": {
             "authorization_id": { "type": "string", "minLength": 1 },
             "authorized_by": { "type": "string", "minLength": 1 },
-            "reason": { "type": "string", "minLength": 1 }
+            "reason": { "type": "string", "minLength": 1 },
+            "procedure": { "const": "H3-indeterminate-disposition" },
+            "action": { "const": "INDETERMINATE_FINAL" }
           }
         },
+        { "type": "null" }
+      ]
+    },
+    "class_d_records_commitment_sha256": {
+      "description": "Canonical commitment over the isolated model_reports records whose conflicts the class_d_conflict_count represents. A digest proves the records are unchanged, never that their claims are true. Null only when the count is zero.",
+      "anyOf": [
+        { "type": "string", "pattern": "^[0-9a-f]{64}$" },
         { "type": "null" }
       ]
     },

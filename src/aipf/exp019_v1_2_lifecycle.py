@@ -559,7 +559,9 @@ class AttemptLifecycle:
             "authorization": (
                 {"authorization_id": authorization["authorization_id"],
                  "authorized_by": authorization["authorized_by"],
-                 "reason": authorization["reason"]}
+                 "reason": authorization["reason"],
+                 "procedure": authorization["procedure"],
+                 "action": authorization["action"]}
                 if disposition == "INDETERMINATE_FINAL" else None),
             "retained_artifact_sha256":
                 attempt["retained_artifact_sha256"],

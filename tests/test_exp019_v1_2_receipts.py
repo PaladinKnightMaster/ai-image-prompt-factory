@@ -273,7 +273,8 @@ def test_duplicate_finalization_is_idempotent(tmp_path) -> None:
         frozen_prompt_sha256=_prompt_digest(bundle),
         evidence_bundle=bundle)
     assert again["receipt_sha256"] == receipt["receipt_sha256"]
-    stored = list((tmp_path / "store" / "receipts").glob("*.json"))
+    stored = [p for p in (tmp_path / "store" / "receipts").glob("*.json")
+              if p.name != "status-transitions.json"]
     assert len(stored) == 1
     terminal = [e for e in life.store.events
                 if e["type"] == "attempt_terminal"]
@@ -417,6 +418,99 @@ def test_receipt_schema_is_valid_and_version_specific() -> None:
         .read_text(encoding="utf-8"))
     Draft202012Validator.check_schema(schema)
     assert schema["properties"]["experiment_version"]["const"] == "1.2.0"
+
+
+def test_status_field_edit_cannot_forge_external_verification(
+        tmp_path) -> None:
+    """Mutable status is excluded from receipt_sha256; an attacker who
+    edits only the status field still fails verification because the
+    audited transition log and lifecycle anchor disagree."""
+    life, _, _, receipt = _admitted_receipt(tmp_path)
+    forged = copy.deepcopy(receipt)
+    forged["local_finalization_status"] = "externally_verified"
+    # Binding unchanged because status is outside receipt_sha256.
+    assert forged["receipt_sha256"] == receipt["receipt_sha256"]
+    result = verify_terminal_receipt(forged, lifecycle=life)
+    assert not result.verified
+    assert "UNANCHORED_AS_VERIFIED" in result.codes
+    assert "STATUS_AUDIT_MISMATCH" in result.codes
+
+
+def test_class_d_count_cannot_change_independently_of_records(
+        tmp_path) -> None:
+    bundle = make_evidence_bundle("contradictory_class_d")
+    report = validate_evidence_bundle(bundle)
+    life = _lifecycle(tmp_path)
+    life.record_output(SLOT, bundle["raster_bytes"])
+    with pytest.raises(ValueError, match="disagrees with the validated"):
+        finalize_attempt_with_receipt(
+            life, SLOT, "ADMIT", slot_position=1,
+            frozen_prompt_sha256=_prompt_digest(bundle),
+            evidence_bundle=bundle, validation_report=report,
+            class_d_conflict_count=99)
+    receipt = finalize_attempt_with_receipt(
+        life, SLOT, "ADMIT", slot_position=1,
+        frozen_prompt_sha256=_prompt_digest(bundle),
+        evidence_bundle=bundle, validation_report=report,
+        class_d_conflict_count=report.class_d_conflict_count)
+    assert receipt["class_d_records_commitment_sha256"]
+    # Substituting the underlying reports breaks the commitment.
+    other = make_evidence_bundle("qualifying_class_b")
+    result = verify_terminal_receipt(receipt, lifecycle=life,
+                                     evidence_bundle=other)
+    assert "CLASS_D_RECORDS_MISMATCH" in result.codes or \
+        "EVIDENCE_COMMITMENT_MISMATCH" in result.codes
+
+
+def test_admit_requires_complete_evidence_qualification(tmp_path) -> None:
+    life = _lifecycle(tmp_path)
+    life.record_output(SLOT, b"bytes without evidence bundle")
+    with pytest.raises(ValueError, match="evidence validation"):
+        finalize_attempt_with_receipt(
+            life, SLOT, "ADMIT", slot_position=1,
+            frozen_prompt_sha256="a" * 64)
+
+
+def test_crash_at_receipt_store_boundary_recovers(tmp_path, monkeypatch
+                                                  ) -> None:
+    life = _lifecycle(tmp_path)
+    bundle = make_evidence_bundle("qualifying_class_b")
+    life.record_output(SLOT, bundle["raster_bytes"])
+    life.finalize_attempt(SLOT, "ADMIT")
+    real_replace = __import__("aipf.exp019_v1_2_lifecycle",
+                              fromlist=["os"]).os.replace
+    calls = {"n": 0}
+
+    def boom(src, dst):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise OSError("synthetic crash at receipt commit")
+        return real_replace(src, dst)
+
+    monkeypatch.setattr(
+        "aipf.exp019_v1_2_lifecycle.os.replace", boom)
+    with pytest.raises(OSError):
+        finalize_attempt_with_receipt(
+            life, SLOT, "ADMIT", slot_position=1,
+            frozen_prompt_sha256=_prompt_digest(bundle),
+            evidence_bundle=bundle)
+    monkeypatch.undo()
+    receipt = finalize_attempt_with_receipt(
+        life, SLOT, "ADMIT", slot_position=1,
+        frozen_prompt_sha256=_prompt_digest(bundle),
+        evidence_bundle=bundle)
+    again = finalize_attempt_with_receipt(
+        life, SLOT, "ADMIT", slot_position=1,
+        frozen_prompt_sha256=_prompt_digest(bundle),
+        evidence_bundle=bundle)
+    assert again["receipt_sha256"] == receipt["receipt_sha256"]
+    stored = list((tmp_path / "store" / "receipts").glob("*.json"))
+    # One receipt + the status-transitions audit log.
+    assert len([p for p in stored if p.name != "status-transitions.json"]
+               ) == 1
+    terminal = [e for e in life.store.events
+                if e["type"] == "attempt_terminal"]
+    assert len(terminal) == 1
 
 
 def test_activation_lockout_remains_effective() -> None:

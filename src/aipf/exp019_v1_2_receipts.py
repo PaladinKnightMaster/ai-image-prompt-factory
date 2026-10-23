@@ -14,11 +14,18 @@ qualification, and the local finalization status.
 Cryptographic integrity is SHA-256 over deterministic canonical
 serializations. ``receipt_sha256`` binds the receipt core and excludes
 both itself and ``local_finalization_status`` (a mutable lifecycle
-state), so the binding is never self-referential; the status is instead
-verified against the durable lifecycle record. Evidence integrity is
-kept separate from evidence truth and from authenticated host
-provenance: a commitment proves bytes are unchanged, never that their
-claims are true or class-C authentic.
+state), so the binding is never self-referential. Status transitions
+are recorded in a separate, chained audit log under the store
+(``receipts/status-transitions.json``); verification requires the
+claimed status to match that log and, for ``externally_verified``, the
+durable lifecycle anchor state. An attacker who edits only the status
+field on a stored receipt cannot make an unanchored receipt verify as
+externally verified. Evidence integrity is kept separate from evidence
+truth and from authenticated host provenance: a commitment proves
+bytes are unchanged, never that their claims are true or class-C
+authentic. The class-D conflict count is bound to a commitment over
+the isolated ``model_reports`` records and cannot be changed
+independently of those records.
 
 Outcome-dependent output handling uses ``output_state`` with nullable
 digests and a mandatory no-output reason where no artifact exists; a
@@ -80,6 +87,10 @@ _OUTPUT_STATES_BY_DISPOSITION = {
 
 _EVIDENCE_KINDS = ("observation", "attestation", "action_log",
                    "request_capture", "response_capture")
+
+_STATUS_ORDER = ("prepared", "locally_finalized", "awaiting_external_anchor",
+                 "externally_verified")
+STATUS_TRANSITIONS_NAME = "status-transitions.json"
 
 
 @dataclass(frozen=True)
@@ -228,9 +239,20 @@ def build_terminal_receipt(*, terminal_record: Mapping, slot_position: int,
     report = validation_report
     if report is None and evidence_bundle is not None:
         report = validate_evidence_bundle(evidence_bundle)
+    if disposition == "ADMIT":
+        if report is None:
+            raise ValueError(
+                "ADMIT requires a completed evidence validation report")
+        if not report.evidence_eligible or \
+                report.technical_validation != "passed":
+            raise ValueError(
+                "ADMIT requires complete evidence qualification and "
+                "technical validation; a digest alone is never "
+                "scientific admission")
     evidence_artifacts = []
     attested_fields, recorded_fields = [], []
     attestation_commitment = None
+    model_reports = []
     if evidence_bundle is not None:
         for kind in _EVIDENCE_KINDS:
             artifact = evidence_bundle.get(kind)
@@ -243,13 +265,14 @@ def build_terminal_receipt(*, terminal_record: Mapping, slot_position: int,
         if attestation is not None:
             attestation_commitment = canonical_artifact_digest(attestation)
         observation = evidence_bundle.get("observation") or {}
+        model_reports = list(observation.get("model_reports") or [])
         for name, fld in (observation.get("observations") or {}).items():
             if fld.get("status") == "operator_attested":
                 attested_fields.append(name)
             elif fld.get("status") == "operator_recorded":
                 recorded_fields.append(name)
     if report is not None:
-        class_d_count = report.class_d_conflict_count
+        class_d_count = int(report.class_d_conflict_count)
         authenticated = any(s.authenticated
                             for s in report.source_integrity)
         evidence_validation = {
@@ -261,17 +284,35 @@ def build_terminal_receipt(*, terminal_record: Mapping, slot_position: int,
                  "passed": r.passed} for r in report.q_results],
         }
     else:
-        class_d_count = int(terminal_record.get("class_d_conflict_count", 0))
+        class_d_count = int(terminal_record.get("class_d_conflict_count")
+                            or 0)
         authenticated = False
         evidence_validation = None
     record_conflict_count = int(
         terminal_record.get("class_d_conflict_count") or 0)
-    if record_conflict_count:
-        class_d_count = record_conflict_count
+    # The conflict count cannot be changed independently of the
+    # validated records: a caller-supplied count must agree with the
+    # report when both are present.
+    if report is not None and record_conflict_count and \
+            record_conflict_count != class_d_count:
+        raise ValueError(
+            "class_d_conflict_count disagrees with the validated "
+            "conflict records and cannot be altered independently")
+    if class_d_count and not model_reports:
+        raise ValueError(
+            "a non-zero class-D conflict count requires the isolated "
+            "model_reports records whose commitment it represents")
+    class_d_records_commitment = (
+        _sha256(_canonical(model_reports)) if class_d_count else None)
     provenance = (
         "authenticated_class_c_supported" if authenticated
         else "operator_evidenced_with_class_d_conflict" if class_d_count
         else "operator_evidenced")
+    authorization = copy.deepcopy(terminal_record.get("authorization"))
+    if authorization is not None:
+        authorization.setdefault("procedure",
+                                 "H3-indeterminate-disposition")
+        authorization.setdefault("action", "INDETERMINATE_FINAL")
 
     receipt = {
         "schema_version": SCHEMA_VERSION,
@@ -289,8 +330,7 @@ def build_terminal_receipt(*, terminal_record: Mapping, slot_position: int,
         "failure_evidence": terminal_record.get("failure_evidence"),
         "failure_classification": terminal_record.get(
             "failure_classification"),
-        "authorization": copy.deepcopy(
-            terminal_record.get("authorization")),
+        "authorization": authorization,
         "attempt_event_history": [
             {"seq": int(e["seq"]), "event_type": e["type"],
              "event_id": e["event_id"]} for e in event_history],
@@ -301,6 +341,7 @@ def build_terminal_receipt(*, terminal_record: Mapping, slot_position: int,
             "operator_recorded_fields": sorted(recorded_fields)},
         "attestation_commitment_sha256": attestation_commitment,
         "class_d_conflict_count": class_d_count,
+        "class_d_records_commitment_sha256": class_d_records_commitment,
         "provenance_qualification": provenance,
         "output": output,
         "local_finalization_status": local_finalization_status,
@@ -410,6 +451,28 @@ def verify_terminal_receipt(receipt: Mapping, *, lifecycle=None,
             add("FROZEN_PROMPT_MISMATCH", "frozen_prompt_sha256",
                 "receipt prompt digest does not match the frozen "
                 "prompt digest in the evidence")
+        reports = list(observation.get("model_reports") or [])
+        expected_cd = (_sha256(_canonical(reports))
+                       if receipt.get("class_d_conflict_count") else None)
+        if receipt.get("class_d_records_commitment_sha256") != expected_cd:
+            add("CLASS_D_RECORDS_MISMATCH",
+                "class_d_records_commitment_sha256",
+                "class-D conflict count is not bound to the supplied "
+                "model_reports records")
+        if receipt.get("class_d_conflict_count") and not reports:
+            add("CLASS_D_RECORDS_MISMATCH", "class_d_conflict_count",
+                "a non-zero conflict count has no underlying records")
+
+    if receipt.get("class_d_conflict_count") and \
+            not receipt.get("class_d_records_commitment_sha256"):
+        add("CLASS_D_RECORDS_MISMATCH",
+            "class_d_records_commitment_sha256",
+            "conflict count cannot stand without a records commitment")
+    if not receipt.get("class_d_conflict_count") and \
+            receipt.get("class_d_records_commitment_sha256"):
+        add("CLASS_D_RECORDS_MISMATCH",
+            "class_d_records_commitment_sha256",
+            "a records commitment requires a non-zero conflict count")
 
     if lifecycle is not None:
         try:
@@ -451,10 +514,23 @@ def verify_terminal_receipt(receipt: Mapping, *, lifecycle=None,
             status = receipt.get("local_finalization_status")
             anchored = attempt.get("anchor_state") == \
                 "externally-anchored"
-            if status == "externally_verified" and not anchored:
-                add("UNANCHORED_AS_VERIFIED", "local_finalization_status",
-                    "an unanchored receipt must not be represented as "
-                    "externally verified")
+            audited = latest_receipt_status(
+                lifecycle, receipt.get("receipt_sha256"))
+            if audited is not None and status != audited:
+                add("STATUS_AUDIT_MISMATCH", "local_finalization_status",
+                    "claimed status disagrees with the durable status-"
+                    "transition audit log")
+            if status == "externally_verified":
+                if not anchored:
+                    add("UNANCHORED_AS_VERIFIED",
+                        "local_finalization_status",
+                        "an unanchored receipt must not be represented "
+                        "as externally verified")
+                if audited != "externally_verified":
+                    add("STATUS_AUDIT_MISMATCH",
+                        "local_finalization_status",
+                        "externally_verified requires an audited "
+                        "status transition, not a field edit")
 
     return ReceiptVerification(tuple(findings))
 
@@ -470,23 +546,137 @@ def _receipts_dir(lifecycle) -> Path:
     return directory
 
 
+def _status_log_path(lifecycle) -> Path:
+    return _receipts_dir(lifecycle) / STATUS_TRANSITIONS_NAME
+
+
+def _load_status_log(lifecycle) -> list:
+    path = _status_log_path(lifecycle)
+    if not path.is_file():
+        return []
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _save_status_log(lifecycle, entries: list) -> None:
+    """Persist the status-transition audit log via staged atomic write."""
+    path = _status_log_path(lifecycle)
+    lifecycle.store._stage_and_commit(
+        lifecycle.store.staging_dir, path, _canonical(entries))
+
+
+def latest_receipt_status(lifecycle, receipt_sha256) -> Optional[str]:
+    """Return the latest audited status for a receipt, or None."""
+    for entry in reversed(_load_status_log(lifecycle)):
+        if entry.get("receipt_sha256") == receipt_sha256:
+            return entry.get("to_status")
+    return None
+
+
+def record_status_transition(lifecycle, receipt_sha256: str, *,
+                             from_status: str, to_status: str) -> dict:
+    """Append one auditable status transition for a receipt binding.
+
+    Transitions must advance along ``_STATUS_ORDER`` (or be an
+    idempotent repeat of the current status). The chain is hashed so
+    an edited or reordered log fails closed. This is the only
+    permitted mechanism for changing ``local_finalization_status``.
+    """
+    if from_status not in _STATUS_ORDER or to_status not in _STATUS_ORDER:
+        raise ValueError("unknown receipt finalization status")
+    from_idx = _STATUS_ORDER.index(from_status)
+    to_idx = _STATUS_ORDER.index(to_status)
+    if to_idx < from_idx:
+        raise ValueError("receipt status transitions are monotonic")
+    # Adjacent advance, or prepared -> awaiting_external_anchor (the
+    # durable local-finalization write collapses prepared and
+    # locally_finalized into one audited step).
+    permitted = to_idx == from_idx or to_idx == from_idx + 1 or (
+        from_status == "prepared" and
+        to_status == "awaiting_external_anchor")
+    if not permitted:
+        raise ValueError("receipt status transition is not adjacent")
+    current = latest_receipt_status(lifecycle, receipt_sha256)
+    if current == to_status:
+        for entry in reversed(_load_status_log(lifecycle)):
+            if entry.get("receipt_sha256") == receipt_sha256 and \
+                    entry.get("to_status") == to_status:
+                return entry
+    if current is not None and current != from_status:
+        raise ValueError(
+            "status transition does not continue the audited chain")
+    entries = _load_status_log(lifecycle)
+    previous = entries[-1]["entry_sha256"] if entries else None
+    entry = {
+        "receipt_sha256": receipt_sha256,
+        "from_status": from_status,
+        "to_status": to_status,
+        "previous_entry_sha256": previous,
+    }
+    entry["entry_sha256"] = _sha256(_canonical(entry))
+    entries.append(entry)
+    _save_status_log(lifecycle, entries)
+    return entry
+
+
 def store_receipt(lifecycle, receipt: Mapping) -> dict:
     """Durably store a prepared receipt (staged atomic write).
 
     Idempotent: an already-stored receipt with the same binding is
     returned unchanged. The stored copy is marked
     ``awaiting_external_anchor`` — locally finalized, externally
-    pending; it is never marked externally verified here.
+    pending — and that transition is recorded in the status audit
+    log. It is never marked externally verified here.
     """
     directory = _receipts_dir(lifecycle)
-    final_path = directory / f"{receipt['receipt_sha256']}.json"
+    binding = receipt["receipt_sha256"]
+    final_path = directory / f"{binding}.json"
     if final_path.is_file():
         return json.loads(final_path.read_text(encoding="utf-8"))
     stored = copy.deepcopy(dict(receipt))
     stored["local_finalization_status"] = "awaiting_external_anchor"
+    # Receipt first, then the status transition: a crash between them
+    # recovers by re-invoking store_receipt, which sees the file and
+    # records the missing transition if needed.
     lifecycle.store._stage_and_commit(
         lifecycle.store.staging_dir, final_path, _canonical(stored))
+    if latest_receipt_status(lifecycle, binding) != \
+            "awaiting_external_anchor":
+        record_status_transition(
+            lifecycle, binding, from_status="prepared",
+            to_status="awaiting_external_anchor")
     return stored
+
+
+def mark_receipt_externally_verified(lifecycle, receipt_sha256: str,
+                                     *, verified_anchor: bool) -> dict:
+    """Record the audited transition to externally_verified (PR-9).
+
+    Requires ``verified_anchor=True`` from a trusted anchoring
+    verification — a caller boolean alone is never accepted as proof.
+    """
+    if not verified_anchor:
+        raise ValueError(
+            "externally_verified requires a trusted anchoring "
+            "verification result, not a caller assertion")
+    current = latest_receipt_status(lifecycle, receipt_sha256)
+    if current != "awaiting_external_anchor" and \
+            current != "externally_verified":
+        raise ValueError(
+            "only a locally finalized, awaiting receipt may be marked "
+            "externally verified")
+    entry = record_status_transition(
+        lifecycle, receipt_sha256,
+        from_status="awaiting_external_anchor",
+        to_status="externally_verified")
+    stored = load_stored_receipt(lifecycle, receipt_sha256)
+    if stored is None:
+        raise ValueError("receipt is absent from durable storage")
+    stored = copy.deepcopy(stored)
+    stored["local_finalization_status"] = "externally_verified"
+    path = _receipts_dir(lifecycle) / f"{receipt_sha256}.json"
+    lifecycle.store._stage_and_commit(
+        lifecycle.store.staging_dir, path, _canonical(stored))
+    return entry
 
 
 def load_stored_receipt(lifecycle, receipt_sha256: str) -> Optional[dict]:
@@ -513,17 +703,50 @@ def finalize_attempt_with_receipt(lifecycle, slot_id, disposition, *,
     returned without duplication. A crash between the terminal event
     and the receipt write therefore recovers by simply calling this
     again — the generation attempt is never duplicated and existing
-    evidence is never overwritten.
+    evidence is never overwritten. If recovery cannot prove the
+    existing terminal state, the call fails closed.
     """
+    # Validate the receipt payload against evidence *before* committing
+    # a terminal disposition, so a rejected conflict count or missing
+    # ADMIT qualification cannot leave a durable terminal record that
+    # disagrees with the evidence.
+    report = validation_report
+    if report is None and evidence_bundle is not None:
+        report = validate_evidence_bundle(evidence_bundle)
+    if disposition == "ADMIT":
+        if report is None:
+            raise ValueError(
+                "ADMIT requires a completed evidence validation report")
+        if not report.evidence_eligible or \
+                report.technical_validation != "passed":
+            raise ValueError(
+                "ADMIT requires complete evidence qualification and "
+                "technical validation")
+        if class_d_conflict_count and report.class_d_conflict_count != \
+                class_d_conflict_count:
+            raise ValueError(
+                "class_d_conflict_count disagrees with the validated "
+                "conflict records and cannot be altered independently")
+        if not class_d_conflict_count:
+            class_d_conflict_count = report.class_d_conflict_count
+
     record = lifecycle.finalize_attempt(
         slot_id, disposition, authorization=authorization,
         class_d_conflict_count=class_d_conflict_count)
+    if record.get("disposition") != disposition:
+        raise ValueError(
+            "durable terminal disposition disagrees with the requested "
+            "finalization; recovery fails closed")
     terminal_seqs = [
         e["seq"] for e in lifecycle.store.events
         if e.get("type") == "attempt_terminal"
         and e.get("slot_id") == slot_id
         and e.get("attempt_number") == record["attempt_number"]]
-    cutoff = terminal_seqs[0] if terminal_seqs else -1
+    if not terminal_seqs:
+        raise ValueError(
+            "no durable terminal event exists for this attempt; "
+            "recovery fails closed")
+    cutoff = terminal_seqs[0]
     history = [
         e for e in lifecycle.store.events
         if e.get("slot_id") == slot_id
@@ -533,6 +756,6 @@ def finalize_attempt_with_receipt(lifecycle, slot_id, disposition, *,
         terminal_record=record, slot_position=slot_position,
         frozen_prompt_sha256=frozen_prompt_sha256,
         event_history=history, evidence_bundle=evidence_bundle,
-        validation_report=validation_report, output_state=output_state,
+        validation_report=report, output_state=output_state,
         no_output_reason=no_output_reason)
     return store_receipt(lifecycle, receipt)
