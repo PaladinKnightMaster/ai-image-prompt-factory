@@ -942,11 +942,17 @@ class CheckpointPublisher:
         if state is None:
             raise ValueError("run_root required before run_disposition")
         self._reject_if_closed(state)
-        if disposition not in ("completed", "incomplete"):
-            raise ValueError("run disposition must be completed or incomplete")
+        # ``completed`` = scientific-design closure (caller enforces 3×4).
+        # ``engineering_scenario_closed`` = miniature fixture success without
+        # scientific experiment completion. ``incomplete`` = approved abort.
+        if disposition not in (
+                "completed", "incomplete", "engineering_scenario_closed"):
+            raise ValueError(
+                "run disposition must be completed, incomplete, or "
+                "engineering_scenario_closed")
         if incomplete != (disposition == "incomplete"):
             raise ValueError("incomplete flag disagrees with disposition")
-        # Completed closure requires every finalized attempt checkpointed.
+        # Non-incomplete closures require every finalized attempt checkpointed.
         # Incomplete closure may omit review-freeze and unpublished slots,
         # but never invents admitted samples (admission lives in receipts).
         published_attempts = [
@@ -958,7 +964,7 @@ class CheckpointPublisher:
             (a[0], a[1]) for a in state.finalized_attempts]
         if not incomplete and published_attempts != expected_attempts:
             raise ValueError(
-                "completed run_disposition requires every finalized "
+                "non-incomplete run_disposition requires every finalized "
                 "attempt checkpoint before closure")
         # Incomplete closure may omit unpublished attempts and review-freeze;
         # this publisher never invents attempt checkpoints or ADMIT samples.
