@@ -421,10 +421,19 @@ def verify_terminal_receipt(receipt: Mapping, *, lifecycle=None,
                     "ADMIT requires complete evidence qualification")
             checks = {c.get("check"): c for c in
                       evidence_validation.get("checks") or []}
-            for name in ("Q1", "Q2", "Q3", "Q4", "Q5"):
-                if name not in checks or checks[name].get("passed") is False:
+            # Match evidence-eligibility: Q1/Q2/Q3/Q5 must be True.
+            # Q4 may be null when no image was returned; False always fails.
+            for name in ("Q1", "Q2", "Q3", "Q5"):
+                if name not in checks or \
+                        checks[name].get("passed") is not True:
                     add("ADMIT_EVIDENCE_INCOMPLETE", name,
-                        "ADMIT requires every Q1-Q5 check to pass")
+                        "ADMIT requires Q1/Q2/Q3/Q5 passed=true "
+                        "(null is not success)")
+            if "Q4" not in checks or \
+                    checks["Q4"].get("passed") is False:
+                add("ADMIT_EVIDENCE_INCOMPLETE", "Q4",
+                    "ADMIT rejects Q4 failure; null is only allowed "
+                    "when no image was returned")
 
     if expected_run_id is not None and \
             receipt.get("run_id") != expected_run_id:
@@ -676,13 +685,14 @@ def store_receipt(lifecycle, receipt: Mapping) -> dict:
         stored = json.loads(final_path.read_text(encoding="utf-8"))
         # Heal a missing status-audit entry after a crash between the
         # receipt write and the transition write; never invent a
-        # different binding or status.
+        # different binding or status. If audit already reached
+        # awaiting_external_anchor or later, return idempotently.
         if stored.get("receipt_sha256") != binding:
             raise ValueError(
                 "stored receipt binding disagrees with the requested "
                 "binding; recovery fails closed")
-        if latest_receipt_status(lifecycle, binding) != \
-                "awaiting_external_anchor":
+        audited = latest_receipt_status(lifecycle, binding)
+        if audited is None:
             record_status_transition(
                 lifecycle, binding, from_status="prepared",
                 to_status="awaiting_external_anchor")
@@ -694,8 +704,8 @@ def store_receipt(lifecycle, receipt: Mapping) -> dict:
     # records the missing transition.
     lifecycle.store._stage_and_commit(
         lifecycle.store.staging_dir, final_path, _canonical(stored))
-    if latest_receipt_status(lifecycle, binding) != \
-            "awaiting_external_anchor":
+    audited = latest_receipt_status(lifecycle, binding)
+    if audited is None:
         record_status_transition(
             lifecycle, binding, from_status="prepared",
             to_status="awaiting_external_anchor")

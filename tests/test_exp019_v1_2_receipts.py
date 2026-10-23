@@ -453,6 +453,30 @@ def test_admit_without_evidence_validation_fails_verify(tmp_path) -> None:
     assert "ADMIT_EVIDENCE_INCOMPLETE" in result.codes
 
 
+def test_admit_with_null_q_passed_fails_verify(tmp_path) -> None:
+    """passed=null is not success; forged ADMIT must fail closed."""
+    life, _, _, receipt = _admitted_receipt(tmp_path)
+    forged = copy.deepcopy(receipt)
+    checks = forged["evidence_validation"]["checks"]
+    for check in checks:
+        check["passed"] = None
+    forged["receipt_sha256"] = canonical_receipt_sha256(forged)
+    result = verify_terminal_receipt(forged, lifecycle=life)
+    assert not result.verified
+    assert "ADMIT_EVIDENCE_INCOMPLETE" in result.codes
+
+
+def test_store_after_external_verify_is_idempotent(tmp_path) -> None:
+    from aipf.exp019_v1_2_receipts import mark_receipt_externally_verified
+    life, _, _, receipt = _admitted_receipt(tmp_path)
+    mark_receipt_externally_verified(
+        life, receipt["receipt_sha256"], verified_anchor=True)
+    again = store_receipt(life, receipt)
+    assert again["receipt_sha256"] == receipt["receipt_sha256"]
+    assert latest_receipt_status(life, receipt["receipt_sha256"]) == \
+        "externally_verified"
+
+
 def test_status_field_edit_cannot_forge_external_verification(
         tmp_path) -> None:
     """Mutable status is excluded from receipt_sha256; an attacker who
