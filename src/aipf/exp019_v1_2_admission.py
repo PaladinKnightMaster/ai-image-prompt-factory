@@ -81,14 +81,87 @@ class LifecycleSnapshot:
     run_complete: bool = False
 
 
+#: Receipt-integrity evaluation stage.
+#:
+#: ``prospective`` — first admission decision before a terminal receipt
+#: exists; evidence integrity alone is required; a missing receipt is
+#: expected and must not be treated as ``intact=True``.
+#: ``retrospective`` — a finalized attempt already has (or must have) a
+#: terminal receipt; schema/digest integrity is mandatory.
+RECEIPT_STAGE_PROSPECTIVE = "prospective"
+RECEIPT_STAGE_RETROSPECTIVE = "retrospective"
+
+
 @dataclass(frozen=True)
 class ReceiptIntegrity:
-    """Whether a prepared / verified terminal receipt binding is intact."""
+    """Prospective vs retrospective receipt / evidence integrity status.
 
+    Factories below are the only supported constructors. A bare
+    ``intact=True`` placeholder is not a valid prospective bypass.
+    """
+
+    stage: str
     intact: bool
+    receipt_present: bool
     receipt_sha256: Optional[str] = None
     codes: tuple[str, ...] = ()
     message: str = ""
+
+    @classmethod
+    def prospective(cls) -> "ReceiptIntegrity":
+        """Honest first-attempt state: no receipt constructed yet."""
+        return cls(
+            stage=RECEIPT_STAGE_PROSPECTIVE,
+            intact=True,  # no receipt failure — receipt is not required
+            receipt_present=False,
+            receipt_sha256=None,
+            codes=(),
+            message="prospective admission; terminal receipt not yet "
+                    "constructed",
+        )
+
+    @classmethod
+    def verified(cls, receipt_sha256: str,
+                 *, codes: tuple[str, ...] = ()) -> "ReceiptIntegrity":
+        """Retrospective: an existing receipt verified intact."""
+        if not isinstance(receipt_sha256, str) or len(receipt_sha256) != 64:
+            raise ValueError(
+                "verified receipt integrity requires a 64-char receipt "
+                "digest")
+        return cls(
+            stage=RECEIPT_STAGE_RETROSPECTIVE,
+            intact=True,
+            receipt_present=True,
+            receipt_sha256=receipt_sha256,
+            codes=codes,
+            message="terminal receipt schema and digest verified",
+        )
+
+    @classmethod
+    def failed(cls, *codes: str, receipt_sha256: Optional[str] = None,
+               message: str = "receipt integrity failed",
+               receipt_present: bool = True) -> "ReceiptIntegrity":
+        """Retrospective: receipt present but failed verification."""
+        return cls(
+            stage=RECEIPT_STAGE_RETROSPECTIVE,
+            intact=False,
+            receipt_present=receipt_present,
+            receipt_sha256=receipt_sha256,
+            codes=tuple(codes) or ("RECEIPT_INTEGRITY_FAILED",),
+            message=message,
+        )
+
+    @classmethod
+    def missing_when_required(cls) -> "ReceiptIntegrity":
+        """Finalized attempt should already have a receipt — absent."""
+        return cls(
+            stage=RECEIPT_STAGE_RETROSPECTIVE,
+            intact=False,
+            receipt_present=False,
+            receipt_sha256=None,
+            codes=("RECEIPT_MISSING",),
+            message="finalized attempt is missing its terminal receipt",
+        )
 
 
 @dataclass(frozen=True)
@@ -314,10 +387,57 @@ def evaluate_admission(
                     "commitment",
             extra_codes=("NO_TERMINAL_COMMITMENT",))
 
-    if lifecycle_snapshot.terminal_disposition in TERMINAL_DISPOSITIONS:
+    # ------------------------------------------------------------------
+    # Phase 2 — Evidence trust gate + prospective/retrospective integrity
+    # ------------------------------------------------------------------
+    if validated_evidence is None:
+        codes.append("EVIDENCE_REPORT_MISSING")
+        return decide(
+            "PENDING_UNKNOWN", terminal=False, eligible=False,
+            message="validated evidence report is required")
+    if not isinstance(validated_evidence, ValidationReport):
+        codes.append("UNTRUSTED_EVIDENCE_OBJECT")
+        return decide(
+            "PENDING_UNKNOWN", terminal=False, eligible=False,
+            message="validated_evidence must be a canonical "
+                    "ValidationReport; unvalidated objects cannot "
+                    "impersonate trusted reports",
+            extra_codes=("NEVER_ADMIT", "FAIL_CLOSED"))
+
+    report = validated_evidence
+    refs.append(f"outcome:{report.outcome_classification}")
+    refs.append(f"eligibility:{report.evidence_eligibility}")
+    for q in report.q_results:
+        refs.append(
+            f"{q.check}:{'pass' if q.passed else 'fail' if q.passed is False else 'null'}")
+
+    if report.outcome_classification == "invalid_evidence" and \
+            report.errors:
+        codes.append("EVIDENCE_INVALID")
+
+    # Receipt stage: prospective (no receipt yet) vs retrospective
+    # (finalized attempt must have a verified receipt).
+    already_terminal = (
+        lifecycle_snapshot.terminal_disposition in TERMINAL_DISPOSITIONS)
+    if already_terminal:
+        # A finalized attempt must be evaluated retrospectively.
+        if receipt_integrity.stage != RECEIPT_STAGE_RETROSPECTIVE:
+            codes.append("RECEIPT_STAGE_MISMATCH")
+            return decide(
+                "PENDING_UNKNOWN", terminal=False, eligible=False,
+                message="finalized attempt requires retrospective receipt "
+                        "verification; prospective stage is refused",
+                extra_codes=("NEVER_ADMIT",))
+        if not receipt_integrity.receipt_present or \
+                not receipt_integrity.intact:
+            codes.extend(
+                receipt_integrity.codes or ("RECEIPT_MISSING",))
+            return decide(
+                "PENDING_UNKNOWN", terminal=False, eligible=False,
+                message="finalized attempt missing or invalid terminal "
+                        "receipt; never treat as valid",
+                extra_codes=("NEVER_ADMIT",))
         codes.append("ALREADY_TERMINAL")
-        # Deterministic re-evaluation of a committed terminal: report the
-        # existing disposition without mutating anything.
         prior = lifecycle_snapshot.terminal_disposition
         return decide(
             prior, terminal=True, eligible=False,
@@ -327,37 +447,37 @@ def evaluate_admission(
                 if prior == "FAILURE" else None),
             extra_codes=("IDEMPOTENT_REPLAY",))
 
+    if receipt_integrity.stage == RECEIPT_STAGE_PROSPECTIVE:
+        # First admission: receipt must not yet exist; do not invent
+        # intactness. Evidence integrity comes from ValidationReport.
+        if receipt_integrity.receipt_present:
+            codes.append("PROSPECTIVE_RECEIPT_UNEXPECTED")
+            return decide(
+                "PENDING_UNKNOWN", terminal=False, eligible=False,
+                message="prospective admission must not carry a terminal "
+                        "receipt",
+                extra_codes=("NEVER_ADMIT",))
+    elif receipt_integrity.stage == RECEIPT_STAGE_RETROSPECTIVE:
+        if not receipt_integrity.intact or \
+                not receipt_integrity.receipt_present:
+            codes.extend(
+                receipt_integrity.codes or ("RECEIPT_INTEGRITY_FAILED",))
+            return decide(
+                "PENDING_UNKNOWN", terminal=False, eligible=False,
+                message="invalid receipt or evidence binding; never ADMIT",
+                extra_codes=("NEVER_ADMIT",))
+    else:
+        codes.append("RECEIPT_STAGE_UNKNOWN")
+        return decide(
+            "PENDING_UNKNOWN", terminal=False, eligible=False,
+            message="receipt integrity stage is unrecognized; fail closed",
+            extra_codes=("FAIL_CLOSED", "NEVER_ADMIT"))
+
     if lifecycle_snapshot.state in ("planned",):
         codes.append("NOT_STARTED")
         return decide(
             "PENDING_UNKNOWN", terminal=False, eligible=False,
             message="invocation has not started")
-
-    # ------------------------------------------------------------------
-    # Phase 2 — Evidence integrity and schema / receipt validity
-    # ------------------------------------------------------------------
-    if not receipt_integrity.intact:
-        codes.extend(receipt_integrity.codes or ("RECEIPT_INTEGRITY_FAILED",))
-        return decide(
-            "PENDING_UNKNOWN", terminal=False, eligible=False,
-            message="invalid receipt or evidence binding; never ADMIT",
-            extra_codes=("NEVER_ADMIT",))
-
-    if validated_evidence is None:
-        codes.append("EVIDENCE_REPORT_MISSING")
-        return decide(
-            "PENDING_UNKNOWN", terminal=False, eligible=False,
-            message="validated evidence report is required")
-
-    report = validated_evidence
-    refs.append(f"outcome:{report.outcome_classification}")
-    refs.append(f"eligibility:{report.evidence_eligibility}")
-    for q in report.q_results:
-        refs.append(f"{q.check}:{'pass' if q.passed else 'fail' if q.passed is False else 'null'}")
-
-    if report.outcome_classification == "invalid_evidence" and \
-            report.errors:
-        codes.append("EVIDENCE_INVALID")
 
     # ------------------------------------------------------------------
     # Phase 3 — Demonstrated protocol violations (before ordinary ADMIT)
@@ -576,42 +696,121 @@ def evaluate_retry_advancement(
         prior_decision: AdmissionDecision,
         lifecycle_snapshot: LifecycleSnapshot,
         protocol_context: Optional[ProtocolContext] = None,
+        *,
+        anchor_verification=None,
 ) -> AdmissionDecision:
     """Re-check whether lifecycle may advance a technical retry.
 
-    Does not start a retry. Returns a decision whose ``retry_eligible``
-    flag reflects budget and external-anchor requirements.
+    Does not start a retry. Re-validates confirmed technical-failure
+    classification against the durable snapshot. Production retry
+    eligibility requires a PR-9 ``VerificationResult`` with
+    ``verified=True`` — a caller ``anchor_state`` / ``anchored=True``
+    assertion alone never establishes external anchoring.
     """
+    from .exp019_v1_2_checkpoints import VerificationResult
+
     context = protocol_context or ProtocolContext()
-    if not prior_decision.retry_eligible:
-        return prior_decision
+
+    def _blocked(reason: str, *extra: str,
+                 classification: Optional[str] = None) -> AdmissionDecision:
+        blocked = AdmissionDecision(
+            disposition=prior_decision.disposition,
+            terminal=True,
+            eligible_for_commitment=False,
+            reason_codes=tuple(dict.fromkeys(
+                [*prior_decision.reason_codes, *extra])),
+            evidence_references=prior_decision.evidence_references,
+            retry_eligible=False,
+            retry_eligibility_reason=reason,
+            failure_classification=(
+                classification
+                if classification is not None
+                else prior_decision.failure_classification),
+            message=reason.replace("_", " "),
+            public_summary={},
+        )
+        return AdmissionDecision(
+            disposition=blocked.disposition,
+            terminal=blocked.terminal,
+            eligible_for_commitment=blocked.eligible_for_commitment,
+            reason_codes=blocked.reason_codes,
+            evidence_references=blocked.evidence_references,
+            retry_eligible=False,
+            retry_eligibility_reason=blocked.retry_eligibility_reason,
+            failure_classification=blocked.failure_classification,
+            message=blocked.message,
+            public_summary=blocked.to_public_dict(),
+        )
+
+    # Re-derive eligibility from durable classification — never trust a
+    # forged prior_decision.retry_eligible flag alone.
+    durable = lifecycle_snapshot.failure_classification
+    claimed = prior_decision.failure_classification
+    if prior_decision.disposition != "FAILURE":
+        return _blocked("retry_only_after_terminal_technical_failure",
+                        "RETRY_REFUSED")
+    if durable in NON_RETRYABLE_FAILURES or claimed in NON_RETRYABLE_FAILURES:
+        return _blocked(
+            f"non_retryable:{durable or claimed}",
+            "RETRY_REFUSED", "NON_RETRYABLE",
+            classification=durable or claimed)
+    if durable not in RETRYABLE_TECHNICAL_FAILURES:
+        return _blocked(
+            "generic_failure_does_not_authorize_retry",
+            "RETRY_REFUSED",
+            classification=durable)
+    if claimed is not None and claimed != durable:
+        return _blocked(
+            "failure_classification_mismatch",
+            "RETRY_REFUSED", "CLASSIFICATION_MISMATCH",
+            classification=durable)
+    if lifecycle_snapshot.technically_evaluable is True:
+        return _blocked(
+            "technically_evaluable_output_not_retryable", "RETRY_REFUSED")
     if lifecycle_snapshot.retry_count >= context.max_retries:
-        return AdmissionDecision(
-            disposition=prior_decision.disposition,
-            terminal=True,
-            eligible_for_commitment=False,
-            reason_codes=prior_decision.reason_codes + (
-                "TECHNICAL_RETRY_BUDGET_EXHAUSTED",),
-            evidence_references=prior_decision.evidence_references,
-            retry_eligible=False,
-            retry_eligibility_reason="technical_retry_budget_exhausted",
-            failure_classification=prior_decision.failure_classification,
-            message="technical retry budget exhausted",
-            public_summary={},
-        )
+        return _blocked(
+            "technical_retry_budget_exhausted",
+            "TECHNICAL_RETRY_BUDGET_EXHAUSTED")
+
+    # PR-9 VerificationResult is the sole production authority.
+    if not isinstance(anchor_verification, VerificationResult):
+        return _blocked(
+            "anchor_verification_required",
+            "PREDECESSOR_NOT_EXTERNALLY_ANCHORED",
+            "UNTRUSTED_ANCHOR_CLAIM")
+    if not anchor_verification.verified:
+        return _blocked(
+            "predecessor_not_externally_anchored",
+            "PREDECESSOR_NOT_EXTERNALLY_ANCHORED")
+    # Snapshot label must agree with verified result, but never substitutes.
     if lifecycle_snapshot.anchor_state != ANCHOR_ANCHORED:
-        return AdmissionDecision(
-            disposition=prior_decision.disposition,
-            terminal=True,
-            eligible_for_commitment=False,
-            reason_codes=prior_decision.reason_codes + (
-                "PREDECESSOR_NOT_EXTERNALLY_ANCHORED",),
-            evidence_references=prior_decision.evidence_references,
-            retry_eligible=False,
-            retry_eligibility_reason="predecessor_not_externally_anchored",
-            failure_classification=prior_decision.failure_classification,
-            message="previous receipt not externally anchored; no retry "
-                    "advancement",
-            public_summary={},
-        )
-    return prior_decision
+        return _blocked(
+            "predecessor_not_externally_anchored",
+            "PREDECESSOR_NOT_EXTERNALLY_ANCHORED",
+            "ANCHOR_STATE_MISMATCH")
+
+    allowed = AdmissionDecision(
+        disposition=prior_decision.disposition,
+        terminal=True,
+        eligible_for_commitment=False,
+        reason_codes=prior_decision.reason_codes + (
+            "TECHNICAL_RETRY_AUTHORIZED",),
+        evidence_references=prior_decision.evidence_references,
+        retry_eligible=True,
+        retry_eligibility_reason="confirmed_technical_failure",
+        failure_classification=durable,
+        message="technical retry authorized after verified external anchor",
+        public_summary={},
+    )
+    return AdmissionDecision(
+        disposition=allowed.disposition,
+        terminal=allowed.terminal,
+        eligible_for_commitment=allowed.eligible_for_commitment,
+        reason_codes=allowed.reason_codes,
+        evidence_references=allowed.evidence_references,
+        retry_eligible=True,
+        retry_eligibility_reason=allowed.retry_eligibility_reason,
+        failure_classification=allowed.failure_classification,
+        message=allowed.message,
+        public_summary=allowed.to_public_dict(),
+    )
