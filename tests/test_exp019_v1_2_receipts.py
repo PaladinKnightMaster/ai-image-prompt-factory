@@ -28,7 +28,9 @@ from aipf.exp019_v1_2_receipts import (
     build_terminal_receipt,
     canonical_receipt_sha256,
     finalize_attempt_with_receipt,
+    latest_receipt_status,
     load_stored_receipt,
+    store_receipt,
     verify_terminal_receipt,
 )
 
@@ -418,6 +420,37 @@ def test_receipt_schema_is_valid_and_version_specific() -> None:
         .read_text(encoding="utf-8"))
     Draft202012Validator.check_schema(schema)
     assert schema["properties"]["experiment_version"]["const"] == "1.2.0"
+
+
+def test_missing_status_audit_is_healed_on_store_reentry(tmp_path) -> None:
+    """Crash between receipt write and status transition: re-entry heals."""
+    life, bundle, _, receipt = _admitted_receipt(tmp_path)
+    log = tmp_path / "store" / "receipts" / "status-transitions.json"
+    log.unlink()
+    assert latest_receipt_status(life, receipt["receipt_sha256"]) is None
+    healed = store_receipt(life, receipt)
+    assert healed["receipt_sha256"] == receipt["receipt_sha256"]
+    assert latest_receipt_status(life, receipt["receipt_sha256"]) == \
+        "awaiting_external_anchor"
+    assert verify_terminal_receipt(healed, lifecycle=life).verified
+
+
+def test_missing_status_audit_fails_verification(tmp_path) -> None:
+    life, _, _, receipt = _admitted_receipt(tmp_path)
+    (tmp_path / "store" / "receipts" / "status-transitions.json").unlink()
+    result = verify_terminal_receipt(receipt, lifecycle=life)
+    assert not result.verified
+    assert "STATUS_AUDIT_MISMATCH" in result.codes
+
+
+def test_admit_without_evidence_validation_fails_verify(tmp_path) -> None:
+    life, bundle, _, receipt = _admitted_receipt(tmp_path)
+    forged = copy.deepcopy(receipt)
+    forged["evidence_validation"] = None
+    forged["receipt_sha256"] = canonical_receipt_sha256(forged)
+    result = verify_terminal_receipt(forged, lifecycle=life)
+    assert not result.verified
+    assert "ADMIT_EVIDENCE_INCOMPLETE" in result.codes
 
 
 def test_status_field_edit_cannot_forge_external_verification(

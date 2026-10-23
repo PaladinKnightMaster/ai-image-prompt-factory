@@ -405,6 +405,27 @@ def verify_terminal_receipt(receipt: Mapping, *, lifecycle=None,
         add("AUTHORIZATION_MISSING", "authorization",
             "INDETERMINATE_FINAL requires the authorized record summary")
 
+    if receipt.get("disposition") == "ADMIT":
+        evidence_validation = receipt.get("evidence_validation") or {}
+        if not evidence_validation:
+            add("ADMIT_EVIDENCE_INCOMPLETE", "evidence_validation",
+                "ADMIT requires a bound evidence validation summary")
+        else:
+            if evidence_validation.get("technical_validation") != "passed":
+                add("ADMIT_EVIDENCE_INCOMPLETE", "technical_validation",
+                    "ADMIT requires technical_validation=passed")
+            if evidence_validation.get("evidence_eligibility") not in (
+                    "evidence_eligible",
+                    "evidence_eligible_with_conflict"):
+                add("ADMIT_EVIDENCE_INCOMPLETE", "evidence_eligibility",
+                    "ADMIT requires complete evidence qualification")
+            checks = {c.get("check"): c for c in
+                      evidence_validation.get("checks") or []}
+            for name in ("Q1", "Q2", "Q3", "Q4", "Q5"):
+                if name not in checks or checks[name].get("passed") is False:
+                    add("ADMIT_EVIDENCE_INCOMPLETE", name,
+                        "ADMIT requires every Q1-Q5 check to pass")
+
     if expected_run_id is not None and \
             receipt.get("run_id") != expected_run_id:
         add("IDENTITY_MISMATCH", "run_id",
@@ -435,6 +456,25 @@ def verify_terminal_receipt(receipt: Mapping, *, lifecycle=None,
                 "evidence commitments do not recompute from the "
                 "supplied artifacts; an artifact is missing or "
                 "substituted")
+        if receipt.get("disposition") == "ADMIT":
+            report = validate_evidence_bundle(evidence_bundle)
+            if not report.evidence_eligible or \
+                    report.technical_validation != "passed":
+                add("ADMIT_EVIDENCE_INCOMPLETE", "evidence_bundle",
+                    "supplied evidence does not qualify for ADMIT")
+            if report.class_d_conflict_count != \
+                    receipt.get("class_d_conflict_count"):
+                add("CLASS_D_RECORDS_MISMATCH", "class_d_conflict_count",
+                    "bound conflict count disagrees with revalidated "
+                    "evidence")
+            bound = {(c.get("check"), c.get("passed"))
+                     for c in (receipt.get("evidence_validation") or
+                               {}).get("checks") or []}
+            actual = {(r.check, r.passed) for r in report.q_results}
+            if bound != actual:
+                add("ADMIT_EVIDENCE_INCOMPLETE", "evidence_validation",
+                    "bound Q1-Q5 findings disagree with revalidated "
+                    "evidence")
         attestation = evidence_bundle.get("attestation")
         expected_attestation = canonical_artifact_digest(attestation) \
             if attestation is not None else None
@@ -516,7 +556,14 @@ def verify_terminal_receipt(receipt: Mapping, *, lifecycle=None,
                 "externally-anchored"
             audited = latest_receipt_status(
                 lifecycle, receipt.get("receipt_sha256"))
-            if audited is not None and status != audited:
+            if status != "prepared":
+                if audited != status:
+                    add("STATUS_AUDIT_MISMATCH",
+                        "local_finalization_status",
+                        "claimed status must match the durable status-"
+                        "transition audit log; missing audit fails "
+                        "closed")
+            elif audited is not None and audited != status:
                 add("STATUS_AUDIT_MISMATCH", "local_finalization_status",
                     "claimed status disagrees with the durable status-"
                     "transition audit log")
@@ -526,11 +573,6 @@ def verify_terminal_receipt(receipt: Mapping, *, lifecycle=None,
                         "local_finalization_status",
                         "an unanchored receipt must not be represented "
                         "as externally verified")
-                if audited != "externally_verified":
-                    add("STATUS_AUDIT_MISMATCH",
-                        "local_finalization_status",
-                        "externally_verified requires an audited "
-                        "status transition, not a field edit")
 
     return ReceiptVerification(tuple(findings))
 
@@ -631,12 +673,25 @@ def store_receipt(lifecycle, receipt: Mapping) -> dict:
     binding = receipt["receipt_sha256"]
     final_path = directory / f"{binding}.json"
     if final_path.is_file():
-        return json.loads(final_path.read_text(encoding="utf-8"))
+        stored = json.loads(final_path.read_text(encoding="utf-8"))
+        # Heal a missing status-audit entry after a crash between the
+        # receipt write and the transition write; never invent a
+        # different binding or status.
+        if stored.get("receipt_sha256") != binding:
+            raise ValueError(
+                "stored receipt binding disagrees with the requested "
+                "binding; recovery fails closed")
+        if latest_receipt_status(lifecycle, binding) != \
+                "awaiting_external_anchor":
+            record_status_transition(
+                lifecycle, binding, from_status="prepared",
+                to_status="awaiting_external_anchor")
+        return stored
     stored = copy.deepcopy(dict(receipt))
     stored["local_finalization_status"] = "awaiting_external_anchor"
     # Receipt first, then the status transition: a crash between them
     # recovers by re-invoking store_receipt, which sees the file and
-    # records the missing transition if needed.
+    # records the missing transition.
     lifecycle.store._stage_and_commit(
         lifecycle.store.staging_dir, final_path, _canonical(stored))
     if latest_receipt_status(lifecycle, binding) != \
