@@ -43,6 +43,8 @@ AUTHORIZED_V12_MODULES = {
     # PR-12: synthetic E2E harness may call checkpoint/run_root publishers
     # against isolated temp remotes only; allocate/generate/reveal remain banned.
     "exp019_v1_2_synthetic_e2e.py": frozenset({"checkpoint", "run_root"}),
+    # G3 hardening: local operator run-state / capture controls (inactive science)
+    "exp019_v1_2_g3_hardening.py": frozenset(),
 }
 
 _V12_SCOPE = re.compile(r"1\.2\.0|v1_2|EXP-019 v1\.2")
