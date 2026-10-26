@@ -87,24 +87,12 @@ def _png(path: Path, color=(10, 20, 30)) -> Path:
 
 @pytest.fixture(scope="module", autouse=True)
 def _ensure_fixtures():
-    """Materialize frozen-prompt fixtures from DEFAULT digests via private copy if present."""
+    """Require committed neutral fixtures (no private-run bootstrap)."""
     fix = ROOT / "tests" / "fixtures" / "g3_hardening"
-    fix.mkdir(parents=True, exist_ok=True)
-    private = Path(
-        r"D:\1_PROJECT\AI_Kits\AI Image Prompt Factory\IDEA_POOL\aipf-private"
-        r"\experiments\pilot\EXP019-v1.2-G3\RUN-20261026T121107Z-G3-FOLLOWUP\packets"
-    )
     for pid in (PLVA, PLVB):
         dest = fix / f"{pid}.txt"
-        if dest.exists():
-            continue
-        src = private / pid / "frozen-prompt.txt"
-        if src.exists():
-            dest.write_bytes(src.read_bytes())
-        else:
-            # Deterministic placeholder only if digests match — they won't;
-            # tests skip without fixtures.
-            pass
+        if not dest.exists():
+            pytest.skip(f"missing committed fixture {dest}")
 
 
 def test_bom_reader_and_writer_roundtrip(tmp_path):
@@ -180,16 +168,16 @@ def test_full_contemporaneous_q1_q5_lifecycle(tmp_path):
         v is None for v in unsigned["statements_for_operator_to_confirm"].values())
     # sign without confirm must not sign
     assert _cli(run, "--action", "attest", "--pilot-id", PLVA,
-                "--signature", "codeknight").returncode == 0
+                "--signature", "synthop").returncode == 0
     assert not (run / "evidence" / PLVA /
                 "q5-operator-attestation.SIGNED.json").exists()
     # sign with confirm
     assert _cli(run, "--action", "attest", "--pilot-id", PLVA,
-                "--signature", "codeknight",
+                "--signature", "synthop",
                 "--confirm-all-true").returncode == 0
     signed = read_json(
         run / "evidence" / PLVA / "q5-operator-attestation.SIGNED.json")
-    assert signed["operator_signature"] == "codeknight"
+    assert signed["operator_signature"] == "synthop"
     assert all(signed["statements"].values())
 
 
@@ -315,3 +303,35 @@ def test_privacy_scan_needles_absent_in_module():
         assert needle not in text
     assert "treatment_id" not in text
     assert 'experiment_eligible": true' not in text
+
+def test_host_label_and_prepare_blocked_after_stop(tmp_path):
+    run = _mk_run(tmp_path)
+    assert _cli(run, "--action", "preflight").returncode == 0
+    assert _cli(run, "--action", "record-host-label",
+                "--label", "Images").returncode == 0
+    assert _cli(run, "--action", "authorize").returncode == 0
+    assert _cli(run, "--action", "owner-stop").returncode == 0
+    assert _cli(run, "--action", "record-host-label",
+                "--label", "Images").returncode != 0
+    assert _cli(run, "--action", "preflight").returncode != 0
+    assert _cli(run, "--action", "authorize").returncode != 0
+    assert _cli(run, "--action", "pre-send", "--pilot-id", PLVA).returncode != 0
+    assert _cli(run, "--action", "submit", "--pilot-id", PLVA).returncode != 0
+    audit = (run / "audit" / "unauthorized-attempts.jsonl").read_text(encoding="utf-8")
+    assert "host_label_mutate_blocked" in audit
+    assert "post_stop_continuation_attempt" in audit
+    assert _cli(run, "--action", "log-incident",
+                "--note", "Host Generate clicked after STOP; not authorized").returncode == 0
+    assert get_state(load_pilot_run(run)) == "STOPPED_BY_OWNER"
+    assert remaining_budget(load_pilot_run(run)) == 2
+
+
+def test_closed_blocks_host_label(tmp_path):
+    run = _mk_run(tmp_path)
+    _cli(run, "--action", "preflight")
+    _cli(run, "--action", "authorize")
+    _cli(run, "--action", "owner-stop")
+    _cli(run, "--action", "complete")
+    _cli(run, "--action", "close")
+    assert _cli(run, "--action", "record-host-label",
+                "--label", "Images").returncode != 0

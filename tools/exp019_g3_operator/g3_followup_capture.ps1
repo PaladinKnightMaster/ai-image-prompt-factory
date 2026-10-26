@@ -14,6 +14,7 @@ param(
   [Parameter(Mandatory = $true)]
   [ValidateSet(
     'preflight', 'authorize', 'owner-stop', 'complete', 'close', 'status',
+    'record-host-label', 'log-incident',
     'copy', 'verify-clipboard', 'pre-send', 'submit', 'response', 'download', 'attest'
   )]
   [string]$Action,
@@ -21,6 +22,8 @@ param(
   [int]$ReturnedCount = 1,
   [string]$ImagePath = '',
   [string]$Signature = '',
+  [string]$Label = '',
+  [string]$Note = '',
   [switch]$ConfirmAllTrue,
   [string]$AtUtc = '',
   [string]$ConversationRef = 'chatgpt.com/images',
@@ -32,7 +35,8 @@ $ErrorActionPreference = 'Stop'
 $Root = $WorkRoot
 if (-not (Test-Path $Root)) { throw "WorkRoot not found: $Root" }
 
-$Repo = 'D:\1_PROJECT\AI_Kits\AI Image Prompt Factory\IDEA_POOL\ai-image-prompt-factory'
+# tools/exp019_g3_operator -> repo root
+$Repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $Py = Join-Path $Repo '.venv\Scripts\python.exe'
 if (-not (Test-Path $Py)) { $Py = 'python' }
 $env:PYTHONPATH = (Join-Path $Repo 'src')
@@ -68,6 +72,20 @@ function Assert-Digest([byte[]]$Bytes, [string]$Id) {
 
 if ($Action -in @('preflight', 'authorize', 'owner-stop', 'complete', 'close')) {
   & $Py -m aipf.exp019_v1_2_g3_hardening --root $Root --action $Action
+  if ($LASTEXITCODE -ne 0) { throw "hardening failed: $LASTEXITCODE" }
+  return
+}
+
+if ($Action -eq 'record-host-label') {
+  if (-not $Label) { throw 'Label required for record-host-label' }
+  & $Py -m aipf.exp019_v1_2_g3_hardening --root $Root --action record-host-label --label $Label
+  if ($LASTEXITCODE -ne 0) { throw "hardening failed: $LASTEXITCODE" }
+  return
+}
+
+if ($Action -eq 'log-incident') {
+  if (-not $Note) { throw 'Note required for log-incident' }
+  & $Py -m aipf.exp019_v1_2_g3_hardening --root $Root --action log-incident --note $Note
   if ($LASTEXITCODE -ne 0) { throw "hardening failed: $LASTEXITCODE" }
   return
 }

@@ -16,7 +16,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -90,13 +92,30 @@ def read_json(path: Path) -> Any:
 
 
 def write_json(path: Path, data: Any) -> None:
-    """Write JSON as UTF-8 without BOM (atomic replace)."""
+    """Write JSON as UTF-8 without BOM (atomic replace + exclusive lock)."""
     path.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(data, indent=2, sort_keys=True) + "\n"
     payload = text.encode("utf-8")
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_bytes(payload)
-    tmp.replace(path)
+    lock = path.with_suffix(path.suffix + ".lock")
+    # Best-effort exclusive create lock (Windows + POSIX).
+    for _ in range(50):
+        try:
+            fd = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.close(fd)
+            break
+        except FileExistsError:
+            time.sleep(0.02)
+    else:
+        raise HardeningError(f"write lock timeout for {path.name}")
+    try:
+        tmp.write_bytes(payload)
+        tmp.replace(path)
+    finally:
+        try:
+            lock.unlink(missing_ok=True)
+        except OSError:
+            pass
 
 
 def has_utf8_bom(path: Path) -> bool:
@@ -301,10 +320,30 @@ def build_operator_session(
 def action_preflight(root: Path) -> int:
     meta = load_pilot_run(root)
     state = get_state(meta)
-    if state not in {"CREATED", "PREFLIGHT_READY"}:
-        # idempotent read/check when already past preflight
-        print(f"OK preflight skipped; run_state={state}")
+    if state in {
+        "STOPPED_BY_OWNER", "CLOSED", "CAPTURE_BLOCKED", "COMPLETED",
+    }:
+        append_audit(root, {
+            "event": "preflight_blocked",
+            "state": state,
+        })
+        raise HardeningError(
+            f"preflight refused in run_state={state} "
+            "(setup progression forbidden)"
+        )
+    if state == "ACTIVE":
+        # Idempotent re-check only; do not regress state.
+        pr = pilot_run_path(root)
+        if pr.exists() and has_utf8_bom(pr):
+            raise HardeningError(
+                "PREFLIGHT_FAIL: pilot-run.json has UTF-8 BOM"
+            )
+        for pid in list(meta.get("prompt_order") or ["PLVA01", "PLVB01"]):
+            resolve_pilot(root, pid)
+        print(f"OK preflight recheck PASS; run_state={state}")
         return 0
+    if state not in {"CREATED", "PREFLIGHT_READY"}:
+        raise HardeningError(f"preflight not valid from {state}")
     pr = pilot_run_path(root)
     if pr.exists() and has_utf8_bom(pr):
         raise HardeningError(
@@ -336,11 +375,57 @@ def action_authorize(root: Path) -> int:
     """Mark ACTIVE only from PREFLIGHT_READY (owner APPROVE EXECUTION recorded)."""
     meta = load_pilot_run(root)
     if get_state(meta) != "PREFLIGHT_READY":
+        append_audit(root, {
+            "event": "authorize_blocked",
+            "state": get_state(meta),
+        })
         raise HardeningError("authorize requires PREFLIGHT_READY")
     meta["execution_authorized"] = True
     meta["execution_authorized_at_utc"] = utc_now()
     transition(root, meta, "ACTIVE", "owner APPROVE EXECUTION recorded locally")
     print("OK ACTIVE - local capture permitted; ChatGPT UI not controlled")
+    return 0
+
+
+def action_record_host_label(root: Path, label: str) -> int:
+    """Record host UI label; allowed only in PREFLIGHT_READY or ACTIVE."""
+    meta = load_pilot_run(root)
+    state = get_state(meta)
+    if state not in {"PREFLIGHT_READY", "ACTIVE"}:
+        append_audit(root, {
+            "event": "host_label_mutate_blocked",
+            "state": state,
+            "attempted_label": label,
+        })
+        raise HardeningError(
+            f"record-host-label forbidden in run_state={state}"
+        )
+    if not label.strip():
+        raise HardeningError("host label required")
+    meta["host_ui_label_observed"] = label.strip()
+    meta["host_ui_label_recorded_at_utc"] = utc_now()
+    save_pilot_run(root, meta)
+    print(
+        f"RECORDED host_ui_label_observed={meta['host_ui_label_observed']} "
+        "(utf-8 no BOM)"
+    )
+    return 0
+
+
+def action_log_incident(root: Path, note: str) -> int:
+    """Append an incident note (e.g. unauthorized host Generate after STOP).
+
+    Does not authorize progression and does not write Q1-Q5 success evidence.
+    """
+    if not note.strip():
+        raise HardeningError("incident note required")
+    append_audit(root, {
+        "event": "operator_incident",
+        "note": note.strip(),
+        "authorized_progression": False,
+        "timestamp_class": "operator_observed",
+    })
+    print("OK incident logged (not authorized progression)")
     return 0
 
 
@@ -695,6 +780,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--image-path", default="")
     ap.add_argument("--signature", default="")
     ap.add_argument("--confirm-all-true", action="store_true")
+    ap.add_argument("--label", default="")
+    ap.add_argument("--note", default="")
     args = ap.parse_args(argv)
 
     root = Path(args.root)
@@ -713,6 +800,10 @@ def main(argv: list[str] | None = None) -> int:
             return action_complete(root)
         if action == "close":
             return action_close(root)
+        if action == "record-host-label":
+            return action_record_host_label(root, args.label)
+        if action == "log-incident":
+            return action_log_incident(root, args.note)
         if action == "status":
             return action_status(root, args.pilot_id or None)
         if action in {"submit-retrospective", "response-retrospective"}:

@@ -32,8 +32,9 @@ $Here = $PSScriptRoot
 $Capture = Join-Path $Here 'g3_followup_capture.ps1'
 
 function Show-Banner([string]$Required, [string]$Permitted) {
-  $Repo = 'D:\1_PROJECT\AI_Kits\AI Image Prompt Factory\IDEA_POOL\ai-image-prompt-factory'
+  $Repo = (Resolve-Path (Join-Path $Here '..\..')).Path
   $Py = Join-Path $Repo '.venv\Scripts\python.exe'
+  if (-not (Test-Path $Py)) { $Py = 'python' }
   $env:PYTHONPATH = (Join-Path $Repo 'src')
   Write-Host '======== G3 OPERATOR (HARDENED) ========'
   Write-Host "Stage:      $Stage"
@@ -52,20 +53,7 @@ switch ($Stage) {
   'PREPARE' {
     Show-Banner 'Confirm Images UI; run preflight then authorize' 'yes if CREATED/PREFLIGHT'
     & $Capture -WorkRoot $WorkRoot -Action preflight
-    # Record host label without BOM (Python utf-8)
-    $Repo = 'D:\1_PROJECT\AI_Kits\AI Image Prompt Factory\IDEA_POOL\ai-image-prompt-factory'
-    $Py = Join-Path $Repo '.venv\Scripts\python.exe'
-    $env:PYTHONPATH = (Join-Path $Repo 'src')
-    & $Py -c @"
-from pathlib import Path
-from aipf.exp019_v1_2_g3_hardening import load_pilot_run, save_pilot_run, utc_now
-r = Path(r'''$WorkRoot''')
-m = load_pilot_run(r)
-m['host_ui_label_observed'] = '''$HostLabel'''
-m['host_ui_label_recorded_at_utc'] = utc_now()
-save_pilot_run(r, m)
-print('RECORDED host_ui_label_observed=' + m['host_ui_label_observed'])
-"@
+    & $Capture -WorkRoot $WorkRoot -Action record-host-label -Label $HostLabel
     & $Capture -WorkRoot $WorkRoot -Action authorize
     Write-Host 'NEXT: VERIFY_PROMPT'
   }
