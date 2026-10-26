@@ -32,20 +32,23 @@ PLVB = "PLVB01"
 
 def _write_frozen(run: Path, pilot_id: str) -> None:
     info = DEFAULT_PILOTS[pilot_id]
-    # Reconstruct exact bytes from closed follow-up packets when available;
-    # otherwise synthesize matching length is impossible — copy from private
-    # is not allowed in CI. Use repo test fixture bytes built to match digests.
     fixture = ROOT / "tests" / "fixtures" / "g3_hardening" / f"{pilot_id}.txt"
-    if fixture.exists():
-        data = fixture.read_bytes()
-    else:
+    if not fixture.exists():
         pytest.skip(f"missing fixture {fixture}")
+    data = fixture.read_bytes().replace(b"\r\n", b"\n")
+    digest = __import__("hashlib").sha256(data).hexdigest()
+    if digest != info["sha256"] or len(data) != info["nbytes"]:
+        raise AssertionError(
+            f"fixture digest drift {pilot_id}: {digest} {len(data)} "
+            f"(expected {info['sha256']} {info['nbytes']}); "
+            "ensure LF checkout via .gitattributes"
+        )
     d = run / "packets" / pilot_id
     d.mkdir(parents=True, exist_ok=True)
     (d / "frozen-prompt.txt").write_bytes(data)
     write_json(d / "packet.json", {
-        "sha256": info["sha256"],
-        "nbytes": info["nbytes"],
+        "sha256": digest,
+        "nbytes": len(data),
         "tooling_slot": info["slot"],
     })
 
