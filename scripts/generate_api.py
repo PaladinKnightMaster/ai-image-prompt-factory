@@ -64,9 +64,10 @@ def build_parser() -> argparse.ArgumentParser:
         default=os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-2"),
         help="Verified execution model id: gpt-image-2 or gpt-image-2-2026-04-21",
     )
-    # Default remains the historical snapshot label for CLI compatibility, but
-    # provenance treats it as undeclared unless --model-snapshot was passed
-    # explicitly (or OPENAI_IMAGE_MODEL_SNAPSHOT is set in the environment).
+    # Default remains the historical snapshot label for CLI compatibility.
+    # Provenance marks a snapshot as declared only when --model-snapshot appears
+    # on the argv (see _snapshot_was_explicit). An env/default label alone is not
+    # an explicit declaration and is never treated as provider-verified.
     ap.add_argument(
         "--model-snapshot",
         default=os.getenv("OPENAI_IMAGE_MODEL_SNAPSHOT", "gpt-image-2-2026-04-21"),
