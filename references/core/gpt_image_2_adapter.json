@@ -51,14 +51,66 @@
     "editing": "Use the same semantic locks, with reference roles and preserve/change boundaries made explicit.",
     "evaluation": "Evaluate the produced image independently from prompt compilation."
   },
-  "research_note": "OpenAI currently lists GPT Image 2 as the state-of-the-art image generation/editing model, with flexible image sizes, high-fidelity image inputs, and a dated snapshot gpt-image-2-2026-04-21 for reproducibility. V3.2 records the model alias and snapshot separately and does not invent unsupported seed controls.",
+  "request_contract": {
+    "verified_model_ids": [
+      "gpt-image-2",
+      "gpt-image-2-2026-04-21"
+    ],
+    "modes": [
+      "generate",
+      "edit"
+    ],
+    "parameters": {
+      "size": {
+        "accepted": [
+          "auto",
+          "1024x1024",
+          "1536x1024",
+          "1024x1536",
+          "WIDTHxHEIGHT"
+        ],
+        "notes": "Custom WIDTHxHEIGHT must be multiples of 16, aspect ratio between 1:3 and 3:1, max 3840x2160. auto is omitted from the SDK payload."
+      },
+      "quality": {
+        "accepted": [
+          "low",
+          "medium",
+          "high",
+          "auto"
+        ],
+        "notes": "auto is omitted from the SDK payload."
+      },
+      "background": {
+        "accepted": [
+          "transparent",
+          "opaque",
+          "auto"
+        ],
+        "notes": "auto/null are omitted from the SDK payload. Official API reference notes transparent may be rejected for gpt-image-2 targets; the executor still accepts the CLI value and records it."
+      }
+    },
+    "seed_supported": false,
+    "notes": [
+      "scripts/generate_api.py and aipf.model_adapter share one normalized effective request for dry-run and SDK execution.",
+      "Only verified_model_ids are accepted by the PR1 executor; other provider/model IDs are rejected before network I/O.",
+      "Alias gpt-image-2 must not be reported as a verified dated-snapshot request solely because a default snapshot label exists in CLI/env configuration.",
+      "GPT Image models return b64_json; URL transport is recorded if present but does not count as a successful local save.",
+      "No separate adapter schema file is added; this JSON remains the sole GPT Image 2 adapter record and is checked by unit tests."
+    ]
+  },
+  "research_note": "OpenAI currently lists GPT Image 2 as the state-of-the-art image generation/editing model, with flexible image sizes, high-fidelity image inputs, and a dated snapshot gpt-image-2-2026-04-21 for reproducibility. V3.2 records the model alias and snapshot separately and does not invent unsupported seed controls. PR1 executor verification re-checked official model and Images API docs on 2026-10-27 and still recognizes only gpt-image-2 and gpt-image-2-2026-04-21 as verified execution targets for this repository path.",
   "sources": [
     {
       "url": "https://developers.openai.com/api/docs/models/gpt-image-2",
       "type": "official",
-      "accessed": "2026-09-07"
+      "accessed": "2026-10-27"
+    },
+    {
+      "url": "https://developers.openai.com/api/reference/resources/images/",
+      "type": "official",
+      "accessed": "2026-10-27"
     }
   ],
-  "version": "1.1.0",
+  "version": "1.2.0",
   "recommended_snapshot_for_regression": "gpt-image-2-2026-04-21"
 }

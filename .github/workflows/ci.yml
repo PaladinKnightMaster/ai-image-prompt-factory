@@ -42,3 +42,9 @@ jobs:
 
       - name: Validate repository
         run: python scripts/validate_repo.py
+
+      - name: Regression suite
+        run: aipf regress
+
+      - name: Golden baseline check
+        run: aipf baseline-check regression/baselines/golden_baselines.json
