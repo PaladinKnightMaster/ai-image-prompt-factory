@@ -6,8 +6,11 @@
   "properties": {
     "schema_version":{"type":"string"},
     "provider":{"type":"string"},
-    "model":{"type":"string"},
-    "model_snapshot":{"type":["string","null"]},
+    "model":{"type":"string","description":"Legacy field: requested/execution model id. Prefer requested_model_id when present."},
+    "model_snapshot":{"type":["string","null"],"description":"Legacy field: dated snapshot only when explicitly declared. Null for alias-only requests even if a CLI default snapshot label exists. Prefer declared_model_snapshot when present."},
+    "requested_model_id":{"type":"string","description":"Model id requested for execution (alias or dated snapshot id)."},
+    "declared_model_snapshot":{"type":["string","null"],"description":"Dated snapshot declared by the operator or implied by requesting the dated model id. Null when only the alias was requested without an explicit snapshot declaration."},
+    "provider_verified_model_id":{"type":["string","null"],"description":"Provider-confirmed model id from a live response when available. Remains null for dry-run and when the provider does not return one."},
     "generation_date_utc":{"type":"string"},
     "mode":{"enum":["generate","edit"]},
     "prompt_profile":{"enum":["compact","standard","extended"]},
@@ -20,6 +23,7 @@
     "skill_version":{"type":"string"},
     "seed":{"type":"null"},
     "dry_run":{"type":"boolean"},
+    "generation_completed":{"type":"boolean","description":"True only when a local image was successfully persisted from recognized API output. Dry-run and URL-only/incomplete outputs are false."},
     "result":{"type":"object"}
   }
 }
