@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "description": "Allowlisted public knowledge resources for installed aipf wheels",
   "file_count": 99,
-  "total_bytes": 422375,
+  "total_bytes": 414049,
   "files": [
     {
       "path": "compatibility/compatibility_rules.json",
@@ -11,8 +11,8 @@
     },
     {
       "path": "data/schemas/art_method.schema.json",
-      "sha256": "2142763561df15cafa9734ee148db6894e21d9c6e58fe89ca999230b890805fe",
-      "size": 859
+      "sha256": "d64704bf63d7d2026a35c4315de97ab6092340d9a7c10752645e12162885cd77",
+      "size": 827
     },
     {
       "path": "data/schemas/benchmark.schema.json",
@@ -31,8 +31,8 @@
     },
     {
       "path": "data/schemas/era_pack.schema.json",
-      "sha256": "fcedd13282c99bd929a0523a485fa5750eb7e66a1a1b8f7f3817dd5d685fee46",
-      "size": 633
+      "sha256": "93ed94430ff2a1782486f36cfdabfabbd6eb3c126c8e28b6696f3f3858deabf5",
+      "size": 608
     },
     {
       "path": "data/schemas/evaluation.schema.json",
@@ -51,98 +51,98 @@
     },
     {
       "path": "data/schemas/execution_receipt.schema.json",
-      "sha256": "f0b4ba3763313b768cf36637d2ef18eb27f691c937d99e24ba6ec41c6cd7bee3",
-      "size": 3433
+      "sha256": "195908f2ec10f842b9d34a3c39f3b182241444c1d980c3b845c732e3f7fcb498",
+      "size": 3276
     },
     {
       "path": "data/schemas/exp019_degraded_host_attestation.schema.json",
-      "sha256": "2d8e13cfe78fe3c284b24379673672cfb1587d2c18c7ed6e71c485433578c104",
-      "size": 1475
+      "sha256": "b7beb87a3955f4bc4364f4bb986e36dff5b77d88c388f9202453a9fb2d1e612a",
+      "size": 1424
     },
     {
       "path": "data/schemas/exp019_degraded_host_evidence.schema.json",
-      "sha256": "f106377b8e31c86b84bcbe0f7964f99d01e3a8e3cff2c31ba8447284d8771338",
-      "size": 3386
+      "sha256": "8ddb4cb13ffd960f4db61b21a7cb31b58804d23ef97c7b792503621365ca47e8",
+      "size": 3236
     },
     {
       "path": "data/schemas/exp019_execution_receipt.schema.json",
-      "sha256": "8a296cf02a591ffd6af52412ae5705523c482479f55de51fe723d19ed82dde47",
-      "size": 2364
+      "sha256": "903f694586b088129850bc54421b9a56e7f93d83227188d18a166ee985f6147b",
+      "size": 2336
     },
     {
       "path": "data/schemas/exp019_host_result.schema.json",
-      "sha256": "4516bca039b8bcecd89033ebaf74bdb10749bef71c6718e4204d251df1df33ac",
-      "size": 14446
+      "sha256": "485273dfec9f6978b5d9958d87ff09b32b513815bedd9aa5abf7a31b885551a4",
+      "size": 13832
     },
     {
       "path": "data/schemas/exp019_host_result_v1_1_1.schema.json",
-      "sha256": "8fcc873145d7b8a9d35469ce166785d4a7ccfc8ed51551aa87295ba3d305dd1c",
-      "size": 21486
+      "sha256": "c3abc217aa59efc2dceb433e6b570728f609f00d596ca62ecab9c65914da6c6f",
+      "size": 20600
     },
     {
       "path": "data/schemas/exp019_host_run_receipt.schema.json",
-      "sha256": "59835b81c33d4646ccd4554a33b244e0998eb697c6a99f7b27634ab80cfd1bd5",
-      "size": 3422
+      "sha256": "1401da4b5939bff6c3f76dd37dd39220eccec2ebe12bb6b6b8359182b0c29f54",
+      "size": 3265
     },
     {
       "path": "data/schemas/exp019_host_run_receipt_v1_1_1.schema.json",
-      "sha256": "b5e5be5e07706cf664680eba5a9830f9e7683b305f5e40bd90917623a076dfe8",
-      "size": 3746
+      "sha256": "5c61fac96436378f6e275abda0c2caaf05eff1e485e21c353ee781ada493e013",
+      "size": 3576
     },
     {
       "path": "data/schemas/exp019_host_session_metadata.schema.json",
-      "sha256": "2072891afe011f0b3088827bfe7b15fa281e2a1e8a36a8ea6af562d36838fe84",
-      "size": 9859
+      "sha256": "cac92a975ca898075bd8e748b71233aa7a50cd6cbaf424e9b36964fe697aa55c",
+      "size": 9363
     },
     {
       "path": "data/schemas/exp019_metadata_recovery_attestation.schema.json",
-      "sha256": "33758403d185400732d5895866456370e8e2bca31a2305f5e37ebe5ddd782970",
-      "size": 932
+      "sha256": "763960e3ed3d4afa72d3cc34e800ac5cf551ad78162467603615df6e6f6be8b6",
+      "size": 915
     },
     {
       "path": "data/schemas/exp019_public_result_v1_1_1.schema.json",
-      "sha256": "291100909a1f3336b0fb7651966eb4678874a55a20c6c73a5bb850707e21ce15",
-      "size": 11520
+      "sha256": "6757286e357484b3d7be1ca5618c58df520e2d6fb22097db5492eb0d422f4041",
+      "size": 11057
     },
     {
       "path": "data/schemas/exp019_result.schema.json",
-      "sha256": "d1bf3ed1b1328f6a175ccc412279f823782acdd778105f9bcd115d67349c13db",
-      "size": 8366
+      "sha256": "6b138a25b7bd19e358d7541b6ab9ef8dbec28c3495fc475165143e6b871ed0aa",
+      "size": 8317
     },
     {
       "path": "data/schemas/exp019_run_receipt.schema.json",
-      "sha256": "831aa3ba1bf54f50941b7b5641784139e48722c5fa2b32b0888a1b7caada1d0b",
-      "size": 1987
+      "sha256": "b7a8d2f5ae48709b949deb3076cd4b51e791591c1c48e40d0d8606876072b15f",
+      "size": 1962
     },
     {
       "path": "data/schemas/exp019_v1_2_action_log.schema.json",
-      "sha256": "febf81e0c27a95e7732c5d79dff46393bf38b6ad7aec18d43c246fe96c106d63",
-      "size": 3488
+      "sha256": "4d55f2bca71120abbaa0e1644d28d49fe1657e7d9ab9a4f06411c949f3182765",
+      "size": 3394
     },
     {
       "path": "data/schemas/exp019_v1_2_attestation.schema.json",
-      "sha256": "d0557379625c716e2695a0236cfb71031f3196363f1ce59d9b90bf179f771a8a",
-      "size": 3601
+      "sha256": "ceb8457a9eae65da3e902ac3d52ee13d6a21ee441cda30547724a7e37045a3ef",
+      "size": 3513
     },
     {
       "path": "data/schemas/exp019_v1_2_observation.schema.json",
-      "sha256": "9bde1066351e96bdb9f63906b018dea9ecc5636013dc7ec82de263a73a7c531a",
-      "size": 12428
+      "sha256": "5a28da16ea46a519445fe27d36ebcad37cbc4386701526db9a7243c02f60fd2b",
+      "size": 12082
     },
     {
       "path": "data/schemas/exp019_v1_2_request_capture.schema.json",
-      "sha256": "1614afefbc0436017a1227dcafccdd62be0752af5a8f35fc8295645822978882",
-      "size": 3958
+      "sha256": "e86a81c17248dd118c52a1de003da3f2de90d70d4aa1b89f20b0e4ff4a753bc1",
+      "size": 3872
     },
     {
       "path": "data/schemas/exp019_v1_2_response_capture.schema.json",
-      "sha256": "76944258b97823b0e67564871485f63adfc2baeba19026ab8c352098503b76ce",
-      "size": 4837
+      "sha256": "fc1f0e7a2a8df1b42013135e5def6d76678069681bb45aeeefc2b5086b8d41c0",
+      "size": 4698
     },
     {
       "path": "data/schemas/exp019_v1_2_terminal_attempt_receipt.schema.json",
-      "sha256": "d983e9078f866153dfb469a560740d0df6f647191cdfb45f799e48c2cade0ede",
-      "size": 8903
+      "sha256": "ab1b9215ee9884fbb2539196b5c34886668d9dee576f649d751f1194de1dc150",
+      "size": 8687
     },
     {
       "path": "data/schemas/experiment.schema.json",
@@ -151,23 +151,23 @@
     },
     {
       "path": "data/schemas/experiment_result.schema.json",
-      "sha256": "b9874865cfb087ab0aee7ab4575becb095a7a6782b39d135b10bd025b1aae9fd",
-      "size": 2326
+      "sha256": "fd9d51b02cee5a846af6a2758efe3650107ee4780314b222fa15f09d7b86f209",
+      "size": 2258
     },
     {
       "path": "data/schemas/experiment_review.schema.json",
-      "sha256": "3d8f3462991fd3c8e77327102492f418d2c6ba08ed6f22b95cf48d3681e5945a",
-      "size": 3612
+      "sha256": "a3c92ddfbd5098c67926034792b4837424054624d676c57af780d74950055e8f",
+      "size": 3503
     },
     {
       "path": "data/schemas/experiment_run.schema.json",
-      "sha256": "50decacbdb3d99bd7fc796497a20e710510c7fc779fe64361760db1286626a47",
-      "size": 5886
+      "sha256": "e562b16f9268eff7aae9620b875b1999de9051db255ad50470b80dcf14022e86",
+      "size": 5637
     },
     {
       "path": "data/schemas/generation_metadata.schema.json",
-      "sha256": "6a7280cd77d96a57bf96d5d8f2d30f424a5bade15a927b28cb1281ffc922e397",
-      "size": 2195
+      "sha256": "a7e6f89383821db351381114833e053850a23647985875f67cb7fc80d94c3a58",
+      "size": 2166
     },
     {
       "path": "data/schemas/prompt_record.schema.json",
@@ -176,8 +176,8 @@
     },
     {
       "path": "data/schemas/request.schema.json",
-      "sha256": "156f6be9661bc3e09257e9bc6394999b6894a4e16cb23e454117967b6a571728",
-      "size": 8130
+      "sha256": "4809e4c031f7bd65c8d13894413124453b44c688e0d1681bb6bc241210b2ae9b",
+      "size": 7758
     },
     {
       "path": "data/schemas/source.schema.json",
@@ -186,18 +186,18 @@
     },
     {
       "path": "data/schemas/transfer_archetype.schema.json",
-      "sha256": "bf302182191390ea334dbd8ef4ab5dcf597fa1d98815cb3eb5ad4a9d6ebec6a2",
-      "size": 4537
+      "sha256": "778f1fe16854ca5c249b540469e2f480be82cf4c51b91b5a834febb88b47c516",
+      "size": 4344
     },
     {
       "path": "data/schemas/transfer_mapping.schema.json",
-      "sha256": "06d4cdb7a27ad43c07ea9a5ad651129cf7c347121583d93c79e8ae06663edc9b",
-      "size": 4115
+      "sha256": "ade7b69af5b4afc8004fe0ae10d2848fcef434cf58091957162d90948d5f0fee",
+      "size": 3954
     },
     {
       "path": "data/schemas/transformation_pack.schema.json",
-      "sha256": "95e2aa69f2dc6c7b5707f540e9182155aa45afcf5117b38086b75a8b415c40cb",
-      "size": 1051
+      "sha256": "f62336d577f518df75c410539d8aeeb90740110fdea57d83dc9fd64c0f4638df",
+      "size": 1027
     },
     {
       "path": "data/schemas/visual_pattern.schema.json",
@@ -206,13 +206,13 @@
     },
     {
       "path": "data/schemas/visual_semantic_lexicon.schema.json",
-      "sha256": "c51122f6d6937e6cb60fb56bc6ed2b6310f62d43010050d268818a398096815a",
-      "size": 2660
+      "sha256": "2f36108010fa69c38ae5beff23fab563974832a4ed4216bc7cd155d1ae3dbcc5",
+      "size": 2607
     },
     {
       "path": "evaluation/failure_taxonomy.json",
-      "sha256": "6ebe013e0f0e4c4797265fb4c47f110b0d7e5b4f1eb8b7a1fd34424f961eeb1a",
-      "size": 4748
+      "sha256": "14b6f975543871a284a69b652f02478a13cef237b252dccd4300454995f6efb3",
+      "size": 4665
     },
     {
       "path": "evidence/claims/classical_greek.json",
@@ -251,8 +251,8 @@
     },
     {
       "path": "evidence/claims/v34_pouncing.json",
-      "sha256": "92db46b957874af7f32f186968be8101672a1bf732583b98c6803a978505fa4e",
-      "size": 874
+      "sha256": "5cbc410f6760bc0ab9b639c758120c2d808580a790814a7518acfb84de4a2118",
+      "size": 854
     },
     {
       "path": "evidence/conflicts/registry.json",
@@ -261,18 +261,18 @@
     },
     {
       "path": "evidence/registry.json",
-      "sha256": "9de7555987acde07c2ee9e013923fc8327f4eb6957c44cf83a8c69b9ed05ba5f",
-      "size": 1698
+      "sha256": "1c3c95ac9cc2dd95140bc98e991e35d3be24d8d7e75b584fb4162e4023f0c1f9",
+      "size": 1639
     },
     {
       "path": "evidence/sources/registry.json",
-      "sha256": "6404d240dfa2a082b00c469ff50a9a78bf96bd48e45f1bf9b6e7b9277568a04d",
-      "size": 20482
+      "sha256": "3abc72e1dfcd003b118b43c942629052e083136b041958332ac852a238fbd633",
+      "size": 19990
     },
     {
       "path": "references/art-methods/blue_white_ceramic.json",
-      "sha256": "979703d510bdd746f7f1fb3d9672c427c9977023389793ab95a95943edcaf6a1",
-      "size": 3504
+      "sha256": "73aa1468900c0d21311c1f8340d9e9f876f383105ffe7a99e6684a8f599048c9",
+      "size": 3429
     },
     {
       "path": "references/art-methods/bronze_sculpture.json",
@@ -301,8 +301,8 @@
     },
     {
       "path": "references/art-methods/japanese_woodblock_print.json",
-      "sha256": "eb5e0245ebdc840fb1b5793df29628ea698f051d3c073dcae31b4493f485d498",
-      "size": 3415
+      "sha256": "8412f3de559bd47f022b1a7d6063b7210e58486009041c124a14ed8a752550e2",
+      "size": 3337
     },
     {
       "path": "references/art-methods/manuscript_miniature.json",
@@ -311,13 +311,13 @@
     },
     {
       "path": "references/art-methods/marble_sculpture.json",
-      "sha256": "37477345eaf52503702e0968b5a95c447f782195c3825eead03f46c3aa847167",
-      "size": 3916
+      "sha256": "6ee7fd69b63db2b7a45b11ac08cec3a787a72aa4819dc7c5f2d34a8dd0941f8b",
+      "size": 3836
     },
     {
       "path": "references/art-methods/mineral_pigment_mural.json",
-      "sha256": "36e889044c98521114331b0312fe925ca1ef50aa810612059545ccacc09b0051",
-      "size": 3338
+      "sha256": "3fd5e9caea5dfde5e4ab8da1dad2caa5fef7d756250294c748eea209df0ec3f3",
+      "size": 3265
     },
     {
       "path": "references/art-methods/paper_cut_layered.json",
@@ -336,8 +336,8 @@
     },
     {
       "path": "references/artifacts/forms.json",
-      "sha256": "6be72ba3bded5fe8c09a5e3130e216458c311234f4d390e355f2a299162c5320",
-      "size": 2949
+      "sha256": "f94094d17e41202865af24f24081bcad8c38bed1a3db1c0d46b670e100b16938",
+      "size": 2871
     },
     {
       "path": "references/artifacts/states.json",
@@ -361,8 +361,8 @@
     },
     {
       "path": "references/core/gpt_image_2_adapter.json",
-      "sha256": "7047c41e22d420b8b94aafd5caa9a23f6758561dac0475b7620566ceb6b3d99d",
-      "size": 4792
+      "sha256": "0fc15100cbf9a30453fe81afc8d286494a1fabf26e459c5bfa2f04abe5aff4d6",
+      "size": 4676
     },
     {
       "path": "references/core/historical_strictness.json",
@@ -396,8 +396,8 @@
     },
     {
       "path": "references/eras/classical_greek.json",
-      "sha256": "de947d2ed5d56717c3a81ec951c6f5ba5c9bc19fd50b3ba0e2efaf174eac82b3",
-      "size": 4420
+      "sha256": "05bca522a50950f3eafd21943966b999167d32eb6d4338b1de5729b21a1a9d1d",
+      "size": 4284
     },
     {
       "path": "references/eras/dunhuang.json",
@@ -466,38 +466,38 @@
     },
     {
       "path": "references/lexicon/registry.json",
-      "sha256": "f05fb22d50c82fad5bbbff038af783e92e2b7ea7804fd0455cf3e9b20054ee66",
-      "size": 11481
+      "sha256": "f4b1f3dec0979868fca2db1e585f2168fb5507f31b788da462b5b6f5246f3aae",
+      "size": 11443
     },
     {
       "path": "references/transformations/portrait_to_architectural_mural.json",
-      "sha256": "997ad71c8b2a5ff4c817e64358fed666c9df23f60cf1ff1e32d8b02abee64e07",
-      "size": 639
+      "sha256": "0a51cda3a6beb8c42bf13a2c9b2665782b81a3885f98711d8b7fb2d8b38e1f2e",
+      "size": 627
     },
     {
       "path": "references/transformations/portrait_to_decorated_artifact.json",
-      "sha256": "463a89b2cdcdc2e5c6f7a242c671de7bc7dc8559c2263db1cf4fbd37c1458e03",
-      "size": 651
+      "sha256": "448d1777f4d7786637d55b810bc1c41a716aeb5af54e4a97f2a0d04216244a3e",
+      "size": 639
     },
     {
       "path": "references/transformations/portrait_to_relief_print.json",
-      "sha256": "95b0b69ba322a30c0ee962be1033dea61fcf5db3ef2172348ec5830641d56f56",
-      "size": 644
+      "sha256": "c9a8985640ae6d55d45b2e32bcd6524320669b8445152e82e31b6400824ad765",
+      "size": 632
     },
     {
       "path": "references/transformations/portrait_to_volumetric_sculpture.json",
-      "sha256": "9e5e78f9535ddab7132307aafd0cd9d3100ccc949579edc83a5e24db9d270daa",
-      "size": 723
+      "sha256": "08eaf1f80cc2289ee4e800e4d6a958ffc1ccbbfe6ffb4008cf320c3264003c33",
+      "size": 711
     },
     {
       "path": "references/transformations/registry.json",
-      "sha256": "eb6cc094fdf2a9c88723e1a61bbced2fae4752fcb874ad3b3cedd8a4280b6f37",
-      "size": 525
+      "sha256": "7d43c95ab2b03e24d6d2bd85a66fadf4caad4940d6746fce4f57a31a88e70fe5",
+      "size": 516
     },
     {
       "path": "visual-patterns/registry.json",
-      "sha256": "4ca507d6c33ed5d494dff4d70ac8b43c111c15f861b6c9310c2c9e4c3703c5ff",
-      "size": 45752
+      "sha256": "0846fa3be71c07ccd7d3f8718a4d8f85ab915f8dcf31cc49da6f372c9150680c",
+      "size": 44358
     }
   ]
 }

@@ -2,30 +2,28 @@
 
 - Date: 2026-10-28
 - Branch: `feat/v34-installed-package-portability`; base `main`: `5940b5f1d5e566a61f823a9781e8679a504cfd80` (merged PR1 / PR #30)
+- Draft PR: https://github.com/PaladinKnightMaster/ai-image-prompt-factory/pull/31
 - Worktree: `D:\1_PROJECT\AI_Kits\AI Image Prompt Factory\IDEA_POOL\ai-image-prompt-factory`
 - Stable release: V3.3; V3.4 empirical validation and release remain pending.
 
 ## Change
 
-PR2 installed-package portability plus post-review corrections: reliable
-`PackagedResourceWriteError` write guard for installed `_knowledge`, sdist
-file-list filtering through `resource_inventory.json` (canary-proof), and a
-BOM-free commit subject. Canonical knowledge remains repository trees; wheels
-receive the derived allowlisted copy. No compiler, TransformationPack, lexicon
-concept, model-adapter, or EXP-019 scientific changes.
+PR2 installed-package portability plus CI hotfix for cross-platform resource
+hashes: inventory records committed Git LF blob digests (99 files / 414049
+bytes); staging and sdist release trees apply only CRLF→LF before hash/package.
+No compiler, TransformationPack, lexicon, model-adapter, or EXP-019 scientific
+changes. Knowledge JSON content unchanged.
 
 ## Validation
 
-- `python -m pytest -q`: 902 passed, 13 skipped
-- `python scripts/validate_repo.py`: ok on an isolated tracked-only tree
-  (original untracked `.superpowers` UTF-16 JSON files preserved; dirty
-  worktree still trips the pre-existing recursive JSON scan)
-- `aipf regress`: 19/19; exit 0
-- `aipf baseline-check regression/baselines/golden_baselines.json`: 10/10 stable
-- Portability suite: write-guard negatives, sdist inventory exactness, canary
-  exclusion, wheel / sdist / wheel-from-sdist, clean-install parity
+- `python -m pytest -q`: 904 passed, 13 skipped
+- Portability suite: 18 passed (LF/CRLF fixtures, canary, wheel/sdist/wfs)
+- Isolated tracked-only `validate_repo.py`: ok
+- `aipf regress`: 19/19
+- `aipf baseline-check`: 10/10 stable
+- Remote CI on `ebea338` failed at install (CRLF inventory); hotfix not pushed yet
 
 ## Next task
 
-Owner review of correction commit, then authorized draft PR push/create only.
-Do not start PR3 or EXP-019 scientific work from this branch.
+Owner review of local hotfix commit, then authorized push to update PR #31 CI.
+Do not merge, release, start PR3, or advance EXP-019 science without authorization.

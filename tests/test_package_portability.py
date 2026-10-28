@@ -27,9 +27,12 @@ from aipf.resources import (
 )
 import aipf.resources as resources_mod
 from aipf_packaging.stage_knowledge import (
+    ResourceContentError,
+    canonical_resource_bytes,
     filter_sdist_knowledge_files,
     load_inventory,
     verify_canonical,
+    write_canonical_resource,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -165,7 +168,61 @@ def test_inventory_matches_canonical_bytes():
     assert errors == []
     inv = load_inventory()
     assert inv["file_count"] == len(inv["files"]) == 99
-    assert inv["total_bytes"] == 422375
+    assert inv["total_bytes"] == 414049
+
+
+def test_canonical_lf_and_crlf_resource_inputs(tmp_path: Path):
+    lf = b'{"id": "sample", "ok": true}\n'
+    crlf = b'{"id": "sample", "ok": true}\r\n'
+    digest = sha256(lf).hexdigest()
+    assert canonical_resource_bytes(lf) == lf
+    assert canonical_resource_bytes(crlf) == lf
+    assert sha256(canonical_resource_bytes(crlf)).hexdigest() == digest
+
+    root = tmp_path / "tree"
+    rel = "references/eras/sample.json"
+    path = root / rel
+    inv = {"files": [{"path": rel, "sha256": digest, "size": len(lf)}]}
+
+    path.parent.mkdir(parents=True)
+    path.write_bytes(lf)
+    assert verify_canonical(inv, root=root) == []
+    staged = tmp_path / "staged" / rel
+    write_canonical_resource(staged, lf, expected_sha256=digest)
+    assert staged.read_bytes() == lf
+
+    path.write_bytes(crlf)
+    assert verify_canonical(inv, root=root) == []
+    staged_crlf = tmp_path / "staged_crlf" / rel
+    write_canonical_resource(staged_crlf, crlf, expected_sha256=digest)
+    assert staged_crlf.read_bytes() == lf
+    assert b"\r" not in staged_crlf.read_bytes()
+
+
+def test_canonical_rejects_content_and_forbidden_representations(tmp_path: Path):
+    lf = b'{"id": "sample", "ok": true}\n'
+    digest = sha256(lf).hexdigest()
+    root = tmp_path / "tree"
+    rel = "references/eras/sample.json"
+    path = root / rel
+    path.parent.mkdir(parents=True)
+    inv = {"files": [{"path": rel, "sha256": digest, "size": len(lf)}]}
+
+    path.write_bytes(b'{"id": "sample", "ok": false}\n')
+    errs = verify_canonical(inv, root=root)
+    assert errs and "hash mismatch" in errs[0]
+
+    with pytest.raises(ResourceContentError, match="bare carriage-return"):
+        canonical_resource_bytes(b'{"id": "sample"}\r')
+
+    path.write_bytes(b'{"id": "sample", "ok": true}\r')
+    errs = verify_canonical(inv, root=root)
+    assert errs and "resource content error" in errs[0]
+
+    # Unexpected UTF-16 bytes are not a permitted conversion; hash must fail.
+    path.write_bytes(b"\xff\xfe{\x00}")
+    errs = verify_canonical(inv, root=root)
+    assert errs and "hash mismatch" in errs[0]
 
 
 def test_source_checkout_resource_reads_and_enumeration():

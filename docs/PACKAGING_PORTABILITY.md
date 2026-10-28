@@ -18,10 +18,14 @@ Installed aipf/_knowledge (read-only)
 
 The allowlist and content hashes live in
 [`aipf_packaging/resource_inventory.json`](../aipf_packaging/resource_inventory.json).
-A wheel or sdist build fails if an inventory file is missing or its SHA-256 differs.
-Wheel staging copies only inventory paths into `aipf/_knowledge`. The sdist command
-filters the setuptools file list through the same inventory so uninventoried JSON
-under knowledge trees cannot enter the source distribution.
+Hashes are SHA-256 digests of the **committed Git blob bytes** (LF newlines). A wheel
+or sdist build fails if an inventory file is missing or its canonical content differs.
+Working trees may present the same JSON with CRLF; build-time staging and sdist release
+trees apply only a CRLF→LF conversion before hashing and packaging. Bare CR and any
+other byte changes are rejected. Wheel staging writes only inventory paths into
+`aipf/_knowledge`. The sdist command filters the setuptools file list through the same
+inventory so uninventoried JSON under knowledge trees cannot enter the source
+distribution.
 
 ## Supported installed commands
 
