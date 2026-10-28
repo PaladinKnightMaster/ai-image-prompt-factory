@@ -3,6 +3,7 @@
 [![GitHub Pages](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/pages.yml/badge.svg)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/actions/workflows/pages.yml)
 [![Latest Release](https://img.shields.io/github/v/release/PaladinKnightMaster/ai-image-prompt-factory)](https://github.com/PaladinKnightMaster/ai-image-prompt-factory/releases/latest)
 [![License](https://img.shields.io/github/license/PaladinKnightMaster/ai-image-prompt-factory)](LICENSE)
+[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/PaladinKnightMaster/badge.svg)](https://hub.xerj.org/contributors/PaladinKnightMaster)
 
 **[View the public benchmark gallery →](https://paladinknightmaster.github.io/ai-image-prompt-factory/)**
 
