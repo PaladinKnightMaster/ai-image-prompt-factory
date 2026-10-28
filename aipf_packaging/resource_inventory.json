@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
   "description": "Allowlisted public knowledge resources for installed aipf wheels",
-  "file_count": 99,
-  "total_bytes": 414049,
+  "file_count": 100,
+  "total_bytes": 415541,
   "files": [
     {
       "path": "compatibility/compatibility_rules.json",
@@ -168,6 +168,11 @@
       "path": "data/schemas/generation_metadata.schema.json",
       "sha256": "a7e6f89383821db351381114833e053850a23647985875f67cb7fc80d94c3a58",
       "size": 2166
+    },
+    {
+      "path": "data/schemas/prompt_recipe.schema.json",
+      "sha256": "17133923e6c29ad285d6644e582c883c83ee6c0911e9cfc7b65dd65368d72f59",
+      "size": 1492
     },
     {
       "path": "data/schemas/prompt_record.schema.json",

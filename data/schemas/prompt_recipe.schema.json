@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v1/prompt_recipe.schema.json",
+  "title": "AI Image Prompt Factory PromptRecipe v1",
+  "description": "Static, versioned creative specification wrapper. Embedded semantic_spec is validated independently against request.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "recipe_schema_version",
+    "recipe_id",
+    "recipe_version",
+    "title",
+    "semantic_spec"
+  ],
+  "properties": {
+    "recipe_schema_version": {
+      "const": "1.0",
+      "description": "PromptRecipe envelope schema revision. Must be exactly 1.0 for PR3."
+    },
+    "recipe_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "minLength": 1,
+      "description": "Stable lowercase slug-style recipe identity."
+    },
+    "recipe_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Explicit three-component numeric revision. Published revisions are intended to be immutable; hashes detect change but do not enforce uniqueness across external copies."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "semantic_spec": {
+      "type": "object",
+      "description": "Complete embedded semantic specification. Validated independently with request.schema.json and lint_spec gates; not duplicated here."
+    }
+  }
+}

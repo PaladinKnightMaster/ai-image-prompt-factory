@@ -1,5 +1,5 @@
 from __future__ import annotations
-import argparse,json
+import argparse,json,sys
 from pathlib import Path
 from .classifier import classify
 from .compiler import compile_prompt,compile_result
@@ -38,6 +38,13 @@ def main():
     ap=argparse.ArgumentParser(prog='aipf'); sub=ap.add_subparsers(dest='cmd',required=True)
     p=sub.add_parser('classify'); p.add_argument('request'); p.add_argument('--has-reference',action='store_true')
     p=sub.add_parser('compile'); p.add_argument('spec'); p.add_argument('--profile',choices=['compact','standard','extended']); p.add_argument('--json',action='store_true',dest='as_json')
+    recipe_p = sub.add_parser('recipe', help='Validate or compile a static PromptRecipe')
+    recipe_sub = recipe_p.add_subparsers(dest='recipe_cmd', required=True)
+    rp = recipe_sub.add_parser('validate', help='Validate recipe envelope and embedded semantic_spec')
+    rp.add_argument('recipe')
+    rp = recipe_sub.add_parser('compile', help='Compile recipe via the existing semantic compiler')
+    rp.add_argument('recipe')
+    rp.add_argument('--json', action='store_true', dest='as_json')
     p=sub.add_parser('audit'); p.add_argument('spec')
     p=sub.add_parser('evidence'); p.add_argument('spec')
     p=sub.add_parser('lint'); p.add_argument('input'); p.add_argument('--prompt',action='store_true')
@@ -175,6 +182,38 @@ def main():
     if args.cmd=='classify': print(classify(args.request,args.has_reference)); return
     if args.cmd=='compile':
         r=compile_result(_load(args.spec),args.profile); _dump(r) if args.as_json else print(r['prompt'],end=''); return
+    if args.cmd == 'recipe':
+        from .recipes import (
+            RecipeError,
+            RecipeValidationError,
+            compile_recipe,
+            load_recipe,
+            validate_recipe,
+        )
+        try:
+            recipe = load_recipe(args.recipe)
+        except RecipeError as exc:
+            print(str(exc), file=sys.stderr)
+            raise SystemExit(1)
+        if args.recipe_cmd == 'validate':
+            findings = validate_recipe(recipe)
+            _dump(findings)
+            raise SystemExit(0 if not any(f['level'] == 'error' for f in findings) else 1)
+        if args.recipe_cmd == 'compile':
+            try:
+                envelope = compile_recipe(recipe)
+            except RecipeValidationError as exc:
+                _dump(exc.findings)
+                raise SystemExit(1)
+            except RecipeError as exc:
+                print(str(exc), file=sys.stderr)
+                raise SystemExit(1)
+            if args.as_json:
+                _dump(envelope)
+            else:
+                print(envelope['compilation']['prompt'], end='')
+            return
+        raise SystemExit(f'unknown recipe command: {args.recipe_cmd}')
     if args.cmd=='audit':
         spec=_load(args.spec); _dump(compile_result(spec)['compatibility_audit']); return
     if args.cmd=='evidence': _dump(evidence_explain(_load(args.spec))); return
