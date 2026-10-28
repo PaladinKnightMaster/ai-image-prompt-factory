@@ -444,17 +444,34 @@ def test_cli_compile_invalid_json_diagnostics_under_cp1252(tmp_path: Path):
 
 
 def test_cli_plaintext_parity_unchanged_by_json_transport(tmp_path: Path):
+    """Legacy and recipe plain-text CLIs must match under an explicit UTF-8 env.
+
+    This proves parity under the same configured UTF-8 subprocess environment.
+    It does not claim the legacy CLI can emit arbitrary Unicode under cp1252.
+    """
     spec = _load_case(PARITY_CASES[1][1])
-    assert "→" in compile_result(spec)["prompt"]
+    expected_prompt = compile_result(spec)["prompt"]
+    assert "→" in expected_prompt
     spec_path = tmp_path / "spec.json"
     recipe_path = tmp_path / "recipe.json"
     spec_path.write_text(json.dumps(spec, ensure_ascii=False) + "\n", encoding="utf-8")
     _write_recipe(recipe_path, _wrap_recipe(spec, recipe_id="greek-marble-bust"))
-    legacy = _run(_aipf_cmd("compile", str(spec_path)))
-    recipe = _run(_aipf_cmd("recipe", "compile", str(recipe_path)))
-    assert legacy.returncode == 0, legacy.stderr
-    assert recipe.returncode == 0, recipe.stderr
-    assert recipe.stdout.encode("utf-8") == legacy.stdout.encode("utf-8")
+
+    env = dict(os.environ)
+    env["PYTHONIOENCODING"] = "utf-8"
+    env["PYTHONUTF8"] = "1"
+
+    legacy = _run_raw(_aipf_cmd("compile", str(spec_path)), env=env)
+    recipe = _run_raw(_aipf_cmd("recipe", "compile", str(recipe_path)), env=env)
+    assert legacy.returncode == 0, legacy.stderr.decode("utf-8", errors="replace")
+    assert recipe.returncode == 0, recipe.stderr.decode("utf-8", errors="replace")
+    # Raw stdout bytes must match exactly; do not normalize before this check.
+    assert recipe.stdout == legacy.stdout
+    arrow = "→".encode("utf-8")
+    assert arrow in legacy.stdout
+    assert arrow in recipe.stdout
+    # Console text mode may translate newlines on Windows; account only for CRLF.
+    assert recipe.stdout.replace(b"\r\n", b"\n") == expected_prompt.encode("utf-8")
 
 
 def test_json_transport_does_not_alter_canonical_hashes(tmp_path: Path):
