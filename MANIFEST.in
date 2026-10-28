@@ -1,0 +1,24 @@
+include setup.py
+include pyproject.toml
+include README.md
+include LICENSE
+include aipf_packaging/*.py
+include aipf_packaging/resource_inventory.json
+# Knowledge JSON below is candidate discovery only. aipf_packaging.build_hooks.sdist
+# keeps solely paths listed in aipf_packaging/resource_inventory.json.
+recursive-include references/core *.json
+recursive-include references/eras *.json
+recursive-include references/art-methods *.json
+recursive-include references/artifacts *.json
+recursive-include references/transformations *.json
+recursive-include references/lexicon *.json
+include evidence/registry.json
+include evidence/conflicts/registry.json
+include evidence/sources/registry.json
+recursive-include evidence/claims *.json
+include compatibility/compatibility_rules.json
+include visual-patterns/registry.json
+include evaluation/failure_taxonomy.json
+recursive-include data/schemas *.json
+prune src/aipf/_knowledge
+global-exclude *.py[cod] __pycache__ .env *.png *.jpg *.jpeg *.webp

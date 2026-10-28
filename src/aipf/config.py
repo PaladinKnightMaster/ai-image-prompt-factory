@@ -5,10 +5,17 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from .resources import source_checkout_root
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
 
-load_dotenv(REPO_ROOT / ".env")
+_CHECKOUT = source_checkout_root()
+# Preserve source-checkout .env loading. Installed wheels must not treat an
+# unrelated virtualenv parent directory as a project repository.
+if _CHECKOUT is not None:
+    REPO_ROOT = _CHECKOUT
+    load_dotenv(_CHECKOUT / ".env")
+else:
+    REPO_ROOT = Path.cwd()
 
 
 def corpus_path() -> Path | None:

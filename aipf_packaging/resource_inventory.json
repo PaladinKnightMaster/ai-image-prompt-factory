@@ -1,0 +1,503 @@
+{
+  "version": "1.0.0",
+  "description": "Allowlisted public knowledge resources for installed aipf wheels",
+  "file_count": 99,
+  "total_bytes": 422375,
+  "files": [
+    {
+      "path": "compatibility/compatibility_rules.json",
+      "sha256": "9005f3a7322e395170f3d157af8982bac7ba926091e8182528789a45b917e1f4",
+      "size": 3195
+    },
+    {
+      "path": "data/schemas/art_method.schema.json",
+      "sha256": "2142763561df15cafa9734ee148db6894e21d9c6e58fe89ca999230b890805fe",
+      "size": 859
+    },
+    {
+      "path": "data/schemas/benchmark.schema.json",
+      "sha256": "e2b0f2cab2b0d4c023f738d15ad26bacef09c079193db68996501d9f89e4c453",
+      "size": 1428
+    },
+    {
+      "path": "data/schemas/case.schema.json",
+      "sha256": "ff5dd1d26eafa359d0d923b1a578405faa42f286a6676abf75435cd44097e0d7",
+      "size": 2313
+    },
+    {
+      "path": "data/schemas/corpus_asset.schema.json",
+      "sha256": "d5da50b8e1a62accb0115871082cd27e4922ce3f60c13e10f0f7ce116dc79bec",
+      "size": 1978
+    },
+    {
+      "path": "data/schemas/era_pack.schema.json",
+      "sha256": "fcedd13282c99bd929a0523a485fa5750eb7e66a1a1b8f7f3817dd5d685fee46",
+      "size": 633
+    },
+    {
+      "path": "data/schemas/evaluation.schema.json",
+      "sha256": "3d44da6dcdd4e879bfc7d3f3fe8bfa743513e3402dbe251091c236617039e8bf",
+      "size": 2288
+    },
+    {
+      "path": "data/schemas/evidence_claim.schema.json",
+      "sha256": "905a835b2a44472c9941a343b727e8f5bc5b1bf4d26083f6bad4e86a7d85aeb8",
+      "size": 2915
+    },
+    {
+      "path": "data/schemas/evidence_conflict.schema.json",
+      "sha256": "d1b66e97791e4a24dbbc0f5169b290a6f49335b8ab4e79731c724804cba2143e",
+      "size": 657
+    },
+    {
+      "path": "data/schemas/execution_receipt.schema.json",
+      "sha256": "f0b4ba3763313b768cf36637d2ef18eb27f691c937d99e24ba6ec41c6cd7bee3",
+      "size": 3433
+    },
+    {
+      "path": "data/schemas/exp019_degraded_host_attestation.schema.json",
+      "sha256": "2d8e13cfe78fe3c284b24379673672cfb1587d2c18c7ed6e71c485433578c104",
+      "size": 1475
+    },
+    {
+      "path": "data/schemas/exp019_degraded_host_evidence.schema.json",
+      "sha256": "f106377b8e31c86b84bcbe0f7964f99d01e3a8e3cff2c31ba8447284d8771338",
+      "size": 3386
+    },
+    {
+      "path": "data/schemas/exp019_execution_receipt.schema.json",
+      "sha256": "8a296cf02a591ffd6af52412ae5705523c482479f55de51fe723d19ed82dde47",
+      "size": 2364
+    },
+    {
+      "path": "data/schemas/exp019_host_result.schema.json",
+      "sha256": "4516bca039b8bcecd89033ebaf74bdb10749bef71c6718e4204d251df1df33ac",
+      "size": 14446
+    },
+    {
+      "path": "data/schemas/exp019_host_result_v1_1_1.schema.json",
+      "sha256": "8fcc873145d7b8a9d35469ce166785d4a7ccfc8ed51551aa87295ba3d305dd1c",
+      "size": 21486
+    },
+    {
+      "path": "data/schemas/exp019_host_run_receipt.schema.json",
+      "sha256": "59835b81c33d4646ccd4554a33b244e0998eb697c6a99f7b27634ab80cfd1bd5",
+      "size": 3422
+    },
+    {
+      "path": "data/schemas/exp019_host_run_receipt_v1_1_1.schema.json",
+      "sha256": "b5e5be5e07706cf664680eba5a9830f9e7683b305f5e40bd90917623a076dfe8",
+      "size": 3746
+    },
+    {
+      "path": "data/schemas/exp019_host_session_metadata.schema.json",
+      "sha256": "2072891afe011f0b3088827bfe7b15fa281e2a1e8a36a8ea6af562d36838fe84",
+      "size": 9859
+    },
+    {
+      "path": "data/schemas/exp019_metadata_recovery_attestation.schema.json",
+      "sha256": "33758403d185400732d5895866456370e8e2bca31a2305f5e37ebe5ddd782970",
+      "size": 932
+    },
+    {
+      "path": "data/schemas/exp019_public_result_v1_1_1.schema.json",
+      "sha256": "291100909a1f3336b0fb7651966eb4678874a55a20c6c73a5bb850707e21ce15",
+      "size": 11520
+    },
+    {
+      "path": "data/schemas/exp019_result.schema.json",
+      "sha256": "d1bf3ed1b1328f6a175ccc412279f823782acdd778105f9bcd115d67349c13db",
+      "size": 8366
+    },
+    {
+      "path": "data/schemas/exp019_run_receipt.schema.json",
+      "sha256": "831aa3ba1bf54f50941b7b5641784139e48722c5fa2b32b0888a1b7caada1d0b",
+      "size": 1987
+    },
+    {
+      "path": "data/schemas/exp019_v1_2_action_log.schema.json",
+      "sha256": "febf81e0c27a95e7732c5d79dff46393bf38b6ad7aec18d43c246fe96c106d63",
+      "size": 3488
+    },
+    {
+      "path": "data/schemas/exp019_v1_2_attestation.schema.json",
+      "sha256": "d0557379625c716e2695a0236cfb71031f3196363f1ce59d9b90bf179f771a8a",
+      "size": 3601
+    },
+    {
+      "path": "data/schemas/exp019_v1_2_observation.schema.json",
+      "sha256": "9bde1066351e96bdb9f63906b018dea9ecc5636013dc7ec82de263a73a7c531a",
+      "size": 12428
+    },
+    {
+      "path": "data/schemas/exp019_v1_2_request_capture.schema.json",
+      "sha256": "1614afefbc0436017a1227dcafccdd62be0752af5a8f35fc8295645822978882",
+      "size": 3958
+    },
+    {
+      "path": "data/schemas/exp019_v1_2_response_capture.schema.json",
+      "sha256": "76944258b97823b0e67564871485f63adfc2baeba19026ab8c352098503b76ce",
+      "size": 4837
+    },
+    {
+      "path": "data/schemas/exp019_v1_2_terminal_attempt_receipt.schema.json",
+      "sha256": "d983e9078f866153dfb469a560740d0df6f647191cdfb45f799e48c2cade0ede",
+      "size": 8903
+    },
+    {
+      "path": "data/schemas/experiment.schema.json",
+      "sha256": "89c84f44678f1703ac3475d7efb5817f0a8abd0d3353c39baa4242da7cb1d1d4",
+      "size": 1988
+    },
+    {
+      "path": "data/schemas/experiment_result.schema.json",
+      "sha256": "b9874865cfb087ab0aee7ab4575becb095a7a6782b39d135b10bd025b1aae9fd",
+      "size": 2326
+    },
+    {
+      "path": "data/schemas/experiment_review.schema.json",
+      "sha256": "3d8f3462991fd3c8e77327102492f418d2c6ba08ed6f22b95cf48d3681e5945a",
+      "size": 3612
+    },
+    {
+      "path": "data/schemas/experiment_run.schema.json",
+      "sha256": "50decacbdb3d99bd7fc796497a20e710510c7fc779fe64361760db1286626a47",
+      "size": 5886
+    },
+    {
+      "path": "data/schemas/generation_metadata.schema.json",
+      "sha256": "6a7280cd77d96a57bf96d5d8f2d30f424a5bade15a927b28cb1281ffc922e397",
+      "size": 2195
+    },
+    {
+      "path": "data/schemas/prompt_record.schema.json",
+      "sha256": "b5c21adfbf18b4cad72502f09461e7791d0cef19422cfc4bb730a1bb2c0d72a8",
+      "size": 672
+    },
+    {
+      "path": "data/schemas/request.schema.json",
+      "sha256": "156f6be9661bc3e09257e9bc6394999b6894a4e16cb23e454117967b6a571728",
+      "size": 8130
+    },
+    {
+      "path": "data/schemas/source.schema.json",
+      "sha256": "1428efed3daf787a7c4320e3183fa67e8213971e910e6d4889914c391f1a1ace",
+      "size": 1600
+    },
+    {
+      "path": "data/schemas/transfer_archetype.schema.json",
+      "sha256": "bf302182191390ea334dbd8ef4ab5dcf597fa1d98815cb3eb5ad4a9d6ebec6a2",
+      "size": 4537
+    },
+    {
+      "path": "data/schemas/transfer_mapping.schema.json",
+      "sha256": "06d4cdb7a27ad43c07ea9a5ad651129cf7c347121583d93c79e8ae06663edc9b",
+      "size": 4115
+    },
+    {
+      "path": "data/schemas/transformation_pack.schema.json",
+      "sha256": "95e2aa69f2dc6c7b5707f540e9182155aa45afcf5117b38086b75a8b415c40cb",
+      "size": 1051
+    },
+    {
+      "path": "data/schemas/visual_pattern.schema.json",
+      "sha256": "49f63cf5debd5844065ecf1f712eef597ca9ae5ed07b8dcd870dbd2a5518e7ae",
+      "size": 2193
+    },
+    {
+      "path": "data/schemas/visual_semantic_lexicon.schema.json",
+      "sha256": "c51122f6d6937e6cb60fb56bc6ed2b6310f62d43010050d268818a398096815a",
+      "size": 2660
+    },
+    {
+      "path": "evaluation/failure_taxonomy.json",
+      "sha256": "6ebe013e0f0e4c4797265fb4c47f110b0d7e5b4f1eb8b7a1fd34424f961eeb1a",
+      "size": 4748
+    },
+    {
+      "path": "evidence/claims/classical_greek.json",
+      "sha256": "7ba8d48d78c56ab669b0908a2740c3516c8087051a0834d5904878f85573aff6",
+      "size": 4076
+    },
+    {
+      "path": "evidence/claims/dunhuang.json",
+      "sha256": "1011cbf5edf9a04865b40c52fbd007f66d3daf74abc768462421aa0554d422d5",
+      "size": 4781
+    },
+    {
+      "path": "evidence/claims/edo.json",
+      "sha256": "7700dc6a6b5908697d87553ac8a975cf7e89fd1b8d8ebc6f7f4e17234b39d48c",
+      "size": 5366
+    },
+    {
+      "path": "evidence/claims/hellenistic_greek.json",
+      "sha256": "285220732845b2d0dff544f45d91f3c6d35af1abdd175739f03451863c7034f3",
+      "size": 4645
+    },
+    {
+      "path": "evidence/claims/ming.json",
+      "sha256": "3ad765ec0e1d53fe25bc071c297b55efe92cbd35f5b8d1be96b84547335c597c",
+      "size": 3252
+    },
+    {
+      "path": "evidence/claims/roman_imperial.json",
+      "sha256": "88f0785fa4b7cc92de1a42c75490092e753aa85557241362287392343b11520d",
+      "size": 3613
+    },
+    {
+      "path": "evidence/claims/tang.json",
+      "sha256": "b47e5fae3a4ab757625b4dafb62501bc35dbf30da5bc94b11f8502cf85d67b53",
+      "size": 7339
+    },
+    {
+      "path": "evidence/claims/v34_pouncing.json",
+      "sha256": "92db46b957874af7f32f186968be8101672a1bf732583b98c6803a978505fa4e",
+      "size": 874
+    },
+    {
+      "path": "evidence/conflicts/registry.json",
+      "sha256": "47e6a41aac5116834f89d3972042a3410807ee7c4a2ee9f4f298914199e06810",
+      "size": 1737
+    },
+    {
+      "path": "evidence/registry.json",
+      "sha256": "9de7555987acde07c2ee9e013923fc8327f4eb6957c44cf83a8c69b9ed05ba5f",
+      "size": 1698
+    },
+    {
+      "path": "evidence/sources/registry.json",
+      "sha256": "6404d240dfa2a082b00c469ff50a9a78bf96bd48e45f1bf9b6e7b9277568a04d",
+      "size": 20482
+    },
+    {
+      "path": "references/art-methods/blue_white_ceramic.json",
+      "sha256": "979703d510bdd746f7f1fb3d9672c427c9977023389793ab95a95943edcaf6a1",
+      "size": 3504
+    },
+    {
+      "path": "references/art-methods/bronze_sculpture.json",
+      "sha256": "4d1d0c565ce876dfba44a5754483a945f1ffe2b6f1a22fa667bbc54c5d1c10d1",
+      "size": 3338
+    },
+    {
+      "path": "references/art-methods/carved_stone_relief.json",
+      "sha256": "a24edc6221ad235965e679e723ed0b89139c66b581946907151d11367a0884db",
+      "size": 2696
+    },
+    {
+      "path": "references/art-methods/chinese_ink_painting.json",
+      "sha256": "4ba8a8ab07d48a18bf9e699d59f258a1eff9b79e888fd65573fd8a57c1605a50",
+      "size": 2999
+    },
+    {
+      "path": "references/art-methods/embroidery_textile.json",
+      "sha256": "c6154579d99ecb5064d9d4ec686ae80de3113c54daa150c06d89a6b018631305",
+      "size": 3269
+    },
+    {
+      "path": "references/art-methods/gongbi_painting.json",
+      "sha256": "31fb0e3a7d5b01882d6cbeed2ac4461395cf627576ec50552982e7171a0a121a",
+      "size": 2516
+    },
+    {
+      "path": "references/art-methods/japanese_woodblock_print.json",
+      "sha256": "eb5e0245ebdc840fb1b5793df29628ea698f051d3c073dcae31b4493f485d498",
+      "size": 3415
+    },
+    {
+      "path": "references/art-methods/manuscript_miniature.json",
+      "sha256": "de47fd51a458a46de6a42a42dd131661fda3d2d0d833780bab124860175a1f48",
+      "size": 2826
+    },
+    {
+      "path": "references/art-methods/marble_sculpture.json",
+      "sha256": "37477345eaf52503702e0968b5a95c447f782195c3825eead03f46c3aa847167",
+      "size": 3916
+    },
+    {
+      "path": "references/art-methods/mineral_pigment_mural.json",
+      "sha256": "36e889044c98521114331b0312fe925ca1ef50aa810612059545ccacc09b0051",
+      "size": 3338
+    },
+    {
+      "path": "references/art-methods/paper_cut_layered.json",
+      "sha256": "ce48159cc7fe000ec681fdc94dfc731d04e828f82e50b48af9e8d9b895c48ee6",
+      "size": 2949
+    },
+    {
+      "path": "references/art-methods/registry.json",
+      "sha256": "b3386d6d25693c3307d34ff73f39c6ed5a061872846d2d5aafe59300f85111af",
+      "size": 1338
+    },
+    {
+      "path": "references/art-methods/watercolor.json",
+      "sha256": "6bd77b822804856b9321758c5e1e31e318f338fa2bcf68d8e3d4b56e1433b7e8",
+      "size": 2796
+    },
+    {
+      "path": "references/artifacts/forms.json",
+      "sha256": "6be72ba3bded5fe8c09a5e3130e216458c311234f4d390e355f2a299162c5320",
+      "size": 2949
+    },
+    {
+      "path": "references/artifacts/states.json",
+      "sha256": "4a3e87f603a6f86ee8c7ad929afa6e2b7cd3fa1819f7e02fe09920d4004a6d06",
+      "size": 1472
+    },
+    {
+      "path": "references/core/body_modes.json",
+      "sha256": "329f1453192eab01bbebcdb77e0bcb6f059eba501b9dfae589c079c753012f43",
+      "size": 891
+    },
+    {
+      "path": "references/core/conflict_resolution.json",
+      "sha256": "a54ace0c13b55e37ee63d9c492d0cfc486744da5a9069c0c89ba766ad4fd704b",
+      "size": 1249
+    },
+    {
+      "path": "references/core/director_gate.json",
+      "sha256": "fd9fa769950764da9b74a8ad8cc09508b5274ecdbcd840725b55facc87de9e8e",
+      "size": 1050
+    },
+    {
+      "path": "references/core/gpt_image_2_adapter.json",
+      "sha256": "7047c41e22d420b8b94aafd5caa9a23f6758561dac0475b7620566ceb6b3d99d",
+      "size": 4792
+    },
+    {
+      "path": "references/core/historical_strictness.json",
+      "sha256": "0373fd5be4a4ba15b1fc8d125a735517662be0dfa5279305cc6b2473d8714824",
+      "size": 983
+    },
+    {
+      "path": "references/core/identity_modes.json",
+      "sha256": "7d32e446243d18feb142c4284f940636631ac97e5d318f647fd2a874d27c794f",
+      "size": 540
+    },
+    {
+      "path": "references/core/parameter_locks.json",
+      "sha256": "be94522d188b3cb124bdf67134b90e96911747ee1208109db2d450ddaf901de4",
+      "size": 890
+    },
+    {
+      "path": "references/core/precedence.json",
+      "sha256": "1521bbd7769665cd910d2ff97def40837f69ad74ae62ed03a56de177ec595ff3",
+      "size": 813
+    },
+    {
+      "path": "references/core/reference_roles.json",
+      "sha256": "2c2394ac900ec594eb94d3ee0294e83b89d153d2b45af91d10a3e21d59f7736c",
+      "size": 2435
+    },
+    {
+      "path": "references/core/task_classifier.json",
+      "sha256": "22697ad4bd8a5d9b4de9939703b4c82fd83210445979ffd89c01f954b1d7c2a8",
+      "size": 1140
+    },
+    {
+      "path": "references/eras/classical_greek.json",
+      "sha256": "de947d2ed5d56717c3a81ec951c6f5ba5c9bc19fd50b3ba0e2efaf174eac82b3",
+      "size": 4420
+    },
+    {
+      "path": "references/eras/dunhuang.json",
+      "sha256": "3d42ea08615738d9d7f815d57cc48faf9a927dcceaf58d741b7c742755e914e6",
+      "size": 5154
+    },
+    {
+      "path": "references/eras/edo.json",
+      "sha256": "ce8f8d0d5521c55a40156efd3078f8742036b6f29a821bcba22c5ffba73bfd17",
+      "size": 4962
+    },
+    {
+      "path": "references/eras/han.json",
+      "sha256": "13ff4ac68a19fef42a44f0e943554899587c1e7c23034e259d803adfaa9ff2b8",
+      "size": 5716
+    },
+    {
+      "path": "references/eras/heian.json",
+      "sha256": "18a07244843c3f36f2089893b681ac0d8e74e4907587a68c7de3e8542c702ab4",
+      "size": 3748
+    },
+    {
+      "path": "references/eras/hellenistic_greek.json",
+      "sha256": "80d59dedd944d1c50d4c15824cedcf6b43393dc98253fb726eb6ab06d7052a57",
+      "size": 3174
+    },
+    {
+      "path": "references/eras/ming.json",
+      "sha256": "80c9d4d910f28d720664214c424c109d8dc8a8f2366c65d5667bef22e437f4cb",
+      "size": 5747
+    },
+    {
+      "path": "references/eras/qing.json",
+      "sha256": "300af7156c4c6c26e0f9e862ac7c8d4a8612883e6228f68f76f729a80e814b1c",
+      "size": 4876
+    },
+    {
+      "path": "references/eras/registry.json",
+      "sha256": "de33afeff9b91a1f8eb5d9629c4634dad8e2084f29809f642e02ce422da1bd6d",
+      "size": 1163
+    },
+    {
+      "path": "references/eras/roman_imperial.json",
+      "sha256": "38bbe6370c95900bec99aaad42cdf7fe3b479a18c336038db82c84b94a84ed35",
+      "size": 4965
+    },
+    {
+      "path": "references/eras/song.json",
+      "sha256": "ae1d19165ac24e11768532e2b219c571d2d22a2578f47a576d3495ff7960a546",
+      "size": 4705
+    },
+    {
+      "path": "references/eras/tang.json",
+      "sha256": "89658c3ad60249cd2e7d13f7f62af148506ef08e7024626bbb7ddc714305e1f5",
+      "size": 6236
+    },
+    {
+      "path": "references/eras/wuxia.json",
+      "sha256": "794ad2618d62c90fa8159c6ae0e6d2314944215c881fe9a23a497b8ce2bc19b0",
+      "size": 2889
+    },
+    {
+      "path": "references/eras/xianxia.json",
+      "sha256": "a9bebfa96accdfc1cb68883ae0b6ce3953abb0b518f7c8c6f9333f961103e797",
+      "size": 2622
+    },
+    {
+      "path": "references/lexicon/registry.json",
+      "sha256": "f05fb22d50c82fad5bbbff038af783e92e2b7ea7804fd0455cf3e9b20054ee66",
+      "size": 11481
+    },
+    {
+      "path": "references/transformations/portrait_to_architectural_mural.json",
+      "sha256": "997ad71c8b2a5ff4c817e64358fed666c9df23f60cf1ff1e32d8b02abee64e07",
+      "size": 639
+    },
+    {
+      "path": "references/transformations/portrait_to_decorated_artifact.json",
+      "sha256": "463a89b2cdcdc2e5c6f7a242c671de7bc7dc8559c2263db1cf4fbd37c1458e03",
+      "size": 651
+    },
+    {
+      "path": "references/transformations/portrait_to_relief_print.json",
+      "sha256": "95b0b69ba322a30c0ee962be1033dea61fcf5db3ef2172348ec5830641d56f56",
+      "size": 644
+    },
+    {
+      "path": "references/transformations/portrait_to_volumetric_sculpture.json",
+      "sha256": "9e5e78f9535ddab7132307aafd0cd9d3100ccc949579edc83a5e24db9d270daa",
+      "size": 723
+    },
+    {
+      "path": "references/transformations/registry.json",
+      "sha256": "eb6cc094fdf2a9c88723e1a61bbced2fae4752fcb874ad3b3cedd8a4280b6f37",
+      "size": 525
+    },
+    {
+      "path": "visual-patterns/registry.json",
+      "sha256": "4ca507d6c33ed5d494dff4d70ac8b43c111c15f861b6c9310c2c9e4c3703c5ff",
+      "size": 45752
+    }
+  ]
+}

@@ -12,3 +12,5 @@ build/
 *.jpeg
 *.webp
 !cases/**/output.*
+# Build-time derived knowledge copy; canonical trees remain at repository root.
+src/aipf/_knowledge/

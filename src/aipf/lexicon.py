@@ -8,7 +8,8 @@ import unicodedata
 
 from jsonschema import Draft202012Validator
 
-from .io import load_json, repo_root
+from .io import load_json
+from .resources import iter_resource_dir
 
 
 def normalize(text: str) -> str:
@@ -33,7 +34,7 @@ def validate_registry(registry: dict | None = None) -> list[str]:
     terms: dict[str, list[dict]] = defaultdict(list)
     source_ids = {row["source_id"] for row in load_json("evidence/sources/registry.json")["sources"]}
     claim_ids: set[str] = set()
-    for path in (repo_root() / "evidence/claims").glob("*.json"):
+    for path in iter_resource_dir("evidence/claims", "*.json"):
         claim_ids.update(row["claim_id"] for row in load_json(path)["claims"])
     for record in registry.get("concepts", []):
         cid = record.get("id")

@@ -42,7 +42,22 @@ def _check_expectations(spec:dict,result:dict|None,findings:list[dict])->list[st
 
 
 def run_regression(case_root:str|Path|None=None)->dict:
-    root=repo_root(); case_root=Path(case_root) if case_root else root/'cases'/'regression'; cases=sorted(case_root.glob('*/case.json')); results=[]
+    if case_root is None:
+        case_root=repo_root()/'cases'/'regression'
+    else:
+        case_root=Path(case_root)
+    if not case_root.is_dir():
+        raise FileNotFoundError(
+            f"Regression case root not found: {case_root}. "
+            "Installed wheels do not bundle repository cases; pass an explicit case directory."
+        )
+    cases=sorted(case_root.glob('*/case.json'))
+    if not cases:
+        raise FileNotFoundError(
+            f"No regression cases found under {case_root}. "
+            "Refusing zero-case success."
+        )
+    results=[]
     for p in cases:
         spec=json.loads(p.read_text(encoding='utf-8')); findings=lint_spec(spec); compiled=None; compile_error=None
         try: compiled=compile_result(spec)
@@ -66,8 +81,23 @@ def run_regression(case_root:str|Path|None=None)->dict:
 
 
 def build_baselines(case_root:str|Path|None=None)->dict:
-    root=repo_root(); case_root=Path(case_root) if case_root else root/'cases'/'golden'; out={}
-    for p in sorted(case_root.glob('*/case.json')):
+    if case_root is None:
+        case_root=repo_root()/'cases'/'golden'
+    else:
+        case_root=Path(case_root)
+    if not case_root.is_dir():
+        raise FileNotFoundError(
+            f"Golden case root not found: {case_root}. "
+            "Installed wheels do not bundle repository cases; pass an explicit case directory."
+        )
+    cases=sorted(case_root.glob('*/case.json'))
+    if not cases:
+        raise FileNotFoundError(
+            f"No golden cases found under {case_root}. "
+            "Refusing zero-case baseline success."
+        )
+    out={}
+    for p in cases:
         spec=json.loads(p.read_text(encoding='utf-8')); result=compile_result(spec); rec=spec.get('case_record',{})
         ev_path=p.parent/(rec.get('evaluation') or 'evaluation.json'); out_path=p.parent/(rec.get('output_image') or 'output.png')
         out[spec['id']]={

@@ -25,6 +25,14 @@ aipf = "aipf.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+aipf = ["_knowledge/**/*"]
+
+[tool.setuptools.cmdclass]
+build_py = "aipf_packaging.build_hooks.build_py"
+sdist = "aipf_packaging.build_hooks.sdist"
