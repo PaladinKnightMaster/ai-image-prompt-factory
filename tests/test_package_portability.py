@@ -167,8 +167,9 @@ def test_inventory_matches_canonical_bytes():
     errors = verify_canonical()
     assert errors == []
     inv = load_inventory()
-    assert inv["file_count"] == len(inv["files"]) == 99
-    assert inv["total_bytes"] == 414049
+    assert inv["file_count"] == len(inv["files"]) == 100
+    assert inv["total_bytes"] == 415541
+    assert any(row["path"] == "data/schemas/prompt_recipe.schema.json" for row in inv["files"])
 
 
 def test_canonical_lf_and_crlf_resource_inputs(tmp_path: Path):
@@ -520,6 +521,64 @@ def test_clean_wheel_install_compile_parity(tmp_path, built_artifacts, source_ba
 
     assert out_path.is_file()
     assert not list(installed_path.parent.rglob("*.out.json"))
+
+
+def test_clean_wheel_recipe_cli(tmp_path, built_artifacts, source_baselines):
+    """Installed wheel validates/compiles external recipe JSON without checkout imports."""
+    venv_dir, work, env = _install_wheel_env(tmp_path, built_artifacts["wheel"])
+    py = _venv_python(venv_dir)
+    aipf_bin = _venv_aipf(venv_dir)
+
+    loc = _run(
+        [str(py), "-c", "import aipf, pathlib; print(pathlib.Path(aipf.__file__).resolve())"],
+        cwd=work,
+        env=env,
+    )
+    assert loc.returncode == 0, loc.stderr
+    installed_path = Path(loc.stdout.strip())
+    assert "site-packages" in str(installed_path)
+    assert (ROOT.resolve() / "src") not in installed_path.parents
+
+    sample = source_baselines["greek_marble"]
+    recipe = {
+        "recipe_schema_version": "1.0",
+        "recipe_id": "installed-greek-marble",
+        "recipe_version": "1.0.0",
+        "title": "Installed wheel recipe",
+        "semantic_spec": sample["spec"],
+    }
+    recipe_path = work / "recipe.json"
+    recipe_path.write_text(json.dumps(recipe, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    validated = _run([str(aipf_bin), "recipe", "validate", str(recipe_path)], cwd=work, env=env)
+    assert validated.returncode == 0, validated.stderr + validated.stdout
+
+    plain = _run([str(aipf_bin), "recipe", "compile", str(recipe_path)], cwd=work, env=env)
+    assert plain.returncode == 0, plain.stderr
+    assert plain.stdout.replace("\r\n", "\n").encode("utf-8") == sample["prompt_bytes"]
+
+    as_json = _run(
+        [str(aipf_bin), "recipe", "compile", str(recipe_path), "--json"],
+        cwd=work,
+        env=env,
+    )
+    assert as_json.returncode == 0, as_json.stderr
+    envelope = json.loads(as_json.stdout.replace("\r\n", "\n"))
+    assert envelope["compilation"]["prompt"].encode("utf-8") == sample["prompt_bytes"]
+    assert envelope["prompt_sha256"] == sample["fingerprint"]["prompt_sha256"]
+    assert envelope["recipe"]["recipe_id"] == "installed-greek-marble"
+
+    schema_check = _run(
+        [
+            str(py),
+            "-c",
+            "from aipf.io import load_json; s=load_json('data/schemas/prompt_recipe.schema.json'); "
+            "assert s['properties']['recipe_schema_version']['const']=='1.0'",
+        ],
+        cwd=work,
+        env=env,
+    )
+    assert schema_check.returncode == 0, schema_check.stderr
 
 
 def test_wheel_from_sdist_parity(tmp_path, built_artifacts, source_baselines):
