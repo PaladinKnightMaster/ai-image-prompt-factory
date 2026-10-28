@@ -34,6 +34,16 @@ def _load(p): return json.loads(Path(p).read_text(encoding='utf-8'))
 def _dump(x): print(json.dumps(x,ensure_ascii=False,indent=2))
 
 
+def _dump_recipe_json(value):
+    """ASCII-safe JSON transport for recipe CLI stdout (cp1252-safe).
+
+    Escapes non-ASCII for portable printing; parsed values retain Unicode.
+    Does not alter canonical recipe/spec hashing (see recipes.canonical_json_bytes).
+    """
+    print(json.dumps(value, ensure_ascii=True, indent=2))
+
+
+
 def main():
     ap=argparse.ArgumentParser(prog='aipf'); sub=ap.add_subparsers(dest='cmd',required=True)
     p=sub.add_parser('classify'); p.add_argument('request'); p.add_argument('--has-reference',action='store_true')
@@ -197,19 +207,19 @@ def main():
             raise SystemExit(1)
         if args.recipe_cmd == 'validate':
             findings = validate_recipe(recipe)
-            _dump(findings)
+            _dump_recipe_json(findings)
             raise SystemExit(0 if not any(f['level'] == 'error' for f in findings) else 1)
         if args.recipe_cmd == 'compile':
             try:
                 envelope = compile_recipe(recipe)
             except RecipeValidationError as exc:
-                _dump(exc.findings)
+                _dump_recipe_json(exc.findings)
                 raise SystemExit(1)
             except RecipeError as exc:
                 print(str(exc), file=sys.stderr)
                 raise SystemExit(1)
             if args.as_json:
-                _dump(envelope)
+                _dump_recipe_json(envelope)
             else:
                 print(envelope['compilation']['prompt'], end='')
             return

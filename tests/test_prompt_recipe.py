@@ -5,6 +5,7 @@ from copy import deepcopy
 from hashlib import sha256
 from pathlib import Path
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -80,6 +81,22 @@ def _run(cmd: list[str], *, cwd: Path | None = None, env: dict | None = None) ->
         raw.stdout.decode("utf-8", errors="replace"),
         raw.stderr.decode("utf-8", errors="replace"),
     )
+
+
+def _cp1252_env() -> dict[str, str]:
+    """Force recipe CLI subprocess stdout through a Windows-like charmap codec."""
+    env = dict(os.environ)
+    env["PYTHONIOENCODING"] = "cp1252"
+    # Avoid UTF-8 mode overriding PYTHONIOENCODING on modern Windows/Python.
+    env["PYTHONUTF8"] = "0"
+    env["PYTHONLEGACYWINDOWSSTDIO"] = "1"
+    return env
+
+
+def _run_raw(
+    cmd: list[str], *, cwd: Path | None = None, env: dict | None = None
+) -> subprocess.CompletedProcess[bytes]:
+    return subprocess.run(cmd, cwd=str(cwd or ROOT), env=env, capture_output=True, check=False)
 
 
 def _errors(findings: list[dict]) -> list[dict]:
@@ -346,3 +363,116 @@ def test_canonical_json_bytes_contract():
     obj = {"b": 1, "a": 2}
     assert canonical_json_bytes(obj) == b'{"a":2,"b":1}'
     assert sha256_bytes(b"x") == sha256(b"x").hexdigest()
+
+
+# --- Windows cp1252 JSON transport ----------------------------------------------
+
+
+def test_cli_compile_json_ascii_safe_under_cp1252(tmp_path: Path):
+    """Recipe --json must print on cp1252 stdout without losing Unicode values."""
+    recipe = _wrap_recipe(_load_case(PARITY_CASES[1][1]), recipe_id="greek-marble-bust")
+    path = _write_recipe(tmp_path / "r.json", recipe)
+    expected = compile_recipe(recipe)
+    assert "→" in expected["compilation"]["prompt"]
+
+    raw = _run_raw(
+        _aipf_cmd("recipe", "compile", str(path), "--json"),
+        env=_cp1252_env(),
+    )
+    assert raw.returncode == 0, raw.stderr.decode("utf-8", errors="replace")
+    assert b"UnicodeEncodeError" not in raw.stderr
+    # Transport JSON is ASCII-only; values round-trip when parsed.
+    ascii_text = raw.stdout.decode("ascii")
+    envelope = json.loads(ascii_text)
+    assert "→" in envelope["compilation"]["prompt"]
+    assert envelope["compilation"] == expected["compilation"]
+    assert envelope["recipe"]["recipe_sha256"] == expected["recipe"]["recipe_sha256"]
+    assert envelope["recipe"]["semantic_spec_sha256"] == expected["recipe"]["semantic_spec_sha256"]
+    assert envelope["prompt_sha256"] == expected["prompt_sha256"]
+    assert envelope["evidence_snapshot_sha256"] == expected["evidence_snapshot_sha256"]
+    assert envelope["compiler_version"] == expected["compiler_version"]
+
+
+def test_cli_compile_json_deterministic_under_cp1252(tmp_path: Path):
+    path = _write_recipe(
+        tmp_path / "r.json",
+        _wrap_recipe(_load_case(PARITY_CASES[1][1]), recipe_id="greek-marble-bust"),
+    )
+    env = _cp1252_env()
+    a = _run_raw(_aipf_cmd("recipe", "compile", str(path), "--json"), env=env)
+    b = _run_raw(_aipf_cmd("recipe", "compile", str(path), "--json"), env=env)
+    assert a.returncode == 0, a.stderr.decode("utf-8", errors="replace")
+    assert a.stdout == b.stdout
+    a.stdout.decode("ascii")
+
+
+def test_cli_validate_unicode_diagnostics_under_cp1252(tmp_path: Path):
+    # Invalid slug so jsonschema echoes the Unicode recipe_id in the finding.
+    recipe = _wrap_recipe(
+        _load_case(PARITY_CASES[0][1]),
+        recipe_id="bad→id",
+        title="Marble → Greek",
+    )
+    path = _write_recipe(tmp_path / "bad.json", recipe)
+    raw = _run_raw(_aipf_cmd("recipe", "validate", str(path)), env=_cp1252_env())
+    assert raw.returncode != 0
+    assert b"UnicodeEncodeError" not in raw.stderr
+    findings = json.loads(raw.stdout.decode("ascii"))
+    assert isinstance(findings, list)
+    assert any("→" in f.get("message", "") for f in findings)
+
+
+def test_cli_compile_invalid_json_diagnostics_under_cp1252(tmp_path: Path):
+    path = _write_recipe(
+        tmp_path / "bad.json",
+        _wrap_recipe(
+            {"version": "3.2", "request": "incomplete →"},
+            recipe_id="bad→id",
+            title="Broken → Recipe",
+        ),
+    )
+    raw = _run_raw(
+        _aipf_cmd("recipe", "compile", str(path), "--json"),
+        env=_cp1252_env(),
+    )
+    assert raw.returncode != 0
+    assert b"UnicodeEncodeError" not in raw.stderr
+    findings = json.loads(raw.stdout.decode("ascii"))
+    assert isinstance(findings, list)
+    assert _errors(findings)
+    assert any("→" in f.get("message", "") for f in findings)
+
+
+def test_cli_plaintext_parity_unchanged_by_json_transport(tmp_path: Path):
+    spec = _load_case(PARITY_CASES[1][1])
+    assert "→" in compile_result(spec)["prompt"]
+    spec_path = tmp_path / "spec.json"
+    recipe_path = tmp_path / "recipe.json"
+    spec_path.write_text(json.dumps(spec, ensure_ascii=False) + "\n", encoding="utf-8")
+    _write_recipe(recipe_path, _wrap_recipe(spec, recipe_id="greek-marble-bust"))
+    legacy = _run(_aipf_cmd("compile", str(spec_path)))
+    recipe = _run(_aipf_cmd("recipe", "compile", str(recipe_path)))
+    assert legacy.returncode == 0, legacy.stderr
+    assert recipe.returncode == 0, recipe.stderr
+    assert recipe.stdout.encode("utf-8") == legacy.stdout.encode("utf-8")
+
+
+def test_json_transport_does_not_alter_canonical_hashes(tmp_path: Path):
+    recipe = _wrap_recipe(_load_case(PARITY_CASES[1][1]), recipe_id="greek-marble-bust")
+    path = _write_recipe(tmp_path / "r.json", recipe)
+    direct = compile_recipe(recipe)
+    raw = _run_raw(
+        _aipf_cmd("recipe", "compile", str(path), "--json"),
+        env=_cp1252_env(),
+    )
+    assert raw.returncode == 0, raw.stderr.decode("utf-8", errors="replace")
+    envelope = json.loads(raw.stdout.decode("ascii"))
+    assert sha256_canonical(recipe) == direct["recipe"]["recipe_sha256"]
+    assert sha256_canonical(recipe["semantic_spec"]) == direct["recipe"]["semantic_spec_sha256"]
+    assert envelope["recipe"]["recipe_sha256"] == direct["recipe"]["recipe_sha256"]
+    assert envelope["recipe"]["semantic_spec_sha256"] == direct["recipe"]["semantic_spec_sha256"]
+    assert envelope["prompt_sha256"] == direct["prompt_sha256"]
+    assert envelope["compilation"] == direct["compilation"]
+    # Canonical serializer remains UTF-8 / ensure_ascii=False (not transport JSON).
+    assert b"\\u" not in canonical_json_bytes({"arrow": "→"})
+    assert "→".encode("utf-8") in canonical_json_bytes({"arrow": "→"})
