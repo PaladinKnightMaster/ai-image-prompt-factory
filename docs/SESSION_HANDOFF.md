@@ -2,7 +2,6 @@
 
 - Date: 2026-10-29
 - Canonical `main` PR4 implementation merge: `b7b6f801abeeb4b7340a863b4d24566c238c1fc7` (PR #33)
-- Documentation branch: `docs/pr4-milestone-reconciliation` (isolated worktree)
 - Feature branch retained: `feat/pr4-constrained-recipe-variables` @ `ed6766d`
 - Stable release: V3.3 (`v3.3.0`); unchanged by PR1–PR4
 - No PyPI or package release from this workstream
@@ -26,6 +25,10 @@ unchanged by this engineering track.
 
 ## Next task
 
-Owner review of documentation reconciliation (this branch). Do not commit,
-push, open a PR, start PR5, publish a release, or advance EXP-019 science
-without separate authorization.
+After PR4 documentation reconciliation, the next proposed engineering-governance
+task is to evaluate branch protection for `main`, including required pull-request
+review and Ubuntu/Windows Python 3.12 and Python 3.10 portability checks. This
+requires separate owner authorization.
+
+PR5, product releases, PyPI publication, and EXP-019 scientific advancement
+remain unauthorized.
