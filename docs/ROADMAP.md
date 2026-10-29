@@ -8,6 +8,16 @@ These are planning targets, not promises or evidence that a feature exists. The 
 
 **Closed.** Added preregistered experiments, frozen fixtures, controlled review, execution provenance, result classification, replication, transfer testing, and cross-experiment synthesis. Findings and limits are in the [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md).
 
+### Prompt-authoring packaging and PromptRecipe (engineering infrastructure)
+
+**Engineering implementation merged (PRs #30–#33); not a product release; not empirical validation.**
+- PR1 (#30): GPT Image 2 request-contract / CI guardrails hardening.
+- PR2 (#31): installed-wheel knowledge packaging and portability.
+- PR3 (#32): PromptRecipe v1.0 static foundation.
+- PR4 (#33): PromptRecipe v1.1 constrained enum variables; v1.0 recipes remain supported.
+
+This track delivers installable authoring resources and versioned recipes on `main`. It does **not** complete V3.4 empirical validation, does **not** change EXP-019 scientific status, and does **not** authorize a tagged product release or PyPI publication. Details: [PROMPT_RECIPE.md](PROMPT_RECIPE.md), [PACKAGING_PORTABILITY.md](PACKAGING_PORTABILITY.md).
+
 ## Implemented; empirical validation pending
 
 ### V3.4 - Transformation Intelligence

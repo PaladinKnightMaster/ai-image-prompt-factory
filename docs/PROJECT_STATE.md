@@ -1,10 +1,12 @@
 # Current Project State
 
-- Last updated: 2026-09-28
-- Canonical branch: `main`; V3.4 implementation merge commit: `aa6ae9bb57166d70840fb6ec6ca2a2f4a59b8a52` (PR #6)
+- Last updated: 2026-10-29
+- Canonical branch: `main`
+- PR4 implementation merge (PromptRecipe v1.1 via PR #33): `b7b6f801abeeb4b7340a863b4d24566c238c1fc7`
 - Current stable release: V3.3 Empirical Lab
 - Stable tag: `v3.3.0` (annotated; closure commit `3c0119e`)
 - Architecture freeze base HEAD: `a86b66cee21c37e9a055ee0b3809082b7413d370` on `main`
+- V3.4 implementation merge commit: `aa6ae9bb57166d70840fb6ec6ca2a2f4a59b8a52` (PR #6)
 
 ## Current status
 
@@ -13,6 +15,14 @@
 **V3.4 Transformation Intelligence: architecture frozen; implementation merged into `main`; empirical validation pending; release pending.** The canonical [architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) remains authoritative. PR #6 merged the four-family MVP, documented in the [implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md). EXP-019 v1.0.0 was preregistered but never executed. The active v1.1.1 [preregistration](../experiments/preregistrations/EXP-019.PREREGISTRATION.md) preserves the frozen [textual fixture](../experiments/fixtures/EXP-019/EXP-019-BOKASHI-01.fixture.json), prompts, and scientific rules while allowing unavailable host timestamps to be recorded honestly. The definition remains `planned`; the private v1.1.1 run has two finalized host-native outputs, no reviewer scoring, and no result or analysis. Execution is paused before import of the third raster because its host sidecar failed validation. No general image-generation benefit from domain-grounded lexical realization has been established.
 
 EXP-019 execution infrastructure was merged before the v1.1.0 host-native amendment. Its offline synthetic rehearsal is not empirical evidence. The first v1.1.0 real run has a root provenance checkpoint and one staged, unimported HADCEH raster; it stopped before the first accepted attempt because exact host request time was unavailable. Its image and run are excluded from any v1.1.1 execution. PR #11 merged the v1.1.1 text-only metadata-query and sidecar contract. PR #12 merged the [post-start metadata recovery addendum](../experiments/amendments/EXP-019.v1.1.1.METADATA-RECOVERY-01.md), which permits one bounded exact-query replay in the original conversation. Permanent conversation loss prevents that path for the next unimported raster; a separate degraded-host addendum is prepared for publication review. Both preserve the frozen scientific definition.
+
+**Prompt-authoring packaging and PromptRecipe (engineering on `main`, not a product release).** Merged through GitHub PRs #30–#33:
+- PR1 (#30): GPT Image 2 request-contract / CI guardrails hardening.
+- PR2 (#31): installed-wheel knowledge packaging and portability.
+- PR3 (#32): PromptRecipe v1.0 static foundation (`aipf.recipes`, recipe CLI, deterministic receipts).
+- PR4 (#33): PromptRecipe **v1.1** constrained enum variables (`director.camera`, `director.light_source`, `output.aspect_ratio`); v1.0 recipes remain supported unchanged.
+
+Post-merge CI on the PR4 merge commit `b7b6f80` succeeded (Ubuntu/Windows Python 3.12, Python 3.10 portability, GitHub Pages). This is **merged engineering implementation**, not a V3.4 scientific result, not a tagged product release, and not a PyPI publication. V3.3 remains the latest stable release. See [PROMPT_RECIPE.md](PROMPT_RECIPE.md) and [PACKAGING_PORTABILITY.md](PACKAGING_PORTABILITY.md).
 
 ## Strongest established findings
 
@@ -45,4 +55,4 @@ result or V3.4 release. Later tracks remain in the [capability roadmap](ROADMAP.
 
 ## Canonical references
 
-[V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) · [V3.4 implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md) · [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md) · [V3.3 release notes](RELEASE_NOTES_V3.3.md) · [roadmap](ROADMAP.md) · [decision index](DECISIONS.md) · [research queue](RESEARCH_QUEUE.md) · [session handoff](SESSION_HANDOFF.md)
+[V3.4 architecture freeze](V3.4_ARCHITECTURE_FREEZE.md) · [V3.4 implementation evidence](V3.4_IMPLEMENTATION_EVIDENCE.md) · [V3.3 evidence synthesis](V3.3_EVIDENCE_SYNTHESIS.md) · [V3.3 release notes](RELEASE_NOTES_V3.3.md) · [PromptRecipe](PROMPT_RECIPE.md) · [packaging portability](PACKAGING_PORTABILITY.md) · [roadmap](ROADMAP.md) · [decision index](DECISIONS.md) · [research queue](RESEARCH_QUEUE.md) · [session handoff](SESSION_HANDOFF.md)

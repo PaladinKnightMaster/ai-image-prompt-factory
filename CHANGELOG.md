@@ -1,4 +1,14 @@
 # Changelog
+
+## Unreleased (engineering on `main` — not a tagged release)
+
+- PR1–PR4 (#30–#33): GPT Image 2 request-contract / CI guardrails; installed-wheel
+  knowledge packaging and portability; PromptRecipe v1.0 static foundation;
+  PromptRecipe v1.1 constrained enum variables (PR #33 merge `b7b6f80`).
+- v1.0 recipes remain valid; no compiler or EXP-019 scientific-status change;
+  no PyPI publication in this workstream. V3.3 (`3.3.0` / `v3.3.0`) remains the
+  latest stable release.
+
 ## 3.3.0 â€” 2026-09-23
 - Added the V3.3 Empirical Lab execution framework with preregistration, frozen fixtures, controlled review, and evidence classification.
 - Added task commitments, execution receipts, SHA-256 artifact bindings, replication, ceiling/floor safeguards, and external-validity testing.
