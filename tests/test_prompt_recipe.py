@@ -766,9 +766,20 @@ def test_v11_load_bindings_and_cli(tmp_path: Path):
     validated = _run(_aipf_cmd("recipe", "validate", str(recipe_path), "--bindings", str(bind_path)))
     assert validated.returncode == 0, validated.stderr + validated.stdout
 
-    plain = _run(_aipf_cmd("recipe", "compile", str(recipe_path), "--bindings", str(bind_path)))
+    # Plain-text Unicode prompts require a UTF-8 console/env (same contract as
+    # test_cli_plaintext_parity_unchanged_by_json_transport). Hosted Windows CI
+    # defaults to cp1252; forcing UTF-8 here avoids a false product failure while
+    # JSON recipe output remains ASCII-safe under cp1252 (covered separately).
+    utf8_env = dict(os.environ)
+    utf8_env["PYTHONIOENCODING"] = "utf-8"
+    utf8_env["PYTHONUTF8"] = "1"
+    plain = _run(
+        _aipf_cmd("recipe", "compile", str(recipe_path), "--bindings", str(bind_path)),
+        env=utf8_env,
+    )
     assert plain.returncode == 0, plain.stderr
     assert plain.stdout.replace("\r\n", "\n") == compile_recipe(recipe, bindings)["compilation"]["prompt"]
+    assert "→" in plain.stdout
 
     as_json = _run(_aipf_cmd("recipe", "compile", str(recipe_path), "--bindings", str(bind_path), "--json"))
     assert as_json.returncode == 0, as_json.stderr

@@ -95,16 +95,19 @@ Module: `aipf.recipes`
 - `load_recipe(path)` — read JSON; rejects duplicate keys and nonstandard numeric constants; no compilation
 - `load_bindings(path)` — read a bindings object with the same strict JSON rules
 - `validate_recipe(recipe)` — envelope + semantic findings (definition / baseline only)
-- `validate_recipe(recipe, bindings)` — also validate an explicit invocation (`{}` reports missing required variables)
-- `resolve_recipe(recipe, bindings=None)` — deep copy of baseline or resolved specification
-- `compile_recipe(recipe, bindings=None)` — call `compile_result` and return a receipt envelope
+- `validate_recipe(recipe, bindings)` — also validate an explicit invocation
+- `resolve_recipe(recipe)` / `resolve_recipe(recipe, bindings)` — deep copy of baseline or resolved specification
+- `compile_recipe(recipe)` / `compile_recipe(recipe, bindings)` — call `compile_result` and return a receipt envelope
 
-v1.0: omitting bindings preserves PR3 behavior. Explicitly submitted bindings
-(including `{}`) are rejected because v1.0 does not support them.
+The optional `bindings` argument uses a private omit sentinel. **Omitting the
+argument is not the same as passing `None`.**
 
-v1.1: omitting bindings on `resolve_recipe` / `compile_recipe` is treated as an
-empty invocation. `validate_recipe(recipe)` without bindings does not require
-invocation values.
+| Invocation | v1.0 | v1.1 |
+| --- | --- | --- |
+| Argument omitted | Definition/baseline validation only; resolve/compile unchanged from PR3 | `validate_recipe(recipe)` is definition/baseline only (required variables not enforced). `resolve_recipe` / `compile_recipe` treat omission as an empty invocation (`{}`). |
+| `bindings={}` | Rejected (`recipe_bindings_unsupported`) | Explicit empty invocation; missing **required** variables are reported; optional variables use the embedded baseline |
+| `bindings=None` | Invalid (not an object); rejected | Invalid (not an object); rejected — **not** equivalent to omission |
+| Nonempty bindings object | Rejected | Validated against declared enums; resolved onto a deep copy of `semantic_spec` |
 
 Resolution replaces only authorized scalar target values, then re-validates the
 resolved specification with existing lint/gates. Automatic semantic repairs are
@@ -172,6 +175,12 @@ aipf recipe compile recipe.json --bindings values.json --json
 
 Invalid invocations must not emit compiled prompts. Recipe JSON CLI output and
 diagnostics use `ensure_ascii=True` for Windows cp1252-safe transport.
+
+Unicode plaintext compilation (`recipe compile` without `--json`) requires a
+UTF-8-compatible stdout. Hosted Windows consoles that default to cp1252 may
+raise `UnicodeEncodeError` for prompts containing non-cp1252 characters (for
+example `→`); use a UTF-8 console/environment for plain-text output. JSON
+recipe receipts remain ASCII-safe under cp1252.
 
 Legacy commands (`compile`, `lint`, `classify`, `audit`, `evidence`) are
 unchanged and do not auto-detect recipes.
