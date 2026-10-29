@@ -1,8 +1,11 @@
 # Packaging Portability
 
-PR2 makes the V3.4 prompt-authoring core installable as a self-contained Python
-wheel. Canonical knowledge remains the repository trees. Installed wheels receive
-a derived, read-only copy of an allowlisted public subset.
+PR2–PR4 make the V3.4 prompt-authoring core installable as a self-contained
+Python wheel, including PromptRecipe v1.0/v1.1 schemas and the `aipf recipe`
+CLI. Canonical knowledge remains the repository trees. Installed wheels receive
+a derived, read-only copy of an allowlisted public subset (currently **101**
+inventory resources). Versioned recipe and bindings contracts are documented in
+[PROMPT_RECIPE.md](PROMPT_RECIPE.md).
 
 ## Authority model
 
@@ -34,6 +37,8 @@ distribution.
 - `aipf lint`
 - `aipf audit`
 - `aipf evidence`
+- `aipf recipe validate`
+- `aipf recipe compile`
 
 Internal APIs for TransformationPack / ArtMethodPack / EraPack resolution,
 artifact form/state lookup, evidence selection, compatibility auditing, lexicon
