@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/v1/prompt_recipe_v1_1.schema.json",
+  "title": "AI Image Prompt Factory PromptRecipe v1.1",
+  "description": "Constrained enum variable extension of PromptRecipe v1. Envelope remains closed; embedded semantic_spec is validated independently against request.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "recipe_schema_version",
+    "recipe_id",
+    "recipe_version",
+    "title",
+    "semantic_spec"
+  ],
+  "properties": {
+    "recipe_schema_version": {
+      "const": "1.1",
+      "description": "PromptRecipe envelope schema revision. Must be exactly 1.1 for constrained variables."
+    },
+    "recipe_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "minLength": 1,
+      "description": "Stable lowercase slug-style recipe identity."
+    },
+    "recipe_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Explicit three-component numeric revision. Published revisions are intended to be immutable."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "semantic_spec": {
+      "type": "object",
+      "description": "Complete embedded semantic specification. Must be valid without variable substitution. Validated independently with request.schema.json and lint_spec gates."
+    },
+    "variables": {
+      "type": "object",
+      "description": "Optional constrained enum variables. At most three. Keys are stable lowercase ASCII identifiers.",
+      "additionalProperties": false,
+      "maxProperties": 3,
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "maxLength": 64
+      },
+      "patternProperties": {
+        "^[a-z][a-z0-9_]*$": {
+          "$ref": "#/$defs/variableDefinition"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "variableDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "target",
+        "choices"
+      ],
+      "properties": {
+        "type": {
+          "const": "enum",
+          "description": "Only enum variables are permitted in v1.1."
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "director.camera",
+            "director.light_source",
+            "output.aspect_ratio"
+          ],
+          "description": "Closed destination set. No JSON Pointer or arbitrary object replacement."
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, invocation must supply this variable. Optional variables use the embedded semantic_spec baseline."
+        },
+        "description": {
+          "type": "string"
+        },
+        "choices": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Distinct nonempty string literals. Baseline target value must be included (enforced in runtime)."
+        }
+      }
+    }
+  }
+}
