@@ -52,8 +52,10 @@ def main():
     recipe_sub = recipe_p.add_subparsers(dest='recipe_cmd', required=True)
     rp = recipe_sub.add_parser('validate', help='Validate recipe envelope and embedded semantic_spec')
     rp.add_argument('recipe')
+    rp.add_argument('--bindings', help='Optional JSON object of constrained variable bindings (v1.1)')
     rp = recipe_sub.add_parser('compile', help='Compile recipe via the existing semantic compiler')
     rp.add_argument('recipe')
+    rp.add_argument('--bindings', help='Optional JSON object of constrained variable bindings (v1.1)')
     rp.add_argument('--json', action='store_true', dest='as_json')
     p=sub.add_parser('audit'); p.add_argument('spec')
     p=sub.add_parser('evidence'); p.add_argument('spec')
@@ -197,6 +199,7 @@ def main():
             RecipeError,
             RecipeValidationError,
             compile_recipe,
+            load_bindings,
             load_recipe,
             validate_recipe,
         )
@@ -205,13 +208,24 @@ def main():
         except RecipeError as exc:
             print(str(exc), file=sys.stderr)
             raise SystemExit(1)
+        bindings = None
+        if getattr(args, 'bindings', None):
+            try:
+                bindings = load_bindings(args.bindings)
+            except RecipeError as exc:
+                print(str(exc), file=sys.stderr)
+                raise SystemExit(1)
         if args.recipe_cmd == 'validate':
-            findings = validate_recipe(recipe)
+            try:
+                findings = validate_recipe(recipe) if bindings is None else validate_recipe(recipe, bindings)
+            except RecipeError as exc:
+                print(str(exc), file=sys.stderr)
+                raise SystemExit(1)
             _dump_recipe_json(findings)
             raise SystemExit(0 if not any(f['level'] == 'error' for f in findings) else 1)
         if args.recipe_cmd == 'compile':
             try:
-                envelope = compile_recipe(recipe)
+                envelope = compile_recipe(recipe) if bindings is None else compile_recipe(recipe, bindings)
             except RecipeValidationError as exc:
                 _dump_recipe_json(exc.findings)
                 raise SystemExit(1)

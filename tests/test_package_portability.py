@@ -167,9 +167,10 @@ def test_inventory_matches_canonical_bytes():
     errors = verify_canonical()
     assert errors == []
     inv = load_inventory()
-    assert inv["file_count"] == len(inv["files"]) == 100
-    assert inv["total_bytes"] == 415541
+    assert inv["file_count"] == len(inv["files"]) == 101
+    assert inv["total_bytes"] == 418808
     assert any(row["path"] == "data/schemas/prompt_recipe.schema.json" for row in inv["files"])
+    assert any(row["path"] == "data/schemas/prompt_recipe_v1_1.schema.json" for row in inv["files"])
 
 
 def test_canonical_lf_and_crlf_resource_inputs(tmp_path: Path):
@@ -573,12 +574,70 @@ def test_clean_wheel_recipe_cli(tmp_path, built_artifacts, source_baselines):
             str(py),
             "-c",
             "from aipf.io import load_json; s=load_json('data/schemas/prompt_recipe.schema.json'); "
-            "assert s['properties']['recipe_schema_version']['const']=='1.0'",
+            "assert s['properties']['recipe_schema_version']['const']=='1.0'; "
+            "s11=load_json('data/schemas/prompt_recipe_v1_1.schema.json'); "
+            "assert s11['properties']['recipe_schema_version']['const']=='1.1'",
         ],
         cwd=work,
         env=env,
     )
     assert schema_check.returncode == 0, schema_check.stderr
+
+    # Constrained v1.1 variables with external bindings outside the repository.
+    cam = sample["spec"]["director"]["camera"]
+    light = sample["spec"]["director"]["light_source"]
+    ratio = sample["spec"]["output"]["aspect_ratio"]
+    if ratio not in ("1:1", "4:5"):
+        ratio = "4:5"
+    recipe_v11 = {
+        "recipe_schema_version": "1.1",
+        "recipe_id": "installed-greek-marble-v11",
+        "recipe_version": "1.1.0",
+        "title": "Installed wheel recipe v1.1",
+        "semantic_spec": sample["spec"],
+        "variables": {
+            "camera": {
+                "type": "enum",
+                "target": "director.camera",
+                "choices": [cam, "tight frontal bust framing"],
+            },
+            "light": {
+                "type": "enum",
+                "target": "director.light_source",
+                "choices": [light, "soft overhead museum skylight"],
+            },
+            "ratio": {
+                "type": "enum",
+                "target": "output.aspect_ratio",
+                "choices": ["1:1", "4:5"],
+            },
+        },
+    }
+    # Keep baseline aspect_ratio inside approved vocabulary for the installed case.
+    recipe_v11["semantic_spec"] = json.loads(json.dumps(sample["spec"]))
+    recipe_v11["semantic_spec"]["output"]["aspect_ratio"] = ratio
+    recipe_v11_path = work / "recipe_v11.json"
+    bind_path = work / "bindings.json"
+    recipe_v11_path.write_text(json.dumps(recipe_v11, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    bind_path.write_text(json.dumps({"ratio": "1:1"}, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    v11_validate = _run(
+        [str(aipf_bin), "recipe", "validate", str(recipe_v11_path), "--bindings", str(bind_path)],
+        cwd=work,
+        env=env,
+    )
+    assert v11_validate.returncode == 0, v11_validate.stderr + v11_validate.stdout
+
+    v11_json = _run(
+        [str(aipf_bin), "recipe", "compile", str(recipe_v11_path), "--bindings", str(bind_path), "--json"],
+        cwd=work,
+        env=env,
+    )
+    assert v11_json.returncode == 0, v11_json.stderr
+    v11_envelope = json.loads(v11_json.stdout.replace("\r\n", "\n"))
+    assert v11_envelope["recipe"]["recipe_schema_version"] == "1.1"
+    assert v11_envelope["variable_resolution"]["effective_bindings"]["ratio"] == "1:1"
+    assert v11_envelope["compilation"]["prompt"]
 
 
 def test_wheel_from_sdist_parity(tmp_path, built_artifacts, source_baselines):
@@ -613,12 +672,71 @@ def test_wheel_from_sdist_parity(tmp_path, built_artifacts, source_baselines):
 
     venv_dir, work, env = _install_wheel_env(tmp_path / "sdist-venv", wheel)
     py = _venv_python(venv_dir)
+    aipf_bin = _venv_aipf(venv_dir)
     sample = source_baselines["greek_marble"]
     spec_path = work / "case.json"
     spec_path.write_text(json.dumps(sample["spec"], ensure_ascii=False), encoding="utf-8")
     result = _compile_installed(py, spec_path, work, env)
     assert result["prompt"].encode("utf-8") == sample["prompt_bytes"]
     assert _semantic_fingerprint(result) == sample["fingerprint"]
+
+    # Explicit v1.1 constrained-variable exercise from wheel-from-sdist install.
+    cam = sample["spec"]["director"]["camera"]
+    light = sample["spec"]["director"]["light_source"]
+    ratio = sample["spec"]["output"]["aspect_ratio"]
+    if ratio not in ("1:1", "4:5"):
+        ratio = "4:5"
+    recipe_v11 = {
+        "recipe_schema_version": "1.1",
+        "recipe_id": "sdist-greek-marble-v11",
+        "recipe_version": "1.1.0",
+        "title": "Wheel-from-sdist recipe v1.1",
+        "semantic_spec": json.loads(json.dumps(sample["spec"])),
+        "variables": {
+            "camera": {
+                "type": "enum",
+                "target": "director.camera",
+                "choices": [cam, "tight frontal bust framing"],
+            },
+            "light": {
+                "type": "enum",
+                "target": "director.light_source",
+                "choices": [light, "soft overhead museum skylight"],
+            },
+            "ratio": {
+                "type": "enum",
+                "target": "output.aspect_ratio",
+                "choices": ["1:1", "4:5"],
+            },
+        },
+    }
+    recipe_v11["semantic_spec"]["output"]["aspect_ratio"] = ratio
+    recipe_path = work / "recipe_v11.json"
+    bind_path = work / "bindings_v11.json"
+    recipe_path.write_text(json.dumps(recipe_v11, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    bind_path.write_text(json.dumps({"ratio": "1:1"}, ensure_ascii=False) + "\n", encoding="utf-8")
+    schema_ok = _run(
+        [
+            str(py),
+            "-c",
+            "from aipf.io import load_json; "
+            "assert load_json('data/schemas/prompt_recipe_v1_1.schema.json')"
+            "['properties']['recipe_schema_version']['const']=='1.1'",
+        ],
+        cwd=work,
+        env=env,
+    )
+    assert schema_ok.returncode == 0, schema_ok.stderr
+    compiled = _run(
+        [str(aipf_bin), "recipe", "compile", str(recipe_path), "--bindings", str(bind_path), "--json"],
+        cwd=work,
+        env=env,
+    )
+    assert compiled.returncode == 0, compiled.stderr + compiled.stdout
+    envelope = json.loads(compiled.stdout.replace("\r\n", "\n"))
+    assert envelope["recipe"]["recipe_schema_version"] == "1.1"
+    assert envelope["variable_resolution"]["effective_bindings"]["ratio"] == "1:1"
+    assert envelope["compilation"]["prompt"]
 
 
 def test_missing_packaged_resource_fails(monkeypatch):
