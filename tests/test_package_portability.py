@@ -167,10 +167,11 @@ def test_inventory_matches_canonical_bytes():
     errors = verify_canonical()
     assert errors == []
     inv = load_inventory()
-    assert inv["file_count"] == len(inv["files"]) == 101
-    assert inv["total_bytes"] == 418808
+    assert inv["file_count"] == len(inv["files"]) == 102
+    assert inv["total_bytes"] == 424730
     assert any(row["path"] == "data/schemas/prompt_recipe.schema.json" for row in inv["files"])
     assert any(row["path"] == "data/schemas/prompt_recipe_v1_1.schema.json" for row in inv["files"])
+    assert any(row["path"] == "data/schemas/esr_review.schema.json" for row in inv["files"])
 
 
 def test_canonical_lf_and_crlf_resource_inputs(tmp_path: Path):
@@ -576,12 +577,38 @@ def test_clean_wheel_recipe_cli(tmp_path, built_artifacts, source_baselines):
             "from aipf.io import load_json; s=load_json('data/schemas/prompt_recipe.schema.json'); "
             "assert s['properties']['recipe_schema_version']['const']=='1.0'; "
             "s11=load_json('data/schemas/prompt_recipe_v1_1.schema.json'); "
-            "assert s11['properties']['recipe_schema_version']['const']=='1.1'",
+            "assert s11['properties']['recipe_schema_version']['const']=='1.1'; "
+            "esr=load_json('data/schemas/esr_review.schema.json'); "
+            "assert esr['properties']['protocol_version']['const']=='ESR-v0.1'",
         ],
         cwd=work,
         env=env,
     )
     assert schema_check.returncode == 0, schema_check.stderr
+
+    pillow_gate = _run(
+        [
+            str(py),
+            "-c",
+            "import builtins\n"
+            "real_import = builtins.__import__\n"
+            "def blocked(name, *a, **k):\n"
+            "    if name == 'PIL' or name.startswith('PIL.'):\n"
+            "        raise ImportError('blocked for ESR smoke')\n"
+            "    return real_import(name, *a, **k)\n"
+            "builtins.__import__ = blocked\n"
+            "from aipf.esr_images import require_pillow, EsrImageError\n"
+            "try:\n"
+            "    require_pillow()\n"
+            "except EsrImageError as e:\n"
+            "    assert 'ai-image-prompt-factory[esr]' in str(e)\n"
+            "else:\n"
+            "    raise SystemExit('expected EsrImageError')\n",
+        ],
+        cwd=work,
+        env=env,
+    )
+    assert pillow_gate.returncode == 0, pillow_gate.stderr + pillow_gate.stdout
 
     # Constrained v1.1 variables with external bindings outside the repository.
     cam = sample["spec"]["director"]["camera"]
