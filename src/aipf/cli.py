@@ -34,6 +34,49 @@ def _load(p): return json.loads(Path(p).read_text(encoding='utf-8'))
 def _dump(x): print(json.dumps(x,ensure_ascii=False,indent=2))
 
 
+# Canonical example for `aipf esr package --help`. Field names match esr_review.package_session.
+# Operators must replace every REPLACE_ME_* value and provide local PNG/JPEG/WEBP paths.
+ESR_SESSION_JSON_EXAMPLE = """\
+{
+  "session_id": "REPLACE_ME_session_id",
+  "transformation_in_scope": false,
+  "task_brief": {
+    "text": "REPLACE_ME_shared_task_brief_subject_and_constraints",
+    "style_target": "REPLACE_ME_shared_style_target"
+  },
+  "model": "REPLACE_ME_model_id",
+  "settings": {"size": "REPLACE_ME_size"},
+  "planned_generation_count": 2,
+  "inclusions": ["REPLACE_ME_candidate_A", "REPLACE_ME_candidate_B"],
+  "exclusions": [],
+  "candidates": [
+    {
+      "candidate_id": "REPLACE_ME_candidate_A",
+      "prompt_text": "REPLACE_ME_exact_prompt_text_for_candidate_A",
+      "image_path": "REPLACE_ME_local_image_A.png"
+    },
+    {
+      "candidate_id": "REPLACE_ME_candidate_B",
+      "prompt_text": "REPLACE_ME_exact_prompt_text_for_candidate_B",
+      "image_path": "REPLACE_ME_local_image_B.png"
+    }
+  ],
+  "contamination_status": "clean",
+  "deviations": []
+}
+"""
+
+ESR_PACKAGE_HELP_EPILOG = (
+    "session.json must live in session_dir (outside the git checkout).\n"
+    "After packaging, edit package/review.json, then run: freeze → verify → reveal.\n"
+    "When transformation_in_scope is true, also set task_brief.transformation_target.\n"
+    "Instead of prompt_text, a candidate may use prompt_ref "
+    "{\"path\": \"...\", \"sha256\": \"...\"}.\n\n"
+    "Example session.json (replace every REPLACE_ME_* value):\n"
+    + ESR_SESSION_JSON_EXAMPLE
+)
+
+
 def _dump_recipe_json(value):
     """ASCII-safe JSON transport for recipe CLI stdout (cp1252-safe).
 
@@ -57,6 +100,24 @@ def main():
     rp.add_argument('recipe')
     rp.add_argument('--bindings', help='Optional JSON object of constrained variable bindings (v1.1)')
     rp.add_argument('--json', action='store_true', dest='as_json')
+    esr_p = sub.add_parser('esr', help='ESR-v0.1 exploratory self-review lifecycle')
+    esr_sub = esr_p.add_subparsers(dest='esr_cmd', required=True)
+    ep = esr_sub.add_parser(
+        'package',
+        help='Build anonymized reviewer package from session.json',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=ESR_PACKAGE_HELP_EPILOG,
+    )
+    ep.add_argument(
+        'session_dir',
+        help='Directory containing session.json (must be outside the repository checkout)',
+    )
+    ep = esr_sub.add_parser('freeze', help='Freeze completed S1 scores with integrity seal')
+    ep.add_argument('session_dir')
+    ep = esr_sub.add_parser('verify', help='Verify frozen review and commitments')
+    ep.add_argument('session_dir')
+    ep = esr_sub.add_parser('reveal', help='Reveal private mapping after verified freeze')
+    ep.add_argument('session_dir')
     p=sub.add_parser('audit'); p.add_argument('spec')
     p=sub.add_parser('evidence'); p.add_argument('spec')
     p=sub.add_parser('lint'); p.add_argument('input'); p.add_argument('--prompt',action='store_true')
@@ -194,6 +255,31 @@ def main():
     if args.cmd=='classify': print(classify(args.request,args.has_reference)); return
     if args.cmd=='compile':
         r=compile_result(_load(args.spec),args.profile); _dump(r) if args.as_json else print(r['prompt'],end=''); return
+    if args.cmd == 'esr':
+        from .esr_review import (
+            EsrError,
+            freeze_session,
+            package_session,
+            reveal_session,
+            verify_session,
+        )
+        try:
+            if args.esr_cmd == 'package':
+                _dump(package_session(args.session_dir))
+                return
+            if args.esr_cmd == 'freeze':
+                _dump(freeze_session(args.session_dir))
+                return
+            if args.esr_cmd == 'verify':
+                _dump(verify_session(args.session_dir))
+                return
+            if args.esr_cmd == 'reveal':
+                _dump(reveal_session(args.session_dir))
+                return
+        except EsrError as exc:
+            print(json.dumps({'ok': False, 'error': str(exc)}, ensure_ascii=False), file=sys.stderr)
+            raise SystemExit(1) from exc
+        raise SystemExit(f'unknown esr command: {args.esr_cmd}')
     if args.cmd == 'recipe':
         from .recipes import (
             RecipeError,
