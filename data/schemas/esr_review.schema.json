@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/aipf/esr/esr_review.schema.json",
+  "title": "AIPF ESR-v0.1 Reviewer-Facing Review Document",
+  "description": "Exploratory self-review scoring contract (ESR-IQ-v0.1). Reviewer-facing only: must not embed private treatment mappings, candidate identifiers, or candidate-linked prompt digests. Package/freeze/reveal lifecycle is PR2 runtime; this schema validates the S1 score document shape.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "rubric_version",
+    "scientific_status",
+    "evaluator_identity_class",
+    "independent_reviewer",
+    "blindness_claim",
+    "transformation_in_scope",
+    "task_brief",
+    "presentation_order",
+    "items"
+  ],
+  "properties": {
+    "protocol_version": {"const": "ESR-v0.1"},
+    "rubric_version": {"const": "ESR-IQ-v0.1"},
+    "scientific_status": {"const": "exploratory"},
+    "evaluator_identity_class": {"const": "owner_self_review"},
+    "independent_reviewer": {"const": false},
+    "blindness_claim": {"const": "partial_anonymization_only"},
+    "transformation_in_scope": {"type": "boolean"},
+    "task_brief": {"$ref": "#/$defs/task_brief"},
+    "presentation_order": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/review_id"}
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/review_item"}
+    },
+    "status": {"enum": ["open", "frozen"]},
+    "contamination_status": {"enum": ["clean", "contaminated_pilot"]},
+    "deviations": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"transformation_in_scope": {"const": true}},
+        "required": ["transformation_in_scope"]
+      },
+      "then": {
+        "properties": {
+          "task_brief": {
+            "type": "object",
+            "required": [
+              "text",
+              "task_brief_sha256",
+              "style_target",
+              "transformation_target"
+            ],
+            "properties": {
+              "transformation_target": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scores": {
+                  "type": "object",
+                  "properties": {
+                    "transformation_fidelity": {
+                      "$ref": "#/$defs/scored_integer_cell"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scores": {
+                  "type": "object",
+                  "properties": {
+                    "transformation_fidelity": {
+                      "$ref": "#/$defs/d6_na_cell"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "review_id": {
+      "type": "string",
+      "pattern": "^R[A-HJ-NP-Z2-9]{7}$"
+    },
+    "scored_integer_cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "na_reason"],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "na_reason": {"type": "null"}
+      }
+    },
+    "d5_cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "na_reason"],
+      "properties": {
+        "value": {"type": "null"},
+        "na_reason": {"const": "deferred_protocol_v0_1"}
+      }
+    },
+    "d6_na_cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "na_reason"],
+      "properties": {
+        "value": {"type": "null"},
+        "na_reason": {"const": "not_applicable_to_task"}
+      }
+    },
+    "task_brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "task_brief_sha256", "style_target"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "task_brief_sha256": {"$ref": "#/$defs/sha256_hex"},
+        "style_target": {"type": "string", "minLength": 1},
+        "transformation_target": {"type": "string", "minLength": 1}
+      }
+    },
+    "score_block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_brief_adherence",
+        "visual_coherence",
+        "target_style_fidelity",
+        "technical_cleanliness",
+        "prompt_repeatability",
+        "transformation_fidelity"
+      ],
+      "properties": {
+        "task_brief_adherence": {"$ref": "#/$defs/scored_integer_cell"},
+        "visual_coherence": {"$ref": "#/$defs/scored_integer_cell"},
+        "target_style_fidelity": {"$ref": "#/$defs/scored_integer_cell"},
+        "technical_cleanliness": {"$ref": "#/$defs/scored_integer_cell"},
+        "prompt_repeatability": {"$ref": "#/$defs/d5_cell"},
+        "transformation_fidelity": true
+      }
+    },
+    "review_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "review_id",
+        "scores",
+        "recognized_image_or_treatment",
+        "notes"
+      ],
+      "properties": {
+        "review_id": {"$ref": "#/$defs/review_id"},
+        "scores": {"$ref": "#/$defs/score_block"},
+        "recognized_image_or_treatment": {
+          "enum": ["none", "suspected", "certain"]
+        },
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

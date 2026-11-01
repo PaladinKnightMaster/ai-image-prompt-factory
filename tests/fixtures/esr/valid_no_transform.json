@@ -1,0 +1,30 @@
+{
+  "protocol_version": "ESR-v0.1",
+  "rubric_version": "ESR-IQ-v0.1",
+  "scientific_status": "exploratory",
+  "evaluator_identity_class": "owner_self_review",
+  "independent_reviewer": false,
+  "blindness_claim": "partial_anonymization_only",
+  "transformation_in_scope": false,
+  "task_brief": {
+    "text": "Portrait of an adult subject outdoors at dusk; calm expression; no logos.",
+    "task_brief_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "style_target": "naturalistic photographic portrait with soft dusk light"
+  },
+  "presentation_order": ["RAAAAAA2"],
+  "items": [
+    {
+      "review_id": "RAAAAAA2",
+      "scores": {
+        "task_brief_adherence": {"value": 4, "na_reason": null},
+        "visual_coherence": {"value": 3, "na_reason": null},
+        "target_style_fidelity": {"value": 4, "na_reason": null},
+        "technical_cleanliness": {"value": 5, "na_reason": null},
+        "prompt_repeatability": {"value": null, "na_reason": "deferred_protocol_v0_1"},
+        "transformation_fidelity": {"value": null, "na_reason": "not_applicable_to_task"}
+      },
+      "recognized_image_or_treatment": "none",
+      "notes": ""
+    }
+  ]
+}

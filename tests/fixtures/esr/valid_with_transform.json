@@ -1,0 +1,44 @@
+{
+  "protocol_version": "ESR-v0.1",
+  "rubric_version": "ESR-IQ-v0.1",
+  "scientific_status": "exploratory",
+  "evaluator_identity_class": "owner_self_review",
+  "independent_reviewer": false,
+  "blindness_claim": "partial_anonymization_only",
+  "transformation_in_scope": true,
+  "task_brief": {
+    "text": "Transform the living portrait into a shallow relief print look while preserving identity.",
+    "task_brief_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "style_target": "relief print with flattened tonal planes",
+    "transformation_target": "portrait to relief_print; preserve identity; emphasize carved edge and inked surface"
+  },
+  "presentation_order": ["RBBBBBB3", "RCCCCCC4"],
+  "items": [
+    {
+      "review_id": "RBBBBBB3",
+      "scores": {
+        "task_brief_adherence": {"value": 5, "na_reason": null},
+        "visual_coherence": {"value": 4, "na_reason": null},
+        "target_style_fidelity": {"value": 4, "na_reason": null},
+        "technical_cleanliness": {"value": 3, "na_reason": null},
+        "prompt_repeatability": {"value": null, "na_reason": "deferred_protocol_v0_1"},
+        "transformation_fidelity": {"value": 4, "na_reason": null}
+      },
+      "recognized_image_or_treatment": "suspected",
+      "notes": "possible recognition of composition"
+    },
+    {
+      "review_id": "RCCCCCC4",
+      "scores": {
+        "task_brief_adherence": {"value": 2, "na_reason": null},
+        "visual_coherence": {"value": 2, "na_reason": null},
+        "target_style_fidelity": {"value": 1, "na_reason": null},
+        "technical_cleanliness": {"value": 2, "na_reason": null},
+        "prompt_repeatability": {"value": null, "na_reason": "deferred_protocol_v0_1"},
+        "transformation_fidelity": {"value": 1, "na_reason": null}
+      },
+      "recognized_image_or_treatment": "none",
+      "notes": ""
+    }
+  ]
+}
