@@ -68,7 +68,7 @@ ESR_SESSION_JSON_EXAMPLE = """\
 
 ESR_PACKAGE_HELP_EPILOG = (
     "session.json must live in session_dir (outside the git checkout).\n"
-    "After packaging, edit package/review.json, then run: freeze → verify → reveal.\n"
+    "After packaging, edit package/review.json, then run: freeze -> verify -> reveal.\n"
     "When transformation_in_scope is true, also set task_brief.transformation_target.\n"
     "Instead of prompt_text, a candidate may use prompt_ref "
     "{\"path\": \"...\", \"sha256\": \"...\"}.\n\n"

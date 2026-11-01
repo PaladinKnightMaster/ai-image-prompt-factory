@@ -450,3 +450,33 @@ def test_package_help_session_example_is_operable(tmp_path: Path) -> None:
     assert (session / "package" / "images").is_dir()
     assert len(list((session / "package" / "images").iterdir())) == 2
     assert (session / "private" / "mapping.json").is_file()
+
+
+def test_package_help_is_cp1252_safe() -> None:
+    """ESR package --help must print under Windows cp1252 stdout (CI runners)."""
+    import os
+    import subprocess
+    import sys
+
+    from aipf.cli import ESR_PACKAGE_HELP_EPILOG
+
+    assert ESR_PACKAGE_HELP_EPILOG.encode("cp1252")
+    assert "\u2192" not in ESR_PACKAGE_HELP_EPILOG
+
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "cp1252:strict"
+    help_proc = subprocess.run(
+        [sys.executable, "-m", "aipf.cli", "esr", "package", "--help"],
+        capture_output=True,
+        text=True,
+        encoding="cp1252",
+        errors="strict",
+        env=env,
+        check=False,
+    )
+    assert help_proc.returncode == 0, help_proc.stderr
+    combined = (help_proc.stdout or "") + (help_proc.stderr or "")
+    assert "UnicodeEncodeError" not in combined
+    assert "Example session.json" in help_proc.stdout
+    assert "REPLACE_ME_" in help_proc.stdout
+    assert "freeze -> verify -> reveal" in help_proc.stdout
