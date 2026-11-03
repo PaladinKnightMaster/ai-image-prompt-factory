@@ -167,11 +167,15 @@ def test_inventory_matches_canonical_bytes():
     errors = verify_canonical()
     assert errors == []
     inv = load_inventory()
-    assert inv["file_count"] == len(inv["files"]) == 102
-    assert inv["total_bytes"] == 426653
+    assert inv["file_count"] == len(inv["files"]) == 103
+    assert inv["total_bytes"] == 432537
     assert any(row["path"] == "data/schemas/prompt_recipe.schema.json" for row in inv["files"])
     assert any(row["path"] == "data/schemas/prompt_recipe_v1_1.schema.json" for row in inv["files"])
     assert any(row["path"] == "data/schemas/esr_review.schema.json" for row in inv["files"])
+    assert any(
+        row["path"] == "data/schemas/chatgpt_web_manual_source.schema.json"
+        for row in inv["files"]
+    )
 
 
 def test_canonical_lf_and_crlf_resource_inputs(tmp_path: Path):

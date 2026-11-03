@@ -7,11 +7,14 @@ provider-confirmed identifiers.
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime, timezone
 from hashlib import sha256
 from pathlib import Path, PurePosixPath
 import json
 import os
 import re
+import struct
+import tempfile
 from typing import Any
 
 from .model_adapter import (
@@ -42,12 +45,31 @@ DEFAULT_OUTPUT_NAME = "output.png"
 # Evidence levels are descriptive only; higher levels never invent provider proof.
 EVIDENCE_COMPILATION_CONSISTENT = "compilation_consistent"
 EVIDENCE_LOCALLY_VERIFIED = "locally_verified_generation"
+EVIDENCE_MANUAL_IMPORT = "locally_verified_manual_import"
 EVIDENCE_PROVIDER_CONFIRMED = "provider_confirmed_partial"
 EVIDENCE_INCOMPLETE = "incomplete_or_unverifiable"
+
+CHATGPT_WEB_SOURCE_SCHEMA_VERSION = "1.0.0"
+CHATGPT_WEB_SOURCE_NAME = "source.json"
+CHATGPT_WEB_IMAGE_NAME = "original.png"
+CHATGPT_WEB_CAPTURE_NAME = "submitted_prompt_capture.txt"
+CHATGPT_WEB_MANIFEST_NAME = "manifest.json"
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+_MANUAL_AUTHENTICITY_LIMITS = [
+    "Manual ChatGPT Web download; not OpenAI Images API output.",
+    "Local hash consistency and recipe linkage are not provider-origin proof.",
+    "Model identity is unknown unless separately attested by a future channel.",
+    "ChatGPT internal effective prompt is not known from this import.",
+    "provider_confirmed_partial is unreachable on the chatgpt_web_manual channel.",
+    "publication_status remains private_only until a separately authorized gallery gate.",
+]
 
 _FORBIDDEN_STAGE_PREFIXES = (
     "website/generated",
     "website\\generated",
+    "/cases/",
+    "\\cases\\",
 )
 
 
@@ -708,3 +730,490 @@ def simulate_completed_generation_metadata(
     # Never invent provider confirmation.
     out["provider_verified_model_id"] = None
     return out
+
+
+def _utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _atomic_write_bytes(path: Path, data: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_name = tempfile.mkstemp(
+        dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp"
+    )
+    tmp_path = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(tmp_path, path)
+    except Exception:
+        try:
+            if tmp_path.exists():
+                tmp_path.unlink()
+        except OSError:
+            pass
+        raise
+
+
+def _atomic_write_text(path: Path, text: str) -> None:
+    _atomic_write_bytes(path, (text if text.endswith("\n") else text + "\n").encode("utf-8"))
+
+
+def _parse_custody_sha256(custody_path: Path) -> str:
+    text = custody_path.read_text(encoding="utf-8")
+    match = re.search(r"(?im)^\s*SHA-?256\s*[:=]\s*([0-9a-f]{64})\s*$", text)
+    if not match:
+        raise CreativeProvenanceError(
+            f"custody record missing SHA-256 declaration: {custody_path}"
+        )
+    return match.group(1).lower()
+
+
+def inspect_png_file(path: Path) -> dict[str, Any]:
+    """Validate PNG signature and read IHDR dimensions. No pixel decode."""
+    if not path.is_file():
+        raise CreativeProvenanceError(f"image file not found: {path}")
+    data = path.read_bytes()
+    if len(data) < 24 or not data.startswith(PNG_SIGNATURE):
+        raise CreativeProvenanceError(
+            f"unsupported image format or missing PNG signature: {path}"
+        )
+    # signature(8) + length(4) + type(4) + IHDR(13) ...
+    length = struct.unpack(">I", data[8:12])[0]
+    chunk_type = data[12:16]
+    if chunk_type != b"IHDR" or length < 8:
+        raise CreativeProvenanceError(f"PNG IHDR missing or invalid: {path}")
+    width, height = struct.unpack(">II", data[16:24])
+    if width < 1 or height < 1:
+        raise CreativeProvenanceError(f"PNG dimensions invalid: {path}")
+    return {
+        "sha256": sha256(data).hexdigest(),
+        "byte_length": len(data),
+        "mime_type": "image/png",
+        "format": "PNG",
+        "width": width,
+        "height": height,
+        "bytes": data,
+    }
+
+
+def import_chatgpt_web_manual(
+    *,
+    prep_dir: str | Path,
+    image_path: str | Path,
+    output_dir: str | Path,
+    expect_image_sha256: str,
+    custody_path: str | Path | None = None,
+    submitted_prompt_path: str | Path | None = None,
+    operator_attests_prompt_submission: bool = False,
+    attestation_note: str | None = None,
+    conversation_reference: str | None = None,
+    expect_recipe_id: str | None = None,
+    expect_recipe_version: str | None = None,
+    expect_recipe_sha256: str | None = None,
+) -> dict[str, Any]:
+    """Import a manually downloaded ChatGPT Images PNG into a private bundle.
+
+    Does not call providers. Does not mutate the source image or custody file.
+    Does not grant provider confirmation. No overwrite of destination assets.
+    """
+    if not re.fullmatch(r"[0-9a-f]{64}", expect_image_sha256 or ""):
+        raise CreativeProvenanceError("expect_image_sha256 must be 64 lowercase hex")
+
+    prep = Path(prep_dir)
+    image = Path(image_path)
+    stage = _resolve_stage_root(output_dir)
+
+    prep_report = verify_recipe_generation_bundle(
+        prep,
+        expect_recipe_id=expect_recipe_id,
+        expect_recipe_version=expect_recipe_version,
+        expect_recipe_sha256=expect_recipe_sha256,
+    )
+    if not prep_report.get("ok"):
+        raise CreativeProvenanceError(
+            "preparation bundle verification failed: "
+            + "; ".join(f["message"] for f in prep_report.get("findings", []) if f["level"] == "error")
+        )
+
+    receipt = _load_json(prep / RECEIPT_NAME)
+    metadata = _load_json(prep / GENERATION_NAME)
+    provenance = metadata.get("creative_provenance")
+    if not isinstance(provenance, dict):
+        raise CreativeProvenanceError("preparation generation.json lacks creative_provenance")
+    for message in validate_creative_provenance_block(provenance):
+        raise CreativeProvenanceError(message)
+
+    intended_adapter_sha = sha256_file(prep / PROMPT_NAME)
+    intended_compiler_sha = provenance.get("prompt_sha256")
+    if intended_adapter_sha != provenance.get("adapter_prompt_sha256"):
+        raise CreativeProvenanceError(
+            "preparation prompt.txt does not match creative_provenance.adapter_prompt_sha256"
+        )
+
+    if submitted_prompt_path is not None and operator_attests_prompt_submission:
+        raise CreativeProvenanceError(
+            "provide either submitted_prompt_path or operator attestation, not both"
+        )
+    if submitted_prompt_path is None and not operator_attests_prompt_submission:
+        raise CreativeProvenanceError(
+            "prompt evidence required: pass submitted_prompt_path for an independently "
+            "captured submission, or set operator_attests_prompt_submission=True"
+        )
+
+    operator_attestation = None
+    capture_bytes: bytes | None = None
+    if submitted_prompt_path is not None:
+        capture_path = Path(submitted_prompt_path)
+        if not capture_path.is_file():
+            raise CreativeProvenanceError(f"submitted prompt capture not found: {capture_path}")
+        capture_bytes = capture_path.read_bytes()
+        if capture_bytes != (prep / PROMPT_NAME).read_bytes():
+            raise CreativeProvenanceError(
+                "submitted prompt capture does not exactly match preparation prompt.txt"
+            )
+        prompt_submission = {
+            "intended_adapter_prompt_sha256": intended_adapter_sha,
+            "intended_compiler_prompt_sha256": intended_compiler_sha,
+            "independent_capture_status": "provided",
+            "submitted_prompt_sha256": sha256(capture_bytes).hexdigest(),
+            "submission_verification": "exact_match",
+            "operator_attestation": None,
+            "chatgpt_effective_prompt_known": False,
+        }
+    else:
+        operator_attestation = {
+            "attested": True,
+            "note": attestation_note,
+            "attested_at_utc": _utc_now_iso(),
+        }
+        prompt_submission = {
+            "intended_adapter_prompt_sha256": intended_adapter_sha,
+            "intended_compiler_prompt_sha256": intended_compiler_sha,
+            "independent_capture_status": "unavailable",
+            "submitted_prompt_sha256": None,
+            "submission_verification": "operator_attested_uncaptured",
+            "operator_attestation": operator_attestation,
+            "chatgpt_effective_prompt_known": False,
+        }
+
+    png = inspect_png_file(image)
+    if png["sha256"] != expect_image_sha256:
+        raise CreativeProvenanceError(
+            "image SHA-256 does not match expect_image_sha256"
+        )
+
+    custody_declared = None
+    custody_record_path = None
+    if custody_path is not None:
+        custody_file = Path(custody_path)
+        if not custody_file.is_file():
+            raise CreativeProvenanceError(f"custody record not found: {custody_file}")
+        custody_declared = _parse_custody_sha256(custody_file)
+        if custody_declared != png["sha256"]:
+            raise CreativeProvenanceError(
+                "custody SHA-256 does not match image file digest"
+            )
+        custody_record_path = str(custody_file)
+
+    # Refuse destination overwrite / duplicate import (no --force in MVP).
+    dest_image = stage / CHATGPT_WEB_IMAGE_NAME
+    dest_source = stage / CHATGPT_WEB_SOURCE_NAME
+    dest_manifest = stage / CHATGPT_WEB_MANIFEST_NAME
+    dest_capture = stage / CHATGPT_WEB_CAPTURE_NAME
+    for path in (dest_image, dest_source, dest_manifest, dest_capture):
+        if path.exists():
+            raise CreativeProvenanceError(
+                f"refusing duplicate import / overwrite of existing evidence file: {path}"
+            )
+    if stage.exists() and any(stage.iterdir()):
+        raise CreativeProvenanceError(
+            f"refusing import into non-empty destination directory: {stage}"
+        )
+
+    aspect = None
+    bindings = provenance.get("effective_bindings") or {}
+    if isinstance(bindings, dict):
+        aspect = bindings.get("aspect")
+
+    imported_at = _utc_now_iso()
+    source: dict[str, Any] = {
+        "schema_version": CHATGPT_WEB_SOURCE_SCHEMA_VERSION,
+        "record_kind": "chatgpt_web_manual_source",
+        "generation_channel": "chatgpt_web_manual",
+        "recipe": {
+            "recipe_id": provenance["recipe_id"],
+            "recipe_version": provenance["recipe_version"],
+            "recipe_schema_version": provenance["recipe_schema_version"],
+            "recipe_sha256": provenance["recipe_sha256"],
+            "semantic_spec_sha256": provenance["semantic_spec_sha256"],
+            "resolved_semantic_spec_sha256": provenance.get(
+                "resolved_semantic_spec_sha256"
+            ),
+            "effective_bindings_sha256": provenance.get("effective_bindings_sha256"),
+            "submitted_bindings_sha256": provenance.get("submitted_bindings_sha256"),
+            "recipe_receipt_sha256": provenance["recipe_receipt_sha256"],
+            "compiler_version": provenance["compiler_version"],
+            "compiler_prompt_sha256": provenance["prompt_sha256"],
+            "adapter_prompt_sha256": provenance["adapter_prompt_sha256"],
+            "effective_bindings": deepcopy(bindings),
+            "prep_dir": str(prep.resolve()),
+        },
+        "prompt_submission": prompt_submission,
+        "conversation_reference": {
+            "status": "provided" if conversation_reference else "unavailable",
+            "url_or_id": conversation_reference,
+            "note": None,
+        },
+        "image": {
+            "original_filename": image.name,
+            "stored_filename": CHATGPT_WEB_IMAGE_NAME,
+            "sha256": png["sha256"],
+            "byte_length": png["byte_length"],
+            "mime_type": "image/png",
+            "format": "PNG",
+            "width": png["width"],
+            "height": png["height"],
+            "requested_aspect_ratio": aspect,
+            "observed_aspect_ratio": f"{png['width']}:{png['height']}",
+        },
+        "model_identity": {
+            "status": "unknown",
+            "operator_reported_label": None,
+            "provider_verified_model_id": None,
+        },
+        "custody": {
+            "source_image_path": str(image.resolve()),
+            "custody_record_path": custody_record_path,
+            "custody_sha256_declared": custody_declared,
+            "expect_image_sha256": expect_image_sha256,
+            "sha256_verified": True,
+        },
+        "publication_status": "private_only",
+        "evidence_level": EVIDENCE_MANUAL_IMPORT,
+        "imported_at_utc": imported_at,
+        "verified_at_utc": None,
+        "authenticity_limits": list(_MANUAL_AUTHENTICITY_LIMITS),
+    }
+
+    manifest = {
+        "schema_version": "1.0.0",
+        "bundle_kind": "chatgpt_web_manual_import",
+        "generation_channel": "chatgpt_web_manual",
+        "evidence_level": EVIDENCE_MANUAL_IMPORT,
+        "prep_dir": str(prep.resolve()),
+        "files": {
+            "source": CHATGPT_WEB_SOURCE_NAME,
+            "original_image": CHATGPT_WEB_IMAGE_NAME,
+            "submitted_prompt_capture": (
+                CHATGPT_WEB_CAPTURE_NAME if capture_bytes is not None else None
+            ),
+            "manifest": CHATGPT_WEB_MANIFEST_NAME,
+        },
+        "image_sha256": png["sha256"],
+        "adapter_prompt_sha256": intended_adapter_sha,
+        "recipe_receipt_sha256": provenance["recipe_receipt_sha256"],
+        "authenticity_limits": list(_MANUAL_AUTHENTICITY_LIMITS),
+        "publication_status": "private_only",
+        "imported_at_utc": imported_at,
+    }
+
+    stage.mkdir(parents=True, exist_ok=True)
+    _atomic_write_bytes(dest_image, png["bytes"])
+    if dest_image.read_bytes() != png["bytes"]:
+        raise CreativeProvenanceError("copied original.png bytes do not match source image")
+    if capture_bytes is not None:
+        _atomic_write_bytes(dest_capture, capture_bytes)
+    _atomic_write_text(
+        dest_source, json.dumps(source, ensure_ascii=False, indent=2)
+    )
+    _atomic_write_text(
+        dest_manifest, json.dumps(manifest, ensure_ascii=False, indent=2)
+    )
+
+    return {
+        "ok": True,
+        "stage_dir": str(stage),
+        "evidence_level": EVIDENCE_MANUAL_IMPORT,
+        "image_sha256": png["sha256"],
+        "source": source,
+        "manifest": manifest,
+        "prep_verification": prep_report,
+    }
+
+
+def verify_chatgpt_web_manual(stage_dir: str | Path) -> dict[str, Any]:
+    """Verify a chatgpt_web_manual import bundle. Never rewrites evidence files."""
+    stage = Path(stage_dir)
+    findings: list[dict[str, str]] = []
+
+    def err(code: str, message: str) -> None:
+        findings.append({"level": "error", "code": code, "message": message})
+
+    def warn(code: str, message: str) -> None:
+        findings.append({"level": "warning", "code": code, "message": message})
+
+    if not stage.is_dir():
+        return {
+            "ok": False,
+            "evidence_level": EVIDENCE_INCOMPLETE,
+            "findings": [
+                {
+                    "level": "error",
+                    "code": "missing_bundle",
+                    "message": f"import directory not found: {stage}",
+                }
+            ],
+        }
+
+    source_path = stage / CHATGPT_WEB_SOURCE_NAME
+    image_path = stage / CHATGPT_WEB_IMAGE_NAME
+    manifest_path = stage / CHATGPT_WEB_MANIFEST_NAME
+    for required in (source_path, image_path, manifest_path):
+        if not required.is_file():
+            err("missing_file", f"required file missing: {required.name}")
+    if findings:
+        return {
+            "ok": False,
+            "evidence_level": EVIDENCE_INCOMPLETE,
+            "findings": findings,
+        }
+
+    try:
+        source = _load_json(source_path)
+    except (OSError, json.JSONDecodeError) as exc:
+        err("source_unreadable", str(exc))
+        return {"ok": False, "evidence_level": EVIDENCE_INCOMPLETE, "findings": findings}
+
+    if source.get("record_kind") != "chatgpt_web_manual_source":
+        err("record_kind", "source.json record_kind must be chatgpt_web_manual_source")
+    if source.get("generation_channel") != "chatgpt_web_manual":
+        err("generation_channel", "generation_channel must be chatgpt_web_manual")
+    if source.get("evidence_level") != EVIDENCE_MANUAL_IMPORT:
+        err("evidence_level", "evidence_level must be locally_verified_manual_import")
+    if source.get("publication_status") != "private_only":
+        err("publication_status", "publication_status must remain private_only")
+
+    # Reject API / provider-confirmation pollution.
+    if "provider_verified_model_id" in source and source.get("provider_verified_model_id") is not None:
+        err("provider_claim_forbidden", "top-level provider_verified_model_id is forbidden")
+    model = source.get("model_identity") or {}
+    if not isinstance(model, dict):
+        err("model_identity_invalid", "model_identity must be an object")
+    else:
+        if model.get("status") != "unknown":
+            err("model_identity_invalid", "model_identity.status must be unknown")
+        if model.get("provider_verified_model_id") is not None:
+            err(
+                "provider_claim_forbidden",
+                "provider_verified_model_id must be null on chatgpt_web_manual",
+            )
+    if source.get("result") or source.get("transport") or source.get("dry_run") is not None:
+        err("api_fields_forbidden", "API generation metadata fields are forbidden on manual source")
+
+    try:
+        png = inspect_png_file(image_path)
+    except CreativeProvenanceError as exc:
+        err("image_invalid", str(exc))
+        png = None
+
+    image_meta = source.get("image") or {}
+    if png is not None:
+        if image_meta.get("sha256") != png["sha256"]:
+            err("image_sha_mismatch", "original.png digest does not match source.image.sha256")
+        if image_meta.get("width") != png["width"] or image_meta.get("height") != png["height"]:
+            err("image_dimensions_mismatch", "stored PNG dimensions do not match source.image")
+        if image_meta.get("byte_length") != png["byte_length"]:
+            err("image_length_mismatch", "stored PNG length does not match source.image")
+
+    custody = source.get("custody") or {}
+    if custody.get("expect_image_sha256") != image_meta.get("sha256"):
+        err("expect_hash_mismatch", "custody.expect_image_sha256 does not match image.sha256")
+    if custody.get("sha256_verified") is not True:
+        err("sha_not_verified", "custody.sha256_verified must be true")
+
+    prompt = source.get("prompt_submission") or {}
+    if prompt.get("chatgpt_effective_prompt_known") is not False:
+        err("effective_prompt_claim", "chatgpt_effective_prompt_known must be false")
+    capture_path = stage / CHATGPT_WEB_CAPTURE_NAME
+    if prompt.get("independent_capture_status") == "provided":
+        if not capture_path.is_file():
+            err("missing_capture", "submitted_prompt_capture.txt missing for provided capture")
+        elif sha256(capture_path.read_bytes()).hexdigest() != prompt.get(
+            "submitted_prompt_sha256"
+        ):
+            err("capture_digest_mismatch", "capture file digest mismatch")
+        if prompt.get("submission_verification") != "exact_match":
+            err("capture_verification", "provided capture must use exact_match verification")
+    elif prompt.get("independent_capture_status") == "unavailable":
+        if capture_path.exists():
+            err(
+                "mislabelled_capture",
+                "submitted_prompt_capture.txt must not exist when independent capture is unavailable",
+            )
+        if prompt.get("submission_verification") != "operator_attested_uncaptured":
+            err(
+                "attestation_verification",
+                "uncaptured submission must be operator_attested_uncaptured",
+            )
+        if prompt.get("submitted_prompt_sha256") is not None:
+            err("uncaptured_hash", "uncaptured submission must not claim submitted_prompt_sha256")
+        attestation = prompt.get("operator_attestation") or {}
+        if not attestation.get("attested"):
+            err("attestation_missing", "operator attestation required when capture unavailable")
+    else:
+        err("capture_status", "independent_capture_status missing or invalid")
+
+    prep_dir = (source.get("recipe") or {}).get("prep_dir")
+    if prep_dir:
+        prep_path = Path(prep_dir)
+        if prep_path.is_dir():
+            prep_report = verify_recipe_generation_bundle(prep_path)
+            if not prep_report.get("ok"):
+                err("prep_link_invalid", "linked preparation bundle no longer verifies")
+            else:
+                prep_meta = _load_json(prep_path / GENERATION_NAME)
+                block = prep_meta.get("creative_provenance") or {}
+                recipe = source.get("recipe") or {}
+                for key in (
+                    "recipe_id",
+                    "recipe_version",
+                    "recipe_sha256",
+                    "recipe_receipt_sha256",
+                    "adapter_prompt_sha256",
+                ):
+                    expected = block.get(key) if key != "adapter_prompt_sha256" else block.get(
+                        "adapter_prompt_sha256"
+                    )
+                    if key == "adapter_prompt_sha256":
+                        if recipe.get(key) != expected:
+                            err("prep_digest_mismatch", f"recipe.{key} does not match prep bundle")
+                    elif recipe.get(key) != block.get(key):
+                        err("prep_digest_mismatch", f"recipe.{key} does not match prep bundle")
+                if recipe.get("compiler_prompt_sha256") != block.get("prompt_sha256"):
+                    err(
+                        "prep_digest_mismatch",
+                        "compiler_prompt_sha256 does not match prep creative_provenance.prompt_sha256",
+                    )
+        else:
+            warn("prep_dir_missing", f"linked prep_dir not found: {prep_dir}")
+
+    errors = [f for f in findings if f["level"] == "error"]
+    evidence = EVIDENCE_MANUAL_IMPORT if not errors else EVIDENCE_INCOMPLETE
+    if evidence == EVIDENCE_PROVIDER_CONFIRMED:
+        evidence = EVIDENCE_MANUAL_IMPORT
+        warn(
+            "provider_confirmed_suppressed",
+            "provider_confirmed_partial is reserved; manual import cannot grant it",
+        )
+    return {
+        "ok": not errors,
+        "evidence_level": evidence,
+        "findings": findings,
+        "image_sha256": (png or {}).get("sha256") if png else image_meta.get("sha256"),
+        "authenticity_limits": list(
+            source.get("authenticity_limits") or _MANUAL_AUTHENTICITY_LIMITS
+        ),
+    }
