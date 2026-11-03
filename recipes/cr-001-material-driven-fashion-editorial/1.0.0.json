@@ -1,0 +1,116 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-001-material-driven-fashion-editorial",
+  "recipe_version": "1.0.0",
+  "title": "CR-001 Material-Driven Fashion Editorial",
+  "description": "Original living high-end fashion editorial focused on garment architecture, fabric physics, refined grooming, and motivated studio light. Creative Research library entry; no gallery image attached. V2 wardrobe/hair/makeup/pose/environment JSON files are authoring vocabulary only and are not loaded by the compiler.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-001-material-driven-fashion-editorial",
+    "request": "Create a luxury fashion editorial photograph of an adult woman standing in a controlled studio, wearing an original architectural evening gown. Prioritize garment construction and material fidelity over generic beauty adjectives: a sculpted bodice with clean princess seams, a bias-cut skirt that falls in long continuous folds, and a satin-faced silk surface that shows directional specular ribbons following the cloth geometry. Hair is a sleek low chignon with a few controlled face-framing strands; makeup is polished editorial with defined eyes, restrained highlight, and visible natural skin texture. Keep the atmosphere quiet, expensive, and photographic rather than illustrative.",
+    "route": "new_generation",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "single adult fashion subject",
+      "prefer_material_fidelity_over_beauty_hype": true,
+      "no_logo_or_brand_text": true
+    },
+    "references": [],
+    "identity": {
+      "mode": "identity_unlocked",
+      "locked_features": []
+    },
+    "body_transformation": {
+      "mode": "presentation_only",
+      "anatomy_change": "none; preserve natural adult proportions without idealizing measurements",
+      "pose_change": "allowed as director-specified editorial stance",
+      "camera_presentation": "allowed for editorial framing",
+      "garment_shaping": "architectural bodice with princess seams and internal support implied by clean vertical structure; bias-cut skirt that skims the hip then releases into a floor-grazing column; slight train weight pulling the hem into longer rear folds; no floating fabric panels",
+      "artistic_stylization": "none; keep photographic material response"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "studio fashion editorial",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "requested_elements": [
+      "sculpted evening gown bodice with princess seams",
+      "bias-cut satin-faced silk skirt with continuous drape folds",
+      "directional fabric specular response",
+      "sleek low chignon with restrained face-framing strands",
+      "editorial makeup retaining skin texture",
+      "seamless studio backdrop with controlled negative space"
+    ],
+    "director": {
+      "moment": "the final settled stance after a slow turn, cloth still resolving into gravity",
+      "action": "standing with one foot slightly advanced, torso quietly upright, shoulders relaxed into the bodice architecture",
+      "gaze": "toward camera with calm, unsmiling editorial focus",
+      "body_weight": "front advanced foot carries primary weight; rear foot lightly grounded for recoverable balance",
+      "hand_logic": "near hand lightly gathers a fold of skirt at mid-thigh without pinching; far hand rests open along the opposite thigh seam",
+      "fabric_response": "satin-faced silk shows long bias folds, tension at the bodice waist seam, and soft collapse where the train meets the floor; cloth responds to the recent turn with delayed settling rather than frozen wind",
+      "prop_interaction": "no handheld props; hands interact only with the gown",
+      "foreground": "soft falloff of the train edge and a narrow floor plane highlight",
+      "midground": "full gown silhouette and subject stance reading as one vertical architecture",
+      "background": "seamless warm-gray cyclorama with generous negative space on the non-key side",
+      "camera": "eye-level three-quarter full-length editorial frame with slight subject offset from center",
+      "light_source": "soft directional key from camera-left at chest height, large source, gentle fill from the right wall bounce, restrained rim separating shoulder and hair from the backdrop",
+      "material_response": "satin highlights travel as continuous specular ribbons along fold crowns; matte skin and hair absorb light differently from the cloth; seam edges remain structurally readable without plastic sheen",
+      "micro_story": "a quiet luxury fitting-room certainty translated into a still editorial beat"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Framing alternatives for the same garment and stance.",
+      "choices": [
+        "eye-level three-quarter full-length editorial frame with slight subject offset from center",
+        "slightly low full-length frame emphasizing vertical gown architecture and train weight",
+        "eye-level medium-long frame cutting just below the knee to prioritize bodice seam logic and fabric speculars"
+      ]
+    },
+    "light": {
+      "type": "enum",
+      "target": "director.light_source",
+      "required": false,
+      "description": "Motivated lighting alternatives that keep material response photographic.",
+      "choices": [
+        "soft directional key from camera-left at chest height, large source, gentle fill from the right wall bounce, restrained rim separating shoulder and hair from the backdrop",
+        "narrower camera-left key with deeper shadow falloff on the far side of the gown and a thin hair rim only",
+        "broader near-frontal soft key with minimal contrast, emphasizing continuous satin ribbons across the bias skirt"
+      ]
+    },
+    "aspect": {
+      "type": "enum",
+      "target": "output.aspect_ratio",
+      "required": false,
+      "description": "Prompt-composition aspect vocabulary only; not an image-API size guarantee.",
+      "choices": [
+        "4:5",
+        "1:1"
+      ]
+    }
+  }
+}
