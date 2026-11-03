@@ -433,7 +433,14 @@ def classify_evidence_level(
     output_path: Path | None,
     output_matches: bool,
 ) -> str:
-    """Classify evidence without inventing provider confirmation."""
+    """Classify evidence without inventing provider confirmation.
+
+    Offline verification of self-authored generation metadata never returns
+    ``provider_confirmed_partial``. A non-null ``provider_verified_model_id``
+    in local JSON is an unverified claim and does not raise authenticity.
+    ``EVIDENCE_PROVIDER_CONFIRMED`` is reserved for a future separately
+    authorized attestation channel.
+    """
     if metadata.get("dry_run"):
         return EVIDENCE_INCOMPLETE
     if not metadata.get("generation_completed"):
@@ -443,8 +450,7 @@ def classify_evidence_level(
         return EVIDENCE_INCOMPLETE
     if not output_path or not output_matches:
         return EVIDENCE_INCOMPLETE
-    if metadata.get("provider_verified_model_id"):
-        return EVIDENCE_PROVIDER_CONFIRMED
+    # Claimed provider_verified_model_id values are ignored for elevation.
     return EVIDENCE_LOCALLY_VERIFIED
 
 
@@ -616,10 +622,17 @@ def verify_recipe_generation_bundle(
     if metadata.get("dry_run"):
         warn("dry_run", "record is dry-run preparation only")
 
-    if metadata.get("provider_verified_model_id") is None:
+    claimed_provider_id = metadata.get("provider_verified_model_id")
+    if claimed_provider_id is None:
         warn(
             "no_provider_verified_model",
             "provider_verified_model_id is null; no provider-confirmed model evidence",
+        )
+    else:
+        warn(
+            "claimed_provider_model_unverified",
+            "provider_verified_model_id is present in local metadata but is not "
+            "independently authenticated; it does not elevate evidence_level",
         )
 
     errors = [f for f in findings if f["level"] == "error"]
@@ -634,6 +647,13 @@ def verify_recipe_generation_bundle(
             output_path=output_path if output_path.is_file() else None,
             output_matches=output_matches,
         )
+    # Hard guard: offline verify must never emit provider_confirmed_partial.
+    if evidence == EVIDENCE_PROVIDER_CONFIRMED:
+        evidence = EVIDENCE_LOCALLY_VERIFIED
+        warn(
+            "provider_confirmed_suppressed",
+            "provider_confirmed_partial is reserved; offline verification cannot grant it",
+        )
     return {
         "ok": not errors,
         "evidence_level": evidence,
@@ -642,7 +662,10 @@ def verify_recipe_generation_bundle(
         "output_verified": output_matches,
         "authenticity_limits": [
             "Local hash consistency is not independent third-party attestation.",
-            "Operator assertions without provider identifiers are not provider-origin proof.",
+            "A non-null provider_verified_model_id in self-authored JSON is an "
+            "unverified claim and does not prove a provider event.",
+            "ok:true means local checks passed; it does not imply provider confirmation.",
+            "provider_confirmed_partial is reserved for a future attested channel.",
             "dry_run and URL-only records are never successful generation provenance.",
         ],
     }

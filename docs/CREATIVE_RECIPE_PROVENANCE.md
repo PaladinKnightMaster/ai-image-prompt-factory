@@ -69,13 +69,18 @@ Bundle files: `manifest.json`, `receipt.json`, `prompt.txt`, `generation.json`,
 
 | Level | Meaning |
 | --- | --- |
-| `compilation_consistent` | Receipt ↔ prompt ↔ dry-run metadata hash chain holds |
-| `locally_verified_generation` | Completed flag, local file, digest match; still not third-party proof |
-| `provider_confirmed_partial` | Same as local **and** non-null `provider_verified_model_id` from a real response |
-| `incomplete_or_unverifiable` | Dry-run, URL-only, missing/mismatched asset, or failed checks |
+| `compilation_consistent` | Locally verifiable compilation integrity: receipt ↔ prompt ↔ dry-run metadata |
+| `locally_verified_generation` | Locally verifiable generation + asset integrity (completed flag, file, digest match) |
+| `incomplete_or_unverifiable` | Dry-run with invalid completion claims, URL-only, missing/mismatched asset, or failed checks |
+| `provider_confirmed_partial` | **Reserved.** Not granted by offline verification of self-authored metadata |
 
-Never invent `provider_verified_model_id`. Hash matches in self-authored JSON are
-not independent provider-origin proof. Operator attestations are out-of-band.
+Distinguish carefully:
+
+- **Locally verifiable:** recipe/prompt/receipt digests, adapter prompt bytes, binding equality, local `output_sha256` match.
+- **Recorded but unverified:** a non-null `provider_verified_model_id` in editable `generation.json` is a **claim**, not proof of a provider event. It does not raise `evidence_level`.
+- **Not currently authenticated:** true provider-origin confirmation requires a future separately authorized attestation channel. PR-CR-002 does not implement it.
+
+`ok: true` means local checks passed. It does **not** imply independent provider confirmation. Never invent `provider_verified_model_id`. Hash matches in self-authored JSON are not third-party attestation. Operator attestations remain out-of-band.
 
 ## Successful vs incomplete records
 

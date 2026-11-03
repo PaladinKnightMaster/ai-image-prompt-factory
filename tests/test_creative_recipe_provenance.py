@@ -12,10 +12,12 @@ from aipf.creative_provenance import (
     EVIDENCE_COMPILATION_CONSISTENT,
     EVIDENCE_INCOMPLETE,
     EVIDENCE_LOCALLY_VERIFIED,
+    EVIDENCE_PROVIDER_CONFIRMED,
     CreativeProvenanceError,
     assert_prompt_adapter_integrity,
     attach_creative_provenance,
     build_creative_provenance,
+    classify_evidence_level,
     prepare_recipe_generation_bundle,
     simulate_completed_generation_metadata,
     utf8_sha256_text,
@@ -179,7 +181,67 @@ def test_simulated_b64_output_verification(tmp_path):
     assert report["ok"] is True
     assert report["output_verified"] is True
     assert report["evidence_level"] == EVIDENCE_LOCALLY_VERIFIED
+    assert report["evidence_level"] != EVIDENCE_PROVIDER_CONFIRMED
     assert sha256_file(output) == completed["result"]["output_sha256"]
+
+
+def _write_completed_bundle(tmp_path, *, provider_verified_model_id=None, payload=b"local-asset"):
+    stage = tmp_path / "stage"
+    prepare_recipe_generation_bundle(recipe_path=CR001, output_dir=stage)
+    meta = json.loads((stage / "generation.json").read_text(encoding="utf-8"))
+    output = stage / "output.png"
+    output.write_bytes(payload)
+    completed = simulate_completed_generation_metadata(meta, output_path=output)
+    completed["provider_verified_model_id"] = provider_verified_model_id
+    (stage / "generation.json").write_text(
+        json.dumps(completed, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return stage, completed, output
+
+
+def test_forged_provider_id_does_not_elevate_evidence(tmp_path):
+    stage, completed, output = _write_completed_bundle(
+        tmp_path, provider_verified_model_id="gpt-image-2-FORGED"
+    )
+    report = verify_recipe_generation_bundle(stage)
+    assert report["ok"] is True
+    assert report["output_verified"] is True
+    assert report["evidence_level"] == EVIDENCE_LOCALLY_VERIFIED
+    assert report["evidence_level"] != EVIDENCE_PROVIDER_CONFIRMED
+    assert any(
+        f["code"] == "claimed_provider_model_unverified" for f in report["findings"]
+    )
+    direct = classify_evidence_level(
+        completed, output_path=output, output_matches=True
+    )
+    assert direct == EVIDENCE_LOCALLY_VERIFIED
+    assert direct != EVIDENCE_PROVIDER_CONFIRMED
+
+
+def test_legitimate_looking_provider_id_does_not_elevate_evidence(tmp_path):
+    stage, completed, output = _write_completed_bundle(
+        tmp_path, provider_verified_model_id="gpt-image-2"
+    )
+    report = verify_recipe_generation_bundle(stage)
+    assert report["ok"] is True
+    assert report["evidence_level"] == EVIDENCE_LOCALLY_VERIFIED
+    assert report["evidence_level"] != EVIDENCE_PROVIDER_CONFIRMED
+    assert classify_evidence_level(
+        completed, output_path=output, output_matches=True
+    ) == EVIDENCE_LOCALLY_VERIFIED
+
+
+def test_null_provider_id_preserves_local_verification(tmp_path):
+    stage, completed, output = _write_completed_bundle(
+        tmp_path, provider_verified_model_id=None
+    )
+    report = verify_recipe_generation_bundle(stage)
+    assert report["ok"] is True
+    assert report["evidence_level"] == EVIDENCE_LOCALLY_VERIFIED
+    assert any(f["code"] == "no_provider_verified_model" for f in report["findings"])
+    assert classify_evidence_level(
+        completed, output_path=output, output_matches=True
+    ) == EVIDENCE_LOCALLY_VERIFIED
 
 
 def test_mismatched_output_digest_rejected(tmp_path):
