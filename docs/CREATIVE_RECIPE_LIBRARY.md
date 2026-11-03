@@ -83,3 +83,10 @@ publication rights or generation authenticity.
 
 `recipes/` is a **worktree** library. It is not added to
 `aipf_packaging/resource_inventory.json` in this PR.
+
+## Provenance (PR-CR-002)
+
+Recipe→generation binding, private staging, and evidence limits are documented
+in [CREATIVE_RECIPE_PROVENANCE.md](CREATIVE_RECIPE_PROVENANCE.md). Use
+`scripts/creative_recipe_generation.py prepare|verify` for offline bundles.
+Live image generation and gallery publication remain separately authorized.
