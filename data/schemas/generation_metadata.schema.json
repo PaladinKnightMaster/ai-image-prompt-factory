@@ -10,7 +10,7 @@
     "model_snapshot":{"type":["string","null"],"description":"Legacy field: dated snapshot only when explicitly declared. Null for alias-only requests even if a CLI default snapshot label exists. Prefer declared_model_snapshot when present."},
     "requested_model_id":{"type":"string","description":"Model id requested for execution (alias or dated snapshot id)."},
     "declared_model_snapshot":{"type":["string","null"],"description":"Dated snapshot declared by the operator or implied by requesting the dated model id. Null when only the alias was requested without an explicit snapshot declaration."},
-    "provider_verified_model_id":{"type":["string","null"],"description":"Provider-confirmed model id from a live response when available. Remains null for dry-run and when the provider does not return one."},
+    "provider_verified_model_id":{"type":["string","null"],"description":"Provider-confirmed model id from a live response when available. Remains null for dry-run and when the provider does not return one. Never invent this value."},
     "generation_date_utc":{"type":"string"},
     "mode":{"enum":["generate","edit"]},
     "prompt_profile":{"enum":["compact","standard","extended"]},
@@ -24,6 +24,39 @@
     "seed":{"type":"null"},
     "dry_run":{"type":"boolean"},
     "generation_completed":{"type":"boolean","description":"True only when a local image was successfully persisted from recognized API output. Dry-run and URL-only/incomplete outputs are false."},
-    "result":{"type":"object"}
+    "result":{"type":"object"},
+    "creative_provenance":{
+      "type":"object",
+      "description":"Optional recipe-origin provenance (PR-CR-002). Required only for records that claim PromptRecipe origin. Hash consistency is not independent provider-origin proof.",
+      "required":[
+        "schema_version",
+        "recipe_id",
+        "recipe_version",
+        "recipe_schema_version",
+        "recipe_sha256",
+        "semantic_spec_sha256",
+        "compiler_version",
+        "prompt_sha256",
+        "recipe_receipt_sha256"
+      ],
+      "properties":{
+        "schema_version":{"type":"string"},
+        "recipe_id":{"type":"string"},
+        "recipe_version":{"type":"string"},
+        "recipe_schema_version":{"type":"string"},
+        "recipe_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+        "semantic_spec_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+        "submitted_bindings_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+        "effective_bindings_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+        "resolved_semantic_spec_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+        "effective_bindings":{"type":"object"},
+        "submitted_variable_names":{"type":"array","items":{"type":"string"}},
+        "compiler_version":{"type":"string"},
+        "prompt_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$","description":"SHA-256 of receipt compilation.prompt (compiler form; may include trailing newline)."},
+        "adapter_prompt_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$","description":"SHA-256 of the adapter-effective prompt (compiler prompt after documented strip). Must match generation metadata prompt_sha256."},
+        "recipe_receipt_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$","description":"SHA-256 of the canonical JSON of the full compile_recipe receipt object."},
+        "recipe_path":{"type":"string"}
+      }
+    }
   }
 }
