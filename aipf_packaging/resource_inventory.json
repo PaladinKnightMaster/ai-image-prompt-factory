@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
   "description": "Allowlisted public knowledge resources for installed aipf wheels",
-  "file_count": 102,
-  "total_bytes": 426653,
+  "file_count": 103,
+  "total_bytes": 432537,
   "files": [
     {
       "path": "compatibility/compatibility_rules.json",
@@ -23,6 +23,11 @@
       "path": "data/schemas/case.schema.json",
       "sha256": "ff5dd1d26eafa359d0d923b1a578405faa42f286a6676abf75435cd44097e0d7",
       "size": 2313
+    },
+    {
+      "path": "data/schemas/chatgpt_web_manual_source.schema.json",
+      "sha256": "1eb6cd14ca0674b229cc4b65c62f177aa869108e9cbdb35f86c786f68d066da0",
+      "size": 5884
     },
     {
       "path": "data/schemas/corpus_asset.schema.json",

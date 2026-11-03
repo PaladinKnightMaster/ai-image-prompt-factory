@@ -70,7 +70,8 @@ Bundle files: `manifest.json`, `receipt.json`, `prompt.txt`, `generation.json`,
 | Level | Meaning |
 | --- | --- |
 | `compilation_consistent` | Locally verifiable compilation integrity: receipt ↔ prompt ↔ dry-run metadata |
-| `locally_verified_generation` | Locally verifiable generation + asset integrity (completed flag, file, digest match) |
+| `locally_verified_generation` | Locally verifiable **API-path** generation + asset integrity (completed flag, file, digest match) |
+| `locally_verified_manual_import` | Locally verifiable **ChatGPT Web manual** import: PNG bytes, custody/expect hash, recipe linkage (PR-CR-002A) |
 | `incomplete_or_unverifiable` | Dry-run with invalid completion claims, URL-only, missing/mismatched asset, or failed checks |
 | `provider_confirmed_partial` | **Reserved.** Not granted by offline verification of self-authored metadata |
 
@@ -106,8 +107,77 @@ them.
 PR-CR-003 only. No automatic copy into `website/generated/`. Rights review and
 owner publication approval remain independent of generation success.
 
+## ChatGPT Web manual import (PR-CR-002A)
+
+Manual ChatGPT Images downloads are a **distinct** channel from OpenAI Images
+API generation. They use `record_kind: chatgpt_web_manual_source`,
+`generation_channel: chatgpt_web_manual`, and evidence level
+`locally_verified_manual_import`. Schema:
+`data/schemas/chatgpt_web_manual_source.schema.json`.
+
+This channel never writes API `transport` / `b64_json` fields, never sets
+`provider_verified_model_id`, and cannot reach `provider_confirmed_partial`.
+
+### Prompt-submission evidence (three concepts)
+
+1. **Intended prompt** — verified AIPF preparation `prompt.txt` (adapter form)
+   and receipt digests. Always recorded and locally verified.
+2. **Operator-submitted prompt** — what the owner reports pasting into ChatGPT.
+3. **Independently captured prompt evidence** — only when a separate capture
+   file is preserved. The importer never copies preparation `prompt.txt` and
+   labels it as ChatGPT capture evidence.
+
+Rules:
+
+- `--submitted-prompt <file>`: capture bytes must **exactly** equal preparation
+  `prompt.txt`. Stored as `submitted_prompt_capture.txt` with
+  `submission_verification: exact_match`.
+- `--operator-attests-prompt-submission`: allowed when no capture exists.
+  Records `independent_capture_status: unavailable` and
+  `submission_verification: operator_attested_uncaptured`. No capture file is
+  written.
+- `chatgpt_effective_prompt_known` is always `false`.
+
+### PowerShell operator workflow
+
+```powershell
+# 1) Prepare (once) into private storage — existing PR-CR-002 command
+python scripts/creative_recipe_generation.py prepare `
+  recipes/cr-001-material-driven-fashion-editorial/1.0.0.json `
+  --output-dir C:\path\to\01_preparation_immutable `
+  --bindings C:\path\to\bindings.json
+
+# 2) Owner generates in ChatGPT Images using the preparation prompt.txt text,
+#    downloads the PNG, and preserves original bytes + custody outside the repo.
+
+# 3) Confirm digest
+Get-FileHash -Algorithm SHA256 -LiteralPath C:\path\to\04_raw\image.png
+
+# 4) Import (does not move or modify the preserved original)
+python scripts/creative_recipe_generation.py import-chatgpt-web `
+  --prep-dir C:\path\to\01_preparation_immutable `
+  --image C:\path\to\04_raw\image.png `
+  --custody C:\path\to\04_raw\download_custody.txt `
+  --output-dir C:\path\to\05_chatgpt_web_import `
+  --expect-image-sha256 <64-hex> `
+  --operator-attests-prompt-submission `
+  --attestation-note "Pasted preparation prompt.txt into ChatGPT Images"
+
+# Or, when an independently captured submitted-prompt file exists:
+#   --submitted-prompt C:\path\to\captured_submission.txt
+
+python scripts/creative_recipe_generation.py verify-chatgpt-web `
+  C:\path\to\05_chatgpt_web_import
+```
+
+Import refuses non-empty destinations and never overwrites import assets (no
+`--force` in this MVP). Paths under `website/generated` (and repository
+`cases/`) are refused. `publication_status` remains `private_only`. Future
+gallery linkage is PR-CR-003 only and requires separate owner authorization.
+
 ## Backward compatibility
 
 - Non-recipe generation metadata unchanged and still schema-valid.
 - PromptRecipe envelopes unchanged; CR-001 `1.0.0` unchanged.
-- Existing `scripts/generate_api.py` executor unchanged as the sole live path.
+- Existing `scripts/generate_api.py` executor unchanged as the sole live API path.
+- ChatGPT web import is additive and does not alter API provenance semantics.
