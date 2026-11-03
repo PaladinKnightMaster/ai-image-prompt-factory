@@ -198,3 +198,10 @@ Not in scope for PromptRecipe v1.1 / PR4:
 - Scientific EXP-019 workflows
 - Automatic version migration
 - Arbitrary JSON Pointer patching or expression evaluation
+
+## Creative recipe library (worktree)
+
+Original versioned recipe instances for the Creative Research track live under
+`recipes/` (see [CREATIVE_RECIPE_LIBRARY.md](CREATIVE_RECIPE_LIBRARY.md) and
+`recipes/README.md`). They use these schemas and `aipf recipe` commands unchanged.
+The library is not wheel-packaged in PR-CR-001 and does not attach gallery images.

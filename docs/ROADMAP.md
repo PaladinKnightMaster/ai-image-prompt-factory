@@ -18,6 +18,8 @@ These are planning targets, not promises or evidence that a feature exists. The 
 
 This track delivers installable authoring resources and versioned recipes on `main`. It does **not** complete V3.4 empirical validation, does **not** change EXP-019 scientific status, and does **not** authorize a tagged product release or PyPI publication. Details: [PROMPT_RECIPE.md](PROMPT_RECIPE.md), [PACKAGING_PORTABILITY.md](PACKAGING_PORTABILITY.md).
 
+Worktree creative recipe instances (PR-CR-001 onward) live under `recipes/` and are documented in [CREATIVE_RECIPE_LIBRARY.md](CREATIVE_RECIPE_LIBRARY.md). That library is separate from wheel packaging and does not imply gallery publication.
+
 ## Implemented; empirical validation pending
 
 ### V3.4 - Transformation Intelligence
