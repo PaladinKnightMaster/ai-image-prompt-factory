@@ -26,6 +26,13 @@ def _load_era_docs(hist):
 
 
 def _era_fragment(pack,art,route,occasion):
+    """Select an optional EraPack narrative fragment only via explicit preferences.
+
+    Historical era anchors are emitted separately from structured pack fields.
+    Fragment selection must not fall through to an unrelated artistic-medium
+    instruction merely because a pack happens to define one fragment key.
+    If no method/route/occasion preference matches, omit the fragment.
+    """
     frags=pack.get('prompt_fragments',{})
     if not frags: return None
     preferred=[]; method=art.get('method')
@@ -37,7 +44,6 @@ def _era_fragment(pack,art,route,occasion):
     occ=(occasion or '').casefold()
     if 'lantern' in occ: preferred+=['lantern']
     if route=='historical_portrait': preferred+=['portrait','living','wuxia','court']
-    preferred+=list(frags)
     key=next((k for k in preferred if k in frags),None)
     return frags.get(key) if key else None
 

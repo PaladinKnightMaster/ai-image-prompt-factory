@@ -55,7 +55,7 @@
     },
     "05-tang-dunhuang-mural": {
       "semantic_spec_sha256": "b05bc3a7067d9f80049ee94d7bff9457b0ec83b501e84cb0e8cc494eaa179689",
-      "prompt_sha256": "42b9d7c1b656010059a30e14a2a3a9bda6114b1c1f94db6a92ec010b9d34311e",
+      "prompt_sha256": "cd1a694eba866ed525d2d18904e57c7aa14720e1472c9897221195e598daf755",
       "evidence_snapshot_sha256": "06afe90693702a85d7f666573b0d7c0cd9082c58b8d8a445ff84731f8f92ac8e",
       "compatibility_sha256": "01840168d460463820cd25d662a1f00464ba38808a28d7e2744bcdb86dc21e26",
       "lint_findings_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
