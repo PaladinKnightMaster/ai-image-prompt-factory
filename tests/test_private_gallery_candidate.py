@@ -20,6 +20,7 @@ from aipf.creative_provenance import (
 from aipf.model_adapter import sha256_file
 from aipf.private_gallery_candidate import (
     CANDIDATE_STATUS_PRIVATE,
+    _json_for_inline_script,
     _render_preview_html,
     create_private_gallery_candidate,
     refresh_private_gallery_preview,
@@ -146,7 +147,12 @@ def test_valid_private_candidate_creation_and_schema(tmp_path):
     assert "http://" not in html_text
     assert "cdn." not in html_text.lower()
     assert "@import" not in html_text.lower()
-    assert "<script" not in html_text.lower()
+    assert html_text.lower().count("<script") == 1
+    assert '<script id="aipf-copy-prompt">' in html_text
+    assert "navigator.clipboard.writeText" in html_text
+    assert 'id="copy-prompt-btn"' in html_text
+    assert "Copy prompt" in html_text
+    assert "src=" not in html_text.lower().split('<script id="aipf-copy-prompt">', 1)[1].split("</script>", 1)[0]
     assert 'file:///' in html_text or "file:///" in html_text.replace("\\", "/")
     assert (imp / "original.png").resolve().as_uri() in html_text or digest in html_text
     report = verify_private_gallery_candidate(out)
@@ -431,6 +437,99 @@ def test_html_escapes_unsafe_content(tmp_path):
     assert "<script>alert" not in text
     assert html.escape('<script>alert("x")</script>') in text or "&lt;script&gt;" in text
     assert "&amp;" in text or "a &amp; b" in text
+    assert text.lower().count("<script") == 1
+    assert '<script id="aipf-copy-prompt">' in text
+
+
+def _extract_embedded_prompt(html_text: str) -> str:
+    marker = '<script id="aipf-copy-prompt">'
+    assert marker in html_text
+    body = html_text.split(marker, 1)[1].split("</script>", 1)[0]
+    assign = "var PROMPT = "
+    assert assign in body
+    literal = body.split(assign, 1)[1].split(";\n", 1)[0].strip()
+    return json.loads(literal)
+
+
+def test_copy_prompt_serializes_exact_source_with_special_characters():
+    prompt = (
+        "Line1 with 'quotes' and \"double\"\n"
+        "back\\slash and <tag> & ampersand\n"
+        "unicode café — 日本語\n"
+        "</script><script>alert(1)</script>\n"
+        "trailing blank follows\n"
+    )
+    cand = {
+        "candidate_id": "copy-special",
+        "candidate_status": "private_candidate",
+        "generation_channel": "chatgpt_web_manual",
+        "evidence_level": EVIDENCE_MANUAL_IMPORT,
+        "recipe": {
+            "recipe_id": "cr-001-material-driven-fashion-editorial",
+            "recipe_version": "1.0.0",
+            "recipe_sha256": "a" * 64,
+            "compiler_prompt_sha256": "b" * 64,
+            "effective_bindings": {"camera": "c0", "light": "l0", "aspect": "4:5"},
+        },
+        "prompt": {"adapter_prompt_sha256": "c" * 64, "compiler_prompt_sha256": "b" * 64},
+        "prompt_submission": {
+            "submission_verification": "operator_attested_uncaptured",
+            "independent_capture_status": "unavailable",
+        },
+        "image": {
+            "sha256": "d" * 64,
+            "width": 8,
+            "height": 10,
+            "requested_aspect_ratio": "4:5",
+            "observed_aspect_ratio": "8:10",
+            "private_image_path": "",
+        },
+        "model_identity": {"status": "unknown", "provider_verified_model_id": None},
+        "qualitative_review": _notes(),
+        "rights_review_status": "pending",
+        "publication_approval_status": "pending",
+        "authenticity_limits": ["Private only"],
+    }
+    html_text = _render_preview_html(cand, prompt_text=prompt)
+    assert _extract_embedded_prompt(html_text) == prompt
+    assert json.loads(_json_for_inline_script(prompt)) == prompt
+    assert "\\u003c/script\\u003e" in html_text or "\\u003c\\/script\\u003e" in _json_for_inline_script(
+        "</script>"
+    )
+    assert "</script><script>alert" not in html_text
+    assert html_text.lower().count("<script") == 1
+    assert "Copied!" in html_text
+    assert "Select prompt" in html_text
+    assert "document.execCommand" in html_text
+    assert 'data-icon="copy"' in html_text
+    assert 'aria-live="polite"' in html_text
+    # Copied payload must not append metadata.
+    assert "copy-special" not in _extract_embedded_prompt(html_text)
+    assert "cr-001-material-driven-fashion-editorial" not in _extract_embedded_prompt(html_text)
+
+
+def test_copy_prompt_matches_verified_adapter_source(tmp_path):
+    prep, _, digest, imp, _ = _chain(tmp_path)
+    source_prompt = (prep / "prompt.txt").read_text(encoding="utf-8")
+    out = tmp_path / "06_private_gallery_candidates" / "copy-source"
+    create_private_gallery_candidate(
+        candidate_id="copy-source",
+        prep_dir=prep,
+        import_dir=imp,
+        output_dir=out,
+        expect_image_sha256=digest,
+        qualitative_review=_notes(),
+    )
+    html_text = (out / "preview.html").read_text(encoding="utf-8")
+    embedded = _extract_embedded_prompt(html_text)
+    assert embedded == source_prompt
+    assert sha256_file(prep / "prompt.txt") == (
+        json.loads((out / "candidate.json").read_text(encoding="utf-8"))["prompt"][
+            "adapter_prompt_sha256"
+        ]
+    )
+    # Display escape must not be the copy source reconstruction path.
+    assert html.escape(source_prompt) in html_text or "&amp;" in html_text or source_prompt in html_text
 
 
 def test_public_gallery_unchanged_publishable_count():

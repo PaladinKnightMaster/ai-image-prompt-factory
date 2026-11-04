@@ -145,6 +145,117 @@ def _badge_html(label: str, *, kind: str = "") -> str:
     return f'<li class="{cls}">{escape(label)}</li>'
 
 
+def _json_for_inline_script(value: str) -> str:
+    """Serialize text for embedding inside an inline ``<script>`` string literal.
+
+    Uses JSON then neutralizes HTML/script breakouts (``</script>``, ``<!--``)
+    and JS line separators so the verified prompt bytes round-trip exactly when
+    parsed by ``JSON.parse`` / assignment, without injection into HTML.
+    """
+    encoded = json.dumps(value, ensure_ascii=False)
+    return (
+        encoded.replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("\u2028", "\\u2028")
+        .replace("\u2029", "\\u2029")
+    )
+
+
+def _copy_prompt_inline_script(prompt_text: str) -> str:
+    """Narrow offline copy handler: Clipboard API with local selectable fallback."""
+    prompt_js = _json_for_inline_script(prompt_text)
+    # Literal braces must not be interpreted by the caller f-string; return plain text.
+    return f"""<script id="aipf-copy-prompt">
+(function () {{
+  var PROMPT = {prompt_js};
+  var btn = document.getElementById("copy-prompt-btn");
+  var label = document.getElementById("copy-prompt-label");
+  var live = document.getElementById("copy-prompt-status");
+  var pre = document.getElementById("adapter-prompt-text");
+  if (!btn || !label || !live || !pre) return;
+
+  var iconCopy = btn.querySelector("[data-icon=copy]");
+  var iconOk = btn.querySelector("[data-icon=ok]");
+  var resetTimer = null;
+
+  function setState(kind, message) {{
+    label.textContent = message;
+    btn.setAttribute("data-state", kind);
+    live.textContent = message;
+    if (iconCopy) iconCopy.hidden = kind === "ok";
+    if (iconOk) iconOk.hidden = kind !== "ok";
+    if (resetTimer) window.clearTimeout(resetTimer);
+    if (kind === "ok") {{
+      resetTimer = window.setTimeout(function () {{
+        setState("idle", "Copy prompt");
+      }}, 2000);
+    }}
+  }}
+
+  function selectPromptForManualCopy() {{
+    var range = document.createRange();
+    range.selectNodeContents(pre);
+    var sel = window.getSelection();
+    if (sel) {{
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }}
+    try {{ pre.focus(); }} catch (err) {{}}
+    setState("fail", "Select prompt");
+  }}
+
+  function legacyCopy() {{
+    var ta = document.createElement("textarea");
+    ta.value = PROMPT;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "0";
+    ta.style.left = "0";
+    ta.style.width = "1px";
+    ta.style.height = "1px";
+    ta.style.padding = "0";
+    ta.style.border = "none";
+    ta.style.outline = "none";
+    ta.style.boxShadow = "none";
+    ta.style.background = "transparent";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, ta.value.length);
+    var ok = false;
+    try {{
+      ok = document.execCommand("copy");
+    }} catch (err) {{
+      ok = false;
+    }}
+    document.body.removeChild(ta);
+    return ok;
+  }}
+
+  function onCopied() {{
+    setState("ok", "Copied!");
+  }}
+
+  function onFailed() {{
+    selectPromptForManualCopy();
+  }}
+
+  btn.addEventListener("click", function () {{
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {{
+      navigator.clipboard.writeText(PROMPT).then(onCopied).catch(function () {{
+        if (legacyCopy()) onCopied();
+        else onFailed();
+      }});
+      return;
+    }}
+    if (legacyCopy()) onCopied();
+    else onFailed();
+  }});
+}})();
+</script>"""
+
+
 def _render_preview_html(candidate: dict[str, Any], *, prompt_text: str) -> str:
     """Render an offline, image-first private editorial preview (no external assets)."""
     image_meta = candidate.get("image") or {}
@@ -414,6 +525,74 @@ section h2 {{
 .prompt-panel {{
   max-width: none;
 }}
+.prompt-header {{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0 0 0.75rem;
+}}
+.prompt-header h2 {{
+  margin: 0;
+}}
+.copy-prompt {{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--panel);
+  color: var(--ink);
+  font: 600 0.78rem/1.2 var(--sans);
+  cursor: pointer;
+}}
+.copy-prompt:hover {{
+  border-color: #b7d0cd;
+  color: var(--accent);
+}}
+.copy-prompt:focus {{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}}
+.copy-prompt:focus:not(:focus-visible) {{
+  outline: none;
+}}
+.copy-prompt:focus-visible {{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}}
+.copy-prompt[data-state="ok"] {{
+  border-color: #b7d0cd;
+  color: var(--accent);
+}}
+.copy-prompt[data-state="fail"] {{
+  border-color: #c5ccd6;
+  color: var(--muted);
+}}
+.copy-prompt svg {{
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}}
+.copy-prompt-status {{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}}
 .prompt-frame {{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -538,8 +717,23 @@ details.provenance[open] > summary::before {{ content: "▾ "; }}
 </article>
 
 <section class="prompt-panel" aria-labelledby="prompt-heading">
-  <h2 id="prompt-heading">Compiled adapter-effective prompt</h2>
-  <div class="prompt-frame"><pre>{escape(prompt_text)}</pre></div>
+  <div class="prompt-header">
+    <h2 id="prompt-heading">Compiled adapter-effective prompt</h2>
+    <button type="button" class="copy-prompt" id="copy-prompt-btn" data-state="idle"
+      aria-describedby="copy-prompt-status"
+      aria-label="Copy the entire adapter-effective generation prompt">
+      <svg data-icon="copy" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <rect x="5.2" y="5.2" width="8.2" height="8.2" rx="1.1"></rect>
+        <rect x="2.6" y="2.6" width="8.2" height="8.2" rx="1.1"></rect>
+      </svg>
+      <svg data-icon="ok" viewBox="0 0 16 16" aria-hidden="true" focusable="false" hidden>
+        <path d="M3.2 8.2 6.4 11.2 12.8 4.6"></path>
+      </svg>
+      <span id="copy-prompt-label">Copy prompt</span>
+    </button>
+    <span id="copy-prompt-status" class="copy-prompt-status" role="status" aria-live="polite"></span>
+  </div>
+  <div class="prompt-frame"><pre id="adapter-prompt-text" tabindex="0">{escape(prompt_text)}</pre></div>
   <p class="hash-line">adapter_prompt_sha256 · <code class="hash">{escape(str((candidate.get("prompt") or {}).get("adapter_prompt_sha256") or ""))}</code></p>
 </section>
 
@@ -580,6 +774,7 @@ details.provenance[open] > summary::before {{ content: "▾ "; }}
   </div>
 </details>
 </div>
+{_copy_prompt_inline_script(prompt_text)}
 </body>
 </html>
 """
