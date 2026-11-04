@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from pathlib import Path
+from pathlib import Path  # used by private-candidate CLI summary
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -22,6 +22,10 @@ from aipf.creative_provenance import (
     prepare_recipe_generation_bundle,
     verify_chatgpt_web_manual,
     verify_recipe_generation_bundle,
+)
+from aipf.private_gallery_candidate import (
+    create_private_gallery_candidate,
+    verify_private_gallery_candidate,
 )
 from aipf.recipes import load_bindings
 
@@ -113,6 +117,51 @@ def cmd_import_chatgpt_web(args: argparse.Namespace) -> int:
 def cmd_verify_chatgpt_web(args: argparse.Namespace) -> int:
     try:
         report = verify_chatgpt_web_manual(args.bundle_dir)
+    except (CreativeProvenanceError, OSError, ValueError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    _dump(report)
+    return 0 if report.get("ok") else 1
+
+
+def cmd_create_private_candidate(args: argparse.Namespace) -> int:
+    notes = {
+        "recommendation": args.recommendation,
+        "strengths": list(args.strength or []),
+        "limitations": list(args.limitation or []),
+        "scientific_claims": False,
+        "non_custody_assessment_attachment_sha256": args.non_custody_assessment_sha256,
+    }
+    try:
+        result = create_private_gallery_candidate(
+            candidate_id=args.candidate_id,
+            prep_dir=args.prep_dir,
+            import_dir=args.import_dir,
+            output_dir=args.output_dir,
+            expect_image_sha256=args.expect_image_sha256.lower(),
+            qualitative_review=notes,
+            expect_recipe_id=args.expect_recipe_id,
+            expect_recipe_version=args.expect_recipe_version,
+            expect_recipe_sha256=args.expect_recipe_sha256,
+        )
+    except (CreativeProvenanceError, OSError, ValueError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    _dump(
+        {
+            "ok": True,
+            "candidate_dir": result["candidate_dir"],
+            "candidate_status": result["candidate_status"],
+            "image_sha256": result["image_sha256"],
+            "preview_html": str(Path(result["candidate_dir"]) / "preview.html"),
+        }
+    )
+    return 0
+
+
+def cmd_verify_private_candidate(args: argparse.Namespace) -> int:
+    try:
+        report = verify_private_gallery_candidate(args.candidate_dir)
     except (CreativeProvenanceError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 1
@@ -229,6 +278,56 @@ def build_parser() -> argparse.ArgumentParser:
         help="Directory containing source.json / original.png / manifest.json",
     )
     vw.set_defaults(func=cmd_verify_chatgpt_web)
+
+    c = sub.add_parser(
+        "create-private-gallery-candidate",
+        help=(
+            "Create a private creative gallery candidate + local HTML preview "
+            "from verified prep + chatgpt_web_manual import (no public publish)"
+        ),
+    )
+    c.add_argument("--candidate-id", required=True)
+    c.add_argument("--prep-dir", required=True)
+    c.add_argument("--import-dir", required=True)
+    c.add_argument(
+        "--output-dir",
+        required=True,
+        help=(
+            "Absolute empty private destination (e.g. .../06_private_gallery_candidates/<id>). "
+            "Must not be under website/generated, cases/, or the git repository tree."
+        ),
+    )
+    c.add_argument("--expect-image-sha256", required=True)
+    c.add_argument("--recommendation", required=True)
+    c.add_argument(
+        "--strength",
+        action="append",
+        default=[],
+        help="Qualitative strength note (repeatable)",
+    )
+    c.add_argument(
+        "--limitation",
+        action="append",
+        default=[],
+        help="Qualitative limitation note (repeatable)",
+    )
+    c.add_argument(
+        "--non-custody-assessment-sha256",
+        dest="non_custody_assessment_sha256",
+        default=None,
+        help="Optional non-authoritative assessment attachment digest",
+    )
+    c.add_argument("--expect-recipe-id")
+    c.add_argument("--expect-recipe-version")
+    c.add_argument("--expect-recipe-sha256")
+    c.set_defaults(func=cmd_create_private_candidate)
+
+    cv = sub.add_parser(
+        "verify-private-gallery-candidate",
+        help="Verify a private creative gallery candidate directory",
+    )
+    cv.add_argument("candidate_dir")
+    cv.set_defaults(func=cmd_verify_private_candidate)
     return ap
 
 

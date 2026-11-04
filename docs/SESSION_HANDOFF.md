@@ -1,32 +1,29 @@
 # Session Handoff
 
 - Date: 2026-11-03
-- Canonical `main` at branch start: `05369e1096b281105c46c449051a143eca08bca2`
-- Feature branch: `feat/pr-cr-002a-chatgpt-web-manual-import`
-- Branch HEAD: `46a0dfa97ffd666e53dcc825a0e3cddac648dbf6`
-- PR: https://github.com/PaladinKnightMaster/ai-image-prompt-factory/pull/40
-- Stable release: V3.3 (`v3.3.0`); unchanged by PR-CR-002A
+- Canonical `main` at branch start: `6c6359bdbd6762f73ac0f6450fe68dc43b5ac699`
+- Feature branch: `feat/pr-cr-003a-private-gallery-candidate`
+- Branch HEAD: see latest commit on branch
+- PR: https://github.com/PaladinKnightMaster/ai-image-prompt-factory/pull/41
+- Stable release: V3.3 (`v3.3.0`); unchanged
 - CR-001 `1.0.0` unchanged
-- No live image generation, real CR-001 import, gallery publication, EXP-019, or G4/G5 authorization
+- No real CR-001 private candidate creation, gallery publication, or PR-CR-003B
 
 ## Change
 
-PR-CR-002A: ChatGPT Web manual image import/verify
-(`import-chatgpt-web` / `verify-chatgpt-web`), distinct
-`chatgpt_web_manual_source` schema, evidence level
-`locally_verified_manual_import`, and prompt-submission attestation vs
-independent capture rules. Synthetic fixtures only in tests.
+PR-CR-003A: private creative gallery candidate schema, create/verify CLI,
+local HTML preview (file:// to import PNG; no raster copy into candidate dir
+or git), synthetic tests, and docs. Public gallery/Pages behavior unchanged.
 
 ## Validation
 
-- Focused: `tests/test_chatgpt_web_manual_import.py` — 17 passed
-- Provenance regression: `tests/test_creative_recipe_provenance.py` — passed
-- Inventory/sdist: package portability inventory + canary — passed
-- Inventory: `python aipf_packaging/stage_knowledge.py verify` — OK 103 files
-- `python scripts/validate_repo.py` — ok (local `.superpowers` noise excluded)
+- Focused: `tests/test_private_gallery_candidate.py` — 13 passed
+- Inventory/sdist — passed after commit
+- Full: `1085 passed, 13 skipped` (pre-commit sdist flake resolved by commit)
+- `python aipf_packaging/stage_knowledge.py verify` — OK 104 files
+- `python scripts/validate_repo.py` — ok
 
 ## Next task
 
-Owner review of PR #40. Do not merge without separate approval. Do not import
-the real CR-001 ChatGPT image without separate authorization. PR-CR-003 gallery
-publication remains unauthorized.
+Owner review of PR #41. Do not merge without separate approval. Do not create
+the real CR-001 private candidate without separate authorization.

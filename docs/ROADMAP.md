@@ -18,7 +18,7 @@ These are planning targets, not promises or evidence that a feature exists. The 
 
 This track delivers installable authoring resources and versioned recipes on `main`. It does **not** complete V3.4 empirical validation, does **not** change EXP-019 scientific status, and does **not** authorize a tagged product release or PyPI publication. Details: [PROMPT_RECIPE.md](PROMPT_RECIPE.md), [PACKAGING_PORTABILITY.md](PACKAGING_PORTABILITY.md).
 
-Worktree creative recipe instances (PR-CR-001 onward) live under `recipes/` and are documented in [CREATIVE_RECIPE_LIBRARY.md](CREATIVE_RECIPE_LIBRARY.md). That library is separate from wheel packaging and does not imply gallery publication. Recipe→generation provenance tooling (PR-CR-002) and ChatGPT Web manual import (PR-CR-002A) are documented in [CREATIVE_RECIPE_PROVENANCE.md](CREATIVE_RECIPE_PROVENANCE.md) and do not authorize gallery publication. Manual ChatGPT imports remain `private_only` until a separately authorized PR-CR-003 gallery gate.
+Worktree creative recipe instances (PR-CR-001 onward) live under `recipes/` and are documented in [CREATIVE_RECIPE_LIBRARY.md](CREATIVE_RECIPE_LIBRARY.md). That library is separate from wheel packaging and does not imply gallery publication. Recipe→generation provenance tooling (PR-CR-002) and ChatGPT Web manual import (PR-CR-002A) are documented in [CREATIVE_RECIPE_PROVENANCE.md](CREATIVE_RECIPE_PROVENANCE.md). Private creative gallery candidates (PR-CR-003A) are documented in [PRIVATE_CREATIVE_GALLERY_CANDIDATE.md](PRIVATE_CREATIVE_GALLERY_CANDIDATE.md) and remain outside Pages until a separately authorized PR-CR-003B public promotion.
 
 ## Implemented; empirical validation pending
 

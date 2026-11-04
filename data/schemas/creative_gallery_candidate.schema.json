@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIPF Private Creative Gallery Candidate (PR-CR-003A)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_kind",
+    "candidate_id",
+    "candidate_status",
+    "recipe",
+    "import_reference",
+    "generation_channel",
+    "evidence_level",
+    "prompt",
+    "prompt_submission",
+    "image",
+    "model_identity",
+    "qualitative_review",
+    "rights_review_status",
+    "publication_approval_status",
+    "chatgpt_effective_prompt_known",
+    "created_at_utc",
+    "authenticity_limits"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0.0"},
+    "record_kind": {"type": "string", "const": "creative_gallery_candidate"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "candidate_status": {"type": "string", "const": "private_candidate"},
+    "recipe": {
+      "type": "object",
+      "required": [
+        "recipe_id",
+        "recipe_version",
+        "recipe_sha256",
+        "recipe_receipt_sha256",
+        "adapter_prompt_sha256",
+        "compiler_prompt_sha256",
+        "effective_bindings"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "recipe_id": {"type": "string"},
+        "recipe_version": {"type": "string"},
+        "recipe_schema_version": {"type": ["string", "null"]},
+        "recipe_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "semantic_spec_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "recipe_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "adapter_prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "compiler_prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "effective_bindings": {"type": "object"},
+        "prep_dir": {"type": "string"}
+      }
+    },
+    "import_reference": {
+      "type": "object",
+      "required": ["import_dir", "source_record_kind", "image_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "import_dir": {"type": "string"},
+        "source_record_kind": {"type": "string", "const": "chatgpt_web_manual_source"},
+        "image_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "generation_channel": {"type": "string", "const": "chatgpt_web_manual"},
+    "evidence_level": {"type": "string", "const": "locally_verified_manual_import"},
+    "prompt": {
+      "type": "object",
+      "required": ["adapter_prompt_sha256", "adapter_prompt_path"],
+      "additionalProperties": false,
+      "properties": {
+        "adapter_prompt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "adapter_prompt_path": {"type": "string"},
+        "compiler_prompt_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "prompt_submission": {
+      "type": "object",
+      "required": [
+        "independent_capture_status",
+        "submission_verification",
+        "chatgpt_effective_prompt_known"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "independent_capture_status": {"enum": ["provided", "unavailable"]},
+        "submission_verification": {
+          "enum": ["exact_match", "operator_attested_uncaptured"]
+        },
+        "submitted_prompt_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "chatgpt_effective_prompt_known": {"type": "boolean", "const": false}
+      }
+    },
+    "image": {
+      "type": "object",
+      "required": [
+        "sha256",
+        "width",
+        "height",
+        "mime_type",
+        "requested_aspect_ratio",
+        "observed_aspect_ratio",
+        "private_image_path"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "byte_length": {"type": ["integer", "null"], "minimum": 1},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "mime_type": {"type": "string", "const": "image/png"},
+        "requested_aspect_ratio": {"type": ["string", "null"]},
+        "observed_aspect_ratio": {"type": "string"},
+        "private_image_path": {"type": "string"}
+      }
+    },
+    "model_identity": {
+      "type": "object",
+      "required": ["status", "provider_verified_model_id"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"enum": ["unknown"]},
+        "provider_verified_model_id": {"type": "null"}
+      }
+    },
+    "qualitative_review": {
+      "type": "object",
+      "required": ["recommendation", "strengths", "limitations", "scientific_claims"],
+      "additionalProperties": false,
+      "properties": {
+        "recommendation": {"type": "string"},
+        "strengths": {"type": "array", "items": {"type": "string"}},
+        "limitations": {"type": "array", "items": {"type": "string"}},
+        "scientific_claims": {"type": "boolean", "const": false},
+        "non_custody_assessment_attachment_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "rights_review_status": {"type": "string", "const": "pending"},
+    "publication_approval_status": {"type": "string", "const": "pending"},
+    "chatgpt_effective_prompt_known": {"type": "boolean", "const": false},
+    "created_at_utc": {"type": "string"},
+    "preview_html": {"type": ["string", "null"]},
+    "authenticity_limits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    }
+  }
+}
