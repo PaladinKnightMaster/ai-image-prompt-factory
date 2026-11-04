@@ -16,8 +16,6 @@ Translate the subject into a wall-bound painted figure: flattened but graceful c
 
 Use Tang dynasty anchors selectively: high-waisted long skirts and layered court dress appear in Tang visual culture; exact ensemble varies by decade/status; elaborate updos are well represented; choose ornament density by status and date; palace/courtyard architecture with timber construction and tiled roofs; silk and patterned textiles.
 
-Render an adult Tang court subject as a living person in a coherent, role-specific ensemble; keep ornament, furniture and light motivated by occasion.
-
 Intentional adaptation (do not present as documentary fact): modern identity translated into a Tang-period Dunhuang-inspired non-sacred figure.
 
 Historical integrity: preserve strong evidence anchors while allowing clearly bounded interpretation. Tie pigment palette and mural-making details to the selected cave/subperiod when possible. For strict or research-facing work, anchor the mural to a cave, dynasty/subperiod, or tightly bounded evidence family. For aged, damaged, excavated, or museum-conserved mural states, include fading, discoloration, loss, and conservation selectively; for in-period reconstruction, do not copy every modern deterioration artifact. When the selected evidence family matches Cave 55, express mural depth through plaster ground, mineral paint layers, localized gilding, and organic-binder behavior rather than a flat digital “mural filter.” For an 8th-century court scene, use layered elite dress and a materially grounded court setting; do not copy one tomb figure as a universal costume.
