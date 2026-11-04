@@ -172,8 +172,11 @@ python scripts/creative_recipe_generation.py verify-chatgpt-web `
 
 Import refuses non-empty destinations and never overwrites import assets (no
 `--force` in this MVP). Paths under `website/generated` (and repository
-`cases/`) are refused. `publication_status` remains `private_only`. Future
-gallery linkage is PR-CR-003 only and requires separate owner authorization.
+`cases/`) are refused. `publication_status` remains `private_only`. Private
+gallery candidate staging (metadata + local preview only) is PR-CR-003A; see
+[PRIVATE_CREATIVE_GALLERY_CANDIDATE.md](PRIVATE_CREATIVE_GALLERY_CANDIDATE.md).
+Public Pages promotion remains PR-CR-003B and requires separate owner
+authorization.
 
 ## Backward compatibility
 
