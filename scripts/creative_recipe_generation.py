@@ -25,6 +25,7 @@ from aipf.creative_provenance import (
 )
 from aipf.private_gallery_candidate import (
     create_private_gallery_candidate,
+    refresh_private_gallery_preview,
     verify_private_gallery_candidate,
 )
 from aipf.recipes import load_bindings
@@ -167,6 +168,24 @@ def cmd_verify_private_candidate(args: argparse.Namespace) -> int:
         return 1
     _dump(report)
     return 0 if report.get("ok") else 1
+
+
+def cmd_refresh_private_preview(args: argparse.Namespace) -> int:
+    try:
+        result = refresh_private_gallery_preview(args.candidate_dir)
+    except (CreativeProvenanceError, OSError, ValueError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    _dump(
+        {
+            "ok": True,
+            "candidate_dir": result["candidate_dir"],
+            "preview_html": result["preview_html"],
+            "candidate_json_unchanged": result.get("candidate_json_unchanged"),
+            "image_sha256": result.get("image_sha256"),
+        }
+    )
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -328,6 +347,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     cv.add_argument("candidate_dir")
     cv.set_defaults(func=cmd_verify_private_candidate)
+
+    rp = sub.add_parser(
+        "refresh-private-gallery-preview",
+        help=(
+            "Regenerate only preview.html for an existing verified private "
+            "candidate (preserves candidate.json and all evidence)"
+        ),
+    )
+    rp.add_argument(
+        "candidate_dir",
+        help=(
+            "Existing private candidate directory containing candidate.json. "
+            "Must not be under website/generated, cases/, or the git repository tree."
+        ),
+    )
+    rp.set_defaults(func=cmd_refresh_private_preview)
     return ap
 
 

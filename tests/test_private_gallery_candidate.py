@@ -20,7 +20,9 @@ from aipf.creative_provenance import (
 from aipf.model_adapter import sha256_file
 from aipf.private_gallery_candidate import (
     CANDIDATE_STATUS_PRIVATE,
+    _render_preview_html,
     create_private_gallery_candidate,
+    refresh_private_gallery_preview,
     verify_private_gallery_candidate,
 )
 from aipf.recipes import load_recipe, sha256_canonical
@@ -132,8 +134,101 @@ def test_valid_private_candidate_creation_and_schema(tmp_path):
     assert digest in html_text
     assert "private_candidate" in html_text
     assert "locally_verified_manual_import" in html_text
+    assert 'class="hero"' in html_text
+    assert "Compiled adapter-effective prompt" in html_text
+    assert "Creative assessment" in html_text
+    assert "<details class=\"provenance\">" in html_text
+    assert "https://" not in html_text
+    assert "http://" not in html_text
+    assert "cdn." not in html_text.lower()
+    assert "@import" not in html_text.lower()
+    assert "<script" not in html_text.lower()
+    assert 'file:///' in html_text or "file:///" in html_text.replace("\\", "/")
+    assert (imp / "original.png").resolve().as_uri() in html_text or digest in html_text
     report = verify_private_gallery_candidate(out)
     assert report["ok"] is True
+
+
+def test_preview_refresh_rewrites_html_only(tmp_path):
+    prep, _, digest, imp, _ = _chain(tmp_path)
+    out = tmp_path / "06_private_gallery_candidates" / "cand-refresh"
+    create_private_gallery_candidate(
+        candidate_id="cand-refresh",
+        prep_dir=prep,
+        import_dir=imp,
+        output_dir=out,
+        expect_image_sha256=digest,
+        qualitative_review=_notes(),
+    )
+    cand_path = out / "candidate.json"
+    before = cand_path.read_bytes()
+    (out / "preview.html").write_text("<!-- stale -->\n", encoding="utf-8")
+    result = refresh_private_gallery_preview(out)
+    assert result["ok"] is True
+    assert result["candidate_json_unchanged"] is True
+    assert cand_path.read_bytes() == before
+    html_text = (out / "preview.html").read_text(encoding="utf-8")
+    assert "<!-- stale -->" not in html_text
+    assert 'class="hero"' in html_text
+    assert digest in html_text
+    assert verify_private_gallery_candidate(out)["ok"] is True
+
+
+def test_preview_refresh_refuses_invalid_candidate(tmp_path):
+    prep, _, digest, imp, _ = _chain(tmp_path)
+    out = tmp_path / "06" / "refresh-bad"
+    create_private_gallery_candidate(
+        candidate_id="refresh-bad",
+        prep_dir=prep,
+        import_dir=imp,
+        output_dir=out,
+        expect_image_sha256=digest,
+        qualitative_review=_notes(),
+    )
+    cand = json.loads((out / "candidate.json").read_text(encoding="utf-8"))
+    cand["publication_approval_status"] = "approved"
+    (out / "candidate.json").write_text(json.dumps(cand, indent=2) + "\n", encoding="utf-8")
+    with pytest.raises(CreativeProvenanceError, match="verif"):
+        refresh_private_gallery_preview(out)
+
+
+def test_preview_missing_image_renders_placeholder():
+    cand = {
+        "candidate_id": "missing-img",
+        "candidate_status": "private_candidate",
+        "generation_channel": "chatgpt_web_manual",
+        "evidence_level": EVIDENCE_MANUAL_IMPORT,
+        "recipe": {
+            "recipe_id": "cr-001-material-driven-fashion-editorial",
+            "recipe_version": "1.0.0",
+            "recipe_sha256": "a" * 64,
+            "compiler_prompt_sha256": "b" * 64,
+            "effective_bindings": {"camera": "c0", "light": "l0", "aspect": "4:5"},
+        },
+        "prompt": {"adapter_prompt_sha256": "c" * 64, "compiler_prompt_sha256": "b" * 64},
+        "prompt_submission": {
+            "submission_verification": "operator_attested_uncaptured",
+            "independent_capture_status": "unavailable",
+        },
+        "image": {
+            "sha256": "d" * 64,
+            "width": 1122,
+            "height": 1402,
+            "requested_aspect_ratio": "4:5",
+            "observed_aspect_ratio": "1122:1402",
+            "private_image_path": str(Path("Z:/definitely/missing/original.png")),
+        },
+        "model_identity": {"status": "unknown", "provider_verified_model_id": None},
+        "qualitative_review": _notes(),
+        "rights_review_status": "pending",
+        "publication_approval_status": "pending",
+        "authenticity_limits": ["Private only"],
+    }
+    html_text = _render_preview_html(cand, prompt_text="prompt <tag> & text")
+    assert "hero-missing" in html_text
+    assert "<img" not in html_text
+    assert "prompt &lt;tag&gt; &amp; text" in html_text
+    assert "CR-001" in html_text
 
 
 def test_tampered_import_image_rejected(tmp_path):
