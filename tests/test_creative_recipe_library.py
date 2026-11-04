@@ -24,8 +24,8 @@ CR001_VERSION = "1.0.0"
 CR002_PATH = RECIPES_ROOT / "cr-002-song-corridor-editorial" / "1.0.0.json"
 CR002_ID = "cr-002-song-corridor-editorial"
 CR002_VERSION = "1.0.0"
-CR002_KNOWN_RECIPE_SHA = "072b0c6397dc99a907c5a6b02b3f1dc6b335480720b5b08ca7281127fd113c46"
-CR002_KNOWN_PROMPT_SHA = "99b9e5d3c0f79a5e812d14b3a3b09662783690c2839cfdcc7e4e347945899a51"
+CR002_KNOWN_RECIPE_SHA = "2fc6fc85163206023c77c9d492e0f5437ec4f1ff00f0a2dbb04bcac84c5b59d9"
+CR002_KNOWN_PROMPT_SHA = "0bf699d3c75fb89d0df8d48445fbe514f00b43d72e99a8bdb3a13cc71cb873a4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
     {"director.camera", "director.light_source", "output.aspect_ratio"}
 )
@@ -228,8 +228,13 @@ def test_cr002_compiles_deterministically_and_audits_prompt():
     assert "4:5" in prompt
     assert "beizi" in prompt.casefold() or "Beizi" in prompt
     assert "photographic" in prompt.casefold()
-    # Documented EraPack limitation: song ink fragment may appear; photographic locks must remain.
-    assert "living photographic" in prompt.casefold() or "photographic fashion editorial" in prompt.casefold()
+    # Post PR #46: Song ink fragment must not appear for null ArtMethod photography.
+    sections = first["compilation"]["prompt_sections"]
+    assert "era_song" in sections
+    assert "era_fragment_song" not in sections
+    assert "ink transformation" not in prompt.casefold()
+    assert "hybrids" not in sections
+    assert recipe["semantic_spec"]["historical"]["intentional_hybrids"] == []
     assert "qing banner" in prompt.casefold() or "Qing banner" in prompt
     assert "god-rays" in prompt or "god-rays" in prompt.casefold()
     # No ArtMethodPack section for null method.
@@ -260,7 +265,39 @@ def test_cr001_unchanged_alongside_cr002():
     recipe = load_recipe(CR001_PATH)
     assert recipe["recipe_id"] == CR001_ID
     assert recipe["semantic_spec"]["historical"]["packs"] == []
-    assert compile_recipe(recipe)["recipe"]["recipe_id"] == CR001_ID
+    assert sha256_canonical(recipe) == (
+        "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
+    )
+    receipt = compile_recipe(recipe)
+    assert receipt["recipe"]["recipe_id"] == CR001_ID
+    assert receipt["prompt_sha256"] == (
+        "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
+    )
+
+
+def test_cr002_all_variable_combinations_stay_photographic_song():
+    recipe = load_recipe(CR002_PATH)
+    cams = recipe["variables"]["camera"]["choices"]
+    lights = recipe["variables"]["light"]["choices"]
+    aspects = recipe["variables"]["aspect"]["choices"]
+    assert len(cams) == 3 and len(lights) == 3 and len(aspects) == 2
+    for camera in cams:
+        for light in lights:
+            for aspect in aspects:
+                bound = compile_recipe(
+                    recipe, bindings={"camera": camera, "light": light, "aspect": aspect}
+                )
+                prompt = bound["compilation"]["prompt"]
+                sections = bound["compilation"]["prompt_sections"]
+                assert "era_song" in sections
+                assert "era_fragment_song" not in sections
+                assert "ink transformation" not in prompt.casefold()
+                assert "hybrids" not in sections
+                assert camera in prompt
+                assert light in prompt
+                assert aspect in prompt
+                assert "beizi" in prompt.casefold()
+                assert "corridor" in prompt.casefold()
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():

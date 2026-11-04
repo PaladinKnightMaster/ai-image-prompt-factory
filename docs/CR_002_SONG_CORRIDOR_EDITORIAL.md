@@ -64,16 +64,25 @@ repository.
 - Photographic output: `art.method` null avoids ArtMethodPack conflict by
   design.
 
-### Known engine/EraPack tension (not fixed in this PR)
+### Compiler dependency (PR #46)
 
-`references/eras/song.json` currently exposes a single `prompt_fragments`
-entry keyed `ink`. Compiler `_era_fragment()` falls through to available
-fragment keys when `art.method` is null, so baseline CR-002 compiles with the
-Song ink-transformation sentence even though the recipe lock and request demand
-a living photograph. CR-002 counters this in request, locks,
-`intentional_hybrids`, and director material language. **Do not silently edit
-the EraPack or compiler in this delivery**; a future pack authoring change
-(e.g. a `living` / portrait fragment) would be the proper fix.
+CR-002 requires the medium-safe EraPack fragment selector from
+[ERA_FRAGMENT_MEDIUM_SAFE_SELECTION.md](ERA_FRAGMENT_MEDIUM_SAFE_SELECTION.md)
+(merged PR #46). With that fix, Song photographic compiles keep `era_song`
+anchors and **omit** `era_fragment_song` ink text when `art.method` is null.
+
+CR-002-RECONCILE-001 therefore removed the obsolete
+`intentional_hybrids` photographic-versus-ink disclaimer that only papered
+over the pre-#46 fallthrough defect. No replacement negative medium clause was
+added. Request/locks still state photographic living intent and forbid
+fantasy/xianxia and Tang/Qing default styling.
+
+### Digests (post-reconcile)
+
+| Digest | SHA-256 |
+| --- | --- |
+| Recipe (`1.0.0.json`) | `2fc6fc85163206023c77c9d492e0f5437ec4f1ff00f0a2dbb04bcac84c5b59d9` |
+| Baseline compiled prompt (c0/l0/4:5) | `0bf699d3c75fb89d0df8d48445fbe514f00b43d72e99a8bdb3a13cc71cb873a4` |
 
 ## Supported variables
 
@@ -82,6 +91,11 @@ the EraPack or compiler in this delivery**; a future pack authoring change
 | `camera` | `director.camera` | eye-level three-quarter full-length corridor axis frame |
 | `light` | `director.light_source` | soft daylight from courtyard-side openings |
 | `aspect` | `output.aspect_ratio` | `4:5` (also `1:1`) |
+
+All 18 camera×light×aspect combinations are supported PromptRecipe bindings.
+They share Song historically informed photographic context; framing and daylight
+emphasis differ by binding. Medium-long crops prioritize beizi/face readability
+while the static request still carries corridor wardrobe context.
 
 ## Validation commands
 
