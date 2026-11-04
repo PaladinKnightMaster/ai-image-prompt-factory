@@ -117,6 +117,34 @@ def _display_recipe_title(recipe_id: str) -> str:
     return text.replace("-", " ").replace("_", " ")
 
 
+def _channel_badge_label(channel: str) -> str:
+    labels = {
+        "chatgpt_web_manual": "ChatGPT Web",
+    }
+    text = (channel or "").strip()
+    if not text:
+        return "channel n/a"
+    return labels.get(text, text.replace("_", " "))
+
+
+def _short_config_chips(candidate_id: str) -> list[str]:
+    """Extract compact cN/lN chips from candidate_id when present (e.g. cr001-c0-l0-4x5)."""
+    chips: list[str] = []
+    cid = candidate_id or ""
+    cam = re.search(r"(?i)(?:^|-)(c\d+)(?:-|$)", cid)
+    if cam:
+        chips.append(cam.group(1).lower())
+    light = re.search(r"(?i)(?:^|-)(l\d+)(?:-|$)", cid)
+    if light:
+        chips.append(light.group(1).lower())
+    return chips
+
+
+def _badge_html(label: str, *, kind: str = "") -> str:
+    cls = "badge" if not kind else f"badge badge-{kind}"
+    return f'<li class="{cls}">{escape(label)}</li>'
+
+
 def _render_preview_html(candidate: dict[str, Any], *, prompt_text: str) -> str:
     """Render an offline, image-first private editorial preview (no external assets)."""
     image_meta = candidate.get("image") or {}
@@ -137,6 +165,16 @@ def _render_preview_html(candidate: dict[str, Any], *, prompt_text: str) -> str:
     recipe_id = str(recipe.get("recipe_id") or "")
     recipe_version = str(recipe.get("recipe_version") or "")
     display_title = _display_recipe_title(recipe_id)
+    candidate_id = str(candidate.get("candidate_id") or "")
+    channel = str(candidate.get("generation_channel") or "")
+    recommendation = str(review.get("recommendation") or "n/a")
+    aspect = str(
+        bindings.get("aspect")
+        or image_meta.get("requested_aspect_ratio")
+        or "n/a"
+    )
+    camera_full = str(bindings.get("camera") or "n/a")
+    light_full = str(bindings.get("light") or "n/a")
     width = image_meta.get("width")
     height = image_meta.get("height")
     dim_label = (
@@ -144,6 +182,17 @@ def _render_preview_html(candidate: dict[str, Any], *, prompt_text: str) -> str:
         if isinstance(width, int) and isinstance(height, int)
         else "dimensions unavailable"
     )
+
+    badge_items = [
+        _badge_html(f"v{recipe_version}" if recipe_version else "version n/a"),
+        _badge_html(recommendation, kind="decision"),
+        _badge_html(aspect, kind="aspect"),
+    ]
+    for chip in _short_config_chips(candidate_id):
+        badge_items.append(_badge_html(chip, kind="config"))
+    badge_items.append(_badge_html(_channel_badge_label(channel), kind="channel"))
+    badge_items.append(_badge_html("private", kind="status"))
+    badges_html = f'<ul class="badge-row" aria-label="Core specs">{"".join(badge_items)}</ul>'
 
     strengths = "".join(f"<li>{escape(x)}</li>" for x in (review.get("strengths") or []))
     limitations = "".join(f"<li>{escape(x)}</li>" for x in (review.get("limitations") or []))
@@ -278,27 +327,80 @@ a {{ color: var(--accent); }}
   letter-spacing: -0.01em;
 }}
 .lede {{
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.85rem;
   color: var(--muted);
-  font-size: 1.05rem;
+  font-size: 1.02rem;
 }}
-.meta-row {{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-  gap: 0.75rem 1.25rem;
-  margin: 0 0 1.75rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+.badge-row {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
 }}
-.meta-row dt {{
+.badge {{
+  display: inline-block;
   margin: 0;
-  font-size: 0.72rem;
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--panel);
+  color: var(--ink);
+  font: 600 0.75rem/1.3 var(--sans);
+  letter-spacing: 0.01em;
+}}
+.badge-decision {{
+  border-color: #b7d0cd;
+  color: var(--accent);
+}}
+.badge-status {{
+  border-color: #c5ccd6;
   color: var(--muted);
 }}
-.meta-row dd {{
-  margin: 0.15rem 0 0;
-  font-size: 0.95rem;
+details.advanced {{
+  margin: 0 0 1.75rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+}}
+details.advanced > summary {{
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0;
+  color: var(--accent);
+  font: 600 0.88rem/1.4 var(--sans);
+}}
+details.advanced > summary::-webkit-details-marker {{ display: none; }}
+details.advanced > summary::before {{
+  content: "▸";
+  color: var(--accent);
+}}
+details.advanced[open] > summary::before {{ content: "▾"; }}
+.advanced-body {{
+  margin-top: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}}
+.advanced-body dl {{
+  display: grid;
+  grid-template-columns: minmax(7rem, 9rem) 1fr;
+  gap: 0.55rem 1rem;
+  margin: 0;
+}}
+.advanced-body dt {{
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}}
+.advanced-body dd {{
+  margin: 0;
+  font-size: 0.9rem;
   overflow-wrap: anywhere;
 }}
 section {{
@@ -399,7 +501,7 @@ details.provenance[open] > summary::before {{ content: "▾ "; }}
   .site {{ width: calc(100vw - 1.5rem); padding-top: 1rem; }}
   .editorial h1 {{ font-size: 1.55rem; }}
   .review-grid {{ grid-template-columns: 1fr; }}
-  .provenance dl {{ grid-template-columns: 1fr; }}
+  .provenance dl, .advanced-body dl {{ grid-template-columns: 1fr; }}
   .hero img {{ max-height: none; }}
 }}
 @media (prefers-reduced-motion: reduce) {{
@@ -418,18 +520,21 @@ details.provenance[open] > summary::before {{ content: "▾ "; }}
 
 <article class="editorial">
   <h1>{escape(display_title)}</h1>
-  <p class="lede">Version {escape(recipe_version)} · qualitative decision
-  <strong>{escape(str(review.get("recommendation") or "n/a"))}</strong>.
-  Local file preview only — rights review and publication approval remain pending.</p>
-
-  <dl class="meta-row">
-    <div><dt>Recipe</dt><dd>{escape(recipe_id)} <span class="note">v{escape(recipe_version)}</span></dd></div>
-    <div><dt>Candidate</dt><dd>{escape(str(candidate.get("candidate_id") or ""))}</dd></div>
-    <div><dt>Camera</dt><dd>{escape(str(bindings.get("camera") or "n/a"))}</dd></div>
-    <div><dt>Lighting</dt><dd>{escape(str(bindings.get("light") or "n/a"))}</dd></div>
-    <div><dt>Aspect</dt><dd>{escape(str(bindings.get("aspect") or image_meta.get("requested_aspect_ratio") or "n/a"))}</dd></div>
-    <div><dt>Channel</dt><dd>{escape(str(candidate.get("generation_channel") or ""))}</dd></div>
-  </dl>
+  <p class="lede">Local file preview only — rights review and publication approval remain pending.</p>
+  {badges_html}
+  <details class="advanced">
+    <summary>Advanced details</summary>
+    <div class="advanced-body">
+      <dl>
+        <dt>Recipe</dt><dd>{escape(recipe_id)} <span class="note">v{escape(recipe_version)}</span></dd>
+        <dt>Candidate</dt><dd>{escape(candidate_id)}</dd>
+        <dt>Camera</dt><dd>{escape(camera_full)}</dd>
+        <dt>Lighting</dt><dd>{escape(light_full)}</dd>
+        <dt>Aspect</dt><dd>{escape(aspect)}</dd>
+        <dt>Channel</dt><dd>{escape(channel)}</dd>
+      </dl>
+    </div>
+  </details>
 </article>
 
 <section class="prompt-panel" aria-labelledby="prompt-heading">

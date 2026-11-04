@@ -137,6 +137,10 @@ def test_valid_private_candidate_creation_and_schema(tmp_path):
     assert 'class="hero"' in html_text
     assert "Compiled adapter-effective prompt" in html_text
     assert "Creative assessment" in html_text
+    assert 'class="badge-row"' in html_text
+    assert "Advanced details" in html_text
+    assert '<details class="advanced">' in html_text
+    assert "meta-row" not in html_text
     assert "<details class=\"provenance\">" in html_text
     assert "https://" not in html_text
     assert "http://" not in html_text
@@ -147,6 +151,31 @@ def test_valid_private_candidate_creation_and_schema(tmp_path):
     assert (imp / "original.png").resolve().as_uri() in html_text or digest in html_text
     report = verify_private_gallery_candidate(out)
     assert report["ok"] is True
+
+
+def test_preview_badges_include_short_config_chips(tmp_path):
+    prep, _, digest, imp, _ = _chain(tmp_path)
+    out = tmp_path / "06_private_gallery_candidates" / "cr001-c0-l0-4x5"
+    create_private_gallery_candidate(
+        candidate_id="cr001-c0-l0-4x5",
+        prep_dir=prep,
+        import_dir=imp,
+        output_dir=out,
+        expect_image_sha256=digest,
+        qualitative_review=_notes(),
+    )
+    html_text = (out / "preview.html").read_text(encoding="utf-8")
+    assert ">c0<" in html_text
+    assert ">l0<" in html_text
+    assert ">4:5<" in html_text
+    assert ">KEEP<" in html_text
+    assert ">private<" in html_text
+    assert "ChatGPT Web" in html_text
+    # Full director prose stays under Advanced details, not the badge row.
+    badge_block = html_text.split('<ul class="badge-row"', 1)[1].split("</ul>", 1)[0]
+    assert "camera-left" not in badge_block
+    assert "three-quarter" not in badge_block
+    assert "camera-left" in html_text
 
 
 def test_preview_refresh_rewrites_html_only(tmp_path):

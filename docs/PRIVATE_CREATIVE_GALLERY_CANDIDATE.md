@@ -66,15 +66,18 @@ python scripts/creative_recipe_generation.py refresh-private-gallery-preview `
 Creation always re-verifies prep + import, recomputes image digests, and refuses
 mismatches, API-origin claims, and non-empty destinations.
 
-## Private preview presentation (PR-CR-003A-UX1)
+## Private preview presentation (PR-CR-003A-UX1 / UX2)
 
 `preview.html` is an offline, image-first editorial page generated from
 `candidate.json` plus the linked adapter-effective prompt. It uses local CSS
-only (no CDN fonts, scripts, analytics, or network assets). Technical hashes
-and authenticity limits live under a collapsible provenance section so the
-hero image, recipe identity, compiled prompt, and qualitative review stay
-primary. Refreshing the preview never publishes and never modifies
-`candidate.json`.
+only (no CDN fonts, scripts, analytics, or network assets).
+
+Primary scan path: hero image → title → compact core-spec badges (version,
+decision, aspect, optional `cN`/`lN` chips, channel, private) → compiled
+prompt → qualitative review. Long camera/lighting prose and recipe/candidate
+identifiers live under **Advanced details**. Technical hashes and authenticity
+limits remain under collapsible **Provenance**. Refreshing the preview never
+publishes and never modifies `candidate.json`.
 
 ## Contract highlights
 
