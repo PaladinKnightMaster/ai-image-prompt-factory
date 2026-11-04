@@ -1,0 +1,120 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-003-refraction-ledger",
+  "recipe_version": "1.0.0",
+  "title": "CR-003 Refraction Ledger",
+  "description": "Original luxury commercial product still-life: unbranded faceted transparent glass perfume flacon with brushed-metal cap on a honed limestone plinth. Photographic material realism for glass thickness, controlled reflections, brushed metal, and matte stone. Creative Research library entry; no gallery image attached. See docs/CR_003_REFRACTION_LEDGER.md for photographic principles and acceptance criteria.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-003-refraction-ledger",
+    "request": "Create a luxury commercial product still-life photograph of an original unbranded transparent faceted glass perfume flacon with a precisely fitted brushed-metal cap, resting on a honed limestone plinth in a controlled studio. Keep the result clearly photographic—not CGI-gloss fantasy, not abstract glass sculpture, not fashion editorial, and not a painted still life. The flacon is a short vertical faceted bottle with readable glass thickness at edges and corners, a calm clear liquid fill without foam or decorative lettering, and a brushed-metal cap seated flush on the neck. Prioritize material separation: transparent glass versus opaque brushed metal versus matte limestone. Communicate controlled reflection and refraction cues, physically plausible contact shadows, restrained tonal palette, and deliberate editorial product composition with no humans, logos, brand names, or unrelated props.",
+    "route": "new_generation",
+    "locks": {
+      "product_only_still_life": true,
+      "no_human_subject": true,
+      "no_logo_or_brand_text": true,
+      "no_lettering_on_product": true,
+      "prefer_material_fidelity_over_cgi_gloss": true,
+      "photographic_not_painterly": true,
+      "keep_glass_metal_stone_roles_distinct": true
+    },
+    "references": [],
+    "identity": {
+      "mode": "identity_unlocked",
+      "locked_features": []
+    },
+    "body_transformation": {
+      "mode": "presentation_only",
+      "anatomy_change": "none; no human subject—preserve only the designed product geometry",
+      "pose_change": "none; fixed product placement on plinth",
+      "camera_presentation": "allowed for commercial product framing variants",
+      "garment_shaping": "product geometry only: short vertical faceted glass flacon with consistent facet planes, readable wall thickness at edges, flush brushed-metal cap on a short neck, calm clear liquid fill; no extra stoppers, no atomizer bulb, no hanging tags",
+      "artistic_stylization": "none; keep photographic material response without painterly or hyper-CGI styling"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "luxury product still-life studio",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "requested_elements": [
+      "transparent faceted glass perfume flacon with readable edge thickness",
+      "precisely fitted brushed-metal cap",
+      "calm clear liquid fill without foam or bubbles",
+      "honed limestone plinth with fine matte texture",
+      "controlled studio surround with restrained tonal palette",
+      "physically plausible contact shadow under flacon and plinth",
+      "no humans, logos, lettering, or unrelated props"
+    ],
+    "director": {
+      "moment": "a settled commercial still after final product placement—no motion, no pouring, no hand entering frame",
+      "action": "flacon stands upright centered on the limestone plinth; cap fully seated; liquid level calm and horizontal",
+      "gaze": "camera addresses the product as the sole subject; no human gaze or portrait intent",
+      "body_weight": "glass base bears evenly on the plinth top; plinth sits firmly on the studio surface with a soft contact shadow",
+      "hand_logic": "no hands, fingers, gloves, or props touching the product",
+      "fabric_response": "no textile; transparent glass transmits and refracts the studio surround through facet planes; liquid remains optically calm without foam, bubbles, or decorative swirl",
+      "prop_interaction": "only the flacon and limestone plinth; no extra bottles, flowers, boxes, or jewelry",
+      "foreground": "near edge of the honed limestone plinth with soft contact shadow and fine stone texture readable at the rim",
+      "midground": "faceted glass flacon and brushed-metal cap reading as one coherent product silhouette with clear glass-to-metal junction",
+      "background": "seamless restrained studio sweep in warm-neutral gray with generous quiet negative space and no set dressing",
+      "camera": "eye-level three-quarter hero-product frame showing full flacon, seated cap, limestone plinth top, and a narrow studio floor plane",
+      "light_source": "large soft key camera-left through broad diffusion, gentle far-side bounce fill, black flags outside frame for dark glass edge lines (bright-field against a light surround), soft vertical strip highlight on brushed-metal cap grain",
+      "material_response": "glass shows transparent volume with darker edge lines and restrained refraction through facets rather than opaque crystal; brushed metal reads as directional satin grain with elongated soft highlights (not polished mirror chrome); honed limestone remains matte with fine pore texture and soft shadow falloff; keep caustics and reflections photographically plausible, not ray-traced showcase effects",
+      "micro_story": "a quiet ledger of light through glass, metal, and stone—luxury product certainty without advertising copy"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Commercial product framings that keep flacon, cap, and plinth identity stable.",
+      "choices": [
+        "eye-level three-quarter hero-product frame showing full flacon, seated cap, limestone plinth top, and a narrow studio floor plane",
+        "slightly elevated three-quarter frame looking down onto the plinth top plane, bottle shoulders, and seated metal cap",
+        "eye-level tighter product crop prioritizing faceted glass body, glass-to-metal neck junction, and upper plinth rim while keeping the full flacon readable"
+      ]
+    },
+    "light": {
+      "type": "enum",
+      "target": "director.light_source",
+      "required": false,
+      "description": "Distinct reflection strategies; each choice stays within one coherent field approach.",
+      "choices": [
+        "large soft key camera-left through broad diffusion, gentle far-side bounce fill, black flags outside frame for dark glass edge lines (bright-field against a light surround), soft vertical strip highlight on brushed-metal cap grain",
+        "dark-field luxury setup: charcoal surround, tall side white cards or strip softboxes for luminous glass edges, soft overhead fill off the lens axis, linear highlight on brushed-metal cap without mirror chrome",
+        "dual vertical strip lights with moderate diffusion for glass facet gradients and brushed-metal grain, black negative-fill flags carving the far glass edge, soft under-plinth bounce for a credible contact shadow"
+      ]
+    },
+    "aspect": {
+      "type": "enum",
+      "target": "output.aspect_ratio",
+      "required": false,
+      "description": "Prompt-composition aspect vocabulary only; not an image-API size guarantee.",
+      "choices": [
+        "4:5",
+        "1:1"
+      ]
+    }
+  }
+}
