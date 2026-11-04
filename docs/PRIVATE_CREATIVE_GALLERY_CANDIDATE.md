@@ -55,11 +55,26 @@ python scripts/creative_recipe_generation.py create-private-gallery-candidate `
 python scripts/creative_recipe_generation.py verify-private-gallery-candidate `
   C:\path\to\06_private_gallery_candidates\cr-001-c0-l0-4x5-manual
 
+# After a preview-renderer UX update: rewrite only preview.html (owner-operated).
+# Verifies the candidate first; preserves candidate.json and all custody evidence.
+python scripts/creative_recipe_generation.py refresh-private-gallery-preview `
+  C:\path\to\06_private_gallery_candidates\cr-001-c0-l0-4x5-manual
+
 # Open preview.html locally in a browser (private machine only)
 ```
 
 Creation always re-verifies prep + import, recomputes image digests, and refuses
 mismatches, API-origin claims, and non-empty destinations.
+
+## Private preview presentation (PR-CR-003A-UX1)
+
+`preview.html` is an offline, image-first editorial page generated from
+`candidate.json` plus the linked adapter-effective prompt. It uses local CSS
+only (no CDN fonts, scripts, analytics, or network assets). Technical hashes
+and authenticity limits live under a collapsible provenance section so the
+hero image, recipe identity, compiled prompt, and qualitative review stay
+primary. Refreshing the preview never publishes and never modifies
+`candidate.json`.
 
 ## Contract highlights
 
