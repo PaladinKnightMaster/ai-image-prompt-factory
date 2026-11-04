@@ -115,6 +115,42 @@ python -m pytest -q tests/test_creative_recipe_library.py
 | `light` | `director.light_source` | baseline soft courtyard daylight; narrower side shaft; broader overcast |
 | `aspect` | `output.aspect_ratio` | `4:5` (baseline), `1:1` |
 
+## Locate and validate CR-003
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-003-refraction-ledger/1.0.0.json` |
+| `recipe_id` | `cr-003-refraction-ledger` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+
+Research brief, photographic principles, and acceptance criteria:
+[CR_003_REFRACTION_LEDGER.md](CR_003_REFRACTION_LEDGER.md).
+
+```bash
+aipf recipe validate recipes/cr-003-refraction-ledger/1.0.0.json
+aipf recipe compile recipes/cr-003-refraction-ledger/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-003
+
+- Luxury commercial product still-life request and locks (product only; no humans;
+  no logos/lettering; photographic material fidelity)
+- Route `new_generation`
+- Identity `identity_unlocked`; body mode `presentation_only`
+- Empty historical packs; `art.method` / form / state all `null`
+- Faceted transparent glass flacon, brushed-metal cap, honed limestone plinth
+- Studio depth, material response, micro-story
+
+### Supported variations (CR-003)
+
+| Variable key | Target | Choices |
+| --- | --- | --- |
+| `camera` | `director.camera` | baseline eye-level three-quarter hero; elevated plinth-top; tighter glass/cap crop |
+| `light` | `director.light_source` | bright-field flags; dark-field luxury; dual strip + negative fill |
+| `aspect` | `output.aspect_ratio` | `4:5` (baseline), `1:1` |
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
