@@ -1,0 +1,123 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-002-song-corridor-editorial",
+  "recipe_version": "1.0.0",
+  "title": "CR-002 Song Corridor Editorial",
+  "description": "Original living photographic fashion editorial informed by Song-dynasty Chinese visual culture: layered silk wardrobe, restrained hair, timber covered corridor staging, and soft architectural daylight. historically_informed (not strict reconstruction). Uses existing EraPack id song only; art.method null (photographic). Creative Research library entry; no gallery image attached. See docs/CR_002_SONG_CORRIDOR_EDITORIAL.md for sources and uncertainties.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-002-song-corridor-editorial",
+    "request": "Create a quiet photographic fashion editorial of an adult woman standing in a Song-dynasty-informed timber covered corridor. Keep the result clearly photographic and living—not an ink painting, mural, costume-drama still, or fantasy xianxia tableau. Wardrobe is historically informed layered Song women’s dress: a straight-collar open-front beizi with long side slits over a slim ruqun (upper garment plus long skirt), light silk or silk-gauze with calm vertical drape. Hair is a restrained upswept bun with modest pin ornament only—no Tang tower bun, no Qing banner hairstyle, no ceremonial phoenix crown. Makeup is restrained with visible natural skin texture. Architecture shows a covered timber walkway with wooden columns, grey ceramic roof tiles, white plaster side wall, and an opening to a quiet courtyard garden that admits soft daylight. Prioritize layered spatial depth, material plausibility, and culturally coherent styling over spectacle.",
+    "route": "new_generation",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "single adult fashion subject",
+      "photographic_living_scene": true,
+      "historically_informed_not_reconstruction": true,
+      "no_fantasy_xianxia_costume": true,
+      "no_tang_or_qing_default_styling": true,
+      "no_logo_or_brand_text": true,
+      "prefer_material_fidelity_over_beauty_hype": true
+    },
+    "references": [],
+    "identity": {
+      "mode": "identity_unlocked",
+      "locked_features": []
+    },
+    "body_transformation": {
+      "mode": "presentation_only",
+      "anatomy_change": "none; preserve natural adult proportions without idealizing measurements",
+      "pose_change": "allowed as director-specified quiet editorial stance",
+      "camera_presentation": "allowed for photographic editorial framing",
+      "garment_shaping": "slim vertical Song-informed silhouette: open-front straight-collar beizi hanging in long vertical planes with underarm/side slits reading as construction, not costume flares; inner upper garment close to the torso; long skirt with soft columnar folds and slight hem weight; light silk/gauze layers that stack without ballooning; no floating scarves as wind FX",
+      "artistic_stylization": "none; keep photographic material response (do not convert to ink, print, or mural grammar)"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "song"
+      ],
+      "subperiod": "Southern Song-inspired restrained silhouette and quieter palette (not a dated reconstruction of a specific year)",
+      "region": "China; Jiangnan-inspired elite residential/garden corridor context",
+      "role": "court woman",
+      "occasion": "garden viewing or travel",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "requested_elements": [
+      "straight-collar open-front beizi with long side slits",
+      "slim layered ruqun (upper garment and long skirt) in light silk or silk-gauze",
+      "restrained upswept bun with modest hairpin only",
+      "timber covered corridor with wooden columns and grey roof tiles",
+      "white plaster corridor wall and courtyard garden opening",
+      "soft daylight entering from architectural openings",
+      "layered foreground floor / midground figure / background corridor depth"
+    ],
+    "director": {
+      "moment": "a brief pause mid-walk along the covered corridor, cloth settling after the last step",
+      "action": "standing in a quiet three-quarter stance, one foot slightly advanced along the corridor axis, torso upright without parade stiffness",
+      "gaze": "softly toward the courtyard opening rather than a hard camera stare; calm, unsmiling editorial attention",
+      "body_weight": "front advanced foot carries primary weight; rear foot lightly grounded for recoverable balance",
+      "hand_logic": "near hand rests lightly against the open beizi edge at mid-torso without clutching; far hand hangs relaxed along the skirt seam; no handheld props",
+      "fabric_response": "outer beizi hangs in long vertical silk planes that part slightly at the open front; skirt layers show soft columnar folds with gentle gravity at the hem; gauze underlayers mute specular hotspots; no frozen wind flare",
+      "prop_interaction": "no handheld props; optional quiet architectural contact only if a column is near—prefer free stance",
+      "foreground": "tiled or beaten-earth corridor floor plane with soft shadow falloff toward the viewer",
+      "midground": "full-length adult subject reading as one slim vertical silhouette inside the column rhythm",
+      "background": "receding timber covered corridor with white plaster wall, grey tiled roof underside, and a bright-quiet courtyard garden opening beyond",
+      "camera": "eye-level three-quarter full-length editorial frame aligned to the corridor axis with slight subject offset from center",
+      "light_source": "soft daylight from the courtyard-side corridor openings as key, large and diffuse, gentle fill from plaster bounce, restrained contrast without cinematic god-rays",
+      "material_response": "silk and silk-gauze show quiet directional sheen along fold crowns; timber columns read as matte wood grain; plaster absorbs light; skin and hair remain photographic rather than painterly",
+      "micro_story": "a private pause between rooms—architectural calm translated into a still editorial beat"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Photographic framing alternatives that keep corridor depth and full-figure readability.",
+      "choices": [
+        "eye-level three-quarter full-length editorial frame aligned to the corridor axis with slight subject offset from center",
+        "slightly low full-length frame emphasizing vertical layered robes and corridor column rhythm",
+        "eye-level medium-long frame cutting just below the knee to prioritize beizi front opening, sleeve plane, and facial calm"
+      ]
+    },
+    "light": {
+      "type": "enum",
+      "target": "director.light_source",
+      "required": false,
+      "description": "Daylight motivated by corridor openings; keep photographic soft contrast.",
+      "choices": [
+        "soft daylight from the courtyard-side corridor openings as key, large and diffuse, gentle fill from plaster bounce, restrained contrast without cinematic god-rays",
+        "narrower daylight shaft from a single side opening with deeper shadow on the plaster-wall side and a thin rim on hair and shoulder only",
+        "broader overcast daylight through multiple openings with minimal contrast, emphasizing quiet silk planes and timber grain"
+      ]
+    },
+    "aspect": {
+      "type": "enum",
+      "target": "output.aspect_ratio",
+      "required": false,
+      "description": "Prompt-composition aspect vocabulary only; not an image-API size guarantee.",
+      "choices": [
+        "4:5",
+        "1:1"
+      ]
+    }
+  }
+}

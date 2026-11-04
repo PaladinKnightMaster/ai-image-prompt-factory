@@ -79,12 +79,48 @@ reconciliation, and recipe-to-generation provenance binding are reserved for
 later authorized PRs (PR-CR-002 / PR-CR-003). Status enums alone do not prove
 publication rights or generation authenticity.
 
+## Locate and validate CR-002
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-002-song-corridor-editorial/1.0.0.json` |
+| `recipe_id` | `cr-002-song-corridor-editorial` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+
+Research brief, sources, and EraPack limitations:
+[CR_002_SONG_CORRIDOR_EDITORIAL.md](CR_002_SONG_CORRIDOR_EDITORIAL.md).
+
+```bash
+aipf recipe validate recipes/cr-002-song-corridor-editorial/1.0.0.json
+aipf recipe compile recipes/cr-002-song-corridor-editorial/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-002
+
+- Living photographic editorial request and locks (adult subject; no fantasy
+  xianxia; no Tang/Qing default styling; historically informed, not reconstruction)
+- Route `new_generation`
+- Identity `identity_unlocked`; body mode `presentation_only`
+- EraPack `song` only; `art.method` / form / state all `null`
+- Beizi + ruqun layering, restrained hair, timber corridor staging, daylight
+- Pose / weight / hand logic, spatial depth, micro-story
+
+### Supported variations (CR-002)
+
+| Variable key | Target | Choices |
+| --- | --- | --- |
+| `camera` | `director.camera` | baseline corridor-axis full-length; low full-length; medium-long beizi focus |
+| `light` | `director.light_source` | baseline soft courtyard daylight; narrower side shaft; broader overcast |
+| `aspect` | `output.aspect_ratio` | `4:5` (baseline), `1:1` |
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
 `aipf_packaging/resource_inventory.json` in this PR.
 
-## Provenance (PR-CR-002)
+## Provenance (generation binding track)
 
 Recipe→generation binding, private staging, and evidence limits are documented
 in [CREATIVE_RECIPE_PROVENANCE.md](CREATIVE_RECIPE_PROVENANCE.md). Use

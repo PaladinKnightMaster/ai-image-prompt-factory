@@ -21,6 +21,11 @@ RECIPES_ROOT = ROOT / "recipes"
 CR001_PATH = RECIPES_ROOT / "cr-001-material-driven-fashion-editorial" / "1.0.0.json"
 CR001_ID = "cr-001-material-driven-fashion-editorial"
 CR001_VERSION = "1.0.0"
+CR002_PATH = RECIPES_ROOT / "cr-002-song-corridor-editorial" / "1.0.0.json"
+CR002_ID = "cr-002-song-corridor-editorial"
+CR002_VERSION = "1.0.0"
+CR002_KNOWN_RECIPE_SHA = "2fc6fc85163206023c77c9d492e0f5437ec4f1ff00f0a2dbb04bcac84c5b59d9"
+CR002_KNOWN_PROMPT_SHA = "0bf699d3c75fb89d0df8d48445fbe514f00b43d72e99a8bdb3a13cc71cb873a4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
     {"director.camera", "director.light_source", "output.aspect_ratio"}
 )
@@ -144,6 +149,155 @@ def test_cr001_optional_binding_changes_only_allowlisted_targets():
     assert bound["variable_resolution"]["effective_bindings"]["aspect"] == "1:1"
     assert bound["prompt_sha256"] != baseline["prompt_sha256"]
     assert "1:1" in resolved["prompt"] or resolved["prompt_sections"]["task"].find("1:1") >= 0
+
+
+def test_cr002_file_exists_and_path_matches_identity():
+    assert CR002_PATH.is_file()
+    assert CR002_PATH.parent.name == CR002_ID
+    assert CR002_PATH.stem == CR002_VERSION
+
+
+def test_cr002_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR002_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR002_ID
+    assert recipe["recipe_version"] == CR002_VERSION
+    assert RECIPE_ID_RE.fullmatch(recipe["recipe_id"])
+    assert RECIPE_VERSION_RE.fullmatch(recipe["recipe_version"])
+
+
+def test_cr002_semantic_spec_is_song_informed_photographic_editorial():
+    recipe = load_recipe(CR002_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "new_generation"
+    assert spec["historical"]["strictness"] == "historically_informed"
+    assert spec["historical"]["packs"] == ["song"]
+    assert spec["art"]["method"] is None
+    assert spec["art"]["artifact_form"] is None
+    assert spec["art"]["artifact_state"] is None
+    assert spec["identity"]["mode"] == "identity_unlocked"
+    assert spec["body_transformation"]["mode"] == "presentation_only"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"].get("generation_requested") is False
+    request = spec["request"].casefold()
+    assert "photographic" in request
+    assert "beizi" in request
+    assert "corridor" in request
+    assert "xianxia" in request or "fantasy" in request
+    assert "ink painting" in request
+    director = json.dumps(spec["director"]).casefold()
+    assert "daylight" in director
+    assert "silk" in director
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in json.dumps(spec).casefold()
+
+
+def test_cr002_variables_follow_v11_allowlist_and_baselines():
+    recipe = load_recipe(CR002_PATH)
+    variables = recipe.get("variables") or {}
+    assert 1 <= len(variables) <= 3
+    targets = []
+    for name, definition in variables.items():
+        assert re.fullmatch(r"^[a-z][a-z0-9_]*$", name)
+        assert definition["type"] == "enum"
+        assert definition["target"] in ALLOWED_VARIABLE_TARGETS
+        choices = definition["choices"]
+        assert 2 <= len(choices) <= 8
+        assert len(choices) == len(set(choices))
+        baseline = _nested_get(recipe["semantic_spec"], definition["target"])
+        assert baseline in choices
+        if definition["target"] == "output.aspect_ratio":
+            assert set(choices) <= ASPECT_VOCAB
+        targets.append(definition["target"])
+    assert len(targets) == len(set(targets))
+
+
+def test_cr002_compiles_deterministically_and_audits_prompt():
+    recipe = load_recipe(CR002_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR002_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR002_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    assert "Song dynasty" in prompt
+    assert "4:5" in prompt
+    assert "beizi" in prompt.casefold() or "Beizi" in prompt
+    assert "photographic" in prompt.casefold()
+    # Post PR #46: Song ink fragment must not appear for null ArtMethod photography.
+    sections = first["compilation"]["prompt_sections"]
+    assert "era_song" in sections
+    assert "era_fragment_song" not in sections
+    assert "ink transformation" not in prompt.casefold()
+    assert "hybrids" not in sections
+    assert recipe["semantic_spec"]["historical"]["intentional_hybrids"] == []
+    assert "qing banner" in prompt.casefold() or "Qing banner" in prompt
+    assert "god-rays" in prompt or "god-rays" in prompt.casefold()
+    # No ArtMethodPack section for null method.
+    assert "Art/craft method" not in prompt
+    avoid = prompt.casefold()
+    assert "tang high-waisted" in avoid
+    assert "qing banner" in avoid or "qing" in avoid
+    assert "generation" not in first
+
+
+def test_cr002_optional_binding_changes_only_allowlisted_targets():
+    recipe = load_recipe(CR002_PATH)
+    baseline = compile_recipe(recipe)
+    alt_camera = recipe["variables"]["camera"]["choices"][1]
+    alt_light = recipe["variables"]["light"]["choices"][1]
+    bound = compile_recipe(
+        recipe,
+        bindings={"camera": alt_camera, "light": alt_light, "aspect": "1:1"},
+    )
+    assert bound["variable_resolution"]["effective_bindings"]["camera"] == alt_camera
+    assert bound["variable_resolution"]["effective_bindings"]["light"] == alt_light
+    assert bound["variable_resolution"]["effective_bindings"]["aspect"] == "1:1"
+    assert bound["prompt_sha256"] != baseline["prompt_sha256"]
+    assert "1:1" in bound["compilation"]["prompt"]
+
+
+def test_cr001_unchanged_alongside_cr002():
+    recipe = load_recipe(CR001_PATH)
+    assert recipe["recipe_id"] == CR001_ID
+    assert recipe["semantic_spec"]["historical"]["packs"] == []
+    assert sha256_canonical(recipe) == (
+        "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
+    )
+    receipt = compile_recipe(recipe)
+    assert receipt["recipe"]["recipe_id"] == CR001_ID
+    assert receipt["prompt_sha256"] == (
+        "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
+    )
+
+
+def test_cr002_all_variable_combinations_stay_photographic_song():
+    recipe = load_recipe(CR002_PATH)
+    cams = recipe["variables"]["camera"]["choices"]
+    lights = recipe["variables"]["light"]["choices"]
+    aspects = recipe["variables"]["aspect"]["choices"]
+    assert len(cams) == 3 and len(lights) == 3 and len(aspects) == 2
+    for camera in cams:
+        for light in lights:
+            for aspect in aspects:
+                bound = compile_recipe(
+                    recipe, bindings={"camera": camera, "light": light, "aspect": aspect}
+                )
+                prompt = bound["compilation"]["prompt"]
+                sections = bound["compilation"]["prompt_sections"]
+                assert "era_song" in sections
+                assert "era_fragment_song" not in sections
+                assert "ink transformation" not in prompt.casefold()
+                assert "hybrids" not in sections
+                assert camera in prompt
+                assert light in prompt
+                assert aspect in prompt
+                assert "beizi" in prompt.casefold()
+                assert "corridor" in prompt.casefold()
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():
