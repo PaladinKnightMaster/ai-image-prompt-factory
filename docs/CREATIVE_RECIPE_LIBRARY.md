@@ -151,6 +151,41 @@ python -m pytest -q tests/test_creative_recipe_library.py
 | `light` | `director.light_source` | bright-field flags; dark-field luxury; dual strip + negative fill |
 | `aspect` | `output.aspect_ratio` | `4:5` (baseline), `1:1` |
 
+## Locate and validate CR-004
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-004-marble-afterimage/1.0.0.json` |
+| `recipe_id` | `cr-004-marble-afterimage` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `artifact_transform` |
+
+Research brief, source SHA, and attachment limits:
+[CR_004_MARBLE_AFTERIMAGE.md](CR_004_MARBLE_AFTERIMAGE.md).
+
+```bash
+aipf recipe validate recipes/cr-004-marble-afterimage/1.0.0.json
+aipf recipe compile recipes/cr-004-marble-afterimage/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-004
+
+- Source-backed marble sculpture transformation request and locks
+- Route `artifact_transform` with `portrait_to_volumetric_sculpture`
+- ArtMethod `marble_sculpture`; form `free_standing_statue`; state `newly_created`
+- Empty EraPack list (no Classical Greek reconstruction claim)
+- Symbolic reference `cr001-c0-l0-4x5-source` (identity/pose/outfit/hairstyle)
+- Identity `recognizable_identity`; body `artistic_stylization`
+- Aspect fixed at `4:5`
+
+### Supported variations (CR-004)
+
+| Variable key | Target | Choices |
+| --- | --- | --- |
+| `camera` | `director.camera` | baseline full-statue gallery hero; elevated plinth-top; medium-long drapery emphasis |
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
