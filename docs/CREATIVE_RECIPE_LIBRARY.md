@@ -291,6 +291,27 @@ python -m pytest -q tests/test_creative_recipe_library.py
 | --- | --- | --- |
 | `camera` | `director.camera` | baseline eye-level three-quarter vessel hero; slightly elevated shoulder-to-belly curvature wrap |
 
+## CR-008 status (blocked)
+
+| Field | Value |
+| --- | --- |
+| Proposed `recipe_id` | `cr-008-golden-fault` |
+| Proposed version | `1.0.0` |
+| Working title | Golden Fault — Localized Porcelain Repair |
+| Feasibility | **BLOCKED — LOCAL EDIT CAPABILITY GAP** |
+| Recipe path | *not implemented* |
+
+CR-008 requires source-conditioned **localized** editing of the verified CR-007
+vase (one gold-lacquer repair on the upper-right shoulder) with a credible
+outside-region preservation contract. The installed stack supports whole-image
+reference transforms and whole-image API `edit` without mask/ROI transport; it
+does not support enforceable local edit semantics. No substitute
+`artifact_transform` / `new_generation` recipe was authored.
+
+Research brief, capability matrix, material citations, deferred edit
+specification, and comparison plan:
+[CR_008_GOLDEN_FAULT.md](CR_008_GOLDEN_FAULT.md).
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
