@@ -1,0 +1,122 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-005-silk-on-plaster",
+  "recipe_version": "1.0.0",
+  "title": "CR-005 Silk on Plaster",
+  "description": "Source-backed V3.4 artifact transformation: translate the verified CR-002 Song Corridor Editorial photograph into a contemporary mineral-pigment architectural mural on prepared plaster. Uses portrait_to_architectural_mural + mineral_pigment_mural + wall_surface + newly_created. Symbolic reference roles only; binary reference packaging is out of PromptRecipe scope. Operator must supply the verified CR-002 PNG (SHA-256 a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0) as the image input at generation time. See docs/CR_005_SILK_ON_PLASTER.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-005-silk-on-plaster",
+    "request": "Transform the referenced adult fashion photograph into a contemporary commissioned mineral-pigment mural painted on a prepared plaster architectural wall inside a quiet cultural gallery. Preserve recognizable visual identity of the source adult figure, the distinguishing stance and silhouette, the restrained upswept hairstyle structure, and the layered open-front garment arrangement with major fold architecture, but translate photographic skin, hair, and silk into matte mineral-pigment fields bound to the plaster plane. The result must read as a wall-integrated mural installation—not a living model standing in front of a mural, not a framed canvas or pasted poster, not a floating image panel, and not an excavated Song-dynasty or Dunhuang cave reconstruction. Keep physically plausible plaster texture, planar perspective, surrounding architecture that establishes installation scale, and coherent gallery lighting.",
+    "route": "artifact_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "same adult fashion subject as the source reference photograph",
+      "source_reference_required": true,
+      "recognizable_source_identity_silhouette_and_wardrobe": true,
+      "mural_on_wall_not_living_person_or_framed_picture": true,
+      "painted_pigment_not_photographic_skin_or_silk": true,
+      "no_excavated_song_or_dunhuang_authenticity_claim": true,
+      "no_logo_brand_text_or_decorative_calligraphy": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr002-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-002 verified import original. SHA-256 a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0. Resolve the locally verified CR-002 original through private candidate/import evidence during operator handoff. PromptRecipe encodes symbolic roles only; the operator must attach that PNG to the later image request. The SHA identifies bytes and does not prove upload."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial structure from the source photograph",
+        "source stance and overall silhouette",
+        "restrained upswept hairstyle structure from the source",
+        "layered open-front garment arrangement and major fold architecture from the source outfit"
+      ]
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "translate living anatomy into planar mural figure proportions with readable painted contour hierarchy rather than photographic depth modeling",
+      "pose_change": "preserve the source stance as wall-bound painted figure geometry within the mural field",
+      "camera_presentation": "allowed for architectural gallery framing variants that reveal wall, corner, and floor relationship",
+      "garment_shaping": "translate layered silk garments into pigment-rendered drapery: matte color fields, brush-defined fold ridges, and overlapping planes continuous with the plaster support—not cloth physics or photographic sheen",
+      "artistic_stylization": "architectural mural painting on plaster; forbid living photographic skin, photographic silk speculars, fabric protruding from the wall, or a person standing in front of painted scenery"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary cultural-gallery mural installation",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": "mineral_pigment_mural",
+      "artifact_form": "wall_surface",
+      "artifact_state": "newly_created",
+      "variant": null
+    },
+    "transformation": {
+      "pack_id": "portrait_to_architectural_mural",
+      "source_representation": "portrait",
+      "selected_concepts": []
+    },
+    "requested_elements": [
+      "wall-integrated mineral-pigment mural of the referenced adult fashion subject",
+      "pigment-rendered layered garments translating the source open-front silhouette and major folds",
+      "painted hair mass preserving the restrained upswept structure",
+      "prepared plaster wall with readable grain interrupting painted edges",
+      "enough surrounding architecture—wall plane, corner or ceiling junction, and floor contact—to establish mural scale",
+      "quiet contemporary cultural gallery lighting without theatrical effects",
+      "no additional figures, logos, decorative calligraphy, framed canvas, floating panels, or excavated antiquity cues"
+    ],
+    "director": {
+      "moment": "a settled gallery view of a newly completed plaster-wall mural after installation",
+      "action": "the painted figure occupies the mural field in the preserved source stance; no living motion in front of the wall",
+      "gaze": "painted head orientation matching the source; pigment eyes, not a living camera stare",
+      "body_weight": "pictorial weight reads through painted stance on the wall plane; the mural shares load with the architectural support rather than standing free of the plaster",
+      "hand_logic": "hands remain painted forms following source hand positions without photographic skin detail or floating cutouts",
+      "fabric_response": "layered garments are matte mineral-pigment drapery with brush-defined folds continuous with plaster grain—painted silk language, not photographic cloth sheen or physically protruding fabric",
+      "prop_interaction": "architecture only: plaster wall, optional nearby corner or column edge, and floor plane; no handheld props",
+      "foreground": "gallery floor plane meeting the mural wall base with soft contact shadow and enough floor to show installation scale",
+      "midground": "full wall-integrated mural figure reading as one painted composition with pigment drapery and plaster interruptions",
+      "background": "continuation of the plastered architectural wall and quiet gallery negative space beyond the mural field; no framed picture rail or pasted poster edges",
+      "camera": "eye-level three-quarter architectural gallery frame revealing the mural, wall plane geometry, and floor relationship with slight subject offset",
+      "light_source": "soft directional gallery key from camera-left revealing plaster relief and matte pigment fields, gentle wall bounce fill, restrained contrast without specular hotspots or theatrical god-rays",
+      "material_response": "matte mineral pigment on prepared plaster; brush contours interrupted by plaster grain; clean newly painted finish without fake archaeological cracks, soot, or excavated loss; never photographic skin or silk sheen inside the mural field",
+      "micro_story": "a contemporary afterimage of a corridor editorial settled into plaster as commissioned wall painting"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Architectural gallery framings that keep mural-wall integration, floor contact, and source-figure readability.",
+      "choices": [
+        "eye-level three-quarter architectural gallery frame revealing the mural, wall plane geometry, and floor relationship with slight subject offset",
+        "slightly oblique three-quarter gallery frame that includes a nearby wall corner and ceiling junction to prove architectural continuity",
+        "eye-level medium-long gallery frame prioritizing pigment drapery folds and plaster grain while keeping the full mural figure readable"
+      ]
+    }
+  }
+}

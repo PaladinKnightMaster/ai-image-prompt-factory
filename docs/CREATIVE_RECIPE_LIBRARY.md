@@ -186,6 +186,41 @@ python -m pytest -q tests/test_creative_recipe_library.py
 | --- | --- | --- |
 | `camera` | `director.camera` | baseline full-statue gallery hero; elevated plinth-top; medium-long drapery emphasis |
 
+## Locate and validate CR-005
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-005-silk-on-plaster/1.0.0.json` |
+| `recipe_id` | `cr-005-silk-on-plaster` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `artifact_transform` |
+
+Research brief, source SHA, mural constraints, and attachment limits:
+[CR_005_SILK_ON_PLASTER.md](CR_005_SILK_ON_PLASTER.md).
+
+```bash
+aipf recipe validate recipes/cr-005-silk-on-plaster/1.0.0.json
+aipf recipe compile recipes/cr-005-silk-on-plaster/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-005
+
+- Source-backed mineral-pigment architectural mural transformation request and locks
+- Route `artifact_transform` with `portrait_to_architectural_mural`
+- ArtMethod `mineral_pigment_mural`; form `wall_surface`; state `newly_created`
+- Empty EraPack list (no excavated Song / Dunhuang reconstruction claim)
+- Symbolic reference `cr002-c0-l0-4x5-source` (identity/pose/outfit/hairstyle)
+- Identity `recognizable_identity`; body `artistic_stylization`
+- Aspect fixed at `4:5`
+
+### Supported variations (CR-005)
+
+| Variable key | Target | Choices |
+| --- | --- | --- |
+| `camera` | `director.camera` | baseline three-quarter mural+floor; oblique corner/ceiling continuity; medium-long pigment-drapery emphasis |
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
