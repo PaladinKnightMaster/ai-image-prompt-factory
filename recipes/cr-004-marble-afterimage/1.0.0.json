@@ -1,0 +1,125 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-004-marble-afterimage",
+  "recipe_version": "1.0.0",
+  "title": "CR-004 Marble Afterimage",
+  "description": "Source-backed V3.4 artifact transformation: translate the verified CR-001 adult fashion photograph into a contemporary museum-quality free-standing marble sculpture. Uses portrait_to_volumetric_sculpture + marble_sculpture + free_standing_statue. Symbolic reference roles only; binary reference packaging is out of PromptRecipe scope. Operator must supply the verified CR-001 PNG (SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e) as the image input at generation time. See docs/CR_004_MARBLE_AFTERIMAGE.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-004-marble-afterimage",
+    "request": "Transform the referenced adult fashion photograph into a contemporary museum-quality free-standing marble sculpture photographed in a restrained gallery. Preserve recognizable visual identity of the source adult figure, the distinguishing stance, and the gown's major draping silhouette, but translate flesh, hair, and cloth into coherent carved stone volume. The result must read as an actual sculptural object on a plinth—not a living person with a marble texture overlay, not an ancient excavated antiquity, and not a Classical Greek reconstruction. Keep one continuous marble material, physically plausible support and contact shadows, and quiet contemporary gallery lighting.",
+    "route": "artifact_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "same adult fashion subject as the source reference photograph",
+      "source_reference_required": true,
+      "recognizable_source_identity_and_silhouette": true,
+      "sculpture_object_not_living_marble_skin": true,
+      "no_ancient_excavation_or_classical_greek_claim": true,
+      "no_logo_or_brand_text": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr001-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-001 verified import original. Absolute path (operator handoff only; not model-attached by compile): D:\\1_PROJECT\\AI_Kits\\AI Image Prompt Factory\\IDEA_POOL\\AIPF_Creative_Private\\CR-GATE-005B\\cr001-c0-l0-4x5\\05_chatgpt_web_import_d_native\\original.png. SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e. PromptRecipe encodes symbolic roles only; supplying this PNG to the image model is a separate operator step."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial structure from the source photograph",
+        "source stance and overall silhouette",
+        "major gown draping architecture from the source outfit"
+      ]
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "translate living anatomy into continuous carved marble volume with stone-safe proportions and no paper-thin unsupported projections",
+      "pose_change": "preserve the source stance as weight-bearing sculptural geometry on a plinth",
+      "camera_presentation": "allowed for gallery sculpture framing variants",
+      "garment_shaping": "translate the architectural evening gown into carved drapery: ridges, troughs, overlaps, and hem weight as stone masses continuous with the figure—not cloth physics",
+      "artistic_stylization": "free-standing marble sculpture object; forbid living marble-colored skin, floating hair strands, or fabric that still behaves as textile"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary sculpture gallery installation",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": "marble_sculpture",
+      "artifact_form": "free_standing_statue",
+      "artifact_state": "newly_created",
+      "variant": null
+    },
+    "transformation": {
+      "pack_id": "portrait_to_volumetric_sculpture",
+      "source_representation": "portrait",
+      "selected_concepts": [],
+      "signature_atoms": {
+        "method.marble_sculpture": [
+          "carved planar transitions",
+          "deliberate support and termination"
+        ]
+      }
+    },
+    "requested_elements": [
+      "free-standing marble statue of the referenced adult fashion subject",
+      "carved drapery translating the source gown silhouette",
+      "sculptural hair masses continuous with stone",
+      "integrated or fitted stone plinth with load-bearing contact",
+      "restrained contemporary gallery environment",
+      "no additional figures, logos, or excavated antiquity cues"
+    ],
+    "director": {
+      "moment": "a settled museum gallery view of the finished marble statue after installation",
+      "action": "the statue stands in the preserved source stance on a stone plinth; no living motion",
+      "gaze": "sculpted head orientation matching the source; carved eyes, not a living gaze",
+      "body_weight": "primary weight on the advanced front foot as carved support; rear foot lightly grounded; plinth bears the statue with a soft contact shadow",
+      "hand_logic": "hands remain stone volumes following source hand positions without impossible thin finger projections or floating gaps",
+      "fabric_response": "gown folds are carved marble ridges and troughs continuous with the figure—stone drapery mass, not cloth drape or satin specular ribbons",
+      "prop_interaction": "statue and plinth only; no handheld props",
+      "foreground": "plinth front edge with soft contact shadow on the gallery floor plane",
+      "midground": "full free-standing marble statue reading as one coherent stone object with carved gown architecture",
+      "background": "restrained contemporary gallery wall with quiet warm-neutral negative space and no didactic labels",
+      "camera": "eye-level three-quarter full-statue gallery frame with slight subject offset, showing plinth contact and full carved gown silhouette",
+      "light_source": "soft directional museum key from camera-left revealing carved volume and drapery troughs, gentle fill from the far wall, restrained rim separating stone from the gallery wall",
+      "material_response": "crystalline marble with subtle subsurface light at thin edges; matte-to-polish hierarchy and possible fine tool marks in recesses; never waxy living skin or plastic gloss",
+      "micro_story": "a contemporary afterimage of a fashion editorial solidified into gallery stone"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Gallery sculpture framings that keep plinth contact and full-statue readability for source-preservation checks.",
+      "choices": [
+        "eye-level three-quarter full-statue gallery frame with slight subject offset, showing plinth contact and full carved gown silhouette",
+        "slightly elevated three-quarter gallery frame looking down onto plinth top plane, shoulders, and carved drapery masses",
+        "eye-level medium-long gallery frame prioritizing carved drapery troughs and stone surface finish while keeping full statue readable"
+      ]
+    }
+  }
+}
