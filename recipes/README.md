@@ -31,6 +31,11 @@ Duplicate `(recipe_id, recipe_version)` pairs across this tree are rejected by
 | Recipe ID | Version | Title | Schema |
 | --- | --- | --- | --- |
 | `cr-001-material-driven-fashion-editorial` | `1.0.0` | CR-001 Material-Driven Fashion Editorial | `1.1` |
+| `cr-002-song-corridor-editorial` | `1.0.0` | CR-002 Song Corridor Editorial | `1.1` |
+| `cr-003-refraction-ledger` | `1.0.0` | CR-003 Refraction Ledger | `1.1` |
+| `cr-004-marble-afterimage` | `1.0.0` | CR-004 Marble Afterimage | `1.1` |
+| `cr-005-silk-on-plaster` | `1.0.0` | CR-005 Silk on Plaster | `1.1` |
+| `cr-006-held-light` | `1.0.0` | CR-006 Held Light — Multi-Reference Fragrance Editorial | `1.1` |
 
 ## Validate and compile CR-001
 

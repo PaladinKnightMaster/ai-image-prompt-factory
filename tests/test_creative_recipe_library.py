@@ -43,6 +43,13 @@ CR005_VERSION = "1.0.0"
 CR005_KNOWN_RECIPE_SHA = "cfe891967c42206606b278306d8f0e16158aece2610759e8060e3ea5cf0eaf88"
 CR005_KNOWN_PROMPT_SHA = "6e3f9d6416fffc05c4e94cf81c3312a80b3564f1cd1689a54bfbe31da13984da"
 CR005_SOURCE_IMAGE_SHA = "a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0"
+CR006_PATH = RECIPES_ROOT / "cr-006-held-light" / "1.0.0.json"
+CR006_ID = "cr-006-held-light"
+CR006_VERSION = "1.0.0"
+CR006_KNOWN_RECIPE_SHA = "2222db4d21923c9ee3e2630fd2bcd4dc14808ce702d48db7588369b9d5798f51"
+CR006_KNOWN_PROMPT_SHA = "5bb47d64c127019cd89070cfcaa460401e325e46e38dbdc3d931db36e4947ec4"
+CR006_REF_A_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
+CR006_REF_B_IMAGE_SHA = "43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4"
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -748,7 +755,174 @@ def test_cr005_camera_bindings_preserve_transformation_contract():
         assert "evening gown" not in prompt.casefold()
 
 
-def test_cr001_through_cr004_locked_digests_remain_unchanged():
+def test_cr006_file_exists_and_path_matches_identity():
+    assert CR006_PATH.is_file()
+    assert CR006_PATH.parent.name == CR006_ID
+    assert CR006_PATH.stem == CR006_VERSION
+
+
+def test_cr006_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR006_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR006_ID
+    assert recipe["recipe_version"] == CR006_VERSION
+    assert RECIPE_ID_RE.fullmatch(recipe["recipe_id"])
+    assert RECIPE_VERSION_RE.fullmatch(recipe["recipe_version"])
+
+
+def test_cr006_semantic_spec_is_two_reference_fragrance_campaign():
+    recipe = load_recipe(CR006_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "new_generation"
+    assert spec["route"] != "artifact_transform"
+    assert "transformation" not in spec
+    assert spec["art"]["method"] is None
+    assert spec["historical"]["packs"] == []
+    assert spec["identity"]["mode"] == "recognizable_identity"
+    assert spec["body_transformation"]["mode"] == "presentation_only"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 2
+    assert refs[0]["id"] == "cr001-c0-l0-4x5-source"
+    assert refs[1]["id"] == "cr003-c0-l0-4x5-source"
+    assert set(refs[0]["roles"]) == {"identity", "outfit", "hairstyle"}
+    assert "pose" not in refs[0]["roles"]
+    assert "environment" not in refs[0]["roles"]
+    assert set(refs[1]["roles"]) == {"artifact"}
+    assert "environment" not in refs[1]["roles"]
+    assert set(refs[0]["roles"]).isdisjoint(set(refs[1]["roles"]))
+    notes_a = refs[0].get("notes") or ""
+    notes_b = refs[1].get("notes") or ""
+    assert CR006_REF_A_IMAGE_SHA in notes_a
+    assert CR006_REF_B_IMAGE_SHA in notes_b
+    assert "D:\\" not in notes_a and "D:\\" not in notes_b
+    assert "/Users/" not in notes_a and "/Users/" not in notes_b
+    request = spec["request"].casefold()
+    assert "fragrance" in request or "perfume" in request
+    assert "two references" in request or "fashion-subject reference" in request
+    assert "hand-held" in request or "holding" in request
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert "marble sculpture" not in blob
+    assert "mineral-pigment mural" not in blob
+    assert "song-dynasty" not in blob
+    assert "dunhuang" not in blob
+    assert "xianxia" not in blob
+    raw = CR006_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+
+
+def test_cr006_variables_follow_v11_allowlist_and_baselines():
+    recipe = load_recipe(CR006_PATH)
+    variables = recipe.get("variables") or {}
+    assert 1 <= len(variables) <= 3
+    assert set(variables) == {"camera"}
+    targets = []
+    for name, definition in variables.items():
+        assert re.fullmatch(r"^[a-z][a-z0-9_]*$", name)
+        assert definition["type"] == "enum"
+        assert definition["target"] in ALLOWED_VARIABLE_TARGETS
+        choices = definition["choices"]
+        assert 2 <= len(choices) <= 8
+        assert len(choices) == len(set(choices))
+        baseline = _nested_get(recipe["semantic_spec"], definition["target"])
+        assert baseline in choices
+        if definition["target"] == "output.aspect_ratio":
+            assert set(choices) <= ASPECT_VOCAB
+        targets.append(definition["target"])
+    assert len(targets) == len(set(targets))
+    assert len(variables["camera"]["choices"]) == 3
+
+
+def test_cr006_compiles_with_independent_reference_roles_and_ordering():
+    recipe = load_recipe(CR006_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR006_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR006_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "transformation" not in sections
+    ref_clause = sections["references"]
+    assert "cr001-c0-l0-4x5-source supplies identity, outfit, hairstyle only" in ref_clause
+    assert "cr003-c0-l0-4x5-source supplies artifact only" in ref_clause
+    assert ref_clause.index("cr001-c0-l0-4x5-source") < ref_clause.index("cr003-c0-l0-4x5-source")
+    assert "do not import unassigned" in ref_clause.casefold()
+    assert "champagne satin" in low or "satin" in low
+    assert "perfume" in low or "flacon" in low
+    assert "brushed-metal" in low or "brushed metal" in low
+    assert "limestone plinth" in low
+    assert "without importing its limestone plinth" in low
+    assert "marble" not in low
+    assert "mineral-pigment" not in low
+    assert "architectural mural" not in low
+    assert "generation" not in first
+
+
+def test_cr006_negative_reference_removal_changes_compiled_semantics():
+    recipe = load_recipe(CR006_PATH)
+    baseline = compile_recipe(recipe)
+    baseline_refs = baseline["compilation"]["prompt_sections"]["references"]
+
+    drop_a = deepcopy(recipe)
+    drop_a["semantic_spec"]["references"] = [
+        r for r in drop_a["semantic_spec"]["references"] if r["id"] != "cr001-c0-l0-4x5-source"
+    ]
+    receipt_a = compile_recipe(drop_a)
+    refs_a = receipt_a["compilation"]["prompt_sections"]["references"]
+    assert receipt_a["prompt_sha256"] != baseline["prompt_sha256"]
+    assert "cr001-c0-l0-4x5-source" not in refs_a
+    assert "cr003-c0-l0-4x5-source supplies artifact only" in refs_a
+    assert refs_a != baseline_refs
+
+    drop_b = deepcopy(recipe)
+    drop_b["semantic_spec"]["references"] = [
+        r for r in drop_b["semantic_spec"]["references"] if r["id"] != "cr003-c0-l0-4x5-source"
+    ]
+    receipt_b = compile_recipe(drop_b)
+    refs_b = receipt_b["compilation"]["prompt_sections"]["references"]
+    assert receipt_b["prompt_sha256"] != baseline["prompt_sha256"]
+    assert receipt_b["prompt_sha256"] != receipt_a["prompt_sha256"]
+    assert "cr003-c0-l0-4x5-source" not in refs_b
+    assert "cr001-c0-l0-4x5-source supplies identity, outfit, hairstyle only" in refs_b
+
+    drop_both = deepcopy(recipe)
+    drop_both["semantic_spec"]["references"] = []
+    receipt_both = compile_recipe(drop_both)
+    assert "references" not in receipt_both["compilation"]["prompt_sections"]
+    assert receipt_both["prompt_sha256"] != baseline["prompt_sha256"]
+
+
+def test_cr006_camera_bindings_preserve_two_reference_contract():
+    recipe = load_recipe(CR006_PATH)
+    cams = recipe["variables"]["camera"]["choices"]
+    assert len(cams) == 3
+    for camera in cams:
+        bound = compile_recipe(recipe, bindings={"camera": camera})
+        prompt = bound["compilation"]["prompt"]
+        sections = bound["compilation"]["prompt_sections"]
+        assert camera in prompt
+        assert "references" in sections
+        assert "transformation" not in sections
+        assert recipe["semantic_spec"]["route"] == "new_generation"
+        assert "cr001-c0-l0-4x5-source" in sections["references"]
+        assert "cr003-c0-l0-4x5-source" in sections["references"]
+        assert "architectural mural" not in prompt.casefold()
+        assert "marble sculpture" not in prompt.casefold()
+
+
+def test_cr001_through_cr005_locked_digests_remain_unchanged():
     assert sha256_canonical(load_recipe(CR001_PATH)) == CR001_KNOWN_RECIPE_SHA
     assert compile_recipe(load_recipe(CR001_PATH))["prompt_sha256"] == CR001_KNOWN_PROMPT_SHA
     assert sha256_canonical(load_recipe(CR002_PATH)) == CR002_KNOWN_RECIPE_SHA
@@ -757,6 +931,8 @@ def test_cr001_through_cr004_locked_digests_remain_unchanged():
     assert compile_recipe(load_recipe(CR003_PATH))["prompt_sha256"] == CR003_KNOWN_PROMPT_SHA
     assert sha256_canonical(load_recipe(CR004_PATH)) == CR004_KNOWN_RECIPE_SHA
     assert compile_recipe(load_recipe(CR004_PATH))["prompt_sha256"] == CR004_KNOWN_PROMPT_SHA
+    assert sha256_canonical(load_recipe(CR005_PATH)) == CR005_KNOWN_RECIPE_SHA
+    assert compile_recipe(load_recipe(CR005_PATH))["prompt_sha256"] == CR005_KNOWN_PROMPT_SHA
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():
