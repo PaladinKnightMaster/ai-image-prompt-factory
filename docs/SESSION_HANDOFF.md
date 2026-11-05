@@ -1,27 +1,27 @@
 # Session Handoff
 
 - Date: 2026-11-05
-- Canonical `main` (branch base): `293ab648e58bed5ee0eaa26ef15499c0a89d67a7`
-- Feature branch: `feat/cr-006-held-light`
-- Prior on main: CR-005 Silk on Plaster (PR #50)
+- Canonical `main` (branch base): `45ac7b99e6de72f85da0d544cf1fa4807decf926`
+- Feature branch: `feat/cr-007-porcelain-echo`
+- Prior on main: CR-006 Held Light (PR #51)
 - Stable release: V3.3 (`v3.3.0`); unchanged
 - `COMPILER_VERSION` remains `3.2.0`
-- CR-001 / CR-002 / CR-003 / CR-004 / CR-005 `1.0.0` digests unchanged; no private custody edits
+- CR-001 / CR-002 / CR-003 / CR-004 / CR-005 / CR-006 `1.0.0` digests unchanged; no private custody edits
 
 ## Change
 
-CR-006: Held Light PromptRecipe — two-reference `new_generation` fragrance
-campaign composing CR-001 fashion subject (`identity`/`outfit`/`hairstyle`) with
-CR-003 perfume flacon (`artifact`). Pose intentionally unassigned on Ref A;
-environment/plinth unassigned on Ref B. Symbolic references + source SHAs only;
-no host-absolute private paths. No image generation.
+CR-007: Porcelain Echo PromptRecipe — source-backed `artifact_transform`
+(`portrait_to_decorated_artifact` + `blue_white_ceramic` + `vase` +
+`newly_created`, selected `ceramic.porcelain_body`) translating CR-002 into
+contemporary cobalt underglaze figurative decoration on a free-standing porcelain
+vase. Symbolic reference + source SHA only; no host-absolute private paths. No
+image generation.
 
-## Digests (CR-006 `1.0.0`)
+## Digests (CR-007 `1.0.0`)
 
-- Recipe SHA-256: `2222db4d21923c9ee3e2630fd2bcd4dc14808ce702d48db7588369b9d5798f51`
-- Baseline prompt SHA-256: `5bb47d64c127019cd89070cfcaa460401e325e46e38dbdc3d931db36e4947ec4`
-- Ref A (CR-001) SHA-256: `0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e`
-- Ref B (CR-003) SHA-256: `43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4`
+- Recipe SHA-256: `6af6a0756b344d45a4281e882280f593bd3ffed09b54d9be7b0f86ceb14c3b42`
+- Baseline prompt SHA-256: `ae067b7b1d6c1b1877cdd1b4f9d39d5ab0e6bc861611178b0c47b68fca4138eb`
+- Source (CR-002) SHA-256: `a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0`
 
 ## Validation
 
@@ -30,7 +30,7 @@ no host-absolute private paths. No image generation.
 
 ## Next task
 
-Owner review of CR-006 PR. Do not merge without approval. Do not prepare or
-generate campaign images without separate authorization (must attach both
-verified CR-001 and CR-003 PNGs plus the exact CR-006 prompt). No private
-gallery sixth card without separate authorization.
+Owner review of CR-007 PR. Do not merge without approval. Do not prepare or
+generate ceramic images without separate authorization (must attach verified
+CR-002 PNG plus the exact CR-007 prompt in the same request). No private gallery
+seventh card without separate authorization.
