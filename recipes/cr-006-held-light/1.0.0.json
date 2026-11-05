@@ -1,0 +1,128 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-006-held-light",
+  "recipe_version": "1.0.0",
+  "title": "CR-006 Held Light — Multi-Reference Fragrance Editorial",
+  "description": "Two-reference contemporary luxury fragrance campaign photograph: recognizable CR-001 fashion subject holding the CR-003 faceted perfume flacon in one coherent editorial exposure. Symbolic references only; operator must attach both verified PNGs at generation time. See docs/CR_006_HELD_LIGHT.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-006-held-light",
+    "request": "Create a contemporary unbranded luxury fragrance campaign photograph that combines two references into one coherent editorial exposure: the recognizable adult fashion subject from the fashion-subject reference and the faceted transparent perfume flacon from the product-artifact reference. Show a three-quarter fashion portrait with enough gown construction visible, the model naturally holding or presenting one perfume bottle at a believable hand-held flacon scale so glass facets and the brushed-metal cap remain clearly readable. Preserve facial appearance, hair styling, and champagne satin gown identity from the fashion-subject reference while allowing arm and hand positioning to adapt for secure product contact. Preserve flacon silhouette, facet planes, transparent optical glass, and cap-to-bottle geometry from the product-artifact reference without importing its limestone plinth or still-life studio set. Soft controlled editorial lighting must serve satin, skin, glass, and brushed metal together under shared perspective and shadows. No logos, brand names, invented lettering, oversized advertising bottle, floating product, fused glass-into-skin, extra hands, or pasted multi-image collage.",
+    "route": "new_generation",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "single adult fashion subject from the fashion-subject reference",
+      "two_source_references_required": true,
+      "fashion_subject_reference_governs_face_hair_gown": true,
+      "product_artifact_reference_governs_flacon_shape_facets_cap": true,
+      "pose_may_adapt_for_hand_held_product": true,
+      "plausible_hand_held_perfume_flacon_scale": true,
+      "no_limestone_plinth_as_product_geometry": true,
+      "no_logo_brand_text_or_invented_lettering": true,
+      "no_giant_advertising_bottle": true,
+      "single_coherent_exposure_not_collage": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr001-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-001 verified original. SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e. Resolve the locally verified CR-001 original through private candidate/import evidence during operator handoff. Supplies fashion-subject identity, champagne satin gown construction, and gathered updo only. Pose is intentionally unassigned so arms and hands may adapt for holding the flacon. PromptRecipe encodes symbolic roles only; the operator must attach that PNG as reference A. The SHA identifies bytes and does not prove upload."
+      },
+      {
+        "id": "cr003-c0-l0-4x5-source",
+        "roles": [
+          "artifact"
+        ],
+        "notes": "Authoritative private CR-003 verified import original. SHA-256 43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4. Resolve the locally verified CR-003 original through private candidate/import evidence during operator handoff. Supplies perfume-flacon object form, facet construction, transparent glass, and brushed-metal cap only. Environment/plinth roles are intentionally unassigned so the limestone plinth and CR-003 still-life set do not transfer. PromptRecipe encodes symbolic roles only; the operator must attach that PNG as reference B. The SHA identifies bytes and does not prove upload."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial appearance from the fashion-subject reference",
+        "hair color with gathered updo and framing strands from the fashion-subject reference",
+        "champagne satin gown with cowl neckline, structured fitted bodice, and major drapery features from the fashion-subject reference",
+        "faceted transparent glass perfume-flacon silhouette and brushed-metal cap geometry from the product-artifact reference"
+      ]
+    },
+    "body_transformation": {
+      "mode": "presentation_only",
+      "anatomy_change": "none; preserve natural adult proportions without idealizing measurements",
+      "pose_change": "allowed and expected for natural hand-to-flacon interaction; source arm positions need not be copied when they conflict with secure product grip",
+      "camera_presentation": "allowed for campaign framing variants that keep face, gown construction, and held flacon readable",
+      "garment_shaping": "preserve champagne satin gown identity: cowl neckline, structured fitted bodice, and major drapery architecture; cloth may respond to the new arm gesture without redesigning the gown",
+      "artistic_stylization": "none; keep a single photographic campaign exposure with shared lighting across skin, satin, glass, and metal"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary luxury fragrance campaign editorial",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "requested_elements": [
+      "recognizable adult fashion subject from the fashion-subject reference",
+      "champagne satin gown with cowl neckline and structured bodice drapery",
+      "gathered updo with framing strands",
+      "one hand-held faceted transparent perfume flacon with brushed-metal cap at plausible personal-product scale",
+      "readable glass facet planes and cap-to-bottle geometry without brand lettering",
+      "physically believable hand-to-object contact without floating product, fused glass, or malformed fingers",
+      "soft controlled editorial lighting shared across skin, satin, glass, and metal",
+      "warm-neutral or restrained architectural studio environment",
+      "single coherent photographic exposure rather than a collage of two source frames"
+    ],
+    "director": {
+      "moment": "a quiet settled fragrance-campaign beat after the model lifts the flacon into presentation, cloth and hands already resolved",
+      "action": "standing or lightly poised three-quarter fashion stance while one hand securely holds or presents the perfume flacon near the torso; the free hand may rest naturally without competing props",
+      "gaze": "toward camera with calm unsmiling editorial focus appropriate to luxury fragrance advertising",
+      "body_weight": "stable three-quarter fashion balance; torso upright enough to keep bodice architecture readable while the holding arm supports the flacon without strain",
+      "hand_logic": "exact source hand poses are not required; fingers wrap the flacon neck or lower body with believable contact pressure, no extra fingers, no glass fused into skin or satin, and no floating bottle",
+      "fabric_response": "champagne satin shows continuous specular ribbons along fold crowns and cowl drapery; cloth may shift slightly with the holding gesture while preserving gown construction identity",
+      "prop_interaction": "exactly one perfume flacon from the product-artifact reference, held at hand-scale rather than oversized advertising-object scale; no limestone plinth, no second bottle, no brand tags",
+      "foreground": "held flacon readable in front of or beside the bodice with soft contact cues at the fingers and a narrow studio floor or architectural plane if visible",
+      "midground": "fashion subject and gown reading as one vertical editorial figure integrated with the held product under shared perspective",
+      "background": "warm-neutral restrained architectural studio or quiet cyclorama with controlled negative space; do not import the CR-003 limestone plinth set as scene geometry",
+      "camera": "eye-level three-quarter fashion-campaign frame showing face, cowl and bodice construction, and the held flacon with clear facet and cap readability",
+      "light_source": "soft directional editorial key from camera-left at chest height with gentle fill, plus restrained graduated reflections that define glass facet edges and brushed-metal cap grain without uncontrolled glare washing the facets; satin, skin, glass, and metal share one coherent lighting logic",
+      "material_response": "satin directional specular ribbons; matte-to-soft skin; transparent faceted glass with readable thickness and controlled edge definition rather than opaque crystal; brushed-metal cap with elongated grain highlights rather than polished chrome blowouts; shared shadows and perspective across person and product",
+      "micro_story": "held light—a quiet unbranded fragrance campaign certainty in one photographic breath"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Campaign framings that keep face, gown construction, and held flacon readable in one coherent exposure.",
+      "choices": [
+        "eye-level three-quarter fashion-campaign frame showing face, cowl and bodice construction, and the held flacon with clear facet and cap readability",
+        "eye-level slightly closer mid-length frame prioritizing facial likeness, cowl neckline, and hand-held flacon while keeping major bodice drapery readable",
+        "slightly low three-quarter campaign frame emphasizing vertical gown architecture with the flacon held near mid-torso still fully legible"
+      ]
+    }
+  }
+}

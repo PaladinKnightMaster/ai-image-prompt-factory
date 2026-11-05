@@ -221,6 +221,41 @@ python -m pytest -q tests/test_creative_recipe_library.py
 | --- | --- | --- |
 | `camera` | `director.camera` | baseline three-quarter mural+floor; oblique corner/ceiling continuity; medium-long pigment-drapery emphasis |
 
+## Locate and validate CR-006
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-006-held-light/1.0.0.json` |
+| `recipe_id` | `cr-006-held-light` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `new_generation` |
+
+Research brief, dual source SHAs, role architecture, and two-image attachment limits:
+[CR_006_HELD_LIGHT.md](CR_006_HELD_LIGHT.md).
+
+```bash
+aipf recipe validate recipes/cr-006-held-light/1.0.0.json
+aipf recipe compile recipes/cr-006-held-light/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-006
+
+- Two-reference luxury fragrance campaign request and locks
+- Route `new_generation` (new photographic campaign scene; not medium transform)
+- Empty EraPack list; `art.method` / form / state all `null`
+- Symbolic reference A `cr001-c0-l0-4x5-source` (`identity`, `outfit`, `hairstyle`)
+- Symbolic reference B `cr003-c0-l0-4x5-source` (`artifact` only; no environment/plinth)
+- Identity `recognizable_identity`; body `presentation_only` with pose adaptation for grip
+- Aspect fixed at `4:5`
+
+### Supported variations (CR-006)
+
+| Variable key | Target | Choices |
+| --- | --- | --- |
+| `camera` | `director.camera` | baseline three-quarter campaign; closer mid-length face+flacon; slightly low vertical gown with mid-torso flacon |
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
