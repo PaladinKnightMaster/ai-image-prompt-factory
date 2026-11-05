@@ -1,36 +1,45 @@
 # Session Handoff
 
 - Date: 2026-11-05
-- Canonical `main` (branch base): `45ac7b99e6de72f85da0d544cf1fa4807decf926`
-- Feature branch: `feat/cr-007-porcelain-echo`
-- Prior on main: CR-006 Held Light (PR #51)
+- Canonical `main` (verified HEAD): `6c4ccbde8d93ff7f09dbbf02ea41691db7efd555`
+- Feature branch: `feat/cr-008-golden-fault-feasibility`
+- Prior on main: CR-007 Porcelain Echo (PR #52)
 - Stable release: V3.3 (`v3.3.0`); unchanged
 - `COMPILER_VERSION` remains `3.2.0`
-- CR-001 / CR-002 / CR-003 / CR-004 / CR-005 / CR-006 `1.0.0` digests unchanged; no private custody edits
+- CR-001 through CR-007 `1.0.0` digests unchanged; no private custody edits
 
 ## Change
 
-CR-007: Porcelain Echo PromptRecipe — source-backed `artifact_transform`
-(`portrait_to_decorated_artifact` + `blue_white_ceramic` + `vase` +
-`newly_created`, selected `ceramic.porcelain_body`) translating CR-002 into
-contemporary cobalt underglaze figurative decoration on a free-standing porcelain
-vase. Symbolic reference + source SHA only; no host-absolute private paths. No
-image generation.
+CR-008 Golden Fault feasibility research only. Audited PromptRecipe schema,
+routes, reference roles, Transformation/ArtMethod packs, artifact states,
+compiler, generation adapter, and `generate_api` for source-conditioned
+**localized** image editing. Verdict: **BLOCKED — LOCAL EDIT CAPABILITY GAP**.
+No recipe implemented. No image generation/editing. No private prep/custody.
+No compiler/schema/route/pack expansion.
 
-## Digests (CR-007 `1.0.0`)
+Docs: `docs/CR_008_GOLDEN_FAULT.md`; library status note in
+`docs/CREATIVE_RECIPE_LIBRARY.md`.
 
-- Recipe SHA-256: `6af6a0756b344d45a4281e882280f593bd3ffed09b54d9be7b0f86ceb14c3b42`
-- Baseline prompt SHA-256: `ae067b7b1d6c1b1877cdd1b4f9d39d5ab0e6bc861611178b0c47b68fca4138eb`
-- Source (CR-002) SHA-256: `a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0`
+## Source check (edit target candidate)
+
+- CR-007 import original SHA-256:
+  `15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97`
+- Dimensions 1122×1402; 2,050,051 bytes — verified; bytes untouched
+
+## Digests (CR-008)
+
+- Recipe SHA-256: *n/a — not implemented*
+- Baseline prompt SHA-256: *n/a — not implemented*
 
 ## Validation
 
-- Focused: `tests/test_creative_recipe_library.py`
-- Full pytest / `validate_repo.py` — see PR checks
+- Focused digest lock: `tests/test_creative_recipe_library.py` CR-001–CR-007
+- Full pytest / `validate_repo.py` — see PR checks if opened
 
 ## Next task
 
-Owner review of CR-007 PR. Do not merge without approval. Do not prepare or
-generate ceramic images without separate authorization (must attach verified
-CR-002 PNG plus the exact CR-007 prompt in the same request). No private gallery
-seventh card without separate authorization.
+Owner review of CR-008 feasibility stop. Do **not** implement a substitute
+whole-image recipe. Do not generate or edit images without (1) a supported
+local-edit contract and (2) separate authorization. Smallest gap: semantic
+edit-region + outside-region preservation **and** mask/localized transport —
+expansion not authorized in this milestone.
