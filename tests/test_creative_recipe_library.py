@@ -50,6 +50,12 @@ CR006_KNOWN_RECIPE_SHA = "2222db4d21923c9ee3e2630fd2bcd4dc14808ce702d48db7588369
 CR006_KNOWN_PROMPT_SHA = "5bb47d64c127019cd89070cfcaa460401e325e46e38dbdc3d931db36e4947ec4"
 CR006_REF_A_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
 CR006_REF_B_IMAGE_SHA = "43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4"
+CR007_PATH = RECIPES_ROOT / "cr-007-porcelain-echo" / "1.0.0.json"
+CR007_ID = "cr-007-porcelain-echo"
+CR007_VERSION = "1.0.0"
+CR007_KNOWN_RECIPE_SHA = "6af6a0756b344d45a4281e882280f593bd3ffed09b54d9be7b0f86ceb14c3b42"
+CR007_KNOWN_PROMPT_SHA = "ae067b7b1d6c1b1877cdd1b4f9d39d5ab0e6bc861611178b0c47b68fca4138eb"
+CR007_SOURCE_IMAGE_SHA = "a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0"
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -922,7 +928,151 @@ def test_cr006_camera_bindings_preserve_two_reference_contract():
         assert "marble sculpture" not in prompt.casefold()
 
 
-def test_cr001_through_cr005_locked_digests_remain_unchanged():
+def test_cr007_file_exists_and_path_matches_identity():
+    assert CR007_PATH.is_file()
+    assert CR007_PATH.parent.name == CR007_ID
+    assert CR007_PATH.stem == CR007_VERSION
+
+
+def test_cr007_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR007_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR007_ID
+    assert recipe["recipe_version"] == CR007_VERSION
+    assert RECIPE_ID_RE.fullmatch(recipe["recipe_id"])
+    assert RECIPE_VERSION_RE.fullmatch(recipe["recipe_version"])
+
+
+def test_cr007_semantic_spec_is_source_backed_decorated_artifact_transformation():
+    recipe = load_recipe(CR007_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "artifact_transform"
+    assert spec["route"] != "new_generation"
+    assert spec["transformation"]["pack_id"] == "portrait_to_decorated_artifact"
+    assert spec["transformation"]["source_representation"] == "portrait"
+    assert "ceramic.porcelain_body" in spec["transformation"]["selected_concepts"]
+    assert spec["art"]["method"] == "blue_white_ceramic"
+    assert spec["art"]["artifact_form"] == "vase"
+    assert spec["art"]["artifact_state"] == "newly_created"
+    assert spec["historical"]["packs"] == []
+    assert spec["identity"]["mode"] == "recognizable_identity"
+    assert spec["body_transformation"]["mode"] == "artistic_stylization"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 1
+    assert refs[0]["id"] == "cr002-c0-l0-4x5-source"
+    assert set(refs[0]["roles"]) == {"identity", "pose", "outfit", "hairstyle"}
+    assert "environment" not in refs[0]["roles"]
+    notes = refs[0].get("notes") or ""
+    assert CR007_SOURCE_IMAGE_SHA in notes
+    assert "D:\\" not in notes
+    assert "/Users/" not in notes
+    request = spec["request"].casefold()
+    assert "porcelain" in request or "ceramic" in request
+    assert "vase" in request
+    assert "underglaze" in request or "cobalt" in request
+    assert "photograph" in request or "source" in request
+    assert "not present the object as an authenticated song-dynasty artifact" in request
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert "perfume flacon" not in blob
+    assert "evening gown" not in blob
+    assert "marble sculpture" not in blob
+    assert "mineral-pigment mural" not in blob
+    assert "fragrance" not in blob
+    assert "xianxia" not in blob
+    raw = CR007_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+
+
+def test_cr007_variables_follow_v11_allowlist_and_baselines():
+    recipe = load_recipe(CR007_PATH)
+    variables = recipe.get("variables") or {}
+    assert 1 <= len(variables) <= 3
+    assert set(variables) == {"camera"}
+    targets = []
+    for name, definition in variables.items():
+        assert re.fullmatch(r"^[a-z][a-z0-9_]*$", name)
+        assert definition["type"] == "enum"
+        assert definition["target"] in ALLOWED_VARIABLE_TARGETS
+        choices = definition["choices"]
+        assert 2 <= len(choices) <= 8
+        assert len(choices) == len(set(choices))
+        baseline = _nested_get(recipe["semantic_spec"], definition["target"])
+        assert baseline in choices
+        if definition["target"] == "output.aspect_ratio":
+            assert set(choices) <= ASPECT_VOCAB
+        targets.append(definition["target"])
+    assert len(targets) == len(set(targets))
+    assert len(variables["camera"]["choices"]) == 2
+
+
+def test_cr007_compiles_as_decorated_artifact_transformation_not_new_generation():
+    recipe = load_recipe(CR007_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR007_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR007_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "transformation" in sections
+    assert "artifact_form" in sections
+    assert "artifact_state" in sections
+    assert "decorated_artifact" in prompt
+    assert "blue" in low or "cobalt" in low
+    assert "porcelain" in low or "ceramic" in low
+    assert "vase" in low
+    assert "underglaze" in low or "glaze" in low
+    assert "cr002-c0-l0-4x5-source" in prompt
+    assert "authenticated song-dynasty artifact" in low
+    assert "evening gown" not in low
+    assert "perfume flacon" not in low
+    assert "marble" not in low
+    assert "mural" not in low
+    assert "fragrance" not in low
+    assert "generation" not in first
+    # Negative: dropping transformation silently changes the contract away from decorated-artifact transform.
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["route"] = "new_generation"
+    del mutated["semantic_spec"]["transformation"]
+    mutated_receipt = compile_recipe(mutated)
+    mutated_sections = mutated_receipt["compilation"]["prompt_sections"]
+    assert "transformation" not in mutated_sections
+    assert mutated_receipt["prompt_sha256"] != first["prompt_sha256"]
+    assert "decorated_artifact" not in mutated_receipt["compilation"]["prompt"]
+
+
+def test_cr007_camera_bindings_preserve_transformation_contract():
+    recipe = load_recipe(CR007_PATH)
+    cams = recipe["variables"]["camera"]["choices"]
+    assert len(cams) == 2
+    for camera in cams:
+        bound = compile_recipe(recipe, bindings={"camera": camera})
+        prompt = bound["compilation"]["prompt"]
+        sections = bound["compilation"]["prompt_sections"]
+        assert camera in prompt
+        assert "transformation" in sections
+        assert "references" in sections
+        assert recipe["semantic_spec"]["route"] == "artifact_transform"
+        assert "decorated_artifact" in prompt
+        assert "perfume flacon" not in prompt.casefold()
+        assert "evening gown" not in prompt.casefold()
+        assert "marble" not in prompt.casefold()
+        assert "mural" not in prompt.casefold()
+
+
+def test_cr001_through_cr006_locked_digests_remain_unchanged():
     assert sha256_canonical(load_recipe(CR001_PATH)) == CR001_KNOWN_RECIPE_SHA
     assert compile_recipe(load_recipe(CR001_PATH))["prompt_sha256"] == CR001_KNOWN_PROMPT_SHA
     assert sha256_canonical(load_recipe(CR002_PATH)) == CR002_KNOWN_RECIPE_SHA
@@ -933,6 +1083,8 @@ def test_cr001_through_cr005_locked_digests_remain_unchanged():
     assert compile_recipe(load_recipe(CR004_PATH))["prompt_sha256"] == CR004_KNOWN_PROMPT_SHA
     assert sha256_canonical(load_recipe(CR005_PATH)) == CR005_KNOWN_RECIPE_SHA
     assert compile_recipe(load_recipe(CR005_PATH))["prompt_sha256"] == CR005_KNOWN_PROMPT_SHA
+    assert sha256_canonical(load_recipe(CR006_PATH)) == CR006_KNOWN_RECIPE_SHA
+    assert compile_recipe(load_recipe(CR006_PATH))["prompt_sha256"] == CR006_KNOWN_PROMPT_SHA
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():

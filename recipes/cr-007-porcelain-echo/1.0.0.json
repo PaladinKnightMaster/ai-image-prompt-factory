@@ -1,0 +1,125 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-007-porcelain-echo",
+  "recipe_version": "1.0.0",
+  "title": "CR-007 Porcelain Echo",
+  "description": "Source-backed V3.4 artifact transformation: translate the verified CR-002 Song Corridor Editorial photograph into contemporary handcrafted porcelain vessel decoration with recognizable figurative underglaze painting. Uses portrait_to_decorated_artifact + blue_white_ceramic + vase + newly_created. Symbolic reference roles only; binary reference packaging is out of PromptRecipe scope. Operator must supply the verified CR-002 PNG (SHA-256 a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0) as the image input at generation time. See docs/CR_007_PORCELAIN_ECHO.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-007-porcelain-echo",
+    "request": "Transform the referenced adult fashion photograph into cobalt underglaze figurative decoration physically integrated with one contemporary free-standing porcelain vase, photographed in a controlled gallery or product-photography setting. Preserve recognizable visual identity of the source adult figure: general facial structure and gaze orientation, restrained upswept hairstyle with floral hair ornament, layered pale clothing arrangement and major sleeve/drapery relationships, and the distinctive silhouette—translated into brush-painted ceramic design rather than a living person. The decoration must wrap the vessel's curved surface across neck, shoulder, and belly zones with foreshortening that respects three-dimensional geometry. The result must read as one finished ceramic art vessel—not a flat portrait, framed painting, poster, free-standing stone figure, wall painting installation, living figure standing beside or inside the vase, or a rectangular photo pasted onto ceramic. Do not present the object as an authenticated Song-dynasty artifact, excavated antiquity, or branded commercial product. Keep a pale ivory porcelain body, cobalt indigo underglaze with reserved white ground, thin transparent glaze whose specular highlights sit above the painted pigment, a believable rim opening and foot, coherent base contact, and quiet studio lighting.",
+    "route": "artifact_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "same adult fashion subject as the source reference photograph",
+      "source_reference_required": true,
+      "recognizable_source_identity_hairstyle_and_wardrobe_silhouette": true,
+      "painted_decoration_on_vessel_not_living_person_or_flat_portrait": true,
+      "curvature_aware_underglaze_not_photo_decal": true,
+      "no_authenticated_song_dynasty_or_excavated_antiquity_claim": true,
+      "no_logo_brand_text_dynasty_mark_or_maker_inscription": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr002-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-002 verified import original. SHA-256 a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0. Resolve the locally verified CR-002 original through private candidate/import evidence during operator handoff. PromptRecipe encodes symbolic roles only; the operator must attach that PNG to the later image request. The SHA identifies bytes and does not prove upload."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial structure and gaze orientation from the source photograph",
+        "restrained upswept hairstyle structure with floral hair ornament from the source",
+        "layered pale clothing arrangement and major sleeve/drapery relationships from the source outfit",
+        "distinctive overall silhouette readable after ceramic stylization"
+      ]
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "translate living anatomy into brush-painted underglaze figure proportions with simplified contour hierarchy suited to a curved ceramic field rather than photographic depth modeling",
+      "pose_change": "recompose the source stance into a vessel-zone decoration layout that remains recognizable without demanding exact photographic pose preservation when curvature requires adaptation",
+      "camera_presentation": "allowed for product-photography framings that reveal vessel volume, rim, foot, and curvature-aware decoration wrap",
+      "garment_shaping": "translate layered pale garments into cobalt underglaze drapery: brush-density variation, reserved white ground, and fold relationships continuous with the vessel surface—not cloth physics or photographic sheen",
+      "artistic_stylization": "figurative underglaze decoration fused beneath transparent glaze on a free-standing porcelain vase; forbid living photographic skin, a person standing beside or inside the vessel, flat photo decals, carved-stone figure language, or wall-painting installation language"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary studio porcelain art vessel in gallery product photography",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": "blue_white_ceramic",
+      "artifact_form": "vase",
+      "artifact_state": "newly_created",
+      "variant": "contemporary studio porcelain with cobalt underglaze figurative decoration; not a Ming Jingdezhen court copy and not an authenticated Song artifact"
+    },
+    "transformation": {
+      "pack_id": "portrait_to_decorated_artifact",
+      "source_representation": "portrait",
+      "selected_concepts": [
+        "ceramic.porcelain_body"
+      ]
+    },
+    "requested_elements": [
+      "one free-standing contemporary porcelain vase with pale ivory body",
+      "recognizable figurative cobalt underglaze portrait motif derived from the source adult fashion subject",
+      "brush-painted hairstyle preserving upswept structure and floral ornament",
+      "layered garment and sleeve relationships translated into underglaze drapery",
+      "decoration wrapping neck, shoulder, and belly zones with curvature-aware foreshortening",
+      "believable rim opening, foot ring, and coherent base contact on a quiet surface",
+      "thin transparent glaze with hard specular highlights distinct from painted pigment",
+      "controlled gallery or product-photography three-quarter view",
+      "no additional figures, logos, dynasty marks, maker inscriptions, carved-stone figure cues, or wall-painting installation cues"
+    ],
+    "director": {
+      "moment": "a settled studio or gallery product view of one finished decorated porcelain vase after firing and glazing",
+      "action": "the painted figure occupies the vessel's decorative field as underglaze motif only; no living motion beside or inside the vase",
+      "gaze": "painted head orientation matching the source; cobalt brush eyes, not a living camera stare",
+      "body_weight": "pictorial weight reads through painted stance on the curved ceramic surface; the physical vessel rests on its foot with soft contact shadow",
+      "hand_logic": "hands remain simplified painted forms only if they fit the vessel field cleanly; omit rather than float detached limbs",
+      "fabric_response": "layered garments are cobalt underglaze drapery with brush-density variation continuous with glaze and porcelain body—painted ceramic language, not photographic silk sheen or cloth protruding from the surface",
+      "prop_interaction": "vessel only: porcelain vase standing free on a quiet surface; no handheld props and no second figure",
+      "foreground": "foot ring and soft contact shadow on a neutral studio or gallery surface plane",
+      "midground": "full free-standing porcelain vase reading as one volumetric object with curvature-wrapped figurative underglaze on belly and shoulder",
+      "background": "restrained neutral gallery or product-photography negative space with no didactic labels, display-case clutter, or painted wall installations behind the vessel",
+      "camera": "eye-level three-quarter product hero showing rim opening, neck, shoulder, belly curvature, foot, and enough side plane to prove a true volumetric vessel",
+      "light_source": "soft directional studio key from camera-left revealing ceramic volume and glaze speculars distinct from underglaze pigment, gentle fill, restrained contrast without plastic hotspots or theatrical god-rays",
+      "material_response": "pale ivory porcelain body; cobalt indigo underglaze fused beneath thin transparent glaze; reserved white ground between brush motifs; hard glaze highlights sit above painted pigment; foot or rim may reveal body; never vinyl-like decoration above glaze, photographic skin inside the motif, or identical treatment of pigment and glaze as one material",
+      "micro_story": "a contemporary afterimage of a corridor editorial settled into handcrafted porcelain as painted vessel decoration"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Product-photography framings that keep vessel volume, rim/foot readability, and source-figure decoration fidelity.",
+      "choices": [
+        "eye-level three-quarter product hero showing rim opening, neck, shoulder, belly curvature, foot, and enough side plane to prove a true volumetric vessel",
+        "slightly elevated three-quarter product frame looking down onto shoulder-to-belly curvature and underglaze wrap while keeping rim and foot readable"
+      ]
+    }
+  }
+}

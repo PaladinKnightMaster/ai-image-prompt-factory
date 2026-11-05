@@ -256,6 +256,41 @@ python -m pytest -q tests/test_creative_recipe_library.py
 | --- | --- | --- |
 | `camera` | `director.camera` | baseline three-quarter campaign; closer mid-length face+flacon; slightly low vertical gown with mid-torso flacon |
 
+## Locate and validate CR-007
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-007-porcelain-echo/1.0.0.json` |
+| `recipe_id` | `cr-007-porcelain-echo` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `artifact_transform` |
+
+Research brief, source SHA, ceramic constraints, and attachment limits:
+[CR_007_PORCELAIN_ECHO.md](CR_007_PORCELAIN_ECHO.md).
+
+```bash
+aipf recipe validate recipes/cr-007-porcelain-echo/1.0.0.json
+aipf recipe compile recipes/cr-007-porcelain-echo/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-007
+
+- Source-backed porcelain decorated-artifact transformation request and locks
+- Route `artifact_transform` with `portrait_to_decorated_artifact`
+- ArtMethod `blue_white_ceramic`; form `vase`; state `newly_created`
+- Selected concept `ceramic.porcelain_body`; empty EraPack list (no Song authenticity / Ming court copy claim)
+- Symbolic reference `cr002-c0-l0-4x5-source` (identity/pose/outfit/hairstyle)
+- Identity `recognizable_identity`; body `artistic_stylization`
+- Aspect fixed at `4:5`
+
+### Supported variations (CR-007)
+
+| Variable key | Target | Choices |
+| --- | --- | --- |
+| `camera` | `director.camera` | baseline eye-level three-quarter vessel hero; slightly elevated shoulder-to-belly curvature wrap |
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
