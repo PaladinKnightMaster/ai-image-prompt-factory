@@ -312,6 +312,42 @@ Research brief, capability matrix, material citations, deferred edit
 specification, and comparison plan:
 [CR_008_GOLDEN_FAULT.md](CR_008_GOLDEN_FAULT.md).
 
+CR-008 remains research-only and **implementation blocked**. It is not a
+completed generated recipe and does not add a gallery card.
+
+## Locate and validate CR-009
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-009-golden-seam/1.0.0.json` |
+| `recipe_id` | `cr-009-golden-seam` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `reference_transform` |
+
+Whole-image revision (not localized edit) of verified CR-007 porcelain:
+[CR_009_GOLDEN_SEAM.md](CR_009_GOLDEN_SEAM.md). Does **not** resolve CR-008.
+
+```bash
+aipf recipe validate recipes/cr-009-golden-seam/1.0.0.json
+aipf recipe compile recipes/cr-009-golden-seam/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-009
+
+- Source-conditioned whole-image revision request and locks
+- Route `reference_transform` (no TransformationPack; not `artifact_transform`)
+- `art.method` / form / state all `null` (photographic revision, not medium remake)
+- Symbolic reference `cr007-c0-4x5-source` (identity/artifact/environment/layout/palette)
+- Identity `recognizable_identity`; body `preserve`
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline camera)
+- Explicit non-claims: no mask/ROI, no pixel-exact outside-region preservation
+
+### Supported variations (CR-009)
+
+None in `1.0.0` — single baseline framing only.
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to

@@ -1,0 +1,114 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-009-golden-seam",
+  "recipe_version": "1.0.0",
+  "title": "CR-009 Golden Seam — Controlled Whole-Image Revision",
+  "description": "Source-conditioned whole-image revision of the verified CR-007 Porcelain Echo photograph: revise the attached existing vase image by adding one restrained gold-lacquer repair seam on the visible upper-right shoulder while semantically prioritizing preservation of silhouette, cobalt portrait decoration, motifs, camera, lighting, and studio background. Uses installed route reference_transform with symbolic roles only; no TransformationPack, no mask/ROI fields, and no claim of pixel-exact outside-region preservation. Operator must supply the verified CR-007 PNG (SHA-256 15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97) as the image to edit at generation time. Distinct from blocked CR-008 localized editing. See docs/CR_009_GOLDEN_SEAM.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-009-golden-seam",
+    "request": "Edit the attached existing photograph of one free-standing blue-and-white porcelain vase—do not invent an unrelated new vase or a different composition. Revise that same product photograph by adding one narrow, irregular gold-lacquer repair seam on the visible upper-right shoulder of the vessel (viewer’s right), away from the painted figure’s face. Treat the seam as a fictional contemporary lacquer join finished with restrained metallic gold powder following the vessel curvature—not floating ornament, not a decorative gold network, and not extensive gilding. Optionally allow one short secondary branch only if fracture geometry clearly justifies it. Keep the result a recognizable whole-image revision of the attached source: preserve the original vase silhouette, rim opening, neck, shoulders, belly curvature, foot, and contact shadow; preserve the cobalt underglaze portrait (facial profile, upswept hair with floral ornament, layered painted garments), floral motifs, and existing corridor-style architectural decoration already present on the vessel; preserve the quiet studio background, soft directional lighting, camera framing, perspective, and 4:5 composition as closely as a whole-image edit without masks allows. Do not redesign the figure, repaint the cobalt decoration wholesale, introduce additional cracks or chips elsewhere, change the porcelain into marble/metal/glass, add logos, text, dynasty marks, or decorative gold borders. This is semantic preservation guidance for a whole-image edit, not a pixel-exact or masked local edit.",
+    "route": "reference_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "the same free-standing porcelain vase photographed in the attached CR-007 source image",
+      "source_reference_required": true,
+      "existing_image_edit_not_unrelated_new_generation": true,
+      "whole_image_revision_without_mask_or_roi": true,
+      "single_restrained_gold_lacquer_repair_seam": true,
+      "upper_right_shoulder_semantic_target_not_enforceable_region": true,
+      "preserve_vessel_silhouette_rim_neck_foot": true,
+      "preserve_cobalt_portrait_and_existing_motifs": true,
+      "preserve_existing_architectural_motifs_without_correcting_them": true,
+      "preserve_studio_background_camera_lighting_4x5": true,
+      "no_pixel_exact_outside_region_preservation_claim": true,
+      "no_mask_or_roi_fields": true,
+      "no_authenticated_japanese_conservation_or_antiquity_claim": true,
+      "no_logo_brand_text_dynasty_mark_or_maker_inscription": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr007-c0-4x5-source",
+        "roles": [
+          "identity",
+          "artifact",
+          "environment",
+          "layout",
+          "palette"
+        ],
+        "notes": "Authoritative private CR-007 Porcelain Echo verified import original. SHA-256 15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97. Resolve the locally verified CR-007 original through private candidate/import evidence during operator handoff. This single PNG is the existing photograph to revise in a whole-image edit; it is not a second style inspiration and CR-002 is not a required second attachment. Roles: identity for the painted portrait face and distinctive decorative figure cues; artifact for vessel form, glaze, and decorative mapping; environment for the quiet studio surround; layout for framing and composition; palette for cobalt-and-ivory relationships. PromptRecipe encodes symbolic roles only; the operator must attach that PNG as the image to edit. The SHA identifies bytes and does not prove upload. No mask is supplied or authorized."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable painted adult facial profile and gaze orientation from the attached CR-007 vase decoration",
+        "upswept painted hairstyle with floral hair ornament from the source decoration",
+        "layered painted garment and sleeve relationships from the source cobalt decoration",
+        "overall free-standing porcelain vase silhouette readable as the same object as the source photograph"
+      ]
+    },
+    "body_transformation": {
+      "mode": "preserve",
+      "anatomy_change": "none; do not redesign the painted figure or the vessel proportions",
+      "pose_change": "none; keep the painted figure stance and vessel orientation as in the source photograph",
+      "camera_presentation": "match the source photograph's eye-level product framing; do not reframe into a new hero composition",
+      "garment_shaping": "preserve painted garment arrangement; do not repaint wardrobe into a new decorative scheme",
+      "artistic_stylization": "none beyond the single requested gold-lacquer repair seam; keep photographic continuity with the attached source"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary studio product photograph of one porcelain vase after a fictional restrained gold-lacquer repair",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "requested_elements": [
+      "the same free-standing blue-and-white porcelain vase as in the attached CR-007 source photograph",
+      "one narrow irregular gold-lacquer repair seam on the visible upper-right shoulder",
+      "optional single short secondary branch only if fracture geometry justifies it",
+      "restrained metallic gold reflections on the lacquer join following vessel curvature",
+      "preserved cobalt portrait face, hair ornament, and layered painted garments",
+      "preserved floral and existing architectural motifs already on the vessel",
+      "preserved rim, neck, belly, foot, contact shadow, studio background, lighting, and 4:5 framing",
+      "no mask, no extensive gold decoration, no extra cracks, no logos or dynasty marks"
+    ],
+    "director": {
+      "moment": "the same settled studio product view of the CR-007 porcelain vase, revised only by one restrained gold-lacquer repair seam",
+      "action": "no living motion; the painted figure remains underglaze decoration while the new seam reads as a cured lacquer join on the upper-right shoulder",
+      "gaze": "painted head orientation unchanged from the source; do not redesign facial features",
+      "body_weight": "vessel continues to rest on its foot with the same soft contact shadow; painted stance weight unchanged",
+      "hand_logic": "painted hands remain as in the source decoration if present; do not invent new limbs",
+      "fabric_response": "painted garment drapery stays cobalt underglaze language continuous with the existing glaze—do not convert cloth into photographic fabric or gold embroidery",
+      "prop_interaction": "vessel only; no second object and no handheld props",
+      "foreground": "foot ring and soft contact shadow on the same quiet studio surface plane as the source",
+      "midground": "full free-standing porcelain vase matching the source silhouette with one restrained gold-lacquer seam on the upper-right shoulder",
+      "background": "same restrained neutral studio negative space as the source; do not invent a new environment",
+      "camera": "match the attached source photograph: eye-level centered product framing of the free-standing vase in a 4:5 composition showing rim, neck, shoulder, belly, foot, and soft contact shadow",
+      "light_source": "match the source soft directional studio key revealing porcelain volume and glaze speculars, with the gold-lacquer seam showing only small restrained metallic reflections",
+      "material_response": "preserve pale ivory glazed porcelain with cobalt underglaze decoration; add one lacquer join finished with restrained powdered gold on the upper-right shoulder so gold sits as repair material on the ceramic surface rather than vinyl stickers, floating ornaments, or wholesale gilt patterning; do not treat gold, cobalt pigment, and glaze as one identical material",
+      "micro_story": "a whole-image revision that tests whether semantic preservation can keep a recognizable CR-007 vase while admitting one fictional gold-lacquer seam"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}
