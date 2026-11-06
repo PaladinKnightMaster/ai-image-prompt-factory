@@ -1,27 +1,30 @@
 # Session Handoff
 
-- Date: 2026-11-05
-- Canonical `main` (branch base): `7d3b3759b7aee771dda7b54293b907fc1f63a81e`
-- Feature branch: `feat/cr-009-golden-seam`
-- Prior on main: CR-008 Golden Fault feasibility (PR #53; implementation blocked)
+- Date: 2026-11-06
+- Canonical `main` (branch base): `91b42aebe777005d506eb706d562246013ece790`
+- Feature branch: `feat/cr-010-the-second-angle`
+- Prior on main: CR-009 Golden Seam (PR #54)
 - Stable release: V3.3 (`v3.3.0`); unchanged
 - `COMPILER_VERSION` remains `3.2.0`
-- CR-001 through CR-007 `1.0.0` digests unchanged; CR-008 remains research-only/blocked; no private custody edits
+- CR-001 through CR-007 and CR-009 `1.0.0` digests unchanged; CR-008 remains research-only/blocked; no private custody edits
 
 ## Change
 
-CR-009: Golden Seam PromptRecipe — source-conditioned **whole-image revision**
-via installed `reference_transform` of the verified CR-007 porcelain photograph,
-requesting one restrained gold-lacquer repair seam with semantic preservation
-guidance. No TransformationPack, no mask/ROI, no pixel-exact preservation claim.
-Does not implement or resolve CR-008 localized-edit gap. Symbolic CR-007 source
-SHA only; no host-absolute private paths. No image generation.
+CR-010: The Second Angle PromptRecipe — source-conditioned **product
+viewpoint transfer** via installed `reference_transform` of the verified
+CR-003 perfume photograph. Requests one eye-level three-quarter viewpoint
+approximately 30° off the source near-frontal view while preserving
+recognizable bottle design, faceted clear glass, brushed-metal cap, plinth,
+and studio character. Roles: `artifact`/`environment`/`palette` only (no
+`layout`/`pose`/`identity` lock of frontal framing). Descriptive camera
+prose only; no numeric yaw field; no 3D-reconstruction claim; no new route/
+pack/schema. No image generation.
 
-## Digests (CR-009 `1.0.0`)
+## Digests (CR-010 `1.0.0`)
 
-- Recipe SHA-256: `8bff3467bbe5a1436881098b82eafee239a4644c78b6d08af48a635e196817ed`
-- Baseline prompt SHA-256: `7273bd83193d65a47cf97b789aff64bf69abe901a87cbcfe67a08cf900d52f5a`
-- Source (CR-007) SHA-256: `15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97`
+- Recipe SHA-256: `fdf3b4181313e83a2a3c7c60aaec0cfb92cfc2c46e6a72622a3aa629188e9183`
+- Baseline prompt SHA-256: `eecb60fd973d07e03a9a38ad73ce707b6c0cd52b862817604a3c921bf3610215`
+- Source (CR-003) SHA-256: `43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4`
 
 ## Validation
 
@@ -30,8 +33,7 @@ SHA only; no host-absolute private paths. No image generation.
 
 ## Next task
 
-Owner review of CR-009 PR. Do not merge without approval. Do not prepare or
-generate revision images without separate authorization (must attach verified
-CR-007 PNG plus the exact CR-009 prompt in the same request; no mask). No
-eighth gallery card without separate authorization. Do not reopen CR-008
-implementation.
+Owner review of CR-010 PR. Do not merge without approval. Do not prepare or
+generate viewpoint images without separate authorization (must attach verified
+CR-003 PNG plus the exact CR-010 prompt in the same request). No ninth gallery
+card without separate authorization. Do not reopen CR-008 implementation.
