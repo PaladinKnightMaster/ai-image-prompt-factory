@@ -62,6 +62,12 @@ CR009_VERSION = "1.0.0"
 CR009_KNOWN_RECIPE_SHA = "8bff3467bbe5a1436881098b82eafee239a4644c78b6d08af48a635e196817ed"
 CR009_KNOWN_PROMPT_SHA = "7273bd83193d65a47cf97b789aff64bf69abe901a87cbcfe67a08cf900d52f5a"
 CR009_SOURCE_IMAGE_SHA = "15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97"
+CR010_PATH = RECIPES_ROOT / "cr-010-the-second-angle" / "1.0.0.json"
+CR010_ID = "cr-010-the-second-angle"
+CR010_VERSION = "1.0.0"
+CR010_KNOWN_RECIPE_SHA = "fdf3b4181313e83a2a3c7c60aaec0cfb92cfc2c46e6a72622a3aa629188e9183"
+CR010_KNOWN_PROMPT_SHA = "eecb60fd973d07e03a9a38ad73ce707b6c0cd52b862817604a3c921bf3610215"
+CR010_SOURCE_IMAGE_SHA = "43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4"
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -1249,6 +1255,142 @@ def test_cr009_negative_removing_source_reference_changes_editing_semantics():
     assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
     assert "references" not in receipt["compilation"]["prompt_sections"]
     assert "cr007-c0-4x5-source" not in receipt["compilation"]["prompt"]
+
+
+def test_cr010_file_exists_and_path_matches_identity():
+    assert CR010_PATH.is_file()
+    assert CR010_PATH.parent.name == CR010_ID
+    assert CR010_PATH.stem == CR010_VERSION
+
+
+def test_cr010_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR010_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR010_ID
+    assert recipe["recipe_version"] == CR010_VERSION
+
+
+def test_cr010_semantic_spec_is_source_conditioned_product_viewpoint_transfer():
+    recipe = load_recipe(CR010_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "reference_transform"
+    assert spec["route"] != "artifact_transform"
+    assert spec["route"] != "new_generation"
+    assert "transformation" not in spec or spec.get("transformation") in (None, {})
+    assert spec.get("transformation") is None
+    assert spec["art"]["method"] is None
+    assert spec["art"]["artifact_form"] is None
+    assert spec["art"]["artifact_state"] is None
+    assert spec["historical"]["packs"] == []
+    assert spec["identity"]["mode"] == "identity_unlocked"
+    assert spec["body_transformation"]["mode"] == "presentation_only"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 1
+    assert refs[0]["id"] == "cr003-c0-l0-4x5-source"
+    assert set(refs[0]["roles"]) == {"artifact", "environment", "palette"}
+    assert "layout" not in refs[0]["roles"]
+    assert "pose" not in refs[0]["roles"]
+    assert "identity" not in refs[0]["roles"]
+    notes = refs[0].get("notes") or ""
+    assert CR010_SOURCE_IMAGE_SHA in notes
+    assert "D:\\" not in notes
+    assert "/Users/" not in notes
+    request = spec["request"].casefold()
+    assert "attached" in request
+    assert "viewpoint" in request or "three-quarter" in request or "camera" in request
+    assert "perfume" in request or "flacon" in request or "bottle" in request
+    assert "do not claim exact 3d reconstruction" in request
+    camera = (spec["director"].get("camera") or "").casefold()
+    assert "three-quarter" in camera or "30" in camera or "off" in camera
+    assert "match the attached source photograph" not in camera
+    assert "frontal" in camera or "near-frontal" in camera or "source" in camera
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert '"camera_transfer"' not in blob
+    assert '"novel_view"' not in blob
+    assert '"3d_reconstruction"' not in blob
+    assert "edit_region" not in blob
+    assert '"mask"' not in blob
+    assert spec["route"] not in {"camera_transfer", "novel_view", "3d_reconstruction"}
+    raw = CR010_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+    assert recipe.get("variables") == {}
+
+
+def test_cr010_compiles_as_reference_transform_viewpoint_not_new_product():
+    recipe = load_recipe(CR010_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR010_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR010_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "transformation" not in sections
+    assert "artifact_form" not in sections
+    assert "cr003-c0-l0-4x5-source" in prompt
+    assert "artifact" in low
+    assert "environment" in low
+    assert "palette" in low
+    assert "attached" in low
+    assert "three-quarter" in low or "viewpoint" in low
+    assert "supplies artifact, environment, palette only" in low
+    assert "decorated_artifact" not in low
+    assert "do not claim exact 3d reconstruction" in low
+    assert "generation" not in first
+    assert "D:\\" not in prompt
+    assert "AIPF_Creative_Private" not in prompt
+
+
+def test_cr010_negative_removing_viewpoint_instruction_changes_prompt_sha():
+    recipe = load_recipe(CR010_PATH)
+    baseline = compile_recipe(recipe)
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["request"] = (
+        "Revise the attached existing photograph of one unbranded luxury perfume "
+        "bottle so the result remains the same product design under the same near-"
+        "frontal studio framing. Preserve recognizable bottle geometry, faceted "
+        "clear glass, brushed-metal cap, and limestone plinth. Do not invent a new "
+        "perfume design."
+    )
+    for key in ("moment", "action", "camera", "midground", "micro_story", "material_response"):
+        text = mutated["semantic_spec"]["director"][key]
+        mutated["semantic_spec"]["director"][key] = (
+            text.replace("three-quarter", "near-frontal")
+            .replace("approximately 30 degrees", "matching the source")
+            .replace("new camera viewpoint", "same camera viewpoint")
+            .replace("changed perspective", "unchanged perspective")
+            .replace("viewpoint-dependent", "viewpoint-stable")
+        )
+    mutated["semantic_spec"]["body_transformation"]["camera_presentation"] = (
+        "match the attached source near-frontal product framing; do not reframe"
+    )
+    receipt = compile_recipe(mutated)
+    assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
+    low = receipt["compilation"]["prompt"].casefold()
+    assert "approximately 30 degrees" not in low
+
+
+def test_cr010_negative_removing_source_reference_changes_conditioning_semantics():
+    recipe = load_recipe(CR010_PATH)
+    baseline = compile_recipe(recipe)
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["references"] = []
+    receipt = compile_recipe(mutated)
+    assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
+    assert "references" not in receipt["compilation"]["prompt_sections"]
+    assert "cr003-c0-l0-4x5-source" not in receipt["compilation"]["prompt"]
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():

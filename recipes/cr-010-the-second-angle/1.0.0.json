@@ -1,0 +1,111 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-010-the-second-angle",
+  "recipe_version": "1.0.0",
+  "title": "The Second Angle — Product Viewpoint Transfer",
+  "description": "Source-conditioned product viewpoint transfer of the verified CR-003 Refraction Ledger perfume photograph: depict the same unbranded faceted-glass bottle from a clearly distinguishable eye-level three-quarter camera viewpoint approximately thirty degrees off the source near-frontal perspective, while preserving recognizable product design, transparent faceted glass, distinctive shoulder geometry, brushed-metal cap proportions, pale limestone plinth, and restrained neutral studio character. Uses installed route reference_transform with symbolic roles artifact/environment/palette only (no layout/pose/identity lock of the source frontal frame). No TransformationPack, no numeric camera-yaw field, no 3D-reconstruction claim. Operator must supply the verified CR-003 PNG (SHA-256 43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4) as the image to condition at generation time. See docs/CR_010_THE_SECOND_ANGLE.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-010-the-second-angle",
+    "request": "Using the attached existing CR-003 Refraction Ledger product photograph as the sole product-design reference, produce one new studio product photograph of that same unbranded luxury perfume bottle from a clearly distinguishable new camera viewpoint—an eye-level three-quarter view approximately 30 degrees off the source near-frontal perspective—so additional bottle depth and a different side-facet arrangement become readable. Preserve recognizable product identity: transparent faceted-glass construction, distinctive shoulder geometry, central body proportions, cylindrical brushed-metal cap, cap-to-body relationship, clear colorless glass, understated premium styling, unbranded design, pale limestone plinth, and restrained neutral studio setting with the overall lighting character. Allow perspective foreshortening, apparent front-versus-side facet widths, reflected highlights, refraction patterns, cap ellipse/cylinder shading, and plinth perspective to change naturally with the new viewpoint. Do not invent a different perfume design, do not keep the source near-frontal framing, do not require identical highlights or pixel-perfect silhouette match across viewpoints, and do not claim exact 3D reconstruction of unseen geometry—infer only a physically plausible continuation of partially hidden surfaces.",
+    "route": "reference_transform",
+    "locks": {
+      "product_only_still_life": true,
+      "no_human_subject": true,
+      "source_reference_required": true,
+      "existing_product_viewpoint_transfer_not_unrelated_new_generation": true,
+      "preserve_recognizable_cr003_bottle_design": true,
+      "preserve_transparent_faceted_glass": true,
+      "preserve_brushed_metal_cylindrical_cap": true,
+      "preserve_cap_to_body_proportion": true,
+      "preserve_pale_limestone_plinth_and_restrained_studio": true,
+      "require_meaningful_three_quarter_viewpoint_change": true,
+      "allow_viewpoint_dependent_perspective_reflections_refraction": true,
+      "no_layout_role_locking_source_frontal_frame": true,
+      "no_numeric_camera_yaw_field": true,
+      "no_exact_3d_reconstruction_claim": true,
+      "no_logo_or_brand_text": true,
+      "no_lettering_on_product": true,
+      "no_additional_bottles": true,
+      "prefer_material_fidelity_over_cgi_gloss": true,
+      "photographic_not_painterly": true
+    },
+    "references": [
+      {
+        "id": "cr003-c0-l0-4x5-source",
+        "roles": [
+          "artifact",
+          "environment",
+          "palette"
+        ],
+        "notes": "Authoritative private CR-003 Refraction Ledger verified import original. SHA-256 43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4. Resolve the locally verified CR-003 original through private candidate/import evidence during operator handoff. This single PNG is the existing product photograph whose design must govern the result; it is not a second style inspiration. Roles: artifact for bottle form, faceted-glass construction, brushed-metal cap, and surface condition; environment for pale limestone plinth and restrained neutral studio surround without locking camera placement; palette for clear colorless glass, satin metal, and warm-neutral stone relationships. Deliberately omit layout and pose so the source near-frontal framing and object-facing orientation are not imported as locked composition. Omit person-oriented identity. PromptRecipe encodes symbolic roles only; the operator must attach that PNG in the same generation request. The SHA identifies bytes and does not prove upload. No mask is supplied or authorized. No exact 3D reconstruction is claimed."
+      }
+    ],
+    "identity": {
+      "mode": "identity_unlocked",
+      "locked_features": []
+    },
+    "body_transformation": {
+      "mode": "presentation_only",
+      "anatomy_change": "none; no human subject—preserve only the designed product geometry of the attached CR-003 bottle",
+      "pose_change": "none; keep the bottle upright on the plinth; do not tip, levitate, or invent a second neck; camera moves around a stable product rather than rotating the object as a prop redesign",
+      "camera_presentation": "required deliberate viewpoint change from the source near-frontal studio view to an eye-level three-quarter product view approximately 30 degrees off that frontal axis, revealing additional side-facet depth while remaining a single coherent bottle photograph",
+      "garment_shaping": "product geometry only: preserve the attached bottle's short vertical faceted transparent glass body, distinctive shoulder planes, calm clear liquid fill, flush cylindrical brushed-metal cap on a short neck, and proportional cap-to-body relationship; allow apparent silhouette and facet widths to change with perspective only",
+      "artistic_stylization": "none; keep photographic material response; do not redesign the bottle into a new perfume form"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "luxury product still-life studio viewpoint transfer of an existing perfume photograph",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "requested_elements": [
+      "the same unbranded faceted transparent glass perfume bottle as in the attached CR-003 source photograph",
+      "clearly distinguishable eye-level three-quarter camera viewpoint approximately 30 degrees off the source near-frontal perspective",
+      "additional readable bottle depth and side-facet arrangement differing from the frontal view",
+      "preserved distinctive shoulder geometry and central body proportions",
+      "preserved cylindrical brushed-metal cap seated flush on the neck with stable cap-to-body proportion",
+      "preserved clear colorless transparent glass with viewpoint-updated refraction and edge thickness cues",
+      "preserved pale limestone plinth with perspective updated for the new camera position",
+      "restrained neutral studio surround and overall lighting character continuous with the source",
+      "no humans, logos, lettering, extra bottles, floating cap, opaque glass, or exact 3D-reconstruction claim"
+    ],
+    "director": {
+      "moment": "a settled commercial still of the same CR-003 perfume bottle after a deliberate camera move to a second catalog angle—no pouring, no hands, no prop redesign",
+      "action": "bottle remains upright and seated on the pale limestone plinth; cap fully seated; liquid level calm; only the camera viewpoint changes",
+      "gaze": "camera addresses the product as the sole subject from the new three-quarter angle; no human gaze or portrait intent",
+      "body_weight": "glass base continues to bear evenly on the plinth top; plinth sits firmly with a soft contact shadow consistent with the new perspective",
+      "hand_logic": "no hands, fingers, gloves, or props touching the product",
+      "fabric_response": "no textile; transparent glass transmits and refracts the studio surround through facet planes whose apparent widths and internal refractions update with the new viewpoint; liquid remains optically calm",
+      "prop_interaction": "only the same flacon and limestone plinth; no extra bottles, flowers, boxes, or jewelry",
+      "foreground": "near edge of the honed limestone plinth showing updated perspective foreshortening and soft contact shadow",
+      "midground": "the same faceted glass flacon and brushed-metal cap reading as one coherent product with newly revealed side-facet depth under the three-quarter viewpoint",
+      "background": "restrained neutral studio sweep continuous with the source character; generous quiet negative space; no set dressing",
+      "camera": "eye-level three-quarter product frame approximately 30 degrees off the attached source near-frontal viewpoint, showing full flacon, seated cylindrical brushed-metal cap, pale limestone plinth, and a narrow studio floor plane so side-facet depth is clearly readable; descriptive camera instruction only—no numeric yaw field and no claim of measured physical angle verification",
+      "light_source": "retain the source's overall soft directional studio lighting character so glass edges, facet gradients, and brushed-metal grain remain credible while highlights and reflections are allowed to relocate naturally with the new viewpoint",
+      "material_response": "preserve transparent faceted glass with readable edge thickness and clear colorless appearance; preserve satin brushed-metal cylindrical cap grain rather than mirror chrome; preserve matte limestone texture; expect viewpoint-dependent changes in reflected highlight placement, refraction patterns, apparent front-versus-side facet widths, and the cap's elliptical foreshortening—do not freeze source speculars or invent opaque/cloudy/metallic glass",
+      "micro_story": "the second catalog angle of one known bottle—recognizable product continuity under a genuine camera move, not a new perfume invention and not a claimed complete 3D reconstruction"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}

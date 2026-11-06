@@ -36,6 +36,10 @@ Duplicate `(recipe_id, recipe_version)` pairs across this tree are rejected by
 | `cr-004-marble-afterimage` | `1.0.0` | CR-004 Marble Afterimage | `1.1` |
 | `cr-005-silk-on-plaster` | `1.0.0` | CR-005 Silk on Plaster | `1.1` |
 | `cr-006-held-light` | `1.0.0` | CR-006 Held Light — Multi-Reference Fragrance Editorial | `1.1` |
+| `cr-007-porcelain-echo` | `1.0.0` | CR-007 Porcelain Echo | `1.1` |
+| *(cr-008 blocked)* | — | Golden Fault — localized edit not implemented | — |
+| `cr-009-golden-seam` | `1.0.0` | CR-009 Golden Seam — Controlled Whole-Image Revision | `1.1` |
+| `cr-010-the-second-angle` | `1.0.0` | The Second Angle — Product Viewpoint Transfer | `1.1` |
 
 ## Validate and compile CR-001
 

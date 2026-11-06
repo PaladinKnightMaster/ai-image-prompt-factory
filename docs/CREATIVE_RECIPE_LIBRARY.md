@@ -348,6 +348,41 @@ python -m pytest -q tests/test_creative_recipe_library.py
 
 None in `1.0.0` — single baseline framing only.
 
+## Locate and validate CR-010
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-010-the-second-angle/1.0.0.json` |
+| `recipe_id` | `cr-010-the-second-angle` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `reference_transform` |
+
+Source-conditioned product viewpoint transfer of verified CR-003 perfume:
+[CR_010_THE_SECOND_ANGLE.md](CR_010_THE_SECOND_ANGLE.md). Descriptive camera
+only; no numeric yaw field; no 3D-reconstruction claim; does **not** reopen
+CR-008.
+
+```bash
+aipf recipe validate recipes/cr-010-the-second-angle/1.0.0.json
+aipf recipe compile recipes/cr-010-the-second-angle/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-010
+
+- Source-conditioned product viewpoint-transfer request and locks
+- Route `reference_transform` (no TransformationPack; not `new_generation`)
+- `art.method` / form / state all `null`
+- Symbolic reference `cr003-c0-l0-4x5-source` (`artifact` / `environment` / `palette`; no `layout` / `pose` / `identity`)
+- Identity `identity_unlocked`; body `presentation_only` with required camera-presentation change
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline camera)
+- Explicit non-claims: no numeric camera yaw, no exact 3D reconstruction
+
+### Supported variations (CR-010)
+
+None in `1.0.0` — single baseline three-quarter viewpoint instruction only.
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
