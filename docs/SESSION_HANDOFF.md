@@ -1,45 +1,37 @@
 # Session Handoff
 
 - Date: 2026-11-05
-- Canonical `main` (verified HEAD): `6c4ccbde8d93ff7f09dbbf02ea41691db7efd555`
-- Feature branch: `feat/cr-008-golden-fault-feasibility`
-- Prior on main: CR-007 Porcelain Echo (PR #52)
+- Canonical `main` (branch base): `7d3b3759b7aee771dda7b54293b907fc1f63a81e`
+- Feature branch: `feat/cr-009-golden-seam`
+- Prior on main: CR-008 Golden Fault feasibility (PR #53; implementation blocked)
 - Stable release: V3.3 (`v3.3.0`); unchanged
 - `COMPILER_VERSION` remains `3.2.0`
-- CR-001 through CR-007 `1.0.0` digests unchanged; no private custody edits
+- CR-001 through CR-007 `1.0.0` digests unchanged; CR-008 remains research-only/blocked; no private custody edits
 
 ## Change
 
-CR-008 Golden Fault feasibility research only. Audited PromptRecipe schema,
-routes, reference roles, Transformation/ArtMethod packs, artifact states,
-compiler, generation adapter, and `generate_api` for source-conditioned
-**localized** image editing. Verdict: **BLOCKED — LOCAL EDIT CAPABILITY GAP**.
-No recipe implemented. No image generation/editing. No private prep/custody.
-No compiler/schema/route/pack expansion.
+CR-009: Golden Seam PromptRecipe — source-conditioned **whole-image revision**
+via installed `reference_transform` of the verified CR-007 porcelain photograph,
+requesting one restrained gold-lacquer repair seam with semantic preservation
+guidance. No TransformationPack, no mask/ROI, no pixel-exact preservation claim.
+Does not implement or resolve CR-008 localized-edit gap. Symbolic CR-007 source
+SHA only; no host-absolute private paths. No image generation.
 
-Docs: `docs/CR_008_GOLDEN_FAULT.md`; library status note in
-`docs/CREATIVE_RECIPE_LIBRARY.md`.
+## Digests (CR-009 `1.0.0`)
 
-## Source check (edit target candidate)
-
-- CR-007 import original SHA-256:
-  `15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97`
-- Dimensions 1122×1402; 2,050,051 bytes — verified; bytes untouched
-
-## Digests (CR-008)
-
-- Recipe SHA-256: *n/a — not implemented*
-- Baseline prompt SHA-256: *n/a — not implemented*
+- Recipe SHA-256: `8bff3467bbe5a1436881098b82eafee239a4644c78b6d08af48a635e196817ed`
+- Baseline prompt SHA-256: `7273bd83193d65a47cf97b789aff64bf69abe901a87cbcfe67a08cf900d52f5a`
+- Source (CR-007) SHA-256: `15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97`
 
 ## Validation
 
-- Focused digest lock: `tests/test_creative_recipe_library.py` CR-001–CR-007
-- Full pytest / `validate_repo.py` — see PR checks if opened
+- Focused: `tests/test_creative_recipe_library.py`
+- Full pytest / `validate_repo.py` — see PR checks
 
 ## Next task
 
-Owner review of CR-008 feasibility stop. Do **not** implement a substitute
-whole-image recipe. Do not generate or edit images without (1) a supported
-local-edit contract and (2) separate authorization. Smallest gap: semantic
-edit-region + outside-region preservation **and** mask/localized transport —
-expansion not authorized in this milestone.
+Owner review of CR-009 PR. Do not merge without approval. Do not prepare or
+generate revision images without separate authorization (must attach verified
+CR-007 PNG plus the exact CR-009 prompt in the same request; no mask). No
+eighth gallery card without separate authorization. Do not reopen CR-008
+implementation.

@@ -56,6 +56,12 @@ CR007_VERSION = "1.0.0"
 CR007_KNOWN_RECIPE_SHA = "6af6a0756b344d45a4281e882280f593bd3ffed09b54d9be7b0f86ceb14c3b42"
 CR007_KNOWN_PROMPT_SHA = "ae067b7b1d6c1b1877cdd1b4f9d39d5ab0e6bc861611178b0c47b68fca4138eb"
 CR007_SOURCE_IMAGE_SHA = "a457c47cd96633b18d69e218f3316edb9886ea58114b96f2b4c0d1dce18221e0"
+CR009_PATH = RECIPES_ROOT / "cr-009-golden-seam" / "1.0.0.json"
+CR009_ID = "cr-009-golden-seam"
+CR009_VERSION = "1.0.0"
+CR009_KNOWN_RECIPE_SHA = "8bff3467bbe5a1436881098b82eafee239a4644c78b6d08af48a635e196817ed"
+CR009_KNOWN_PROMPT_SHA = "7273bd83193d65a47cf97b789aff64bf69abe901a87cbcfe67a08cf900d52f5a"
+CR009_SOURCE_IMAGE_SHA = "15b082d7573ee973740553d463aa2693634fcc45a6d0a4d8538dd5e0c4dcbc97"
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -1085,6 +1091,164 @@ def test_cr001_through_cr006_locked_digests_remain_unchanged():
     assert compile_recipe(load_recipe(CR005_PATH))["prompt_sha256"] == CR005_KNOWN_PROMPT_SHA
     assert sha256_canonical(load_recipe(CR006_PATH)) == CR006_KNOWN_RECIPE_SHA
     assert compile_recipe(load_recipe(CR006_PATH))["prompt_sha256"] == CR006_KNOWN_PROMPT_SHA
+
+
+def test_cr001_through_cr007_locked_digests_remain_unchanged():
+    test_cr001_through_cr006_locked_digests_remain_unchanged()
+    assert sha256_canonical(load_recipe(CR007_PATH)) == CR007_KNOWN_RECIPE_SHA
+    assert compile_recipe(load_recipe(CR007_PATH))["prompt_sha256"] == CR007_KNOWN_PROMPT_SHA
+
+
+def test_cr008_remains_research_only_without_recipe():
+    assert not (RECIPES_ROOT / "cr-008-golden-fault").exists()
+    doc = (ROOT / "docs" / "CR_008_GOLDEN_FAULT.md").read_text(encoding="utf-8")
+    assert "BLOCKED — LOCAL EDIT CAPABILITY GAP" in doc
+    lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
+    assert "CR-008 status (blocked)" in lib
+    assert "implementation blocked" in lib.casefold() or "IMPLEMENTATION BLOCKED" in lib or "blocked" in lib.casefold()
+
+
+def test_cr009_file_exists_and_path_matches_identity():
+    assert CR009_PATH.is_file()
+    assert CR009_PATH.parent.name == CR009_ID
+    assert CR009_PATH.stem == CR009_VERSION
+
+
+def test_cr009_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR009_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR009_ID
+    assert recipe["recipe_version"] == CR009_VERSION
+
+
+def test_cr009_semantic_spec_is_source_conditioned_whole_image_revision():
+    recipe = load_recipe(CR009_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "reference_transform"
+    assert spec["route"] != "artifact_transform"
+    assert spec["route"] != "new_generation"
+    assert "transformation" not in spec or spec.get("transformation") in (None, {})
+    assert spec.get("transformation") is None
+    assert spec["art"]["method"] is None
+    assert spec["art"]["artifact_form"] is None
+    assert spec["art"]["artifact_state"] is None
+    assert spec["historical"]["packs"] == []
+    assert spec["identity"]["mode"] == "recognizable_identity"
+    assert spec["body_transformation"]["mode"] == "preserve"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 1
+    assert refs[0]["id"] == "cr007-c0-4x5-source"
+    assert set(refs[0]["roles"]) == {
+        "identity",
+        "artifact",
+        "environment",
+        "layout",
+        "palette",
+    }
+    notes = refs[0].get("notes") or ""
+    assert CR009_SOURCE_IMAGE_SHA in notes
+    assert "D:\\" not in notes
+    assert "/Users/" not in notes
+    assert "mask" in notes.casefold()
+    request = spec["request"].casefold()
+    assert "edit the attached" in request or "edit the attached existing" in request
+    assert "gold-lacquer" in request or "gold lacquer" in request
+    assert "upper-right shoulder" in request
+    assert "whole-image" in request
+    assert "pixel-exact" in request or "masked local edit" in request
+    assert "not a pixel-exact or masked local edit" in request
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert "perfume flacon" not in blob
+    assert "marble sculpture" not in blob
+    assert "mineral-pigment mural" not in blob
+    assert "fragrance" not in blob
+    assert "edit_region" not in blob
+    assert '"mask"' not in blob
+    raw = CR009_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+    assert recipe.get("variables") == {}
+
+
+def test_cr009_compiles_as_reference_transform_edit_not_medium_translation():
+    recipe = load_recipe(CR009_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR009_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR009_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "transformation" not in sections
+    assert "artifact_form" not in sections
+    assert "cr007-c0-4x5-source" in prompt
+    assert "gold-lacquer" in low or "gold lacquer" in low
+    assert "upper-right shoulder" in low
+    assert "edit the attached" in low
+    assert "whole-image" in low
+    assert "pixel-exact" in low or "masked local edit" in low
+    assert "decorated_artifact" not in low
+    assert "perfume flacon" not in low
+    assert "marble sculpture" not in low
+    assert "mineral-pigment mural" not in low
+    assert "fragrance" not in low
+    assert "generation" not in first
+    assert "D:\\" not in prompt
+    assert "AIPF_Creative_Private" not in prompt
+
+
+def test_cr009_negative_removing_seam_instruction_changes_prompt_sha():
+    recipe = load_recipe(CR009_PATH)
+    baseline = compile_recipe(recipe)
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["request"] = (
+        "Edit the attached existing photograph of one free-standing blue-and-white "
+        "porcelain vase—do not invent an unrelated new vase or a different composition. "
+        "Keep a recognizable whole-image revision of the attached source with semantic "
+        "preservation guidance only; this is not a pixel-exact or masked local edit."
+    )
+    # Clear director lines that restate the seam so the negative isolates seam semantics.
+    for key in ("moment", "action", "midground", "material_response", "micro_story", "light_source"):
+        text = mutated["semantic_spec"]["director"][key]
+        mutated["semantic_spec"]["director"][key] = (
+            text.replace("gold-lacquer repair seam", "unchanged glaze surface")
+            .replace("gold-lacquer seam", "unchanged glaze surface")
+            .replace("lacquer join finished with restrained powdered gold on the upper-right shoulder", "unchanged glaze continuity")
+            .replace("one restrained gold-lacquer seam", "no material addition")
+            .replace("fictional gold-lacquer seam", "source continuity")
+        )
+    mutated["semantic_spec"]["requested_elements"] = [
+        e
+        for e in mutated["semantic_spec"]["requested_elements"]
+        if "gold" not in e.casefold() and "seam" not in e.casefold() and "branch" not in e.casefold()
+    ]
+    receipt = compile_recipe(mutated)
+    assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
+    low = receipt["compilation"]["prompt"].casefold()
+    assert "adding one narrow, irregular gold-lacquer" not in low
+    assert "gold-lacquer repair seam" not in low
+
+
+def test_cr009_negative_removing_source_reference_changes_editing_semantics():
+    recipe = load_recipe(CR009_PATH)
+    baseline = compile_recipe(recipe)
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["references"] = []
+    receipt = compile_recipe(mutated)
+    assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
+    assert "references" not in receipt["compilation"]["prompt_sections"]
+    assert "cr007-c0-4x5-source" not in receipt["compilation"]["prompt"]
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():
