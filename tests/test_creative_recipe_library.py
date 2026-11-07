@@ -68,6 +68,12 @@ CR010_VERSION = "1.0.0"
 CR010_KNOWN_RECIPE_SHA = "fdf3b4181313e83a2a3c7c60aaec0cfb92cfc2c46e6a72622a3aa629188e9183"
 CR010_KNOWN_PROMPT_SHA = "eecb60fd973d07e03a9a38ad73ce707b6c0cd52b862817604a3c921bf3610215"
 CR010_SOURCE_IMAGE_SHA = "43a9ff6e0a0aaed177fae1145ac3e1ed88566ab507952c4e68fde97d10b3d1c4"
+CR011_PATH = RECIPES_ROOT / "cr-011-era-reframing" / "1.0.0.json"
+CR011_ID = "cr-011-era-reframing"
+CR011_VERSION = "1.0.0"
+CR011_KNOWN_RECIPE_SHA = "b1dbfcd54ba22f5dee70c5a16e446b6110b4a91f14e9e1ffa06f6a61ebda1c30"
+CR011_KNOWN_PROMPT_SHA = "f44b9d8f15bee39abe87a5a5b08a02be91b98b315ad321ad72dbb9b06d5e2715"
+CR011_SOURCE_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -1391,6 +1397,165 @@ def test_cr010_negative_removing_source_reference_changes_conditioning_semantics
     assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
     assert "references" not in receipt["compilation"]["prompt_sections"]
     assert "cr003-c0-l0-4x5-source" not in receipt["compilation"]["prompt"]
+
+
+def test_cr011_file_exists_and_path_matches_identity():
+    assert CR011_PATH.is_file()
+    assert CR011_PATH.parent.name == CR011_ID
+    assert CR011_PATH.stem == CR011_VERSION
+
+
+def test_cr011_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR011_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR011_ID
+    assert recipe["recipe_version"] == CR011_VERSION
+    assert RECIPE_ID_RE.fullmatch(recipe["recipe_id"])
+    assert RECIPE_VERSION_RE.fullmatch(recipe["recipe_version"])
+
+
+def test_cr011_semantic_spec_is_source_conditioned_tang_era_reframing():
+    recipe = load_recipe(CR011_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "reference_transform"
+    assert spec["route"] != "artifact_transform"
+    assert spec["route"] != "new_generation"
+    assert "transformation" not in spec or spec.get("transformation") in (None, {})
+    assert spec.get("transformation") is None
+    assert spec["art"]["method"] is None
+    assert spec["art"]["artifact_form"] is None
+    assert spec["art"]["artifact_state"] is None
+    assert spec["historical"]["packs"] == ["tang"]
+    assert spec["historical"]["strictness"] == "historically_informed"
+    assert spec["identity"]["mode"] == "recognizable_identity"
+    assert spec["body_transformation"]["mode"] == "preserve"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 1
+    assert refs[0]["id"] == "cr001-c0-l0-4x5-source"
+    assert set(refs[0]["roles"]) == {"identity", "pose", "layout"}
+    assert "outfit" not in refs[0]["roles"]
+    assert "hairstyle" not in refs[0]["roles"]
+    assert "environment" not in refs[0]["roles"]
+    assert "palette" not in refs[0]["roles"]
+    notes = refs[0].get("notes") or ""
+    assert CR011_SOURCE_IMAGE_SHA in notes
+    assert "D:\\" not in notes
+    assert "/Users/" not in notes
+    assert "outfit" in notes.casefold()
+    assert "hairstyle" in notes.casefold()
+    request = spec["request"].casefold()
+    assert "attached" in request
+    assert "tang" in request
+    assert "high-waisted" in request or "high waisted" in request
+    assert "champagne-satin" in request or "champagne satin" in request
+    assert "replace" in request
+    assert "pixel-exact" in request or "masked local edit" in request
+    assert "song slim beizi" in request or "beizi" in request
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert "edit_region" not in blob
+    assert '"mask"' not in blob
+    assert "gallery" not in blob or "no gallery" in (recipe.get("description") or "").casefold()
+    raw = CR011_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+    assert recipe.get("variables") == {}
+
+
+def test_cr011_compiles_as_reference_transform_era_reframing_not_medium_or_invent():
+    recipe = load_recipe(CR011_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR011_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR011_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "historical" in sections
+    assert "era_tang" in sections
+    assert "transformation" not in sections
+    assert "artifact_form" not in sections
+    assert "era_fragment_tang" not in sections
+    assert "cr001-c0-l0-4x5-source" in prompt
+    assert "supplies identity, pose, layout only" in low
+    assert "tang" in low
+    assert "high-waisted" in low or "high waisted" in low
+    assert "champagne-satin" in low or "champagne satin" in low
+    assert "replace" in low
+    assert "decorated_artifact" not in low
+    assert "portrait_to_volumetric_sculpture" not in low
+    assert "portrait_to_architectural_mural" not in low
+    assert "portrait_to_decorated_artifact" not in low
+    assert "free-standing marble" not in low
+    assert "mineral-pigment" not in low
+    assert "generation" not in first
+    assert "D:\\" not in prompt
+    assert "AIPF_Creative_Private" not in prompt
+
+
+def test_cr011_negative_removing_tang_wardrobe_instruction_changes_prompt_sha():
+    recipe = load_recipe(CR011_PATH)
+    baseline = compile_recipe(recipe)
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["request"] = (
+        "Using the attached existing CR-001 Material-Driven Fashion photograph as "
+        "the sole person-identity and stance reference, produce one new photographic "
+        "fashion editorial of that same recognizable adult woman while keeping the "
+        "modern champagne-satin architectural evening gown, contemporary low chignon, "
+        "and warm-gray cyclorama. Preserve facial identity, broad three-quarter stance, "
+        "and eye-level full-length framing. This is not a pixel-exact or masked local edit."
+    )
+    for key in ("moment", "action", "fabric_response", "background", "material_response", "micro_story"):
+        text = mutated["semantic_spec"]["director"][key]
+        mutated["semantic_spec"]["director"][key] = (
+            text.replace("Tang court-leisure", "modern luxury-fashion")
+            .replace("Tang-informed", "modern")
+            .replace("high-waisted long silk skirt", "champagne-satin evening gown")
+            .replace("timber courtyard", "warm-gray cyclorama")
+            .replace("era reframing", "continuity revision")
+        )
+    mutated["semantic_spec"]["body_transformation"]["garment_shaping"] = (
+        "preserve the modern champagne-satin architectural evening gown; do not redesign wardrobe"
+    )
+    mutated["semantic_spec"]["historical"]["packs"] = []
+    receipt = compile_recipe(mutated)
+    assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
+    low = receipt["compilation"]["prompt"].casefold()
+    assert "era_tang" not in receipt["compilation"]["prompt_sections"]
+    assert "high-waisted long silk skirt with soft columnar volume" not in low
+
+
+def test_cr011_negative_removing_source_reference_changes_conditioning_semantics():
+    recipe = load_recipe(CR011_PATH)
+    baseline = compile_recipe(recipe)
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["references"] = []
+    receipt = compile_recipe(mutated)
+    assert receipt["prompt_sha256"] != baseline["prompt_sha256"]
+    assert "references" not in receipt["compilation"]["prompt_sections"]
+    assert "cr001-c0-l0-4x5-source" not in receipt["compilation"]["prompt"]
+
+
+def test_cr011_library_docs_mark_generation_pending_not_gallery_accepted():
+    doc = (ROOT / "docs" / "CR_011_ERA_REFRAMING.md").read_text(encoding="utf-8")
+    assert "No image generation is authorized by this documentation alone" in doc
+    assert CR011_KNOWN_RECIPE_SHA in doc
+    assert CR011_KNOWN_PROMPT_SHA in doc
+    assert CR011_SOURCE_IMAGE_SHA in doc
+    lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
+    assert "Locate and validate CR-011" in lib
+    assert "generation pending" in lib.casefold()
+    assert "not gallery-accepted" in lib.casefold() or "not gallery accepted" in lib.casefold()
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():

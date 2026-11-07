@@ -383,6 +383,42 @@ python -m pytest -q tests/test_creative_recipe_library.py
 
 None in `1.0.0` — single baseline three-quarter viewpoint instruction only.
 
+## Locate and validate CR-011
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-011-era-reframing/1.0.0.json` |
+| `recipe_id` | `cr-011-era-reframing` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `reference_transform` |
+| Status | Implemented recipe; generation pending; not gallery-accepted |
+
+Source-conditioned Tang era reframing of verified CR-001 fashion subject:
+[CR_011_ERA_REFRAMING.md](CR_011_ERA_REFRAMING.md). Historically informed (not
+reconstruction); no TransformationPack; does **not** reopen CR-008.
+
+```bash
+aipf recipe validate recipes/cr-011-era-reframing/1.0.0.json
+aipf recipe compile recipes/cr-011-era-reframing/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-011
+
+- Source-conditioned photographic era-reframing request and locks
+- Route `reference_transform` (no TransformationPack; not `new_generation`)
+- EraPack `tang`; strictness `historically_informed`
+- `art.method` / form / state all `null`
+- Symbolic reference `cr001-c0-l0-4x5-source` (`identity` / `pose` / `layout`; no `outfit` / `hairstyle` / `environment` / `palette`)
+- Identity `recognizable_identity`; body `preserve` with required garment change
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline)
+- Explicit non-claims: no pixel-exact identity, no masked local edit, no dated reconstruction
+
+### Supported variations (CR-011)
+
+None in `1.0.0` — single baseline Tang court-leisure reframing only.
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
