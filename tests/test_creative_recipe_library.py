@@ -74,6 +74,20 @@ CR011_VERSION = "1.0.0"
 CR011_KNOWN_RECIPE_SHA = "b1dbfcd54ba22f5dee70c5a16e446b6110b4a91f14e9e1ffa06f6a61ebda1c30"
 CR011_KNOWN_PROMPT_SHA = "f44b9d8f15bee39abe87a5a5b08a02be91b98b315ad321ad72dbb9b06d5e2715"
 CR011_SOURCE_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
+CR012_PATH = RECIPES_ROOT / "cr-012-keyblock-echo" / "1.0.0.json"
+CR012_ID = "cr-012-keyblock-echo"
+CR012_VERSION = "1.0.0"
+CR012_KNOWN_RECIPE_SHA = "580a9dbef44fb4b6b9d174611148bf2233505aa8657445a08314cf955ea85ec6"
+CR012_KNOWN_PROMPT_SHA = "940f156c45b14443026aefd401b91e7cf8133954c538a86504d58eb3bcecfb58"
+CR012_SOURCE_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
+CR012_WOODBLOCK_CORE_CONCEPTS = (
+    "method.japanese_woodblock_print",
+    "woodblock.keyblock",
+    "woodblock.color_block",
+    "woodblock.kento_registration",
+    "woodblock.baren_printing",
+    "woodblock.kozo_paper",
+)
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -1546,7 +1560,7 @@ def test_cr011_negative_removing_source_reference_changes_conditioning_semantics
     assert "cr001-c0-l0-4x5-source" not in receipt["compilation"]["prompt"]
 
 
-def test_cr011_library_docs_mark_generation_pending_not_gallery_accepted():
+def test_cr011_library_docs_mark_owner_accepted_and_privately_gallery_promoted():
     doc = (ROOT / "docs" / "CR_011_ERA_REFRAMING.md").read_text(encoding="utf-8")
     assert "No image generation is authorized by this documentation alone" in doc
     assert CR011_KNOWN_RECIPE_SHA in doc
@@ -1554,8 +1568,168 @@ def test_cr011_library_docs_mark_generation_pending_not_gallery_accepted():
     assert CR011_SOURCE_IMAGE_SHA in doc
     lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
     assert "Locate and validate CR-011" in lib
+    assert "owner-accepted" in lib.casefold() or "owner accepted" in lib.casefold()
+    assert "gallery-promoted" in lib.casefold() or "gallery promoted" in lib.casefold()
+    assert "ten-card" in lib.casefold() or "ten card" in lib.casefold() or "10-card" in lib.casefold()
+
+
+def test_cr012_file_exists_and_path_matches_identity():
+    assert CR012_PATH.is_file()
+    assert CR012_PATH.parent.name == CR012_ID
+    assert CR012_PATH.stem == CR012_VERSION
+
+
+def test_cr012_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR012_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR012_ID
+    assert recipe["recipe_version"] == CR012_VERSION
+    assert RECIPE_ID_RE.fullmatch(recipe["recipe_id"])
+    assert RECIPE_VERSION_RE.fullmatch(recipe["recipe_version"])
+
+
+def test_cr012_semantic_spec_is_source_backed_relief_print_transformation():
+    recipe = load_recipe(CR012_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "artifact_transform"
+    assert spec["route"] != "new_generation"
+    assert spec["transformation"]["pack_id"] == "portrait_to_relief_print"
+    assert spec["transformation"]["source_representation"] == "portrait"
+    assert spec["transformation"].get("selected_concepts") in ([], None)
+    assert "woodblock.bokashi" not in (spec["transformation"].get("selected_concepts") or [])
+    assert spec["art"]["method"] == "japanese_woodblock_print"
+    assert spec["art"]["artifact_form"] == "print_sheet"
+    assert spec["art"]["artifact_state"] == "newly_created"
+    assert spec["historical"]["packs"] == []
+    assert "edo" not in spec["historical"]["packs"]
+    assert spec["identity"]["mode"] == "recognizable_identity"
+    assert spec["body_transformation"]["mode"] == "artistic_stylization"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 1
+    assert refs[0]["id"] == "cr001-c0-l0-4x5-source"
+    assert set(refs[0]["roles"]) == {"identity", "pose", "outfit", "hairstyle"}
+    assert "environment" not in refs[0]["roles"]
+    assert "palette" not in refs[0]["roles"]
+    notes = refs[0].get("notes") or ""
+    assert CR012_SOURCE_IMAGE_SHA in notes
+    assert "D:\\" not in notes
+    assert "/Users/" not in notes
+    assert "AIPF_Creative_Private" not in notes
+    request = spec["request"].casefold()
+    assert "woodblock" in request or "relief print" in request or "relief-print" in request
+    assert "photograph" in request or "source" in request
+    assert "edo" not in request or "not" in request  # may negate Edo authenticity
+    assert "authenticated" in request or "not a genuine" in request or "not an authenticated" in request
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert "stylepack" not in blob
+    assert "promptpack" not in blob
+    assert "edit_region" not in blob
+    assert '"mask"' not in blob
+    raw = CR012_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+
+
+def test_cr012_variables_follow_v11_allowlist_and_baselines():
+    recipe = load_recipe(CR012_PATH)
+    variables = recipe.get("variables") or {}
+    assert 1 <= len(variables) <= 3
+    assert "camera" in variables
+    targets = []
+    for name, definition in variables.items():
+        assert re.fullmatch(r"^[a-z][a-z0-9_]*$", name)
+        assert definition["type"] == "enum"
+        assert definition["target"] in ALLOWED_VARIABLE_TARGETS
+        choices = definition["choices"]
+        assert 2 <= len(choices) <= 8
+        assert len(choices) == len(set(choices))
+        baseline = _nested_get(recipe["semantic_spec"], definition["target"])
+        assert baseline in choices
+        if definition["target"] == "output.aspect_ratio":
+            assert set(choices) <= ASPECT_VOCAB
+        targets.append(definition["target"])
+    assert len(targets) == len(set(targets))
+    assert len(variables["camera"]["choices"]) >= 2
+
+
+def test_cr012_compiles_as_relief_print_with_woodblock_lexicalization():
+    recipe = load_recipe(CR012_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR012_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR012_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "transformation" in sections
+    assert "artifact_form" in sections
+    assert "artifact_state" in sections
+    assert "lexical_realization" in sections
+    assert "relief_print" in prompt
+    assert "print sheet" in low or "print_sheet" in low
+    assert "keyblock" in low or "keyblock" in sections.get("lexical_realization", "").casefold()
+    assert "color block" in low or "color-block" in low
+    assert "baren" in low
+    assert "kōzo" in low or "kozo" in low
+    assert "kentō" in low or "kento" in low or "registration" in low
+    assert "japanese woodblock" in low
+    assert "edo period" not in low
+    assert "era_edo" not in sections
+    assert "anime" in low  # failure-check avoid list
+    assert "generation" not in first
+    resolved = first["compilation"].get("resolved_concepts") or []
+    resolved_ids = {row["concept_id"] for row in resolved}
+    for cid in CR012_WOODBLOCK_CORE_CONCEPTS:
+        assert cid in resolved_ids
+    assert "woodblock.bokashi" not in resolved_ids
+    # Preservation must not erase medium transform cues.
+    assert "photographic modeling" in low or "bounded color" in low or "contour" in low
+    assert "impressed on a physical sheet" in low or "marks impressed" in low
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["route"] = "new_generation"
+    del mutated["semantic_spec"]["transformation"]
+    mutated_receipt = compile_recipe(mutated)
+    assert "transformation" not in mutated_receipt["compilation"]["prompt_sections"]
+    assert mutated_receipt["prompt_sha256"] != first["prompt_sha256"]
+
+
+def test_cr012_camera_bindings_preserve_relief_print_contract():
+    recipe = load_recipe(CR012_PATH)
+    cams = recipe["variables"]["camera"]["choices"]
+    assert len(cams) >= 2
+    for camera in cams:
+        bound = compile_recipe(recipe, bindings={"camera": camera})
+        prompt = bound["compilation"]["prompt"]
+        sections = bound["compilation"]["prompt_sections"]
+        assert camera in prompt
+        assert "transformation" in sections
+        assert "lexical_realization" in sections
+        assert "relief_print" in prompt
+        assert "edo period" not in prompt.casefold()
+
+
+def test_cr012_library_docs_mark_generation_pending_no_output_yet():
+    doc = (ROOT / "docs" / "CR_012_KEYBLOCK_ECHO.md").read_text(encoding="utf-8")
+    assert "No CR-012 output has yet been generated" in doc or "no CR-012 output has yet been generated" in doc.casefold()
+    assert CR012_KNOWN_RECIPE_SHA in doc
+    assert CR012_KNOWN_PROMPT_SHA in doc
+    assert CR012_SOURCE_IMAGE_SHA in doc
+    lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
+    assert "Locate and validate CR-012" in lib
     assert "generation pending" in lib.casefold()
-    assert "not gallery-accepted" in lib.casefold() or "not gallery accepted" in lib.casefold()
+    readme = (ROOT / "recipes" / "README.md").read_text(encoding="utf-8")
+    assert CR012_ID in readme
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():

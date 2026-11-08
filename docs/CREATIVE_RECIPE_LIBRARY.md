@@ -392,7 +392,7 @@ None in `1.0.0` — single baseline three-quarter viewpoint instruction only.
 | `recipe_version` | `1.0.0` |
 | `recipe_schema_version` | `1.1` |
 | Route | `reference_transform` |
-| Status | Implemented recipe; generation pending; not gallery-accepted |
+| Status | Implemented recipe; generated; owner-accepted; privately gallery-promoted as the tenth card in the accepted ten-card private gallery (`CR-GATE-017`) |
 
 Source-conditioned Tang era reframing of verified CR-001 fashion subject:
 [CR_011_ERA_REFRAMING.md](CR_011_ERA_REFRAMING.md). Historically informed (not
@@ -418,6 +418,46 @@ python -m pytest -q tests/test_creative_recipe_library.py
 ### Supported variations (CR-011)
 
 None in `1.0.0` — single baseline Tang court-leisure reframing only.
+
+## Locate and validate CR-012
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-012-keyblock-echo/1.0.0.json` |
+| `recipe_id` | `cr-012-keyblock-echo` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `artifact_transform` |
+| Status | Implemented recipe; generation pending; not gallery-accepted |
+
+Source-backed V3.4 relief-print transformation of verified CR-001 fashion
+subject into a Japanese woodblock-inspired print sheet:
+[CR_012_KEYBLOCK_ECHO.md](CR_012_KEYBLOCK_ECHO.md). Uses installed
+`portrait_to_relief_print` + `japanese_woodblock_print` + `print_sheet`; no
+EraPack; does **not** reopen CR-008.
+
+```bash
+aipf recipe validate recipes/cr-012-keyblock-echo/1.0.0.json
+aipf recipe compile recipes/cr-012-keyblock-echo/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-012
+
+- Source-backed relief-print request and locks
+- Route `artifact_transform` with TransformationPack `portrait_to_relief_print`
+- ArtMethod `japanese_woodblock_print`; form `print_sheet`; state `newly_created`
+- Empty EraPack list; no Edo authenticity claim
+- Symbolic reference `cr001-c0-l0-4x5-source` (`identity` / `pose` / `outfit` / `hairstyle`)
+- Identity `recognizable_identity`; body `artistic_stylization` for medium translation
+- Aspect fixed at `4:5`; camera-only v1.1 variables
+- Explicit non-claims: no authenticated Edo production, no anime/ink-wash substitution, no generation in this PR
+
+### Supported variations (CR-012)
+
+| Variable key | Target | Choices |
+| --- | --- | --- |
+| `camera` | `director.camera` | baseline full-figure sheet; elevated sheet-table; medium-long contour/color emphasis |
 
 ## Packaging note
 

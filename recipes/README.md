@@ -40,6 +40,8 @@ Duplicate `(recipe_id, recipe_version)` pairs across this tree are rejected by
 | *(cr-008 blocked)* | — | Golden Fault — localized edit not implemented | — |
 | `cr-009-golden-seam` | `1.0.0` | CR-009 Golden Seam — Controlled Whole-Image Revision | `1.1` |
 | `cr-010-the-second-angle` | `1.0.0` | The Second Angle — Product Viewpoint Transfer | `1.1` |
+| `cr-011-era-reframing` | `1.0.0` | CR-011 Era Reframing — Tang Court-Leisure Photographic Transfer | `1.1` |
+| `cr-012-keyblock-echo` | `1.0.0` | CR-012 Keyblock Echo | `1.1` |
 
 ## Validate and compile CR-001
 
