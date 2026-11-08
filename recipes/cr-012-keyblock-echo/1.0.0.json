@@ -1,0 +1,125 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-012-keyblock-echo",
+  "recipe_version": "1.0.0",
+  "title": "CR-012 Keyblock Echo",
+  "description": "Source-backed V3.4 artifact transformation: translate the verified CR-001 adult fashion photograph into a contemporary Japanese woodblock-inspired relief print on a physical print sheet. Uses portrait_to_relief_print + japanese_woodblock_print + print_sheet + newly_created. Empty EraPack list—no Edo authenticity claim. Symbolic reference roles only; binary reference packaging is out of PromptRecipe scope. Operator must supply the verified CR-001 PNG (SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e) as the image input at generation time. See docs/CR_012_KEYBLOCK_ECHO.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-012-keyblock-echo",
+    "request": "Transform the referenced adult fashion photograph into a newly printed Japanese woodblock-inspired relief print on a physical print sheet, shown as a finished sheet under quiet even light. Preserve recognizable visual identity of the source adult figure, the distinguishing standing stance and key anatomical proportions, the architectural evening-gown silhouette and structural construction, and the hairstyle silhouette, but translate photographic skin, satin reflectance, and continuous tonal modeling into carved-keyblock-inspired contours, deliberately separated ink-color regions, controlled planar value, and credible multi-block color relationships on absorbent paper. The result must read as marks impressed on a physical sheet—not a living photograph with paper texture overlay, not a generic anime or cartoon filter, not a vector illustration without print material cues, not an ink-wash painting, not a watercolor, and not an authenticated Edo-period or historically attributed handmade print. Keep sheet-conscious composition with an intentional paper boundary and margins, restrained printmaking irregularities, plausible registration and impression character, and no logos or invented typography.",
+    "route": "artifact_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "same adult fashion subject as the source reference photograph",
+      "source_reference_required": true,
+      "recognizable_source_identity_pose_gown_and_hairstyle_silhouette": true,
+      "relief_print_sheet_not_photograph_with_texture_filter": true,
+      "keyblock_contours_and_separated_color_blocks": true,
+      "preserve_gown_architectural_silhouette_as_print_construction": true,
+      "no_anime_cartoon_or_vector_only_substitution": true,
+      "no_ink_wash_or_watercolor_substitution": true,
+      "no_authenticated_edo_or_historical_printmaker_attribution": true,
+      "no_logo_brand_text_or_invented_typography": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr001-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-001 verified import original. SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e. Resolve the locally verified CR-001 original through private candidate/import evidence during operator handoff. PromptRecipe encodes symbolic roles only; the operator must attach that PNG to the later image request. The SHA identifies bytes and does not prove upload. Outfit role preserves recognizable gown construction and silhouette for print reinterpretation—it does not lock photographic satin reflectance or pixel-level dress texture."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial structure from the source photograph",
+        "source standing stance and overall silhouette",
+        "architectural evening-gown construction and major draping silhouette from the source outfit",
+        "hairstyle silhouette from the source"
+      ]
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "preserve key adult anatomical proportions while translating living form into planar print figure hierarchy with readable carved contour rather than photographic depth modeling",
+      "pose_change": "preserve the source standing stance as sheet-bound print composition; do not invent a major new pose",
+      "camera_presentation": "allowed for sheet-aware framings that keep paper boundary, margins, and full-figure readability",
+      "garment_shaping": "reinterpret the architectural evening gown as keyblock-outlined drapery and separated ink-color regions: fold architecture and silhouette remain recognizable, but photographic satin specular ribbons become flat or lightly planar printed color—not cloth physics",
+      "artistic_stylization": "Japanese woodblock-inspired relief print on a physical sheet; forbid photographic continuous shading, anime/cartoon substitution, ink-wash painting, watercolor wash, or a photo merely overlaid with paper texture"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary woodblock-inspired print sheet afterimage of a fashion portrait",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": "japanese_woodblock_print",
+      "artifact_form": "print_sheet",
+      "artifact_state": "newly_created",
+      "variant": "contemporary woodblock-inspired relief print interpretation; not an authenticated Edo-period impression and not attributed to a historical printmaker"
+    },
+    "transformation": {
+      "pack_id": "portrait_to_relief_print",
+      "source_representation": "portrait",
+      "selected_concepts": []
+    },
+    "requested_elements": [
+      "physical print sheet showing a Japanese woodblock-inspired relief-print of the referenced adult fashion subject",
+      "carved-keyblock-inspired contours preserving recognizable face, stance, gown silhouette, and hairstyle silhouette",
+      "deliberately separated ink-color regions with controlled planar value",
+      "credible multi-block color relationships and restrained registration/impression character",
+      "absorbent paper boundary and margins readable as a sheet",
+      "quiet even light revealing paper and printed ink, not photographic studio rim packages on living skin",
+      "no additional figures, logos, invented typography, anime/cartoon filter look, ink-wash substitution, or authenticated Edo production claims"
+    ],
+    "director": {
+      "moment": "a settled view of a freshly finished woodblock-inspired print sheet after impression",
+      "action": "the printed figure occupies the impression field in the preserved source standing stance; no living motion in front of a textured photo",
+      "gaze": "printed head orientation matching the source; ink-defined eyes within keyblock contour, not a living camera stare",
+      "body_weight": "pictorial weight reads through printed stance on the sheet plane; the physical sheet lies flat with soft contact on a quiet support",
+      "hand_logic": "hands remain simplified printed forms following source hand positions without photographic skin detail or floating cutouts",
+      "fabric_response": "gown architecture becomes keyblock-outlined drapery and separated color blocks continuous with the print grammar—recognizable construction without photographic satin sheen",
+      "prop_interaction": "print sheet only; no handheld props and no second figure",
+      "foreground": "paper margin and sheet edge with quiet support contact shadow",
+      "midground": "full printed figure reading as one sheet-bound composition with keyblock contour and layered color regions",
+      "background": "sheet negative space and paper tone beyond the impression field; do not retain a photographic cyclorama as living space",
+      "camera": "eye-level three-quarter full-figure sheet frame with slight subject offset, showing paper margins and the full gown silhouette as printed construction",
+      "light_source": "even soft light across the paper sheet revealing ink density and paper fiber, gentle fill, restrained contrast without photographic beauty-rim packages or theatrical god-rays",
+      "material_response": "ink impressed on absorbent kōzo-like paper; carved contour quality; flat or lightly planar color blocks; subtle registration and baren-pressure character; never photographic skin, satin specular ribbons, anime cel shading, or ink-wash bloom",
+      "micro_story": "a contemporary afterimage of a fashion editorial settled into woodblock-inspired relief print as Keyblock Echo"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {
+    "camera": {
+      "type": "enum",
+      "target": "director.camera",
+      "required": false,
+      "description": "Sheet-aware framings that keep paper margins, impression-field readability, and source-figure silhouette continuity.",
+      "choices": [
+        "eye-level three-quarter full-figure sheet frame with slight subject offset, showing paper margins and the full gown silhouette as printed construction",
+        "slightly elevated sheet-table view looking down onto paper plane, margins, and printed drapery color blocks",
+        "eye-level medium-long sheet frame prioritizing keyblock contour and layered color regions while keeping the full printed figure readable"
+      ]
+    }
+  }
+}
