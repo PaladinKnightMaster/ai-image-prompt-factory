@@ -1,0 +1,119 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-011-era-reframing",
+  "recipe_version": "1.0.0",
+  "title": "CR-011 Era Reframing — Tang Court-Leisure Photographic Transfer",
+  "description": "Source-conditioned photographic era reframing of the verified CR-001 Material-Driven Fashion subject: reinterpret the attached adult fashion photograph as a historically informed Tang-dynasty court-leisure editorial while preserving recognizable facial identity, broad three-quarter standing orientation, weight logic, subject hierarchy, and eye-level full-length framing. Replace the modern champagne-satin architectural evening gown, contemporary low chignon, modern makeup, and warm-gray cyclorama with Tang-informed high-waisted long silk skirt, layered upper garments, elaborate upswept hair with restrained ornament, period-coherent makeup, and quiet timber architectural staging under soft daylight. Uses installed route reference_transform with symbolic roles identity/pose/layout only (outfit/hairstyle/environment/palette intentionally unassigned). EraPack tang; historically_informed; no TransformationPack; art.method null. Operator must supply the verified CR-001 PNG (SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e) as the image to condition at generation time. See docs/CR_011_ERA_REFRAMING.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-011-era-reframing",
+    "request": "Using the attached existing CR-001 Material-Driven Fashion photograph as the sole person-identity and stance reference, produce one new photographic fashion editorial of that same recognizable adult woman reinterpreted in a historically informed Tang-dynasty court-leisure reading. Preserve recognizable facial identity, natural adult anatomical proportions, the broad three-quarter standing orientation and weight-distribution logic, overall subject hierarchy, and eye-level full-length editorial framing in a 4:5 composition. Replace—do not recolor or lightly restyle—the modern champagne-satin architectural evening gown, contemporary low chignon, modern editorial makeup, and warm-gray seamless cyclorama with Tang-informed wardrobe and presentation: a high-waisted long silk skirt with soft columnar volume, layered upper garments with readable construction and calm directional silk sheen, an elaborate upswept Tang-informed hairstyle with restrained gold or silver hair ornament, period-coherent makeup that retains visible natural skin texture, and a quiet timber courtyard or palace-adjacent covered walk with tiled-roof cues under soft architectural daylight. Keep the result clearly photographic and living—not an ink painting, mural, sancai figurine, marble sculpture, ceramic portrait, costume-drama mashup, Song slim beizi default, Qing Manchu court robe, or fantasy xianxia tableau. This is semantic whole-image era reframing guidance for a source-conditioned transform, not a pixel-exact identity lock and not a masked local edit.",
+    "route": "reference_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "the same recognizable adult fashion subject as in the attached CR-001 source photograph",
+      "source_reference_required": true,
+      "existing_image_era_reframing_not_unrelated_new_generation": true,
+      "historically_informed_not_reconstruction": true,
+      "photographic_living_scene": true,
+      "preserve_recognizable_facial_identity": true,
+      "preserve_broad_three_quarter_stance_and_weight_logic": true,
+      "preserve_eye_level_full_length_editorial_framing": true,
+      "replace_modern_gown_hair_makeup_and_cyclorama": true,
+      "tang_informed_high_waist_layered_silk_wardrobe": true,
+      "no_song_slim_beizi_as_dominant_silhouette": true,
+      "no_qing_manchu_court_robe": true,
+      "no_fantasy_xianxia_costume": true,
+      "no_medium_conversion_to_ink_mural_sculpture_or_ceramic": true,
+      "no_pixel_exact_identity_or_masked_local_edit_claim": true,
+      "no_mask_or_roi_fields": true,
+      "no_logo_or_brand_text": true,
+      "no_additional_people": true,
+      "prefer_material_fidelity_over_beauty_hype": true
+    },
+    "references": [
+      {
+        "id": "cr001-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "layout"
+        ],
+        "notes": "Authoritative private CR-001 Material-Driven Fashion verified import original. SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e. Resolve the locally verified CR-001 original through private candidate/import evidence during operator handoff. This single PNG is the existing fashion photograph whose facial identity, broad stance, and editorial framing must govern the result; it is not a second style inspiration and CR-002 is not a required attachment. Roles: identity for recognizable adult facial appearance and distinctive stable features; pose for body orientation, limb arrangement, and weight distribution; layout for subject hierarchy, placement, and negative-space logic of the eye-level full-length editorial frame. Deliberately omit outfit, hairstyle, environment, and palette so the modern champagne-satin gown, contemporary low chignon, warm-gray cyclorama, and modern luxury palette are not imported as locked dimensions—those axes are the intended Tang era-reframing changes. PromptRecipe encodes symbolic roles only; the operator must attach that PNG in the same generation request. The SHA identifies bytes and does not prove upload. No mask is supplied or authorized. No pixel-exact identity preservation is claimed."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial appearance from the attached CR-001 fashion photograph",
+        "broad three-quarter standing orientation and weight-distribution logic from the source stance",
+        "eye-level full-length editorial subject hierarchy and framing continuity with the source composition"
+      ]
+    },
+    "body_transformation": {
+      "mode": "preserve",
+      "anatomy_change": "none; preserve natural adult proportions without idealizing measurements or redesigning facial structure",
+      "pose_change": "none; keep the source's broad three-quarter standing orientation, advanced-foot weight logic, and quiet upright torso; do not invent a new dance pose or seated arrangement",
+      "camera_presentation": "match the attached source's eye-level full-length editorial framing and subject hierarchy in a 4:5 composition; do not reframe into a tight beauty crop or a radically new viewpoint experiment",
+      "garment_shaping": "required deliberate wardrobe change: replace the modern champagne-satin architectural evening gown with Tang-informed high-waisted long silk skirt and layered upper garments whose construction, vertical drape, and soft columnar hem weight read as living silk rather than recolored modern gown architecture",
+      "artistic_stylization": "none; keep photographic material response; do not convert the living subject into ink, mural pigment, carved stone, porcelain, or sancai figurine grammar"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "tang"
+      ],
+      "subperiod": "Tang court-leisure inspired high-waist layered silk silhouette (not a dated reconstruction of a specific reign year)",
+      "region": "China; Chang'an/Luoyang-inspired elite court or palace-adjacent courtyard context",
+      "role": "court woman",
+      "occasion": "court leisure",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": null,
+      "artifact_form": null,
+      "artifact_state": null,
+      "variant": null
+    },
+    "requested_elements": [
+      "the same recognizable adult fashion subject as in the attached CR-001 source photograph",
+      "preserved broad three-quarter standing orientation and weight-distribution logic",
+      "preserved eye-level full-length editorial framing and subject hierarchy in 4:5",
+      "Tang-informed high-waisted long silk skirt with soft columnar volume",
+      "layered upper garments with readable construction and calm directional silk sheen",
+      "elaborate upswept Tang-informed hairstyle with restrained gold or silver hair ornament",
+      "period-coherent makeup retaining visible natural skin texture",
+      "quiet timber courtyard or palace-adjacent covered walk with tiled-roof cues",
+      "soft architectural daylight rather than modern cyclorama studio key",
+      "no modern champagne-satin evening gown, no Song slim beizi default, no Qing Manchu court robe, no xianxia fantasy, no ink/mural/sculpture/ceramic medium conversion, no logos or text"
+    ],
+    "director": {
+      "moment": "a quiet settled Tang court-leisure editorial beat after the subject pauses in the timber courtyard walk—cloth already resolved under gravity",
+      "action": "standing in the same broad three-quarter orientation as the attached source, one foot slightly advanced, torso quietly upright, shoulders relaxed into the layered silk architecture",
+      "gaze": "toward camera with calm unsmiling editorial focus continuous with the source's photographic attention; do not redesign facial features",
+      "body_weight": "front advanced foot carries primary weight; rear foot lightly grounded for recoverable balance, matching the source stance logic",
+      "hand_logic": "hands may rest lightly against a silk layer edge or hang relaxed along the skirt plane without clutching props; do not invent handheld fans, swords, or floating scarves as spectacle",
+      "fabric_response": "high-waisted long silk skirt shows soft columnar folds with gentle hem weight; layered upper garments hang in readable construction planes with calm directional sheen along fold crowns; no frozen wind flare and no recolored modern bias-cut evening-gown architecture",
+      "prop_interaction": "no handheld luxury perfume, no modern studio props; optional quiet architectural contact only if a timber column is near—prefer free stance",
+      "foreground": "timber or beaten-earth floor plane with soft daylight shadow falloff toward the viewer",
+      "midground": "full-length adult subject reading as one vertical editorial figure in Tang-informed layered silk, continuous with the source stance hierarchy",
+      "background": "quiet timber courtyard or palace-adjacent covered walk with wooden columns, grey tiled-roof cues, and soft daylight openings; do not retain the modern warm-gray seamless cyclorama",
+      "camera": "eye-level three-quarter full-length editorial frame with slight subject offset from center, matching the attached source's subject hierarchy and 4:5 composition; do not convert into a beauty close-up or a deliberate new-viewpoint experiment",
+      "light_source": "soft architectural daylight from courtyard-side openings as key, large and diffuse, gentle fill from plaster or timber bounce, restrained contrast without cinematic god-rays or modern cyclorama rim packages",
+      "material_response": "living silk shows quiet directional sheen distinct from modern champagne-satin specular ribbons; timber reads as matte wood grain; plaster absorbs light; skin and hair remain photographic rather than painterly or ceramic",
+      "micro_story": "era reframing—the same recognizable woman, still photographic, now dressed and staged in a historically informed Tang court-leisure reading rather than a modern luxury-fashion invent"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}
