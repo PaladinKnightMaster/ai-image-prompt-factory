@@ -88,6 +88,12 @@ CR012_WOODBLOCK_CORE_CONCEPTS = (
     "woodblock.baren_printing",
     "woodblock.kozo_paper",
 )
+CR013_PATH = RECIPES_ROOT / "cr-013-silkline-portrait" / "1.0.0.json"
+CR013_ID = "cr-013-silkline-portrait"
+CR013_VERSION = "1.0.0"
+CR013_KNOWN_RECIPE_SHA = "f0c8b40717a77942195827eb95b79ed6032d25149a4c843617aaee0659024f7f"
+CR013_KNOWN_PROMPT_SHA = "87d0280dc48a3c3801df7fdc0b6ba8eef6d9d7752bcae8300dbc937aa213d3c6"
+CR013_SOURCE_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -1719,17 +1725,163 @@ def test_cr012_camera_bindings_preserve_relief_print_contract():
         assert "edo period" not in prompt.casefold()
 
 
-def test_cr012_library_docs_mark_generation_pending_no_output_yet():
+def test_cr012_library_docs_mark_owner_accepted_and_privately_gallery_promoted():
     doc = (ROOT / "docs" / "CR_012_KEYBLOCK_ECHO.md").read_text(encoding="utf-8")
-    assert "No CR-012 output has yet been generated" in doc or "no CR-012 output has yet been generated" in doc.casefold()
     assert CR012_KNOWN_RECIPE_SHA in doc
     assert CR012_KNOWN_PROMPT_SHA in doc
     assert CR012_SOURCE_IMAGE_SHA in doc
     lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
     assert "Locate and validate CR-012" in lib
-    assert "generation pending" in lib.casefold()
+    assert "owner-accepted" in lib.casefold() or "owner accepted" in lib.casefold()
+    assert "gallery-promoted" in lib.casefold() or "gallery promoted" in lib.casefold()
+    assert "eleventh" in lib.casefold() or "eleven-card" in lib.casefold() or "eleven card" in lib.casefold()
     readme = (ROOT / "recipes" / "README.md").read_text(encoding="utf-8")
     assert CR012_ID in readme
+
+
+def test_cr013_file_exists_and_path_matches_identity():
+    assert CR013_PATH.is_file()
+    assert CR013_PATH.parent.name == CR013_ID
+    assert CR013_PATH.stem == CR013_VERSION
+
+
+def test_cr013_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR013_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR013_ID
+    assert recipe["recipe_version"] == CR013_VERSION
+    assert RECIPE_ID_RE.fullmatch(recipe["recipe_id"])
+    assert RECIPE_VERSION_RE.fullmatch(recipe["recipe_version"])
+
+
+def test_cr013_semantic_spec_is_source_conditioned_gongbi_art_style_transform():
+    recipe = load_recipe(CR013_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "art_style_transform"
+    assert spec["route"] != "artifact_transform"
+    assert spec["route"] != "new_generation"
+    assert "transformation" not in spec
+    assert spec.get("transformation") is None
+    assert spec["art"]["method"] == "gongbi_painting"
+    assert spec["art"]["artifact_form"] == "album_leaf"
+    assert spec["art"]["artifact_state"] == "newly_created"
+    assert spec["historical"]["packs"] == []
+    assert spec["identity"]["mode"] == "recognizable_identity"
+    assert spec["body_transformation"]["mode"] == "artistic_stylization"
+    assert spec["body_transformation"]["mode"] != "preserve"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"]["profile"] == "standard"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 1
+    assert refs[0]["id"] == "cr001-c0-l0-4x5-source"
+    assert set(refs[0]["roles"]) == {"identity", "pose", "outfit", "hairstyle"}
+    assert "environment" not in refs[0]["roles"]
+    assert "palette" not in refs[0]["roles"]
+    notes = refs[0].get("notes") or ""
+    assert CR013_SOURCE_IMAGE_SHA in notes
+    assert "D:\\" not in notes
+    assert "/Users/" not in notes
+    assert "AIPF_Creative_Private" not in notes
+    request = spec["request"].casefold()
+    assert "gongbi" in request
+    assert "photograph" in request or "source" in request
+    assert "woodblock" in request or "relief" in request
+    assert "not" in request
+    assert "anime" in request or "cartoon" in request
+    assert "ink-wash" in request or "ink wash" in request
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert "stylepack" not in blob
+    assert "promptpack" not in blob
+    assert "selected_concepts" not in blob
+    assert "woodblock.keyblock" not in blob
+    assert "edit_region" not in blob
+    assert '"mask"' not in blob
+    raw = CR013_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+    assert recipe.get("variables") in ({}, None)
+
+
+def test_cr013_compiles_as_gongbi_art_style_without_transformation_lexicalization():
+    recipe = load_recipe(CR013_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR013_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR013_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert first["compilation"].get("compiler_version") == "3.2.0"
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "art_method" in sections
+    assert "material_behavior" in sections
+    assert "artifact_form" in sections
+    assert "artifact_state" in sections
+    assert "material_failure_checks" in sections
+    assert "transformation" not in sections
+    assert "lexical_realization" not in sections
+    assert "precise fine contour" in low
+    assert "layered color" in low or "layered" in low
+    assert "silk/paper" in low or "silk" in low
+    assert "brush-built" in low or "brush" in low
+    assert "ink-wash" in low or "ink wash" in low
+    assert "anime" in low
+    assert "album leaf" in low or "album-leaf" in low
+    assert "gongbi" in low
+    assert "edo period" not in low
+    assert "song dynasty" not in low
+    assert "tang dynasty" not in low
+    assert "era_edo" not in sections
+    assert "era_song" not in sections
+    assert "era_tang" not in sections
+    # Positive relief-print / woodblock process instructions must not appear.
+    assert "baren printing" not in low
+    assert "baren-pressure" not in low
+    assert "kento registration" not in low
+    assert "kentō" not in low
+    assert "carved-keyblock-inspired" not in low
+    assert "impressed on a physical sheet" not in low
+    assert "multi-block color" not in low
+    assert "generation" not in first
+    assert not first["compilation"].get("resolved_concepts")
+    # Digests of earlier recipes remain stable under this addition.
+    assert sha256_canonical(load_recipe(CR012_PATH)) == CR012_KNOWN_RECIPE_SHA
+    assert sha256_canonical(load_recipe(CR011_PATH)) == CR011_KNOWN_RECIPE_SHA
+    assert sha256_canonical(load_recipe(CR001_PATH)) == CR001_KNOWN_RECIPE_SHA
+    mutated = deepcopy(recipe)
+    mutated["semantic_spec"]["art"]["method"] = "chinese_ink_painting"
+    mutated_receipt = compile_recipe(mutated)
+    mutated_sections = mutated_receipt["compilation"]["prompt_sections"]
+    assert "chinese ink painting" in mutated_sections.get("art_method", "").casefold()
+    assert "precise fine contour" not in mutated_sections.get("art_method", "").casefold()
+    assert mutated_receipt["prompt_sha256"] != first["prompt_sha256"]
+
+
+def test_cr013_library_docs_mark_generation_pending_no_output_yet():
+    doc = (ROOT / "docs" / "CR_013_SILKLINE_PORTRAIT.md").read_text(encoding="utf-8")
+    assert "RECIPE IMPLEMENTED — GENERATION PENDING" in doc
+    assert "No CR-013 output has yet been generated" in doc or "no CR-013 output has yet been generated" in doc.casefold()
+    assert CR013_KNOWN_RECIPE_SHA in doc
+    assert CR013_KNOWN_PROMPT_SHA in doc
+    assert CR013_SOURCE_IMAGE_SHA in doc
+    assert "art_style_transform" in doc
+    assert "gongbi_painting" in doc
+    assert "TransformationPack" in doc or "transformation pack" in doc.casefold()
+    lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
+    assert "Locate and validate CR-013" in lib
+    assert "generation pending" in lib.casefold()
+    assert "cr-013-silkline-portrait" in lib
+    readme = (ROOT / "recipes" / "README.md").read_text(encoding="utf-8")
+    assert CR013_ID in readme
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():

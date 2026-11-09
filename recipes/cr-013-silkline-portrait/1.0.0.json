@@ -1,0 +1,110 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-013-silkline-portrait",
+  "recipe_version": "1.0.0",
+  "title": "CR-013 Silkline Portrait",
+  "description": "Source-conditioned art-style transformation: translate the verified CR-001 adult fashion photograph into a contemporary gongbi-inspired meticulous Chinese figure painting on an album-leaf support. Uses art_style_transform + gongbi_painting + album_leaf + newly_created. No TransformationPack (painting ArtMethod has no concept_refs; fragments emit on the non-lexical compiler path). Empty EraPack list—no dynasty authenticity claim and no named historical artist attribution. Symbolic reference roles only; binary reference packaging is out of PromptRecipe scope. Operator must supply the verified CR-001 PNG (SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e) as the image input at generation time. See docs/CR_013_SILKLINE_PORTRAIT.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-013-silkline-portrait",
+    "request": "Transform the referenced adult fashion photograph into a contemporary gongbi-inspired meticulous Chinese figure painting on a prepared album-leaf painting support. Preserve recognizable visual identity of the source adult figure, the distinguishing standing stance and key anatomical proportions, the architectural evening-gown silhouette including original neckline and draped fabric construction, and the hairstyle silhouette, but translate photographic skin, satin reflectance, and continuous tonal modeling into precise controlled fine brush contours, deliberate line hierarchy, patient layered pigment relationships, subtle tonal transitions, carefully articulated folds, and a credible smooth prepared painting surface rather than a photographic overlay. Keep the modern fashion wardrobe modern—do not invent historical Chinese costume or accessories. The result must read as brush-painted fine-line figure painting—not a living photograph with painting-texture overlay, not generic anime or cartoon rendering, not uniform vector line art, not Japanese woodblock or relief-print appearance with keyblock carving, separated printing-block registration, or baren-impression simulation, not loose expressive ink-wash painting, not watercolor or oil-paint substitution, and not a handmade historical court painting or work attributed to a named historical artist or dynasty workshop. Keep album-leaf-conscious composition with readable full-figure fashion hierarchy in a 4:5 field, restrained contemporary presentation, and no logos or invented typography.",
+    "route": "art_style_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "same adult fashion subject as the source reference photograph",
+      "source_reference_required": true,
+      "recognizable_source_identity_pose_gown_and_hairstyle_silhouette": true,
+      "gongbi_painting_not_photograph_with_texture_filter": true,
+      "fine_line_brush_contours_and_layered_pigment": true,
+      "preserve_gown_architectural_silhouette_as_painted_construction": true,
+      "preserve_modern_fashion_wardrobe_not_historical_chinese_costume": true,
+      "no_anime_cartoon_or_vector_only_substitution": true,
+      "no_woodblock_relief_print_keyblock_or_baren_substitution": true,
+      "no_ink_wash_watercolor_or_oil_substitution": true,
+      "no_handmade_dynasty_or_named_historical_artist_attribution": true,
+      "no_logo_brand_text_or_invented_typography": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr001-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-001 verified import original. SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e. Resolve the locally verified CR-001 original through private candidate/import evidence during operator handoff. PromptRecipe encodes symbolic roles only; the operator must attach that PNG to the later image request. The SHA identifies bytes and does not prove upload. Outfit role preserves recognizable gown construction, neckline, and silhouette for painted reinterpretation—it does not lock photographic satin reflectance or pixel-level dress texture."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial structure and expression from the source photograph",
+        "source standing stance and overall silhouette",
+        "architectural evening-gown construction, original neckline, and major draping silhouette from the source outfit",
+        "hairstyle silhouette from the source"
+      ]
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "preserve key adult anatomical proportions while translating living form into meticulously painted figure hierarchy with controlled brush contours rather than photographic depth modeling",
+      "pose_change": "preserve the source standing stance as painted album-leaf composition; do not invent a major new pose",
+      "camera_presentation": "allowed for painting-support-aware framings that keep full-figure readability and gown silhouette within a 4:5 album-leaf field",
+      "garment_shaping": "reinterpret the architectural evening gown as fine-line outlined drapery with layered pigment within folds: neckline, fold architecture, and silhouette remain recognizable and modern, but photographic satin specular ribbons become restrained painted tonal relationships—not cloth physics and not historical Chinese costume substitution",
+      "artistic_stylization": "contemporary gongbi-inspired meticulous figure painting; forbid photographic continuous shading, anime/cartoon substitution, uniform vector line art, woodblock or relief-print keyblock/baren language, loose ink-wash painting, watercolor or oil substitution, or a photo merely overlaid with painting texture"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary gongbi-inspired figure painting afterimage of a fashion portrait",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": "gongbi_painting",
+      "artifact_form": "album_leaf",
+      "artifact_state": "newly_created",
+      "variant": "contemporary digital gongbi-inspired meticulous figure painting on prepared silk-or-paper album-leaf support; not a handmade historical court painting and not attributed to a named historical artist or dynasty workshop"
+    },
+    "requested_elements": [
+      "prepared album-leaf painting support showing a contemporary gongbi-inspired meticulous figure painting of the referenced adult fashion subject",
+      "precise controlled fine brush contours with deliberate line hierarchy preserving recognizable face, stance, gown silhouette including neckline, and hairstyle silhouette",
+      "patient layered pigment with subtle tonal transitions and carefully articulated fabric folds as painted construction",
+      "credible smooth prepared silk-or-paper painting surface rather than photographic overlay",
+      "modern fashion wardrobe retained as modern gown architecture—not historical Chinese costume",
+      "quiet even pictorial illumination revealing brush-built color, not photographic studio rim packages on living skin",
+      "no additional figures, logos, invented typography, anime/cartoon filter look, woodblock/relief-print keyblock or baren simulation, loose ink-wash substitution, watercolor or oil substitution, handmade dynasty claim, or named historical artist attribution"
+    ],
+    "director": {
+      "moment": "a settled view of a freshly finished contemporary gongbi-inspired figure painting on an album leaf",
+      "action": "the painted figure occupies the album-leaf field in the preserved source standing stance; no living motion in front of a textured photo",
+      "gaze": "painted head orientation matching the source; brush-defined eyes within fine contour, not a living camera stare",
+      "body_weight": "pictorial weight reads through painted stance on the support plane while essential adult proportions remain readable",
+      "hand_logic": "hands remain carefully painted forms following source hand positions without photographic skin pores or floating cutouts",
+      "fabric_response": "gown architecture becomes fine-line outlined drapery with layered pigment continuous with gongbi grammar—recognizable modern neckline and construction without photographic satin sheen and without historical Chinese costume replacement",
+      "prop_interaction": "painting support only; no handheld props and no second figure",
+      "foreground": "quiet support edge and album-leaf margin",
+      "midground": "full painted figure reading as one meticulously brushed composition with controlled contour hierarchy and layered color",
+      "background": "restrained negative space on prepared silk-or-paper beyond the figure; do not retain a photographic cyclorama as living space",
+      "camera": "eye-level three-quarter full-figure painting frame with slight subject offset, showing the album-leaf field and the full gown silhouette as painted construction in a 4:5 composition",
+      "light_source": "even soft pictorial light across the painting support revealing layered pigment and brush edges, gentle fill, restrained contrast without photographic beauty-rim packages",
+      "material_response": "fine even contour lines with deliberate hierarchy; layered transparent-to-opaque pigment on prepared silk or paper; minute garment and facial detail without photographic pores; never photographic skin, satin specular ribbons, anime cel shading, woodblock keyblock carving, separated printing-block registration, baren impression, loose ink-wash bloom, watercolor wash, or oil impasto",
+      "micro_story": "a contemporary afterimage of a fashion editorial settled into gongbi-inspired meticulous figure painting as Silkline Portrait"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}
