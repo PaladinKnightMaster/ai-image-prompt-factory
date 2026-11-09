@@ -468,7 +468,7 @@ python -m pytest -q tests/test_creative_recipe_library.py
 | `recipe_version` | `1.0.0` |
 | `recipe_schema_version` | `1.1` |
 | Route | `art_style_transform` |
-| Status | Implemented recipe; generation pending; not gallery-accepted |
+| Status | Implemented recipe; generated; owner-accepted; privately gallery-promoted as the twelfth card in the accepted twelve-card private gallery (`CR-GATE-017`) |
 
 Source-conditioned gongbi-inspired meticulous figure painting of verified CR-001
 fashion subject on an album-leaf support:
@@ -496,6 +496,45 @@ python -m pytest -q tests/test_creative_recipe_library.py
 ### Supported variations (CR-013)
 
 None in `1.0.0` — single baseline full-figure album-leaf gongbi framing only.
+
+## Locate and validate CR-014
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-014-inkflow-figure/1.0.0.json` |
+| `recipe_id` | `cr-014-inkflow-figure` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `art_style_transform` |
+| Status | Implemented recipe; generation pending; not gallery-accepted |
+
+Source-conditioned expressive Chinese ink figure painting of verified CR-001
+fashion subject on an absorbent album-leaf support:
+[CR_014_INKFLOW_FIGURE.md](CR_014_INKFLOW_FIGURE.md). Uses installed
+`art_style_transform` + `chinese_ink_painting` + `album_leaf`; no TransformationPack;
+no EraPack; does **not** reopen CR-008, CR-012, or CR-013.
+
+```bash
+aipf recipe validate recipes/cr-014-inkflow-figure/1.0.0.json
+aipf recipe compile recipes/cr-014-inkflow-figure/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-014
+
+- Source-conditioned expressive ink painting request and locks
+- Route `art_style_transform` (no TransformationPack; not `artifact_transform`)
+- ArtMethod `chinese_ink_painting`; form `album_leaf`; state `newly_created`
+- Empty EraPack list; no dynasty or named-artist authenticity claim
+- Symbolic reference `cr001-c0-l0-4x5-source` (`identity` / `pose` / `outfit` / `hairstyle`)
+- Identity `recognizable_identity`; body `artistic_stylization` for medium translation
+- Hierarchical preservation: major gown architecture locked; minor folds/seams omittable
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline)
+- Explicit non-claims: no gongbi fine-line substitution, no woodblock/relief-print process, no fake calligraphy/seals, no historical costume replacement, no generation in this PR
+
+### Supported variations (CR-014)
+
+None in `1.0.0` — single baseline full-figure album-leaf expressive-ink framing only.
 
 ## Packaging note
 
