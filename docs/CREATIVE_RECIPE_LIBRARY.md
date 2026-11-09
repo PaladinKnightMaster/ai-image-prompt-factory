@@ -428,7 +428,7 @@ None in `1.0.0` — single baseline Tang court-leisure reframing only.
 | `recipe_version` | `1.0.0` |
 | `recipe_schema_version` | `1.1` |
 | Route | `artifact_transform` |
-| Status | Implemented recipe; generation pending; not gallery-accepted |
+| Status | Implemented recipe; generated; owner-accepted; privately gallery-promoted as the eleventh card in the accepted eleven-card private gallery (`CR-GATE-017`) |
 
 Source-backed V3.4 relief-print transformation of verified CR-001 fashion
 subject into a Japanese woodblock-inspired print sheet:
@@ -451,13 +451,51 @@ python -m pytest -q tests/test_creative_recipe_library.py
 - Symbolic reference `cr001-c0-l0-4x5-source` (`identity` / `pose` / `outfit` / `hairstyle`)
 - Identity `recognizable_identity`; body `artistic_stylization` for medium translation
 - Aspect fixed at `4:5`; camera-only v1.1 variables
-- Explicit non-claims: no authenticated Edo production, no anime/ink-wash substitution, no generation in this PR
+- Explicit non-claims: no authenticated Edo production, no anime/ink-wash substitution
 
 ### Supported variations (CR-012)
 
 | Variable key | Target | Choices |
 | --- | --- | --- |
 | `camera` | `director.camera` | baseline full-figure sheet; elevated sheet-table; medium-long contour/color emphasis |
+
+## Locate and validate CR-013
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-013-silkline-portrait/1.0.0.json` |
+| `recipe_id` | `cr-013-silkline-portrait` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `art_style_transform` |
+| Status | Implemented recipe; generation pending; not gallery-accepted |
+
+Source-conditioned gongbi-inspired meticulous figure painting of verified CR-001
+fashion subject on an album-leaf support:
+[CR_013_SILKLINE_PORTRAIT.md](CR_013_SILKLINE_PORTRAIT.md). Uses installed
+`art_style_transform` + `gongbi_painting` + `album_leaf`; no TransformationPack;
+no EraPack; does **not** reopen CR-008 or CR-012.
+
+```bash
+aipf recipe validate recipes/cr-013-silkline-portrait/1.0.0.json
+aipf recipe compile recipes/cr-013-silkline-portrait/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-013
+
+- Source-conditioned gongbi painting request and locks
+- Route `art_style_transform` (no TransformationPack; not `artifact_transform`)
+- ArtMethod `gongbi_painting`; form `album_leaf`; state `newly_created`
+- Empty EraPack list; no dynasty or named-artist authenticity claim
+- Symbolic reference `cr001-c0-l0-4x5-source` (`identity` / `pose` / `outfit` / `hairstyle`)
+- Identity `recognizable_identity`; body `artistic_stylization` for medium translation
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline)
+- Explicit non-claims: no woodblock/relief-print process, no ink-wash/anime substitution, no historical costume replacement, no generation in this PR
+
+### Supported variations (CR-013)
+
+None in `1.0.0` — single baseline full-figure album-leaf gongbi framing only.
 
 ## Packaging note
 
