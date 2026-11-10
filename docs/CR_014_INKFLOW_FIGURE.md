@@ -214,11 +214,31 @@ reliability validation.
 
 ## Manual ChatGPT Images feasibility
 
-Feasible as an **owner-operated** later gate:
+Feasible as an **owner-operated** later gate after recipe merge and **separate
+authorization**. Image generation is **not** authorized by this documentation
+alone.
 
-- Attach the verified CR-001 PNG and the exact compiled baseline prompt in one request.
-- Do not attach CR-012 or CR-013 output.
-- No private gallery promotion without a separate authorization gate.
+Manual custody uses the offline prepare workflow, not the compiler baseline as
+the submission artifact:
+
+1. Run `python scripts/creative_recipe_generation.py prepare` for this recipe
+   into private storage (separate authorization).
+2. Verify the immutable preparation `receipt.json` and `manifest.json`.
+3. Compute the actual SHA-256 of the adapter-effective `prompt.txt` produced by
+   that prepare gate. Do **not** invent or pre-claim that digest here; it is
+   unknown until preparation exists.
+4. Re-verify the canonical CR-001 original PNG against
+   `0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e`.
+5. In one ChatGPT Images request, attach that verified PNG and paste the exact
+   prepared `prompt.txt` text. Do not attach CR-012 or CR-013 outputs.
+6. Preserve a genuine pre-submit screenshot when available.
+7. Offline `input_references: []` (or similar local preview emptiness) does **not**
+   prove provider-side attachment.
+
+The Digests table baseline compiled prompt is **compiler evidence** only. It is
+not the authoritative manual-submission artifact; submit adapter-effective
+`prompt.txt` after prepare. No private gallery promotion without a separate
+authorization gate.
 
 ## Preparation and generation status
 
