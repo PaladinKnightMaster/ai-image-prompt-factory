@@ -1,0 +1,111 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-014-inkflow-figure",
+  "recipe_version": "1.0.0",
+  "title": "CR-014 Inkflow Figure",
+  "description": "Source-conditioned art-style transformation: translate the verified CR-001 adult fashion photograph into a contemporary expressive Chinese ink figure painting on an absorbent album-leaf support. Uses art_style_transform + chinese_ink_painting + album_leaf + newly_created. No TransformationPack (painting ArtMethod has no concept_refs; fragments emit on the non-lexical compiler path). Empty EraPack list—no dynasty authenticity claim and no named historical artist attribution. Symbolic reference roles only; binary reference packaging is out of PromptRecipe scope. Operator must supply the verified CR-001 PNG (SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e) as the image input at generation time. See docs/CR_014_INKFLOW_FIGURE.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-014-inkflow-figure",
+    "request": "Transform the referenced adult fashion photograph into a contemporary expressive Chinese ink figure painting on an absorbent album-leaf painting support. Preserve recognizable visual identity of the source adult figure, the distinguishing standing stance and key anatomical proportions, the overall evening-gown silhouette including the draped neckline and major gathered-fabric architecture, and the hairstyle silhouette, while explicitly authorizing selective omission of nonessential fine garment seams, minor folds and pleats, satin microtexture and gloss, photographic skin detail, photographic shadow gradients, and fine incidental background detail—do not reconstruct the gown through exhaustive line tracing. Translate photographic skin, satin reflectance, and continuous tonal modeling into confident variable calligraphic brushwork with tapered stroke beginnings and endings, directional brush rhythm following anatomy and major garment structure, wet diluted washes for broad tonal masses with controlled feathering on absorbent support, dry-brush drag for selected structural accents, and a coherent ink-density hierarchy from purposeful untouched support through pale gray wash and intermediate diluted ink to dark structural marks with selective concentrated black accents. Keep intentional negative space that participates in silhouette, body-versus-gown separation, selected overlapping garment masses, and surrounding composition—not a blank backdrop alone. Keep the modern fashion wardrobe modern—do not invent historical Chinese costume, jewelry, hair ornaments, accessories, written calligraphy text, red seals, signatures, dynasty attribution, or named historical artist claims. The result must read as expressive Chinese ink figure painting—not a living photograph with black watercolor or ink-texture overlay, not a uniform grayscale or sepia digital fashion illustration, not gongbi fine-line meticulous contour-and-layered-color painting with uniform thin outlines and exhaustive fold tracing, not Japanese woodblock or relief-print appearance with keyblock carving, separated printing-block registration, kentō marks, or baren-impression simulation, not Western watercolor substitution, not anime or cartoon rendering, not uniform vector line art, not random decorative black splatter without structural brush logic, not photorealistic airbrushed facial gradients, and not a handmade historical painting. Keep album-leaf-conscious composition with readable full-figure fashion hierarchy in a 4:5 field and restrained contemporary presentation, with no logos or invented typography.",
+    "route": "art_style_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "same adult fashion subject as the source reference photograph",
+      "source_reference_required": true,
+      "recognizable_source_identity_pose_gown_and_hairstyle_silhouette": true,
+      "chinese_ink_painting_not_photograph_with_texture_filter": true,
+      "expressive_calligraphic_brush_and_ink_wash_not_gongbi_fine_line": true,
+      "preserve_gown_architectural_silhouette_with_permitted_fold_simplification": true,
+      "preserve_modern_fashion_wardrobe_not_historical_chinese_costume": true,
+      "no_anime_cartoon_or_vector_only_substitution": true,
+      "no_woodblock_relief_print_keyblock_or_baren_substitution": true,
+      "no_gongbi_watercolor_oil_or_sepia_illustration_substitution": true,
+      "no_fake_calligraphy_seals_dynasty_or_named_historical_artist_attribution": true,
+      "no_logo_brand_text_or_invented_typography": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr001-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-001 verified import original. SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e. Resolve the locally verified CR-001 original through private candidate/import evidence during operator handoff. PromptRecipe encodes symbolic roles only; the operator must attach that PNG to the later image request. The SHA identifies bytes and does not prove upload. Outfit role preserves recognizable gown silhouette, draped neckline, and major gathered-fabric architecture for ink reinterpretation—it does not lock photographic satin reflectance, every seam, every minor fold, or pixel-level dress texture; selective omission of nonessential detail is authorized."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial structure and broad expression from the source photograph",
+        "source standing stance and overall silhouette",
+        "overall evening-gown silhouette, draped neckline, and major gathered-fabric architecture from the source outfit",
+        "hairstyle silhouette from the source"
+      ]
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "preserve key adult anatomical proportions while translating living form into expressive ink-figure hierarchy with calligraphic brush rhythm rather than photographic depth modeling",
+      "pose_change": "preserve the source standing stance as painted album-leaf composition; do not invent a major new pose",
+      "camera_presentation": "allowed for painting-support-aware framings that keep full-figure readability and gown silhouette within a 4:5 album-leaf field",
+      "garment_shaping": "reinterpret the architectural evening gown through variable brush weight and wash density: draped neckline, major gathered-fabric architecture, and overall silhouette remain recognizable and modern, but minor seams, repetitive pleats, and nonessential folds may be selectively omitted; photographic satin specular ribbons become ink-wash tonal relationships—not cloth physics and not historical Chinese costume substitution",
+      "artistic_stylization": "contemporary expressive Chinese ink figure painting; forbid photographic continuous shading, anime/cartoon substitution, gongbi fine-line meticulous color painting with uniform outlines, woodblock or relief-print language, Western watercolor substitution, sepia digital illustration, random decorative splatter without structural brush logic, or a photo merely overlaid with ink texture"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary expressive Chinese ink figure painting afterimage of a fashion portrait",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": "chinese_ink_painting",
+      "artifact_form": "album_leaf",
+      "artifact_state": "newly_created",
+      "variant": "contemporary digital expressive Chinese ink figure painting on absorbent paper-or-silk album-leaf support; not a handmade historical painting and not attributed to a named historical artist or dynasty workshop; no invented written calligraphy, red seals, or signatures"
+    },
+    "requested_elements": [
+      "absorbent album-leaf painting support showing a contemporary expressive Chinese ink figure painting of the referenced adult fashion subject",
+      "confident variable calligraphic brush marks with wet-wash versus dry-brush contrast preserving recognizable face, stance, overall gown silhouette including draped neckline and major gathered-fabric architecture, and hairstyle silhouette",
+      "layered ink-density hierarchy from purposeful untouched support through pale gray and intermediate washes to dark structural marks with selective concentrated black accents",
+      "intentional negative space participating in silhouette, body-versus-gown separation, and selected overlapping garment masses",
+      "selective omission of nonessential seams, minor folds, individual hair strands, and photographic surface microdetail",
+      "modern fashion wardrobe retained as modern gown architecture—not historical Chinese costume",
+      "pictorial value built from ink concentration and reserved blank support, not photographic studio rim packages on living skin",
+      "no additional figures, logos, invented typography, anime/cartoon look, woodblock/relief-print simulation, gongbi fine-line color painting, Western watercolor substitution, fake calligraphy or seals, dynasty claim, or named historical artist attribution"
+    ],
+    "director": {
+      "moment": "a settled view of a freshly finished contemporary expressive Chinese ink figure painting on an album leaf",
+      "action": "the painted figure occupies the album-leaf field in the preserved source standing stance; form is built by directional calligraphic brush rhythm rather than living motion in front of a textured photo",
+      "gaze": "painted head orientation matching the source; eyes suggested through ink marks within calligraphic structure, not a living camera stare, not photoreal airbrushed facial gradients, and not every individual hair strand rendered",
+      "body_weight": "pictorial weight reads through ink-constructed stance on the support plane while essential adult proportions remain readable",
+      "hand_logic": "hands remain ink-constructed forms following source hand positions without photographic skin pores or floating cutouts; minor finger detail may be selectively omitted",
+      "fabric_response": "gown architecture becomes variable-pressure brush and wash drapery continuous with Chinese ink grammar—recognizable modern draped neckline and major gathered-fabric architecture without photographic satin sheen, without tracing every seam or minor fold, and without historical Chinese costume replacement",
+      "prop_interaction": "painting support only; no handheld props, no second figure, no invented red seals, signatures, or written calligraphy text",
+      "foreground": "quiet support edge and album-leaf margin showing absorbent-paper character with restrained ink edge diffusion",
+      "midground": "full ink-painted figure reading as one calligraphic composition with wet diluted washes for broad tonal masses, dry-brush drag on selected structural accents, and a clear ink-density hierarchy from pale gray wash to concentrated dark marks",
+      "background": "intentional negative space on absorbent paper or silk that helps define the figure silhouette, separates body from gown masses, and shapes selected overlapping folds; do not retain a photographic cyclorama as living space, and do not treat blankness alone as successful negative space without structural participation",
+      "camera": "eye-level three-quarter full-figure painting frame with slight subject offset, showing the album-leaf field and the full gown silhouette as ink construction in a 4:5 composition",
+      "light_source": "value from ink concentration and reserved blank support rather than photographic beauty-rim packages; gentle pictorial readability without studio spotlight simulation or airbrushed photographic gradients",
+      "material_response": "calligraphic brush-tip taper with variable pressure and line width; dry-brush drag contrasted with wet-wash bloom and restrained diffusion on absorbent fibers; uneven but controlled ink concentration from untouched support through pale gray and intermediate diluted ink to dark structural contours and selective concentrated black accents; never photographic skin or satin specular ribbons; never gongbi fine even contour-and-layered-color grammar with meticulous exhaustive fold tracing; never anime cel shading; never woodblock keyblock carving, separated printing-block registration, kentō marks, or baren impression; never Western watercolor-only blooms; never random decorative black splatter; never fake written calligraphy, red seals, or signatures",
+      "micro_story": "a contemporary afterimage of a fashion editorial settled into expressive Chinese ink figure painting as Inkflow Figure"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}
