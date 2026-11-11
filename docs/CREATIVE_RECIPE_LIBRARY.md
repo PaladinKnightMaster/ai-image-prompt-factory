@@ -545,13 +545,14 @@ None in `1.0.0` — single baseline full-figure album-leaf expressive-ink framin
 | `recipe_version` | `1.0.0` |
 | `recipe_schema_version` | `1.1` |
 | Route | `art_style_transform` |
-| Status | Implemented recipe; generation pending; not gallery-accepted |
+| Status | `CR-015 CLOSED — OWNER ACCEPTED — PRIVATE GALLERY VERIFIED`; generated; owner-accepted; privately gallery-promoted as the fourteenth card in the accepted fourteen-card private gallery (`CR-GATE-017`); final owner browser verification passed |
 
 Source-conditioned layered-paper pop-up diorama of verified CR-001 fashion
 subject:
 [CR_015_CUT_SPACE_PORTRAIT.md](CR_015_CUT_SPACE_PORTRAIT.md). Uses installed
 `art_style_transform` + `paper_cut_layered` + `popup_diorama`; no TransformationPack;
-no EraPack; does **not** reopen CR-008, CR-012, CR-013, or CR-014.
+no EraPack; does **not** reopen CR-008, CR-012, CR-013, or CR-014. Private image
+assets and gallery bytes remain outside Git.
 
 ```bash
 aipf recipe validate recipes/cr-015-cut-space-portrait/1.0.0.json
@@ -570,7 +571,7 @@ python -m pytest -q tests/test_creative_recipe_library.py
 - Hierarchical preservation: major face/pose/gown/hairstyle architecture locked; minor folds/seams/hair strands omittable into supported paper shapes
 - Paper topology: bridges/tabs/folds/glued joins, F/M/B layer spacing, construction-caused shadows, structural negative space
 - Aspect fixed at `4:5`; empty `variables` (single embedded baseline)
-- Explicit non-claims: no photo-texture overlay, no CGI plastic, no sculpture/woodblock/gongbi/ink-wash primary substitution, no historical costume replacement, no generation in this PR
+- Explicit non-claims: no photo-texture overlay, no CGI plastic, no sculpture/woodblock/gongbi/ink-wash primary substitution, no historical costume replacement; provider telemetry not independently verified; digital simulation with qualified support connectivity (no physical-buildability certification)
 
 ### Supported variations (CR-015)
 

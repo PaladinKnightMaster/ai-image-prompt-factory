@@ -44,7 +44,7 @@ Duplicate `(recipe_id, recipe_version)` pairs across this tree are rejected by
 | `cr-012-keyblock-echo` | `1.0.0` | CR-012 Keyblock Echo | `1.1` |
 | `cr-013-silkline-portrait` | `1.0.0` | CR-013 Silkline Portrait | `1.1` |
 | `cr-014-inkflow-figure` | `1.0.0` | CR-014 Inkflow Figure | `1.1` |
-| `cr-015-cut-space-portrait` | `1.0.0` | CR-015 Cut-Space Portrait | `1.1` |
+| `cr-015-cut-space-portrait` | `1.0.0` | CR-015 Cut-Space Portrait (`CLOSED — OWNER ACCEPTED — PRIVATE GALLERY VERIFIED`; rasters not in Git) | `1.1` |
 
 ## Validate and compile CR-001
 

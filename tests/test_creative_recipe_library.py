@@ -2063,7 +2063,8 @@ def test_cr014_library_docs_mark_generation_pending_no_output_yet():
     assert "selective omission" in doc.casefold()
     lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
     assert "Locate and validate CR-014" in lib
-    assert "generation pending" in lib.casefold()
+    cr014_section = lib.split("Locate and validate CR-014")[1].split("Locate and validate CR-015")[0]
+    assert "thirteenth card" in cr014_section.casefold()
     assert "cr-014-inkflow-figure" in lib
     readme = (ROOT / "recipes" / "README.md").read_text(encoding="utf-8")
     assert CR014_ID in readme
@@ -2237,10 +2238,16 @@ def test_cr015_compiles_as_paper_cut_art_style_without_transformation_lexicaliza
     assert mutated_receipt["prompt_sha256"] != first["prompt_sha256"]
 
 
-def test_cr015_library_docs_mark_generation_pending_no_output_yet():
+def test_cr015_library_docs_mark_closed_owner_accepted_gallery_verified():
     doc = (ROOT / "docs" / "CR_015_CUT_SPACE_PORTRAIT.md").read_text(encoding="utf-8")
-    assert "RECIPE IMPLEMENTED — GENERATION PENDING" in doc
-    assert "No CR-015 output has yet been generated" in doc or "no CR-015 output has yet been generated" in doc.casefold()
+    assert "CR-015 CLOSED — OWNER ACCEPTED — PRIVATE GALLERY VERIFIED" in doc
+    assert "GENERATION PENDING" not in doc
+    assert "No CR-015 output has yet been generated" not in doc
+    assert "thirteen-card" not in doc.casefold()
+    assert "fourteen" in doc.casefold()
+    assert "ffb565d4ceea8e640d779c8a28e97484bee9cd1ed93da0de394cd03dd48c7da2" in doc
+    assert "91e1d81fc85ec980c1de9ce9e640e23ea770e8fa71111dbaf29c2b4de74fbf53" in doc
+    assert "ba0f55215926a976dfdbe9dc15a1e716ca4209952e7e7cbe650dd5c626366a07" in doc
     assert CR015_KNOWN_RECIPE_SHA in doc
     assert CR015_KNOWN_PROMPT_SHA in doc
     assert CR015_SOURCE_IMAGE_SHA in doc
@@ -2252,15 +2259,22 @@ def test_cr015_library_docs_mark_generation_pending_no_output_yet():
     assert "bridge" in doc.casefold() or "tab" in doc.casefold()
     assert "prompt.txt" in doc
     assert "compiler_prompt.txt" in doc.casefold() or "Do **not** submit `compiler_prompt.txt`" in doc
+    assert "not independently verified" in doc.casefold() or "telemetry" in doc.casefold()
+    assert "digital simulation" in doc.casefold()
+    assert "AIPF_Creative_Private" not in doc
     lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
     assert "Locate and validate CR-015" in lib
-    assert "generation pending" in lib.casefold()
+    cr015_section = lib.split("Locate and validate CR-015")[1]
+    assert "CR-015 CLOSED — OWNER ACCEPTED — PRIVATE GALLERY VERIFIED" in cr015_section
+    assert "generation pending" not in cr015_section.casefold()
+    assert "fourteenth card" in cr015_section.casefold()
     assert "cr-015-cut-space-portrait" in lib
     assert "popup_diorama" in lib
     assert "thirteenth card" in lib.casefold()
     assert "Implemented recipe; generation pending; not gallery-accepted" not in lib.split("Locate and validate CR-014")[1].split("Locate and validate CR-015")[0]
     readme = (ROOT / "recipes" / "README.md").read_text(encoding="utf-8")
     assert CR015_ID in readme
+    assert "CLOSED — OWNER ACCEPTED — PRIVATE GALLERY VERIFIED" in readme
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():
