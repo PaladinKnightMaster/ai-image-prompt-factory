@@ -2,12 +2,16 @@
 
 Creative Research recipe: **source-conditioned** art-style transformation from the
 verified CR-001 fashion photograph into a contemporary layered-paper pop-up
-diorama. PromptRecipe library only in this delivery—no image generation, custody
-import, or gallery index changes.
+diorama.
 
-**Status: RECIPE IMPLEMENTED — GENERATION PENDING**
+**Status: `CR-015 CLOSED — OWNER ACCEPTED — PRIVATE GALLERY VERIFIED`**
 
-**No CR-015 output has yet been generated.**
+One owner-operated ChatGPT Images generation was completed. Original-byte custody
+was locally verified. Owner KEEP was explicitly confirmed. The private creative
+gallery (`CR-GATE-017`) contains fourteen accepted cards, and final owner browser
+verification passed. Private image assets, custody bundles, and gallery index
+bytes remain outside Git and are not committed here. Provider-side attachment and
+request telemetry were not independently verified. The paper diorama is a digital simulation with qualified support connectivity; physical buildability is not certified.
 
 | Field | Value |
 | --- | --- |
@@ -281,8 +285,18 @@ gallery promotion without a separate authorization gate.
 
 | Item | Status |
 | --- | --- |
-| Recipe `1.0.0` | Implemented |
-| Image generation | **Pending** (not authorized in this PR) |
-| Private preparation bundle | Not created |
-| Gallery candidate | Absent |
-| Private gallery (`CR-GATE-017`) | Unchanged thirteen-card baseline |
+| Recipe `1.0.0` | Implemented (unchanged) |
+| Image generation | **Completed** — one manual ChatGPT Images generation |
+| Original-byte custody | Locally verified (private; not in Git) |
+| Owner creative decision | **KEEP** — explicitly confirmed |
+| Private preparation / candidate | Present under private custody (not in Git) |
+| Private gallery (`CR-GATE-017`) | **Fourteen** accepted cards; final owner browser verification **PASS** |
+| Closure label | `CR-015 CLOSED — OWNER ACCEPTED — PRIVATE GALLERY VERIFIED` |
+
+Private custody digests (referenced only; assets not committed):
+
+- Original SHA-256: `ffb565d4ceea8e640d779c8a28e97484bee9cd1ed93da0de394cd03dd48c7da2`
+- Adapter prompt SHA-256: `91e1d81fc85ec980c1de9ce9e640e23ea770e8fa71111dbaf29c2b4de74fbf53`
+- Owner KEEP decision SHA-256: `ba0f55215926a976dfdbe9dc15a1e716ca4209952e7e7cbe650dd5c626366a07`
+- Gallery index SHA-256: `c9d4e73e1322192004a86d64dc55efc59758bacd37c4622fcba53a95f82913d3`
+- Gallery manifest SHA-256: `6e9428a58593d766e4fbc6e5134b66bf78e5e30b6608809e6f9eda52bdefa4eb`
