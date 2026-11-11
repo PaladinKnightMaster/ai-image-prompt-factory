@@ -506,7 +506,7 @@ None in `1.0.0` — single baseline full-figure album-leaf gongbi framing only.
 | `recipe_version` | `1.0.0` |
 | `recipe_schema_version` | `1.1` |
 | Route | `art_style_transform` |
-| Status | Implemented recipe; generation pending; not gallery-accepted |
+| Status | Implemented recipe; generated; owner-accepted; privately gallery-promoted as the thirteenth card in CR-GATE-017 |
 
 Source-conditioned expressive Chinese ink figure painting of verified CR-001
 fashion subject on an absorbent album-leaf support:
@@ -535,6 +535,46 @@ python -m pytest -q tests/test_creative_recipe_library.py
 ### Supported variations (CR-014)
 
 None in `1.0.0` — single baseline full-figure album-leaf expressive-ink framing only.
+
+## Locate and validate CR-015
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-015-cut-space-portrait/1.0.0.json` |
+| `recipe_id` | `cr-015-cut-space-portrait` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `art_style_transform` |
+| Status | Implemented recipe; generation pending; not gallery-accepted |
+
+Source-conditioned layered-paper pop-up diorama of verified CR-001 fashion
+subject:
+[CR_015_CUT_SPACE_PORTRAIT.md](CR_015_CUT_SPACE_PORTRAIT.md). Uses installed
+`art_style_transform` + `paper_cut_layered` + `popup_diorama`; no TransformationPack;
+no EraPack; does **not** reopen CR-008, CR-012, CR-013, or CR-014.
+
+```bash
+aipf recipe validate recipes/cr-015-cut-space-portrait/1.0.0.json
+aipf recipe compile recipes/cr-015-cut-space-portrait/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-015
+
+- Source-conditioned layered-paper construction request and locks
+- Route `art_style_transform` (no TransformationPack; not `artifact_transform`)
+- ArtMethod `paper_cut_layered`; form `popup_diorama`; state `newly_created`
+- Empty EraPack list; no handmade/museum/dynasty authenticity claim
+- Symbolic reference `cr001-c0-l0-4x5-source` (`identity` / `pose` / `outfit` / `hairstyle`)
+- Identity `recognizable_identity`; body `artistic_stylization` for medium translation
+- Hierarchical preservation: major face/pose/gown/hairstyle architecture locked; minor folds/seams/hair strands omittable into supported paper shapes
+- Paper topology: bridges/tabs/folds/glued joins, F/M/B layer spacing, construction-caused shadows, structural negative space
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline)
+- Explicit non-claims: no photo-texture overlay, no CGI plastic, no sculpture/woodblock/gongbi/ink-wash primary substitution, no historical costume replacement, no generation in this PR
+
+### Supported variations (CR-015)
+
+None in `1.0.0` — single baseline full-figure layered-paper pop-up framing only.
 
 ## Packaging note
 

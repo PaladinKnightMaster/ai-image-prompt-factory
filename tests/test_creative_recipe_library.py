@@ -100,6 +100,12 @@ CR014_VERSION = "1.0.0"
 CR014_KNOWN_RECIPE_SHA = "593e060e227ed3f89a7fd9c416ee86d93e587a050ede35af3c1d26bae4166ecd"
 CR014_KNOWN_PROMPT_SHA = "8261cd7d2f411f3d8e835f2d54b36972170a08d5d782d4b93f990ff93584f6a4"
 CR014_SOURCE_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
+CR015_PATH = RECIPES_ROOT / "cr-015-cut-space-portrait" / "1.0.0.json"
+CR015_ID = "cr-015-cut-space-portrait"
+CR015_VERSION = "1.0.0"
+CR015_KNOWN_RECIPE_SHA = "fe9a6a6a03520e40569df8e3a0c3c5703d31d869c83c02cbaff2331cb58f2e46"
+CR015_KNOWN_PROMPT_SHA = "da5c59146a8bbb84846f52455952749c1dc1dffc65281b6bf7a64eed1b974142"
+CR015_SOURCE_IMAGE_SHA = "0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e"
 CR001_KNOWN_RECIPE_SHA = "60c4547ed59a31dfa1fcebd0dcc959729fff7a2f61d235a1fcb6228724aebdce"
 CR001_KNOWN_PROMPT_SHA = "92f4c6643c005281ee2c287d72c05321aa0dd14043513761188a0b05c8e9a7e4"
 ALLOWED_VARIABLE_TARGETS = frozenset(
@@ -2061,6 +2067,200 @@ def test_cr014_library_docs_mark_generation_pending_no_output_yet():
     assert "cr-014-inkflow-figure" in lib
     readme = (ROOT / "recipes" / "README.md").read_text(encoding="utf-8")
     assert CR014_ID in readme
+
+
+def test_cr015_file_exists_and_path_matches_identity():
+    assert CR015_PATH.is_file()
+    assert CR015_PATH.parent.name == CR015_ID
+    assert CR015_PATH.stem == CR015_VERSION
+
+
+def test_cr015_loads_and_schema_validation_passes():
+    recipe = load_recipe(CR015_PATH)
+    findings = validate_recipe(recipe)
+    assert _errors(findings) == [], findings
+    assert recipe["recipe_schema_version"] == "1.1"
+    assert recipe["recipe_id"] == CR015_ID
+    assert recipe["recipe_version"] == CR015_VERSION
+    assert RECIPE_ID_RE.fullmatch(recipe["recipe_id"])
+    assert RECIPE_VERSION_RE.fullmatch(recipe["recipe_version"])
+
+
+def test_cr015_semantic_spec_is_source_conditioned_paper_cut_art_style_transform():
+    recipe = load_recipe(CR015_PATH)
+    spec = recipe["semantic_spec"]
+    assert spec["route"] == "art_style_transform"
+    assert spec["route"] != "artifact_transform"
+    assert spec["route"] != "new_generation"
+    assert "transformation" not in spec
+    assert spec.get("transformation") is None
+    assert spec["art"]["method"] == "paper_cut_layered"
+    assert spec["art"]["artifact_form"] == "popup_diorama"
+    assert spec["art"]["artifact_state"] == "newly_created"
+    assert spec["historical"]["packs"] == []
+    assert spec["identity"]["mode"] == "recognizable_identity"
+    assert spec["body_transformation"]["mode"] == "artistic_stylization"
+    assert spec["body_transformation"]["mode"] != "preserve"
+    assert spec["output"]["aspect_ratio"] == "4:5"
+    assert spec["output"]["profile"] == "standard"
+    assert spec["output"].get("generation_requested") is False
+    refs = spec["references"]
+    assert len(refs) == 1
+    assert refs[0]["id"] == "cr001-c0-l0-4x5-source"
+    assert set(refs[0]["roles"]) == {"identity", "pose", "outfit", "hairstyle"}
+    assert "environment" not in refs[0]["roles"]
+    assert "palette" not in refs[0]["roles"]
+    notes = refs[0].get("notes") or ""
+    assert CR015_SOURCE_IMAGE_SHA in notes
+    assert "D:\\" not in notes
+    assert "/Users/" not in notes
+    assert "AIPF_Creative_Private" not in notes
+    request = spec["request"].casefold()
+    assert "layered-paper" in request or "cut-paper" in request or "paper" in request
+    assert "pop-up" in request or "popup" in request or "diorama" in request
+    assert "bridge" in request or "tab" in request
+    assert "negative space" in request
+    assert "floating" in request
+    assert "cast shadows" in request or "drop shadows" in request
+    assert "selective omission" in request or "selectively" in request
+    assert "gongbi" in request
+    assert "woodblock" in request or "relief" in request
+    assert "ink-wash" in request or "ink wash" in request
+    assert "not" in request
+    assert "anime" in request or "cartoon" in request
+    blob = json.dumps(spec).casefold()
+    assert "TODO" not in json.dumps(spec)
+    assert "placeholder" not in blob
+    assert "stylepack" not in blob
+    assert "promptpack" not in blob
+    assert "selected_concepts" not in blob
+    assert "woodblock.keyblock" not in blob
+    assert "edit_region" not in blob
+    assert '"mask"' not in blob
+    raw = CR015_PATH.read_text(encoding="utf-8")
+    assert "AIPF_Creative_Private" not in raw
+    assert "D:\\\\1_PROJECT" not in raw
+    assert recipe.get("variables") in ({}, None)
+
+
+def test_cr015_compiles_as_paper_cut_art_style_without_transformation_lexicalization():
+    recipe = load_recipe(CR015_PATH)
+    original = deepcopy(recipe)
+    first = compile_recipe(recipe)
+    second = compile_recipe(recipe)
+    assert recipe == original
+    assert first == second
+    assert sha256_canonical(recipe) == CR015_KNOWN_RECIPE_SHA
+    assert first["prompt_sha256"] == CR015_KNOWN_PROMPT_SHA
+    prompt = first["compilation"]["prompt"]
+    sections = first["compilation"]["prompt_sections"]
+    low = prompt.casefold()
+    assert first["compilation"].get("compiler_version") == "3.2.0"
+    assert "4:5" in prompt
+    assert "references" in sections
+    assert "identity" in sections
+    assert "body" in sections
+    assert "art_method" in sections
+    assert "material_behavior" in sections
+    assert "artifact_form" in sections
+    assert "artifact_state" in sections
+    assert "material_failure_checks" in sections
+    assert "method_variant" in sections
+    assert "director" in sections
+    assert "transformation" not in sections
+    assert "lexical_realization" not in sections
+    # ArtMethod core + surface/edge survive.
+    assert "physically cut paper" in low or "paper-cut" in low or "cut paper" in low
+    assert "paper thickness" in low
+    assert "matte fibrous" in low
+    assert "tabs" in low or "joins" in low
+    assert "cast shadows" in low
+    # Operational paper construction carried via request/director.
+    assert "bridge" in low or "bridges" in low
+    assert "tab" in low or "tabs" in low
+    assert "glued" in low or "pasted" in low
+    assert "floating" in low and "island" in low
+    assert "foreground/midground/background" in low
+    assert "negative space" in low
+    assert "selective omission" in low or "selectively" in low
+    # Source-defining gown/hair structure protected.
+    assert "draped neckline" in low
+    assert "gathered-fabric" in low or "gathered fabric" in low
+    assert "hairstyle" in low
+    # Anti-substitution language present; positive process instructions absent.
+    assert "gongbi" in low
+    assert "woodblock" in low
+    assert "ink-wash" in low or "ink wash" in low
+    assert "anime" in low
+    assert "marble" in low
+    assert "printed photograph" in low or "paper-texture overlay" in low or "paper texture overlay" in low
+    assert "drop shadows" in low
+    assert "cgi" in low
+    assert "baren printing" not in low
+    assert "baren-pressure" not in low
+    assert "kento registration" not in low
+    assert "carved-keyblock-inspired" not in low
+    assert "impressed on a physical sheet" not in low
+    assert "multi-block color" not in low
+    assert "calligraphic brush line" not in sections.get("art_method", "").casefold()
+    assert "precise fine contour" not in sections.get("art_method", "").casefold()
+    assert "patient layered color" not in sections.get("art_method", "").casefold()
+    # No historical dynasty banner or handmade authenticity claim.
+    assert "historical/cultural direction" not in low
+    assert "edo period" not in low
+    assert "song dynasty" not in low
+    assert "tang dynasty" not in low
+    assert "era_edo" not in sections
+    assert "era_song" not in sections
+    assert "era_tang" not in sections
+    assert "popup diorama" in low or "pop-up" in low
+    assert "paper-cut" in low or "cut paper" in low or "layered paper" in low
+    assert "generation" not in first
+    assert not first["compilation"].get("resolved_concepts")
+    # Digests of earlier recipes remain stable under this addition.
+    assert sha256_canonical(load_recipe(CR014_PATH)) == CR014_KNOWN_RECIPE_SHA
+    assert compile_recipe(load_recipe(CR014_PATH))["prompt_sha256"] == CR014_KNOWN_PROMPT_SHA
+    assert sha256_canonical(load_recipe(CR013_PATH)) == CR013_KNOWN_RECIPE_SHA
+    assert compile_recipe(load_recipe(CR013_PATH))["prompt_sha256"] == CR013_KNOWN_PROMPT_SHA
+    assert sha256_canonical(load_recipe(CR012_PATH)) == CR012_KNOWN_RECIPE_SHA
+    assert sha256_canonical(load_recipe(CR011_PATH)) == CR011_KNOWN_RECIPE_SHA
+    assert sha256_canonical(load_recipe(CR001_PATH)) == CR001_KNOWN_RECIPE_SHA
+    mutated = deepcopy(recipe)
+    # Only paper_cut_layered declares popup_diorama compatibility; mutate form
+    # together with method to prove ArtMethod core emission is method-bound.
+    mutated["semantic_spec"]["art"]["method"] = "chinese_ink_painting"
+    mutated["semantic_spec"]["art"]["artifact_form"] = "album_leaf"
+    mutated_receipt = compile_recipe(mutated)
+    mutated_sections = mutated_receipt["compilation"]["prompt_sections"]
+    assert "chinese ink painting" in mutated_sections.get("art_method", "").casefold()
+    assert "physically cut paper" not in mutated_sections.get("art_method", "").casefold()
+    assert mutated_receipt["prompt_sha256"] != first["prompt_sha256"]
+
+
+def test_cr015_library_docs_mark_generation_pending_no_output_yet():
+    doc = (ROOT / "docs" / "CR_015_CUT_SPACE_PORTRAIT.md").read_text(encoding="utf-8")
+    assert "RECIPE IMPLEMENTED — GENERATION PENDING" in doc
+    assert "No CR-015 output has yet been generated" in doc or "no CR-015 output has yet been generated" in doc.casefold()
+    assert CR015_KNOWN_RECIPE_SHA in doc
+    assert CR015_KNOWN_PROMPT_SHA in doc
+    assert CR015_SOURCE_IMAGE_SHA in doc
+    assert "art_style_transform" in doc
+    assert "paper_cut_layered" in doc
+    assert "popup_diorama" in doc
+    assert "TransformationPack" in doc or "transformation pack" in doc.casefold()
+    assert "negative space" in doc.casefold()
+    assert "bridge" in doc.casefold() or "tab" in doc.casefold()
+    assert "prompt.txt" in doc
+    assert "compiler_prompt.txt" in doc.casefold() or "Do **not** submit `compiler_prompt.txt`" in doc
+    lib = (ROOT / "docs" / "CREATIVE_RECIPE_LIBRARY.md").read_text(encoding="utf-8")
+    assert "Locate and validate CR-015" in lib
+    assert "generation pending" in lib.casefold()
+    assert "cr-015-cut-space-portrait" in lib
+    assert "popup_diorama" in lib
+    assert "thirteenth card" in lib.casefold()
+    assert "Implemented recipe; generation pending; not gallery-accepted" not in lib.split("Locate and validate CR-014")[1].split("Locate and validate CR-015")[0]
+    readme = (ROOT / "recipes" / "README.md").read_text(encoding="utf-8")
+    assert CR015_ID in readme
 
 
 def test_library_recipe_id_version_pairs_are_unique_and_path_aligned():

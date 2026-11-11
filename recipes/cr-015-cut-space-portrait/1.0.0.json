@@ -1,0 +1,112 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-015-cut-space-portrait",
+  "recipe_version": "1.0.0",
+  "title": "CR-015 Cut-Space Portrait",
+  "description": "Source-conditioned art-style transformation: translate the verified CR-001 adult fashion photograph into a contemporary layered-paper pop-up diorama with discrete supportable cut components, layer spacing, and construction-generated shadows. Uses art_style_transform + paper_cut_layered + popup_diorama + newly_created. No TransformationPack (paper ArtMethod has no concept_refs; fragments emit on the non-lexical compiler path). Empty EraPack list—no historical craft authenticity claim and no named tradition attribution. Symbolic reference roles only; binary reference packaging is out of PromptRecipe scope. Operator must supply the verified CR-001 PNG (SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e) as the image input at generation time. See docs/CR_015_CUT_SPACE_PORTRAIT.md. No gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-015-cut-space-portrait",
+    "request": "Transform the referenced adult fashion photograph into a newly created contemporary layered-paper pop-up diorama construction. Preserve recognizable visual identity of the source adult figure, the distinguishing standing stance and key anatomical proportions, the overall evening-gown silhouette including the draped neckline and major gathered-fabric architecture, and the hairstyle silhouette, while explicitly authorizing selective omission of nonessential fine garment seams, repetitive tiny folds, satin microtexture and gloss, photographic skin shading, photographic highlight gradients, individual hair strands, and tiny detached features—translate those details into physically supported paper shapes or purposeful cut-out omissions rather than tracing them. Build the figure from discrete cut-paper components with crisp cut silhouettes, consistent paper thickness, matte fibrous stocks, and subtle cut-edge fibers; every apparently separate component must remain mechanically intelligible through a paper bridge, tab, folded support, hinge, glued or pasted overlap, or attachment to another supported layer—forbid unsupported floating paper islands. Express foreground paper elements, middle-layer figure and garment forms, and background support planes with plausible spacing, coherent overlap, and occlusion between paper planes; cast shadows must arise from directional illumination interacting with paper thickness, cut edges, and gaps between actual-looking layers—not uniform digital drop shadows and not smooth volumetric CGI shading. Keep intentional cut negative space that clarifies arm-versus-torso separation, hair and neckline contours, gown silhouette, layered drapery openings, and overlapping fabric masses—blank background alone is insufficient, and negative cuts must remain compatible with connected or glued construction without impossible unsupported internal islands. Keep the modern fashion wardrobe modern—do not invent historical costume, jewelry, hair ornaments, inscriptions, emblems, artist signatures, museum authentication, dynasty attribution, or handmade craft provenance claims. The result must read as visually simulated layered-paper pop-up construction—not a printed photograph with a paper-texture overlay, not a flat painted illustration masquerading as cut paper, not photographic facial shading or recolored satin folds on paper shapes, not smooth plastic CGI objects, not marble or stone sculpture, not Japanese woodblock or relief-print appearance with keyblock carving or baren impression, not gongbi fine-line pigment painting, not expressive ink-wash brushwork as the primary construction, not Western watercolor, not anime or cartoon line art, and not a generic digital collage without coherent support topology. Keep a restrained full-figure 4:5 composition with shallow perspective sufficient to reveal meaningful layer spacing without changing the source stance or hiding major gown architecture.",
+    "route": "art_style_transform",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "same adult fashion subject as the source reference photograph",
+      "source_reference_required": true,
+      "recognizable_source_identity_pose_gown_and_hairstyle_silhouette": true,
+      "layered_paper_popup_diorama_not_photograph_with_texture_filter": true,
+      "supported_bridges_tabs_folds_or_glued_attachments": true,
+      "no_floating_unsupported_paper_islands": true,
+      "preserve_gown_architectural_silhouette_with_paper_layer_translation": true,
+      "preserve_modern_fashion_wardrobe_not_historical_costume": true,
+      "no_cgi_plastic_painted_illustration_or_photo_overlay_substitution": true,
+      "no_sculpture_woodblock_gongbi_or_ink_wash_primary_substitution": true,
+      "no_handmade_museum_dynasty_or_named_artist_authenticity_claim": true,
+      "no_logo_brand_text_or_invented_typography": true,
+      "no_additional_people": true
+    },
+    "references": [
+      {
+        "id": "cr001-c0-l0-4x5-source",
+        "roles": [
+          "identity",
+          "pose",
+          "outfit",
+          "hairstyle"
+        ],
+        "notes": "Authoritative private CR-001 verified import original. SHA-256 0dcf8af6cac15441d5e728f98ac53314442984d3a27a5dd193effa2bac46f41e. Resolve the locally verified CR-001 original through private candidate/import evidence during operator handoff. PromptRecipe encodes symbolic roles only; the operator must attach that PNG to the later image request. The SHA identifies bytes and does not prove upload. Outfit role preserves recognizable gown silhouette, draped neckline, and major gathered-fabric architecture for paper-layer reinterpretation—it does not lock photographic satin reflectance, every seam, every minor fold, or pixel-level dress texture; selective omission of nonessential detail into supported paper shapes is authorized."
+      }
+    ],
+    "identity": {
+      "mode": "recognizable_identity",
+      "locked_features": [
+        "recognizable adult facial structure and broad expression from the source photograph",
+        "source standing stance and overall silhouette",
+        "overall evening-gown silhouette, draped neckline, and major gathered-fabric architecture from the source outfit",
+        "hairstyle silhouette from the source"
+      ]
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "preserve key adult anatomical proportions while translating living form into discrete supportable cut-paper components rather than photographic depth modeling",
+      "pose_change": "preserve the source standing stance as layered pop-up paper composition; do not invent a major new pose",
+      "camera_presentation": "allowed for shallow paper-construction-aware framing that keeps full-figure readability and gown silhouette within a 4:5 field while revealing meaningful layer spacing",
+      "garment_shaping": "reinterpret the architectural evening gown as overlapping cut-paper planes with bridges, tabs, folds, or glued joins: draped neckline, major gathered-fabric architecture, and overall silhouette remain recognizable and modern, but minor seams, repetitive tiny folds, and nonessential detail may be selectively omitted; photographic satin specular ribbons become restrained paper-stock color relationships—not cloth physics and not historical costume substitution",
+      "artistic_stylization": "contemporary layered-paper pop-up diorama construction; forbid photographic continuous shading, printed photo with paper-texture overlay, flat painted illustration masquerading as cut paper, smooth plastic CGI volumes, anime/cartoon substitution, marble sculpture, woodblock or relief-print language, gongbi fine-line pigment painting, expressive ink-wash as primary construction, Western watercolor substitution, or unsupported floating paper islands"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [],
+      "subperiod": null,
+      "region": null,
+      "role": null,
+      "occasion": "contemporary layered-paper pop-up diorama afterimage of a fashion portrait",
+      "intentional_hybrids": []
+    },
+    "art": {
+      "method": "paper_cut_layered",
+      "artifact_form": "popup_diorama",
+      "artifact_state": "newly_created",
+      "variant": "contemporary digital simulation of layered cut-paper pop-up construction; not a handmade historical craft object, not museum-authenticated, and not attributed to a named historical tradition or artist"
+    },
+    "requested_elements": [
+      "newly created layered-paper pop-up diorama of the referenced adult fashion subject",
+      "crisp cut silhouettes with consistent paper thickness, matte fibrous stocks, and subtle cut-edge fibers",
+      "bridges, tabs, folded supports, hinges, or glued overlaps keeping every component mechanically intelligible",
+      "foreground paper elements, middle-layer figure and garment forms, and background support planes with plausible spacing and coherent occlusion",
+      "directional cast shadows caused by paper thickness and layer gaps rather than uniform digital drop shadows",
+      "intentional cut negative space clarifying arm/torso separation, hair/neckline contours, gown silhouette, and drapery openings",
+      "selective omission of nonessential seams, tiny folds, individual hair strands, and photographic surface microdetail into supported paper shapes",
+      "modern fashion wardrobe retained as modern gown architecture—not historical costume",
+      "no additional figures, logos, invented typography, floating unsupported islands, photo-texture overlay, CGI plastic, painted-illustration masquerade, marble sculpture, woodblock/relief-print simulation, gongbi painting, ink-wash primary construction, watercolor substitution, handmade provenance, museum authentication, dynasty claim, or named historical artist attribution"
+    ],
+    "director": {
+      "moment": "a settled view of a freshly assembled contemporary layered-paper pop-up diorama",
+      "action": "the figure occupies the diorama field in the preserved source standing stance as discrete supported paper layers rather than living motion in front of a textured photo",
+      "gaze": "cut-paper head orientation matching the source; facial features built from simplified supported paper shapes, not photographic skin shading and not printed facial photographs pasted onto paper",
+      "body_weight": "pictorial weight reads through stacked paper planes and folded supports while essential adult proportions remain readable",
+      "hand_logic": "hands remain simplified supported cut shapes following source hand positions; no floating finger islands and no photographic skin pores",
+      "fabric_response": "gown architecture becomes overlapping cut-paper planes with bridges, tabs, folds, or glued joins continuous with paper-construction grammar—recognizable modern draped neckline and major gathered-fabric architecture without photographic satin sheen, without tracing every seam or tiny fold as detached thin paper lines, and without historical costume replacement",
+      "prop_interaction": "paper construction only; no handheld props, no second figure, no inscriptions, emblems, seals, or artist signatures",
+      "foreground": "nearest cut silhouette layer with visible paper thickness, subtle edge fiber, and coherent attachment to the assembly",
+      "midground": "full figure built from overlapping supported paper components with bridges, tabs, folded supports, or glued overlaps, and clear foreground/midground/background layer spacing",
+      "background": "rear paper support plane and intentional cut negative space defining gown silhouette, arm/body separation, drapery openings, and hair masses; do not treat blankness alone as successful negative space, and do not retain a photographic cyclorama as living space",
+      "camera": "eye-level three-quarter full-figure frame with slight subject offset and restrained shallow perspective that reveals meaningful paper-layer spacing while keeping the source stance and full gown silhouette readable in a 4:5 composition",
+      "light_source": "directional illumination revealing paper thickness, cut edges, and construction-caused cast shadows from gaps between layers; coherent shadow direction throughout; never uniform generic digital drop shadows around every element and never smooth volumetric CGI shading",
+      "material_response": "matte fibrous paper stocks with crisp cut edges, consistent thickness, subtle fibers, bridges/tabs/hinges or glued overlaps, and shallow physically coherent relief; restrained paper-stock color relationships replace photographic satin gradients; clean newly created edges without aged stains or parchment patina; never photographic skin, printed photo overlay, plastic CGI, painted illustration masquerade, infinitely thin free-floating strands, marble carving, woodblock keyblock carving, gongbi fine-line pigment, expressive ink-wash as primary construction, or Western watercolor bloom",
+      "micro_story": "a contemporary afterimage of a fashion editorial settled into layered-paper pop-up construction as Cut-Space Portrait"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}
