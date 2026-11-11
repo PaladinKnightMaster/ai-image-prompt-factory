@@ -185,6 +185,7 @@ Preserve untracked `.superpowers/` and EXP-019 drafts; do not delete user files 
 
 - `tests/test_installed_surface_verification.py`
 - `docs/ISV_01_INSTALLED_SURFACE_VERIFICATION.md`
-- `docs/SESSION_HANDOFF.md` (session handoff update after meaningful work)
+
+No other tracked files. In particular, `docs/SESSION_HANDOFF.md` is **not** an authorized ISV-01 change and must remain identical to approved main.
 
 No changes under `src/aipf/`, `references/`, `compatibility/`, `data/schemas/`, `recipes/`, golden outputs, gallery, or CI workflows.
