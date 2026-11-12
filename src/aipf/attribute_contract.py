@@ -36,6 +36,23 @@ def _refs_by_id(spec: dict) -> dict[str, dict]:
     return out
 
 
+def _duplicate_reference_ids(spec: dict) -> list[str]:
+    """Return nonempty reference ids that appear more than once (stable order)."""
+    seen: set[str] = set()
+    dupes: list[str] = []
+    reported: set[str] = set()
+    for ref in spec.get("references") or []:
+        rid = ref.get("id")
+        if not isinstance(rid, str) or not rid:
+            continue
+        if rid in seen and rid not in reported:
+            dupes.append(rid)
+            reported.add(rid)
+        else:
+            seen.add(rid)
+    return dupes
+
+
 def _normalized_rows(contract: dict) -> list[dict]:
     rows = list(contract.get("attributes") or [])
     # Stable emission / comparison order by ATTRIBUTE_ORDER; unknown kept last.
@@ -107,6 +124,14 @@ def attribute_contract_findings(spec: dict) -> list[dict]:
             "PCC-02 attribute_contract fails closed under strict_reconstruction.",
         ))
 
+    # APCC-only: duplicate reference ids make ownership ambiguous.
+    for rid in _duplicate_reference_ids(spec):
+        out.append(_finding_local(
+            "error",
+            "attribute_duplicate_reference_id",
+            f"APCC references contain duplicate id {rid!r}; ownership is ambiguous.",
+        ))
+
     seen: set[str] = set()
     refs = _refs_by_id(spec)
     locks = spec.get("locks") or {}
@@ -150,8 +175,16 @@ def attribute_contract_findings(spec: dict) -> list[dict]:
         required_role = ATTRIBUTE_ROLE[attr]
         source_id = row.get("source_reference_id")
         target = row.get("target")
+        has_source = "source_reference_id" in row
+        has_target = "target" in row
 
         if intent == "preserve":
+            if has_target:
+                out.append(_finding_local(
+                    "error",
+                    "attribute_intent_field_mismatch",
+                    f"{attr} preserve must not declare target.",
+                ))
             if not isinstance(source_id, str) or not source_id.strip():
                 out.append(_finding_local(
                     "error",
@@ -186,6 +219,13 @@ def attribute_contract_findings(spec: dict) -> list[dict]:
                     f"Intent change is not supported for {attr} in PCC-02.",
                 ))
                 continue
+            if has_source:
+                out.append(_finding_local(
+                    "error",
+                    "attribute_intent_field_mismatch",
+                    "wardrobe.garment change must not declare source_reference_id; "
+                    "use target.reference_id or target.text.",
+                ))
             if target is None:
                 out.append(_finding_local(
                     "error",
@@ -258,18 +298,17 @@ def attribute_contract_findings(spec: dict) -> list[dict]:
                     ))
                     break
 
-        # unconstrained: no source/target required; reject leftover preserve/change fields lightly
         elif intent == "unconstrained":
-            if source_id:
+            if has_source:
                 out.append(_finding_local(
                     "error",
-                    "attribute_contract_shape",
+                    "attribute_intent_field_mismatch",
                     f"{attr} unconstrained must not declare source_reference_id.",
                 ))
-            if target is not None:
+            if has_target:
                 out.append(_finding_local(
                     "error",
-                    "attribute_contract_shape",
+                    "attribute_intent_field_mismatch",
                     f"{attr} unconstrained must not declare target.",
                 ))
 

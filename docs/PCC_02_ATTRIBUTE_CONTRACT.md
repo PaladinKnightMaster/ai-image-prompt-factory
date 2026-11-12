@@ -146,7 +146,22 @@ Hard errors (block compilation before APCC emission):
 | `attribute_identity_mode_conflict` | Face preserve with incompatible identity mode |
 | `attribute_unsupported_context` | Unsupported route / transform / art / strict reconstruction |
 | `attribute_lock_conflict` | Typed lock opposes wardrobe change |
+| `attribute_intent_field_mismatch` | Intent-incompatible fields (preserve+target, change+source_reference_id, unconstrained+source/target) |
+| `attribute_duplicate_reference_id` | APCC request has multiple `references[]` entries with the same nonempty id |
 | `schema` | Structural schema violations (unknown fields, etc.) |
+
+Intent field compatibility (PCC-02-PREMERGE-HARDENING-01):
+
+| Intent | Required | Forbidden |
+| --- | --- | --- |
+| `preserve` | `source_reference_id` | `target` |
+| `change` | `target` (exactly one of text / reference_id) | `source_reference_id` |
+| `unconstrained` | — | `source_reference_id`, `target` |
+
+Duplicate reference ids are rejected only when `attribute_contract` is present.
+Distinct ids sharing an `outfit` role remain legal when APCC explicitly selects
+one. Multi-role assignment on a single id remains legal. Legacy non-APCC
+requests are unchanged.
 
 Recognized typed wardrobe-preserve lock keys (boolean `true`):
 

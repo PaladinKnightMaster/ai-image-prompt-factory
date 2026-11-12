@@ -581,6 +581,242 @@ def test_pcc02_typed_lock_opposes_wardrobe_change():
 
 
 # ---------------------------------------------------------------------------
+# PCC-02-PREMERGE-HARDENING-01
+# ---------------------------------------------------------------------------
+
+
+PCC02_BASE_PROMPT_SHA256 = (
+    "3c47dcd83a6a632c8886a2ad51567e3907c8c1d742edfa342e821fe8e5202955"
+)
+
+
+def test_pcc02_preserve_identity_rejects_target_field():
+    spec = _base_spec(
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "portrait_A",
+                    "target": {"text": "keep the face unchanged"},
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "change",
+                    "target": {
+                        "text": "A black wool tailored blazer with peak lapels."
+                    },
+                },
+            ]
+        }
+    )
+    assert "attribute_intent_field_mismatch" in _error_codes(spec)
+    with pytest.raises(ValueError, match="Cannot compile invalid spec"):
+        compile_result(spec)
+
+
+def test_pcc02_preserve_wardrobe_rejects_target_field():
+    spec = _base_spec(
+        references=[
+            {"id": "portrait_A", "roles": ["identity"]},
+            {"id": "outfit_B", "roles": ["outfit"]},
+        ],
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "portrait_A",
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "preserve",
+                    "source_reference_id": "outfit_B",
+                    "target": {"reference_id": "outfit_B"},
+                },
+            ]
+        },
+    )
+    assert "attribute_intent_field_mismatch" in _error_codes(spec)
+    with pytest.raises(ValueError, match="Cannot compile invalid spec"):
+        compile_result(spec)
+
+
+def test_pcc02_change_wardrobe_rejects_source_reference_id():
+    spec = _base_spec(
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "portrait_A",
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "change",
+                    "source_reference_id": "portrait_A",
+                    "target": {
+                        "text": "A black wool tailored blazer with peak lapels."
+                    },
+                },
+            ]
+        }
+    )
+    assert "attribute_intent_field_mismatch" in _error_codes(spec)
+    with pytest.raises(ValueError, match="Cannot compile invalid spec"):
+        compile_result(spec)
+
+
+def test_pcc02_duplicate_reference_ids_rejected():
+    spec = _base_spec(
+        references=[
+            {"id": "portrait_A", "roles": ["identity"]},
+            {"id": "portrait_A", "roles": ["outfit"]},
+        ],
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "portrait_A",
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "change",
+                    "target": {"reference_id": "portrait_A"},
+                },
+            ]
+        },
+    )
+    assert "attribute_duplicate_reference_id" in _error_codes(spec)
+    with pytest.raises(ValueError, match="Cannot compile invalid spec"):
+        compile_result(spec)
+
+
+def test_pcc02_duplicate_reference_ids_rejected_regardless_of_order():
+    first = _base_spec(
+        references=[
+            {"id": "shared", "roles": ["identity"]},
+            {"id": "shared", "roles": ["outfit"]},
+        ],
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "shared",
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "change",
+                    "target": {"text": "A black wool tailored blazer with peak lapels."},
+                },
+            ]
+        },
+    )
+    second = _base_spec(
+        references=[
+            {"id": "shared", "roles": ["outfit"]},
+            {"id": "shared", "roles": ["identity"]},
+        ],
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "shared",
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "change",
+                    "target": {"text": "A black wool tailored blazer with peak lapels."},
+                },
+            ]
+        },
+    )
+    assert "attribute_duplicate_reference_id" in _error_codes(first)
+    assert "attribute_duplicate_reference_id" in _error_codes(second)
+    with pytest.raises(ValueError, match="Cannot compile invalid spec"):
+        compile_result(first)
+    with pytest.raises(ValueError, match="Cannot compile invalid spec"):
+        compile_result(second)
+
+
+def test_pcc02_distinct_outfit_ids_remain_legal_when_target_selects_one():
+    spec = _base_spec(
+        references=[
+            {"id": "portrait_A", "roles": ["identity"]},
+            {"id": "outfit_B", "roles": ["outfit"]},
+            {"id": "outfit_C", "roles": ["outfit"]},
+        ],
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "portrait_A",
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "change",
+                    "target": {"reference_id": "outfit_B"},
+                },
+            ]
+        },
+    )
+    assert _errors(spec) == []
+    result = compile_result(spec)
+    assert result["compiler_version"] == "3.5.0"
+    assert "outfit_B" in result["prompt_sections"]["attribute_change"]
+    assert "outfit_C" not in result["prompt_sections"]["attribute_change"]
+
+
+def test_pcc02_multi_role_single_id_remains_legal_after_hardening():
+    spec = _base_spec(
+        references=[{"id": "portrait_A", "roles": ["identity", "outfit"]}],
+        attribute_contract={
+            "attributes": [
+                {
+                    "attribute": "identity.face",
+                    "intent": "preserve",
+                    "source_reference_id": "portrait_A",
+                },
+                {
+                    "attribute": "wardrobe.garment",
+                    "intent": "preserve",
+                    "source_reference_id": "portrait_A",
+                },
+            ]
+        },
+    )
+    assert _errors(spec) == []
+    result = compile_result(spec)
+    assert "attribute_preserve" in result["prompt_sections"]
+    assert "attribute_change" not in result["prompt_sections"]
+
+
+def test_pcc02_valid_preserve_change_prompt_bytes_unchanged():
+    result = compile_result(_base_spec())
+    assert result["compiler_version"] == "3.5.0"
+    digest = sha256(result["prompt"].encode("utf-8")).hexdigest()
+    assert digest == PCC02_BASE_PROMPT_SHA256
+
+
+def test_pcc02_legacy_non_apcc_duplicate_reference_ids_still_compile():
+    """Duplicate reference ids remain a legacy no-op when APCC is absent."""
+    spec = _base_spec(version="3.2")
+    del spec["attribute_contract"]
+    spec["references"] = [
+        {"id": "portrait_A", "roles": ["identity"]},
+        {"id": "portrait_A", "roles": ["outfit"]},
+    ]
+    assert "attribute_duplicate_reference_id" not in _error_codes(spec)
+    result = compile_result(spec)
+    assert result["compiler_version"] == "3.2.0"
+    assert "attribute_preserve" not in result["prompt_sections"]
+
+
+# ---------------------------------------------------------------------------
 # Regression digests (existing Creative Recipes; no APCC)
 # ---------------------------------------------------------------------------
 
