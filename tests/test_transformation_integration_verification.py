@@ -210,9 +210,18 @@ def test_tiv01_with_versus_without_transformation_changes_emission_path():
     assert "art_method" in r_without["prompt_sections"]
     assert "material_behavior" in r_without["prompt_sections"]
     assert "lexical_realization" not in r_without["prompt_sections"]
-    # Era selective anchors emit only on the non-transformation path.
-    assert any(k.startswith("era_") for k in r_without["prompt_sections"])
-    assert not any(k.startswith("era_") for k in r_with["prompt_sections"])
+    # Selective living-scene anchors (era_<id>) remain non-transformation-only.
+    # Method-matched era_fragment_* may emit under transformation after EIT-01;
+    # this classical_greek bust candidate still has no era_fragment when craft-process
+    # vocabulary would be ungated, so anchors alone distinguish the paths here.
+    assert any(
+        k.startswith("era_") and not k.startswith("era_fragment_")
+        for k in r_without["prompt_sections"]
+    )
+    assert not any(
+        k.startswith("era_") and not k.startswith("era_fragment_")
+        for k in r_with["prompt_sections"]
+    )
 
 
 def test_tiv01_lexicalization_requires_concept_refs_from_selected_packs():

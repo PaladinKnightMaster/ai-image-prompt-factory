@@ -7,8 +7,12 @@ from .patterns import prompt_pattern_clauses
 from .transformations import resolve_transformation
 from .gates import resolved_concept_plan
 from .lexical_realizer import realize_concepts
+from .lexicon import concepts
 
 COMPILER_VERSION='3.2.0'
+# Transformation path version: 3.4.1 adds evidence-compatible EraPack fragment
+# emission under TransformationPack compilation (EIT-01). Standard path stays 3.2.0.
+TRANSFORMATION_COMPILER_VERSION='3.4.1'
 
 
 def _texts(items, limit=3):
@@ -48,6 +52,33 @@ def _era_fragment(pack,art,route,occasion):
     return frags.get(key) if key else None
 
 
+def _era_fragment_allowed_under_transformation(frag, method_doc, era_pack, selected_concepts):
+    """Keep transformation-path era fragments from asserting unselected craft-process concepts.
+
+    Method-matched EraPack prose may still emit under TransformationPack compilation,
+    but preferred terms for unselected conditional craft_process concepts (for example
+    bokashi or polychromy) must not bypass the existing concept-selection gates.
+    """
+    if not frag or not method_doc:
+        return False
+    selected=set(selected_concepts or [])
+    records=concepts()
+    conditional=[]
+    for group in (method_doc.get('concept_refs',{}), era_pack.get('concept_refs',{})):
+        conditional.extend(group.get('conditional',[]))
+    text=frag.casefold()
+    for cid in conditional:
+        if cid in selected:
+            continue
+        record=records.get(cid) or {}
+        if record.get('domain')!='craft_process':
+            continue
+        term=(record.get('preferred_term') or '').casefold()
+        if term and term in text:
+            return False
+    return True
+
+
 def _lexical_profile(spec: dict, method_doc: dict) -> str:
     chosen = spec.get('output', {}).get('lexical_profile', 'auto')
     if chosen != 'auto':
@@ -65,6 +96,9 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
     profile=profile or spec['output']['profile']; hist=spec['historical']; art=spec['art']; director=spec.get('director',{})
     claims=select_evidence(spec); snapshot=evidence_snapshot(spec,claims); audit=audit_compatibility(spec,claims); explain=evidence_explain(spec)
     transformation=resolve_transformation(spec)
+    method_doc=None
+    if art.get('method'):
+        artreg=load_json('references/art-methods/registry.json'); apath={x['id']:x['path'] for x in artreg['methods']}[art['method']]; method_doc=load_json(apath)
     sections=[]
     sections.append(('task',f"Create a coherent visual production from the user's request. Apply explicit locks and the compatibility corrections below; when a compatibility clause adapts a requested element, render the adapted element instead of reasserting the raw request. User request: {spec['request'].rstrip('.')}. Use a {spec['output']['aspect_ratio']} composition."))
 
@@ -87,8 +121,15 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
             if hist.get(key): ctx.append(f"{key.replace('_',' ')}: {hist[key]}")
         sections.append(('historical',f"Historical/cultural direction ({hist['strictness']}): {names}. "+('; '.join(ctx)+'.' if ctx else '')))
         base=[p for p in pack_docs if p.get('pack_type') in {'historical_era','site_tradition'}]; overlays=[p for p in pack_docs if p.get('pack_type') in {'genre_overlay','fantasy_overlay'}]
+        selected_concepts=(spec.get('transformation') or {}).get('selected_concepts') or []
         for p in base:
-            if not transformation:
+            if transformation:
+                # EIT-01: allow method-matched EraPack fragments only. Keep living-scene
+                # selective anchors suppressed under representation transformations.
+                frag=_era_fragment(p,art,spec.get('route'),hist.get('occasion'))
+                if frag and _era_fragment_allowed_under_transformation(frag,method_doc,p,selected_concepts):
+                    sections.append((f"era_fragment_{p['id']}",frag))
+            else:
                 anchors=[]
                 for field in ['wardrobe','hairstyle_headwear','architecture','textiles_materials','lighting_technology']:
                     vals=_texts(p.get(field,[]),1)
@@ -117,9 +158,7 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
         state=art.get('artifact_state') or 'living/in-period scene'
         sections.append(('survival_bias',f"Original-vs-surviving appearance ({state}): "+' '.join(survival)))
 
-    method_doc=None
-    if art.get('method'):
-        artreg=load_json('references/art-methods/registry.json'); apath={x['id']:x['path'] for x in artreg['methods']}[art['method']]; method_doc=load_json(apath)
+    if method_doc:
         if not transformation:
             core=method_doc['prompt_fragments'].get('core',next(iter(method_doc['prompt_fragments'].values())))
             sections.append(('art_method',f"Art/craft method — {method_doc['name']}: {core}"))
@@ -176,7 +215,7 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
     prompt='\n\n'.join(text for _,text in sections)
     if profile=='compact': prompt=prompt.replace('\n\n',' ')
     prompt=prompt.strip()+'\n'
-    result={'prompt':prompt,'prompt_sections':{k:v for k,v in sections},'compiler_version':'3.4.0' if transformation else COMPILER_VERSION,'pattern_trace':pattern_trace,'evidence_snapshot':snapshot,'compatibility_audit':audit,'evidence_explain':explain,'lint_findings':findings}
+    result={'prompt':prompt,'prompt_sections':{k:v for k,v in sections},'compiler_version':TRANSFORMATION_COMPILER_VERSION if transformation else COMPILER_VERSION,'pattern_trace':pattern_trace,'evidence_snapshot':snapshot,'compatibility_audit':audit,'evidence_explain':explain,'lint_findings':findings}
     if transformation:
         result.update({'transformation_resolution':transformation,'resolved_concepts':resolved_concepts,'lexical_trace':lexical_trace,'lexical_profile':lexical_profile})
     return result
