@@ -8,11 +8,14 @@ from .transformations import resolve_transformation
 from .gates import resolved_concept_plan
 from .lexical_realizer import realize_concepts
 from .lexicon import concepts
+from .attribute_contract import attribute_contract_prompt_clauses
 
 COMPILER_VERSION='3.2.0'
 # Transformation path version: 3.4.1 adds evidence-compatible EraPack fragment
 # emission under TransformationPack compilation (EIT-01). Standard path stays 3.2.0.
 TRANSFORMATION_COMPILER_VERSION='3.4.1'
+# PCC-02 Attribute Preservation/Change Contract path (opt-in attribute_contract).
+APCC_COMPILER_VERSION='3.5.0'
 
 
 def _texts(items, limit=3):
@@ -109,6 +112,12 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
     if imode!='identity_unlocked':
         modes=load_json('references/core/identity_modes.json')['modes']; sections.append(('identity','Identity: '+modes[imode]))
     bmodes=load_json('references/core/body_modes.json')['modes']; sections.append(('body','Body/presentation: '+bmodes[spec['body_transformation']['mode']]))
+
+    preserve_clause, change_clause = attribute_contract_prompt_clauses(spec)
+    if preserve_clause:
+        sections.append(('attribute_preserve', preserve_clause))
+    if change_clause:
+        sections.append(('attribute_change', change_clause))
 
     if transformation:
         delta=transformation['representation_delta']
@@ -215,7 +224,13 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
     prompt='\n\n'.join(text for _,text in sections)
     if profile=='compact': prompt=prompt.replace('\n\n',' ')
     prompt=prompt.strip()+'\n'
-    result={'prompt':prompt,'prompt_sections':{k:v for k,v in sections},'compiler_version':TRANSFORMATION_COMPILER_VERSION if transformation else COMPILER_VERSION,'pattern_trace':pattern_trace,'evidence_snapshot':snapshot,'compatibility_audit':audit,'evidence_explain':explain,'lint_findings':findings}
+    if transformation:
+        compiler_version = TRANSFORMATION_COMPILER_VERSION
+    elif spec.get('attribute_contract'):
+        compiler_version = APCC_COMPILER_VERSION
+    else:
+        compiler_version = COMPILER_VERSION
+    result={'prompt':prompt,'prompt_sections':{k:v for k,v in sections},'compiler_version':compiler_version,'pattern_trace':pattern_trace,'evidence_snapshot':snapshot,'compatibility_audit':audit,'evidence_explain':explain,'lint_findings':findings}
     if transformation:
         result.update({'transformation_resolution':transformation,'resolved_concepts':resolved_concepts,'lexical_trace':lexical_trace,'lexical_profile':lexical_profile})
     return result

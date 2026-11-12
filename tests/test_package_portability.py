@@ -168,7 +168,7 @@ def test_inventory_matches_canonical_bytes():
     assert errors == []
     inv = load_inventory()
     assert inv["file_count"] == len(inv["files"]) == 104
-    assert inv["total_bytes"] == 438133
+    assert inv["total_bytes"] == 439734
     assert any(row["path"] == "data/schemas/prompt_recipe.schema.json" for row in inv["files"])
     assert any(row["path"] == "data/schemas/prompt_recipe_v1_1.schema.json" for row in inv["files"])
     assert any(row["path"] == "data/schemas/esr_review.schema.json" for row in inv["files"])

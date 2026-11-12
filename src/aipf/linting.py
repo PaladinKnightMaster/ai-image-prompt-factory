@@ -6,6 +6,7 @@ from .gates import temporal_cultural_gate, art_craft_gate, transformation_art_ga
 from .transformations import transformation_findings
 from .evidence import select_evidence
 from .compatibility import audit_compatibility
+from .attribute_contract import attribute_contract_findings
 
 
 def _finding(level, code, message):
@@ -24,7 +25,10 @@ def lint_spec(spec: dict) -> list[dict]:
     out.extend(art_craft_gate(spec))
     out.extend(transformation_findings(spec))
     out.extend(transformation_art_gate(spec))
+    out.extend(attribute_contract_findings(spec))
     if spec.get("transformation") and any(f["level"] == "error" for f in out):
+        return out
+    if spec.get("attribute_contract") and any(f["level"] == "error" for f in out):
         return out
     text=spec.get("request","").casefold()
     if re.search(r"\b(8k|16k|32k)\b", text):
