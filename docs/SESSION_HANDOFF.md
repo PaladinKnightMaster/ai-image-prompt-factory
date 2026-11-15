@@ -1,34 +1,37 @@
 # Session Handoff
 
-- Date: 2026-11-11
-- Canonical `main` (branch base): `2bed45a066cab447471e559c1f454f46f17a3f07`
-- Feature branch: `docs/cr-015-close-recon`
-- Prior on main: CR-015 Cut-Space Portrait recipe (PR #60)
+- Date: 2026-11-14
+- Canonical `main` (branch base): `4c9dd1f4dbdb7cf0b03baf89b092b3a819d4f59f`
+- Feature branch: `feature/cr-016-song-ink-scroll`
+- Prior on main: PCC-02 attribute contract slice1 (PR #65) and closed APCC-VF track
 - Stable release: V3.3 (`v3.3.0`); unchanged
-- `COMPILER_VERSION` remains `3.2.0`
+- `COMPILER_VERSION` remains `3.2.0` for this recipe path
 - Private gallery: fourteen accepted cards; thirteen rollback epochs unchanged
-- CR-008 remains research-only/blocked; no private custody or gallery mutation in this gate
+- CR-008 remains research-only/blocked; CR-015 remains closed
 
 ## Change
 
-CR-015-CLOSE-RECON-01: documentation-only reconciliation of CR-015 closure status
-after owner-accepted generation, custody, fourteen-card private gallery
-promotion, and final owner browser verification. No recipe, pack, compiler,
-EXP-019, or gallery-byte changes.
+AIPF-CR-REENTRY-RECIPE-AUTHORIZE-01: draft Creative Recipe
+`cr-016-ferry-unpainted-water@1.0.0` (Southern Song–informed hanging-scroll ink
+landscape on silk; `new_generation` + `song` + `chinese_ink_painting` + `scroll`).
+Library docs/index updated. No generation, prepare freeze, gallery mutation,
+commit, or PR in this gate.
 
-## Digests (CR-015 closure references)
+## Digests (offline draft; not adapter freeze)
 
-- Recipe SHA-256: `fe9a6a6a03520e40569df8e3a0c3c5703d31d869c83c02cbaff2331cb58f2e46`
-- Adapter prompt SHA-256: `91e1d81fc85ec980c1de9ce9e640e23ea770e8fa71111dbaf29c2b4de74fbf53`
-- Original SHA-256: `ffb565d4ceea8e640d779c8a28e97484bee9cd1ed93da0de394cd03dd48c7da2`
-- Gallery index / manifest: `c9d4e73e…13d3` / `6e9428a5…a4eb`
+- Recipe SHA-256: `399023d58cc080847483024a0483ecf63a26b60e3384e65293dbdd58610e48aa`
+- Compiled prompt SHA-256: `304fabd4de18b02a49107205313ca00c4520ac9b6c543680ea5c7dd097fab184`
+- Research packet (unchanged): concept-spec manifest `639656c66114b1947f9deab8c93ac73b423cfc3e70b9d9fb2df5f057401d4930`
 
 ## Validation
 
-- Focused: `tests/test_creative_recipe_library.py`
-- Full pytest / `validate_repo.py` — see PR checks
+- `aipf recipe validate` / `aipf lint`: empty findings
+- Deterministic `aipf recipe compile --json` ×2
+- `python -m pytest -q tests/test_creative_recipe_library.py` — 94 passed
+- Full `python -m pytest -q` — see private authoring evidence / local run
 
 ## Next task
 
-Owner review/merge of docs-only CR-015 closure reconciliation PR. Do not begin
-ISV-01. Do not generate images. Do not modify the private gallery.
+Owner review of CR-016 recipe draft and offline prompt. Separate authorization
+required for commit/PR, adapter prepare freeze, and any image generation.
+Do not modify the private fourteen-card gallery.
