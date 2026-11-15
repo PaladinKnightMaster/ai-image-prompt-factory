@@ -1,0 +1,103 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-016-ferry-unpainted-water",
+  "recipe_version": "1.0.0",
+  "title": "CR-016 The Ferry Across Unpainted Water",
+  "description": "Original Southern Song-informed Chinese ink landscape as a vertical hanging-scroll painting on silk. Uses new_generation + EraPack song + ArtMethod chinese_ink_painting + artifact form scroll + newly_created. No TransformationPack, no reference images, no StylePack, no APCC. Painting-as-principal-image in a 4:5 field; historically_informed (not reconstruction of a named masterpiece). See docs/CR_016_FERRY_UNPAINTED_WATER.md. Creative Research library entry only; no gallery image attached.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-016-ferry-unpainted-water",
+    "request": "Create an original historically informed Southern Song Chinese ink landscape as a vertical hanging-scroll painting on silk. The painting itself is the principal image filling a 4:5 field—not a studio photograph of a mounted scroll object, not a living photographic scene, not a timber-corridor fashion editorial, and not a fashion-portrait afterimage. Compose one continuous quiet river crossing with coherent hanging-scroll hierarchy: upper mist-softened distant hills in sparse high-value washes; middle broad river space with substantial reserved unpainted silk and a modest ferry as a controlled narrative anchor; lower nearer bank with more defined dry-brush rocks or sparse reeds/trees and darker accents that establish foreground weight—keep transitions continuous through bank shapes, mist, and brush rhythm rather than three disconnected bands. Place one or two tiny adult travelers in the ferry; keep them readable at gallery scale but clearly subordinate to landscape structure (no portrait close-up, no fashion-figure dominance). Prefer Southern Song lyrical mist and asymmetrical spatial breathing over Northern Song monumental mountain-filling masses. Build atmospheric recession through layered ink values, wet washes dissolving into void, and dry-brush texture on nearer rock and tree forms—not photographic depth of field, Gaussian blur, softbox lighting, or airbrush gradients. Use monochrome carbon ink on silk only. If Song selective living anchors mention robes, hair, or timber interiors, treat them only as optional minimal traveler notation for scale—or omit them—never as corridor fashion staging, architecture spectacle, or costume display. Do not invent calligraphy, seals, signatures, collector marks, dates, dynasty inscriptions, logos, or artist attribution. Do not introduce fantasy architecture, mythology, elaborate costume, modern fashion detail, foxing, cracks, or fake aging.",
+    "route": "new_generation",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "Southern Song-informed hanging-scroll ink landscape with subordinate ferry narrative",
+      "painting_is_principal_image": true,
+      "vertical_hanging_scroll_not_handscroll": true,
+      "historically_informed_not_reconstruction": true,
+      "landscape_not_fashion_portrait": true,
+      "landscape_not_song_corridor_editorial": true,
+      "ferry_subordinate_not_character_closeup": true,
+      "monochrome_ink_on_silk_only": true,
+      "prefer_landscape_over_living_era_anchors": true,
+      "no_calligraphy_seals_signatures_or_attribution": true,
+      "no_fake_aging_foxing_or_cracks": true,
+      "no_photographic_living_scene": true,
+      "no_studio_photograph_of_mounted_scroll": true,
+      "no_fantasy_xianxia_or_modern_fashion": true,
+      "no_logo_or_brand_text": true,
+      "no_generation_in_this_delivery": true
+    },
+    "references": [],
+    "identity": {
+      "mode": "identity_unlocked",
+      "locked_features": []
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "tiny adult travelers only; suggest human scale with extreme economy of ink marks; no portrait anatomy, no facial microdetail, no fashion-figure proportions dominating the field",
+      "pose_change": "ferry figures remain quiet and subordinate within the boat; no editorial fashion stance",
+      "camera_presentation": "hanging-scroll painting composition in a vertical 4:5 field; painting surface fills the frame as the artwork itself; quiet support edge or border may appear only as natural painting-field margin—not museum-mount product photography with rollers, knobs, studio walls, or display stands",
+      "garment_shaping": "minimally indicated traveler robes only if needed for scale; no Tang high-waist court display, no Qing defaults, no Song corridor fashion editorial wardrobe, no modern evening gown, no elaborate unsupported costume",
+      "artistic_stylization": "Southern Song-informed monochrome Chinese ink landscape painting grammar: wet wash, dry brush, void as active water/mist, calligraphic economy—not photographic material response"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "song"
+      ],
+      "subperiod": "Southern Song-informed lyrical mist landscape (1127–1279 conventions as creative guidance; not a dated reconstruction of a specific year or surviving masterpiece)",
+      "region": "China; Jiangnan / Hangzhou-region river and hills context as creative inspiration",
+      "role": "landscape painting with subordinate travelers",
+      "occasion": "quiet river crossing / travel",
+      "intentional_hybrids": [
+        "original invented ferry narrative presented as historically informed Southern Song ink landscape painting, not as documentary reconstruction of a named museum object",
+        "if selective Song living anchors (robes, hair, timber interiors) appear in compilation, treat them only as optional minimal traveler scale notation—or omit them—never as living fashion editorial or corridor architecture staging"
+      ]
+    },
+    "art": {
+      "method": "chinese_ink_painting",
+      "artifact_form": "scroll",
+      "artifact_state": "newly_created",
+      "variant": "vertical hanging-scroll painting on silk; principal image is the painted surface in a 4:5 field; ink on silk only (not paper); not a handscroll unfolding sequence; not a photographed mounted object with rollers/knobs/studio lighting; newly painted digital simulation without foxing, cracks, seals, or collector marks"
+    },
+    "requested_elements": [
+      "vertical hanging-scroll ink landscape composition filling a 4:5 field as the painting itself",
+      "silk painting support with absorbent silk-surface response to ink",
+      "upper mist-softened distant hills in sparse wet washes continuous with middle void",
+      "middle river expanse of reserved or barely washed silk with a modest ferry narrative anchor",
+      "lower nearer bank with restrained rocks and sparse reeds or trees in denser dry-brush accents",
+      "one or two tiny subordinate adult travelers in the ferry, readable but not portrait-dominant",
+      "wet-wash versus dry-brush contrast and ink-density hierarchy from untouched silk through pale gray to selective dark accents",
+      "no calligraphy, seals, signatures, collector marks, logos, attribution, foxing, or fake aging"
+    ],
+    "director": {
+      "moment": "a quiet mid-crossing pause on still water under soft mist",
+      "action": "the ferry drifts slowly between banks while landscape structure and void carry the painting",
+      "gaze": "no portrait gaze; travelers are tiny ink notations without readable facial expression",
+      "body_weight": "pictorial weight belongs to landforms and void; human marks are lightest subordinate accents",
+      "hand_logic": "no hand close-ups; traveler gestures omitted or reduced to minimal ink tips",
+      "fabric_response": "if robes appear, they are abbreviated ink shapes continuous with landscape grammar—not satin fashion physics and not Song corridor editorial wardrobe display",
+      "prop_interaction": "boat is a small structural ink form on water-as-void; no second narrative props; no display furniture",
+      "foreground": "nearer bank rocks/reeds/trees with denser dry-brush and texture strokes establishing lower-field weight",
+      "midground": "ferry and open river void occupying substantial unpainted silk, continuous with upper mist and lower bank",
+      "background": "distant hills dissolving into wet mist washes and reserved silk without monumental Northern Song mountain fill",
+      "camera": "vertical hanging-scroll painting field, 4:5, painting surface edge-to-edge as the artwork itself; slight asymmetry allowed; not an eye-level fashion editorial frame and not a museum-object product shot",
+      "light_source": "pictorial value from ink concentration and reserved silk only; no softbox, rim light, god-rays, cyclorama, or photographic beauty lighting",
+      "material_response": "carbon ink on silk only: wet wash bloom and feathering into reserved silk for water/mist; dry-brush drag on nearer rock and tree; brush-tip taper; tonal hierarchy from untouched silk through pale gray wash to selective dark accents; silk weave may subtly affect stroke edges; do not render paper substrate behavior as the primary support; no acrylic impasto, no multicolor watercolor, no uniform airbrush gradient, no sepia filter, no photo-ink overlay",
+      "micro_story": "distance between two shores felt through mist and unpainted water, with a ferry kept small enough that the landscape remains the subject"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}

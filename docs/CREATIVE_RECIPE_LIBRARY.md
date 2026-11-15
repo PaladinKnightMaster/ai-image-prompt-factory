@@ -577,6 +577,45 @@ python -m pytest -q tests/test_creative_recipe_library.py
 
 None in `1.0.0` — single baseline full-figure layered-paper pop-up framing only.
 
+## Locate and validate CR-016
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-016-ferry-unpainted-water/1.0.0.json` |
+| `recipe_id` | `cr-016-ferry-unpainted-water` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `new_generation` |
+| Status | Implemented recipe draft; generation / prompt-freeze pending owner review; not gallery-accepted |
+
+Original Southern Song–informed hanging-scroll Chinese ink landscape on silk:
+[CR_016_FERRY_UNPAINTED_WATER.md](CR_016_FERRY_UNPAINTED_WATER.md). Uses installed
+`new_generation` + EraPack `song` + `chinese_ink_painting` + `scroll`; no
+TransformationPack; no reference images; does **not** reopen CR-008 and is not a
+CR-001 / CR-014 fashion afterimage.
+
+```bash
+aipf recipe validate recipes/cr-016-ferry-unpainted-water/1.0.0.json
+aipf recipe compile recipes/cr-016-ferry-unpainted-water/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-016
+
+- Original landscape request and locks (painting as principal image)
+- Route `new_generation` (no TransformationPack; no references)
+- ArtMethod `chinese_ink_painting`; form `scroll`; state `newly_created`
+- EraPack `song` with Southern Song–informed subperiod; `historically_informed`
+- Identity `identity_unlocked`; body `artistic_stylization` for ink landscape grammar
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline)
+- Explicit non-claims: no handscroll panoramic ratio, no mounted-scroll product shot,
+  no fake calligraphy/seals/aging, no fashion-portrait focal subject, no generation
+  in this delivery
+
+### Supported variations (CR-016)
+
+None in `1.0.0` — single baseline vertical hanging-scroll landscape framing only.
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
