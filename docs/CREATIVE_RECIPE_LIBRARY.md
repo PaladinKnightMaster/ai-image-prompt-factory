@@ -632,7 +632,9 @@ Original Tang-informed secular mineral-pigment mural study on prepared plaster:
 installed `new_generation` + EraPack `tang` + `mineral_pigment_mural` +
 `wall_surface` + `newly_created`; no TransformationPack; no reference images; no
 Dunhuang site pack; does **not** reopen CR-008 and is not a CR-005 / CR-011 /
-CR-016 afterimage.
+CR-016 afterimage. Engineering recipe description metadata was corrected
+pre-merge (authoring-status wording removed); creative `semantic_spec` and
+compiled-prompt digests remain those of the authorized private draft.
 
 ```bash
 aipf recipe validate recipes/cr-017-pigment-beneath-plaster/1.0.0.json

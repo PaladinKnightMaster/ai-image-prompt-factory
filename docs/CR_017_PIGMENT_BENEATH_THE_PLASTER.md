@@ -25,8 +25,8 @@ in this delivery.
 | Historical strictness | `historically_informed` |
 | References | none |
 | Variables | none (single embedded baseline) |
-| Raw recipe SHA-256 | `7b7f1a8ec969206519cedb8186d34224759bc1f15c0825d142acb173cf5031a0` |
-| Canonical recipe SHA-256 | `820b3b7a008a2c5312af61c67d9c0c09e552db62c04ced80373e40f41c497d69` |
+| Raw recipe SHA-256 | `c353357aae5fe18c87f8d46e59acff517771a6ea3d2dd519098da5f2652088c7` |
+| Canonical recipe SHA-256 | `f794c507a245066aef3931685fc7b6938db372f746658d4e570447655507afd7` |
 | Semantic-spec SHA-256 | `222b0aae775310839df1473e96fca489e966d627974a0f6ae0936b4f5128b7e1` |
 | Baseline compiled prompt SHA-256 | `5bd1c2bfd865fb3040f07ce6e4e92d722e123759ada6a7f7ea82e419dd8bd85d` |
 | Compiled UTF-8 bytes | `7049` |
@@ -50,8 +50,12 @@ This recipe is intentionally **not** a transform of CR-001 and is distinct from:
 
 Authoring follows the owner-authorized concept specification and private formal
 recipe draft gates (`AIPF-CR-NEXT-MURAL-CONCEPT-SPEC-01`,
-`AIPF-CR-NEXT-MURAL-RECIPE-AUTHOR-01`). Public/institutional anchors include
-Getty Mogao wall-painting conservation science for plaster/ground/pigment
+`AIPF-CR-NEXT-MURAL-RECIPE-AUTHOR-01`). The engineering recipe in this tree is
+an authorized pre-merge metadata correction of that private draft: only the
+top-level `description` changed (authoring-status / private-path wording
+removed). Creative `semantic_spec`, compiled-prompt bytes, and generation
+semantics are unchanged from the private draft. Public/institutional anchors
+include Getty Mogao wall-painting conservation science for plaster/ground/pigment
 **technique analogy**, and Tang tomb attendant mural evidence (for example
 Shaanxi History Museum Palace Maids) for a secular attendant **subject-family
 analogy**. Installed AIPF sources: `references/eras/tang.json`,

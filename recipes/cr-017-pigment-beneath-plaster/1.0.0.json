@@ -3,7 +3,7 @@
   "recipe_id": "cr-017-pigment-beneath-plaster",
   "recipe_version": "1.0.0",
   "title": "CR-017 Pigment Beneath the Plaster",
-  "description": "PRIVATE DRAFT ONLY — not integrated into engineering main. Original Tang-informed secular mineral-pigment mural study as principal image: three restrained adult attendants in a planar procession with limited painted timber architectural motifs on prepared plaster. Uses new_generation + EraPack tang + ArtMethod mineral_pigment_mural + wall_surface + newly_created. No TransformationPack, no references, no Dunhuang site pack, no APCC. Option C workshop margin for ground/plaster visibility without fake aging. See AIPF_Creative_Private/CR-NEXT-MURAL-CONCEPT-SPEC-01. No gallery image attached.",
+  "description": "Original Tang-informed secular mineral-pigment mural study as the principal image: three restrained adult attendants in a planar procession with limited painted timber architectural motifs on prepared plaster. Uses new_generation, EraPack tang, ArtMethod mineral_pigment_mural, artifact form wall_surface, and state newly_created. The composition includes one small deliberate unfinished workshop margin revealing prepared ground and a narrow plaster strip without artificial aging. No TransformationPack, reference images, Dunhuang site pack, or APCC.",
   "semantic_spec": {
     "version": "3.2",
     "id": "cr-017-pigment-beneath-plaster",
