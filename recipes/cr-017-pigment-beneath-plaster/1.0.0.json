@@ -1,0 +1,104 @@
+{
+  "recipe_schema_version": "1.1",
+  "recipe_id": "cr-017-pigment-beneath-plaster",
+  "recipe_version": "1.0.0",
+  "title": "CR-017 Pigment Beneath the Plaster",
+  "description": "Original Tang-informed secular mineral-pigment mural study as the principal image: three restrained adult attendants in a planar procession with limited painted timber architectural motifs on prepared plaster. Uses new_generation, EraPack tang, ArtMethod mineral_pigment_mural, artifact form wall_surface, and state newly_created. The composition includes one small deliberate unfinished workshop margin revealing prepared ground and a narrow plaster strip without artificial aging. No TransformationPack, reference images, Dunhuang site pack, or APCC.",
+  "semantic_spec": {
+    "version": "3.2",
+    "id": "cr-017-pigment-beneath-plaster",
+    "request": "Create an original Tang-informed secular mineral-pigment wall painting as the principal image filling a 4:5 field. The mural itself occupies nearly the entire frame as a continuous wall-bound painting on prepared plaster—not a photograph of a museum installation, not a living corridor scene, not a framed canvas, not a fashion portrait, and not a sacred cave-temple reconstruction. Depict three restrained adult attendants in a quiet planar procession among limited painted architectural motifs (suggested timber-post and lintel geometry as painted wall decoration, not deep photographic perspective). Figures remain subordinate to the wall-painting program: planar contours, matte mineral color fields, and hierarchical wall composition rather than photographic depth or garment spectacle. Material construction order is architectural wall support, then earthen plaster, then prepared painting ground, then line drawing and mineral-pigment layers. The painting is freshly completed and newly created: intact ground and pigment, clean workshop-fresh finish, no centuries of weathering, no soot, no salt damage, no random flaking, no excavated losses, and no conservation patches. Where ArtMethod fragments mention localized loss, cracks, or aging, treat those as generic method vocabulary for other states—not instructions for this image—and obey artifact state newly_created instead. Demonstrate material construction without damage by keeping the completed painted program dominant while reserving one small deliberate unfinished lower-left margin where unpainted prepared ground and a narrow strip of earthen plaster remain visible as a workshop edge, not as archaeological damage. Prefer matte mineral pigment opacity and fine granular character, brush-defined contours integrated with plaster grain, and limited organic-wash suggestion only where subordinate to mineral fields. Do not invent sacred deities, mudras, halo programs, calligraphy, seals, artist attribution, logos, or fake inscriptions.",
+    "route": "new_generation",
+    "locks": {
+      "adult_subject": true,
+      "primary_subject": "Tang-informed secular mineral-pigment mural with three subordinate attendants",
+      "mural_is_principal_image": true,
+      "historically_informed_not_reconstruction": true,
+      "newly_created_overrides_generic_method_aging_language": true,
+      "intact_pigment_and_ground_no_weathering": true,
+      "workshop_edge_margin_only_not_aging": true,
+      "no_excavated_damage_or_conservation_theater": true,
+      "no_sacred_iconography": true,
+      "no_sacred_cave_composition": true,
+      "no_fashion_portrait_dominance": true,
+      "no_living_people_in_front_of_mural": true,
+      "no_calligraphy_seals_or_attribution": true,
+      "no_buon_fresco_claim": true,
+      "no_logo_or_brand_text": true,
+      "no_generation_in_this_delivery": true
+    },
+    "references": [],
+    "identity": {
+      "mode": "identity_unlocked",
+      "locked_features": []
+    },
+    "body_transformation": {
+      "mode": "artistic_stylization",
+      "anatomy_change": "translate three attendant figures into planar mural proportions with readable contour hierarchy; no photographic anatomy; no fashion-figure dominance",
+      "pose_change": "quiet procession poses subordinate to the wall-painting program",
+      "camera_presentation": "near-frontal documentation view of the mural wall field as principal image; slight obliqueness only to confirm planar wall continuity",
+      "garment_shaping": "matte mineral-pigment drapery with brush-defined folds continuous with the wall; restrained Tang-informed layered dress without dynasty-wide costume certainty; no photographic silk physics",
+      "artistic_stylization": "Tang-informed wall painting grammar; forbid living photographic skin, fashion-editorial staging, framed canvas, floating poster, or CGI relief-sculpture figures"
+    },
+    "historical": {
+      "strictness": "historically_informed",
+      "packs": [
+        "tang"
+      ],
+      "subperiod": "Tang-informed secular attendant wall-painting conventions; not a dated reconstruction of a specific year, cave, tomb, or palace mural",
+      "region": "China; Tang court-culture visual language as creative inspiration, without claiming a surviving Chang'an palace wall",
+      "role": "restrained adult court attendants in a secular procession",
+      "occasion": "court leisure/banquet",
+      "intentional_hybrids": [
+        "original invented secular attendant mural presented as historically informed Tang wall painting, not as documentary reconstruction of a named museum object or excavated palace corridor",
+        "material construction informed by earthen-plaster mural technique research without asserting a sacred cave-temple site identity"
+      ]
+    },
+    "art": {
+      "method": "mineral_pigment_mural",
+      "artifact_form": "wall_surface",
+      "artifact_state": "newly_created",
+      "variant": "freshly completed Tang-informed secular wall painting with one small deliberate unfinished workshop margin revealing prepared ground and limited plaster; intact pigment elsewhere; no fake aging"
+    },
+    "requested_elements": [
+      "wall-bound mineral-pigment mural filling most of the 4:5 field as the principal image",
+      "three restrained adult attendant figures in a quiet planar procession",
+      "Tang-informed but non-extravagant layered garments and restrained hairstyles without dynasty-wide costume certainty",
+      "limited painted architectural motifs establishing wall scale without deep cinematic room perspective",
+      "earthen plaster support character readable at the workshop edge and as grain interrupting paint edges",
+      "prepared painting ground visible only in a small deliberate unfinished margin",
+      "matte mineral-pigment color fields with fine granular character and controlled opacity",
+      "brush line drawing integrated with color fields",
+      "freshly completed newly_created finish: intact pigment, no weathering, soot, salt damage, random flaking, excavated losses, or conservation patches",
+      "no sacred deities, calligraphy, seals, logos, artist attribution, living people in front of the wall, framed canvas, floating poster, or sacred cave authenticity cues"
+    ],
+    "director": {
+      "moment": "a freshly completed Tang-informed secular wall painting at rest on its plaster support",
+      "action": "three painted attendants proceed quietly across the wall field; no living motion in front of the mural",
+      "gaze": "painted sideward or lowered glances without photographic camera stare",
+      "body_weight": "pictorial weight belongs to planar wall composition; figures share the plaster plane rather than standing free of it",
+      "hand_logic": "simple painted hands close to torsos or lightly indicating small court props; no sacred mudra",
+      "fabric_response": "matte mineral-pigment drapery with brush-defined folds continuous with plaster grain—not photographic cloth sheen",
+      "prop_interaction": "optional small painted court implements only if restrained; architecture remains painted wall motif, not handheld spectacle",
+      "foreground": "lower wall zone including one small deliberate unfinished workshop margin at lower left showing prepared ground and a narrow plaster strip",
+      "midground": "three attendant figures and primary pigment fields as one continuous mural program",
+      "background": "continuation of the plastered wall field with restrained painted architectural motifs; no museum room, gallery signage, or deep corridor photography",
+      "camera": "near-frontal documentation view of the mural wall field filling the frame, slight obliqueness only enough to confirm planar wall continuity",
+      "light_source": "even soft documentation light revealing matte pigment and plaster grain without theatrical speculars or cinematic chiaroscuro",
+      "material_response": "freshly completed mineral pigment on prepared ground over earthen plaster: matte reflectance, fine granular color, brush contours interrupted by plaster grain without cracks or losses; intact paint film except the intentional unfinished workshop margin; ignore generic method aging vocabulary",
+      "micro_story": "pigment and plaster read as one newly made wall system—construction visible at a workshop edge, not through invented ruin"
+    },
+    "output": {
+      "profile": "standard",
+      "aspect_ratio": "4:5",
+      "text_in_image": [],
+      "generation_requested": false
+    },
+    "visual_patterns": {
+      "enable_validated": false,
+      "include": [],
+      "exclude": []
+    }
+  },
+  "variables": {}
+}
