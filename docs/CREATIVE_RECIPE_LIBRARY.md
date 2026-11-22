@@ -616,6 +616,48 @@ python -m pytest -q tests/test_creative_recipe_library.py
 
 None in `1.0.0` — single baseline vertical hanging-scroll landscape framing only.
 
+## Locate and validate CR-017
+
+| Field | Value |
+| --- | --- |
+| Path | `recipes/cr-017-pigment-beneath-plaster/1.0.0.json` |
+| `recipe_id` | `cr-017-pigment-beneath-plaster` |
+| `recipe_version` | `1.0.0` |
+| `recipe_schema_version` | `1.1` |
+| Route | `new_generation` |
+| Status | Implemented recipe draft; generation / prompt-freeze pending owner review; not gallery-accepted |
+
+Original Tang-informed secular mineral-pigment mural study on prepared plaster:
+[CR_017_PIGMENT_BENEATH_THE_PLASTER.md](CR_017_PIGMENT_BENEATH_THE_PLASTER.md). Uses
+installed `new_generation` + EraPack `tang` + `mineral_pigment_mural` +
+`wall_surface` + `newly_created`; no TransformationPack; no reference images; no
+Dunhuang site pack; does **not** reopen CR-008 and is not a CR-005 / CR-011 /
+CR-016 afterimage.
+
+```bash
+aipf recipe validate recipes/cr-017-pigment-beneath-plaster/1.0.0.json
+aipf recipe compile recipes/cr-017-pigment-beneath-plaster/1.0.0.json --json
+python -m pytest -q tests/test_creative_recipe_library.py
+```
+
+### What is static in CR-017
+
+- Original mural request and locks (mural as principal image)
+- Route `new_generation` (no TransformationPack; no references)
+- ArtMethod `mineral_pigment_mural`; form `wall_surface`; state `newly_created`
+- EraPack `tang` with Tang-informed secular attendant scope; `historically_informed`
+- Identity `identity_unlocked`; body `artistic_stylization` for wall-painting grammar
+- Aspect fixed at `4:5`; empty `variables` (single embedded baseline)
+- Option C unfinished workshop margin for ground/plaster visibility without fake aging
+- Explicit non-claims: no sacred cave program, no false calligraphy/seals, no
+  excavated aging theater, no fashion-portrait focal subject, no generation in
+  this delivery
+- Documented residual limitation: `UNRESOLVED_PACK_LEAKAGE — REQUEST-LEVEL MITIGATION PRESENT`
+
+### Supported variations (CR-017)
+
+None in `1.0.0` — single baseline mural-as-principal-image framing only.
+
 ## Packaging note
 
 `recipes/` is a **worktree** library. It is not added to
