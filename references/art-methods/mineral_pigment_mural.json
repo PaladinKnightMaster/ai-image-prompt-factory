@@ -66,8 +66,38 @@
   ],
   "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
   "concept_refs": {
-    "core": ["method.mineral_pigment_mural", "mural.prepared_earthen_plaster", "mural.ground_layer", "mural.line_drawing", "mural.mineral_pigment_fields", "mural.wall_integration"],
-    "conditional": ["mural.pouncing_transfer"]
+    "core": [
+      "method.mineral_pigment_mural",
+      "mural.prepared_earthen_plaster",
+      "mural.ground_layer",
+      "mural.line_drawing",
+      "mural.mineral_pigment_fields",
+      "mural.wall_integration"
+    ],
+    "conditional": [
+      "mural.pouncing_transfer"
+    ]
   },
-  "version": "1.1.0"
+  "version": "1.2.0",
+  "supported_art_method_emission_contracts": [
+    "legacy",
+    "state_aware_v1"
+  ],
+  "technique": {
+    "prompt_core": "Make the image inseparable from a prepared wall: matte mineral pigment, brush contours integrated with plaster grain, and composition designed for architectural surface rather than a floating poster.",
+    "surface": "Pigment film sits on/within a mineral wall ground; brushwork and plaster interaction remain physically coherent.",
+    "edge": "Paint edges are brush-defined and interrupted by plaster grain; no floating digital vector edge."
+  },
+  "condition_overlays": {
+    "newly_created": null,
+    "modern_reconstruction": null,
+    "replica": null,
+    "fantasy_artifact": null,
+    "in_period": "Show modest in-period handling wear only: light surface abrasion or soot appropriate to use, without archaeological damage by default.",
+    "aged": "Show restrained long-term aging with localized pigment loss, cracks, and abrasion appropriate to wall material and environment.",
+    "damaged": "Show visible material damage with cracks, chips, or losses that follow plaster and pigment fracture behavior rather than random grunge.",
+    "excavated": "Allow earth or mineral accretions and burial-context effects to remain where appropriate; avoid a generic mud coating over every surface.",
+    "partially_restored": "Keep original and repaired zones visibly distinguishable but coherent; avoid perfect invisible restoration unless separately specified.",
+    "museum_conserved": "Present a stabilized, cleaned, and supported mural surface with restrained conservation evidence rather than uncontrolled decay."
+  }
 }

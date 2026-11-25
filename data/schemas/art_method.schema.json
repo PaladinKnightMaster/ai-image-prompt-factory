@@ -21,12 +21,162 @@
   "properties": {
     "concept_refs": {
       "type": "object",
-      "required": ["core", "conditional"],
+      "required": [
+        "core",
+        "conditional"
+      ],
       "properties": {
-        "core": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-        "conditional": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        "core": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "conditional": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "supported_art_method_emission_contracts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "legacy",
+          "state_aware_v1"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "technique": {
+      "type": "object",
+      "required": [
+        "prompt_core",
+        "surface",
+        "edge"
+      ],
+      "properties": {
+        "prompt_core": {
+          "type": "string",
+          "minLength": 1
+        },
+        "surface": {
+          "type": "string",
+          "minLength": 1
+        },
+        "edge": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "condition_overlays": {
+      "type": "object",
+      "required": [
+        "newly_created",
+        "in_period",
+        "aged",
+        "damaged",
+        "excavated",
+        "partially_restored",
+        "museum_conserved",
+        "modern_reconstruction",
+        "replica",
+        "fantasy_artifact"
+      ],
+      "properties": {
+        "newly_created": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "in_period": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aged": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "damaged": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "excavated": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "partially_restored": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "museum_conserved": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "modern_reconstruction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "replica": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fantasy_artifact": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       },
       "additionalProperties": false
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "supported_art_method_emission_contracts": {
+            "contains": {
+              "const": "state_aware_v1"
+            }
+          }
+        },
+        "required": [
+          "supported_art_method_emission_contracts"
+        ]
+      },
+      "then": {
+        "required": [
+          "technique",
+          "condition_overlays"
+        ]
+      }
+    }
+  ]
 }
