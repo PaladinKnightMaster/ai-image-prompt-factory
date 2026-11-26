@@ -17,10 +17,12 @@ from aipf.linting import lint_spec
 from aipf.recipes import compile_recipe, load_recipe, sha256_canonical
 
 ROOT = Path(__file__).resolve().parents[1]
-STAGE0 = Path(
-    r"D:\1_PROJECT\AI_Kits\AI Image Prompt Factory\IDEA_POOL\AIPF_Creative_Private"
-    r"\CR-017-ARTMETHOD-STAGE0-BASELINE-CAPTURE-01\binaries"
-)
+
+# Portable Stage 0 prompt-byte baselines (UTF-8 digest + length; no private paths).
+STAGE0_B0_01 = ("5bd1c2bfd865fb3040f07ce6e4e92d722e123759ada6a7f7ea82e419dd8bd85d", 7049)
+STAGE0_B0_02 = ("6e3f9d6416fffc05c4e94cf81c3312a80b3564f1cd1689a54bfbe31da13984da", 5369)
+STAGE0_B0_03 = ("cd1a694eba866ed525d2d18904e57c7aa14720e1472c9897221195e598daf755", 5328)
+STAGE0_B0_04 = ("eef91b4d413021c9a1f3d9e30a9f1e2a54ff0a849b776a9f0bbfa0f229d33b4f", 4473)
 
 FORBIDDEN_LEGACY_AGING = (
     "localized loss and aging",
@@ -117,10 +119,7 @@ def test_l_absent_selector_matches_stage0_cr017_bytes():
     receipt = compile_recipe(load_recipe(ROOT / "recipes/cr-017-pigment-beneath-plaster/1.0.0.json"))
     prompt = receipt["compilation"]["prompt"]
     digest, nbytes = _sha(prompt)
-    expected = (STAGE0 / "B0_01_cr017_legacy.prompt.txt").read_bytes()
-    assert prompt.encode("utf-8") == expected
-    assert digest == "5bd1c2bfd865fb3040f07ce6e4e92d722e123759ada6a7f7ea82e419dd8bd85d"
-    assert nbytes == 7049
+    assert (digest, nbytes) == STAGE0_B0_01
     assert receipt["compilation"]["art_method_emission_contract"] == "legacy"
     assert receipt["compilation"]["selected_emission_contract_count"] == 1
 
@@ -139,36 +138,21 @@ def test_l_explicit_legacy_equals_absent_prompt_bytes():
 def test_l_cr005_transform_stage0_bytes_and_skip():
     receipt = compile_recipe(load_recipe(ROOT / "recipes/cr-005-silk-on-plaster/1.0.0.json"))
     prompt = receipt["compilation"]["prompt"]
-    expected = (STAGE0 / "B0_02_cr005_transform.prompt.txt").read_bytes()
-    assert prompt.encode("utf-8") == expected
     sections = receipt["compilation"]["prompt_sections"]
     assert "art_method" not in sections
     assert "material_behavior" not in sections
-    assert _sha(prompt) == (
-        "6e3f9d6416fffc05c4e94cf81c3312a80b3564f1cd1689a54bfbe31da13984da",
-        5369,
-    )
+    assert _sha(prompt) == STAGE0_B0_02
 
 
 def test_l_tang_golden_prompt_body_stage0_bytes():
     case = load_json("cases/golden/05-tang-dunhuang-mural/case.json")
     prompt = compile_result(case)["prompt"]
-    expected = (STAGE0 / "B0_03_tang_golden_prompt_body.prompt.txt").read_bytes()
-    assert prompt.encode("utf-8") == expected
-    assert _sha(prompt) == (
-        "cd1a694eba866ed525d2d18904e57c7aa14720e1472c9897221195e598daf755",
-        5328,
-    )
+    assert _sha(prompt) == STAGE0_B0_03
 
 
 def test_l_isv_aged_stage0_bytes():
     prompt = compile_result(_isv_spec())["prompt"]
-    expected = (STAGE0 / "B0_04_isv_mineral_aged.prompt.txt").read_bytes()
-    assert prompt.encode("utf-8") == expected
-    assert _sha(prompt) == (
-        "eef91b4d413021c9a1f3d9e30a9f1e2a54ff0a849b776a9f0bbfa0f229d33b4f",
-        4473,
-    )
+    assert _sha(prompt) == STAGE0_B0_04
 
 
 def test_l_legacy_pack_field_digests_unchanged():
