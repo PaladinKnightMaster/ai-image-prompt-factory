@@ -16,6 +16,20 @@ COMPILER_VERSION='3.2.0'
 TRANSFORMATION_COMPILER_VERSION='3.4.1'
 # PCC-02 Attribute Preservation/Change Contract path (opt-in attribute_contract).
 APCC_COMPILER_VERSION='3.5.0'
+# CR-017 state-aware ArtMethod emission (explicit art_method_emission_contract).
+ARTMETHOD_STATE_AWARE_COMPILER_VERSION='3.6.0'
+
+
+def resolve_art_method_emission_contract(art: dict) -> str:
+    """Resolve emission contract. Absent selector means legacy (default)."""
+    if 'art_method_emission_contract' not in art:
+        return 'legacy'
+    value = art.get('art_method_emission_contract')
+    if value in {'legacy', 'state_aware_v1'}:
+        return value
+    # Invalid/null should already be rejected by lint/schema before emission.
+    raise ValueError(f'Invalid art_method_emission_contract: {value!r}')
+
 
 
 def _texts(items, limit=3):
@@ -167,17 +181,33 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
         state=art.get('artifact_state') or 'living/in-period scene'
         sections.append(('survival_bias',f"Original-vs-surviving appearance ({state}): "+' '.join(survival)))
 
+    emission_contract='legacy'
+    emission_contracts_selected=0
     if method_doc:
+        emission_contract=resolve_art_method_emission_contract(art)
         if not transformation:
-            core=method_doc['prompt_fragments'].get('core',next(iter(method_doc['prompt_fragments'].values())))
-            sections.append(('art_method',f"Art/craft method — {method_doc['name']}: {core}"))
+            emission_contracts_selected=1  # SELECTED_EMISSION_CONTRACT_COUNT = 1
+            if emission_contract=='state_aware_v1':
+                tech=method_doc['technique']
+                sections.append(('art_method',f"Art/craft method — {method_doc['name']}: {tech['prompt_core']}"))
+            else:
+                core=method_doc['prompt_fragments'].get('core',next(iter(method_doc['prompt_fragments'].values())))
+                sections.append(('art_method',f"Art/craft method — {method_doc['name']}: {core}"))
         if art.get('artifact_form'):
             form=load_json('references/artifacts/forms.json')['forms'][art['artifact_form']]; sections.append(('artifact_form',f"Artifact form — {art['artifact_form'].replace('_',' ')}: {form['geometry']}."))
         if art.get('artifact_state'):
             state=load_json('references/artifacts/states.json')['states'][art['artifact_state']]; sections.append(('artifact_state',f"Artifact state — {art['artifact_state'].replace('_',' ')}: {state}"))
         if art.get('variant'): sections.append(('method_variant',f"Method variant: {art['variant']}."))
         if not transformation:
-            sections.append(('material_behavior','Material behavior: '+method_doc['surface_behavior']+' '+method_doc['edge_behavior']))
+            if emission_contract=='state_aware_v1':
+                tech=method_doc['technique']
+                material=tech['surface']+' '+tech['edge']
+                overlay=method_doc['condition_overlays'].get(art['artifact_state'])
+                if isinstance(overlay,str) and overlay.strip():
+                    material=material+' '+overlay.strip()
+                sections.append(('material_behavior','Material behavior: '+material))
+            else:
+                sections.append(('material_behavior','Material behavior: '+method_doc['surface_behavior']+' '+method_doc['edge_behavior']))
 
     order=[('Moment','moment'),('Action','action'),('Gaze','gaze'),('Body weight/support','body_weight'),('Hands','hand_logic'),('Fabric response','fabric_response'),('Prop interaction','prop_interaction'),('Foreground','foreground'),('Midground','midground'),('Background','background'),('Camera/framing','camera'),('Motivated light','light_source'),('Material response','material_response'),('Emotional micro-story','micro_story')]
     selected=order if profile!='compact' else [x for x in order if x[1] in {'moment','action','hand_logic','camera','light_source','micro_story'}]
@@ -226,11 +256,16 @@ def compile_result(spec:dict,profile:str|None=None)->dict:
     prompt=prompt.strip()+'\n'
     if transformation:
         compiler_version = TRANSFORMATION_COMPILER_VERSION
+    elif emission_contract=='state_aware_v1' and method_doc and not transformation:
+        compiler_version = ARTMETHOD_STATE_AWARE_COMPILER_VERSION
     elif spec.get('attribute_contract'):
         compiler_version = APCC_COMPILER_VERSION
     else:
         compiler_version = COMPILER_VERSION
     result={'prompt':prompt,'prompt_sections':{k:v for k,v in sections},'compiler_version':compiler_version,'pattern_trace':pattern_trace,'evidence_snapshot':snapshot,'compatibility_audit':audit,'evidence_explain':explain,'lint_findings':findings}
+    if method_doc:
+        result['art_method_emission_contract']=emission_contract
+        result['selected_emission_contract_count']=emission_contracts_selected
     if transformation:
         result.update({'transformation_resolution':transformation,'resolved_concepts':resolved_concepts,'lexical_trace':lexical_trace,'lexical_profile':lexical_profile})
     return result

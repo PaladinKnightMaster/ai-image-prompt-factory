@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "description": "Allowlisted public knowledge resources for installed aipf wheels",
   "file_count": 104,
-  "total_bytes": 439734,
+  "total_bytes": 444807,
   "files": [
     {
       "path": "compatibility/compatibility_rules.json",
@@ -11,8 +11,8 @@
     },
     {
       "path": "data/schemas/art_method.schema.json",
-      "sha256": "d64704bf63d7d2026a35c4315de97ab6092340d9a7c10752645e12162885cd77",
-      "size": 827
+      "sha256": "59c2c482087cd21f0b079508d3c7fe9fa83a6f7d7ded2023d451c730d23fa2f5",
+      "size": 3612
     },
     {
       "path": "data/schemas/benchmark.schema.json",
@@ -201,8 +201,8 @@
     },
     {
       "path": "data/schemas/request.schema.json",
-      "sha256": "2fd1d8d5ac1a3918922d959618ec925990658e4d38c6faa0eba21d071f19832d",
-      "size": 9359
+      "sha256": "96adbfd84537ec20237a04e896217dc20796ac7b982c89cc31d094d381e63a94",
+      "size": 9946
     },
     {
       "path": "data/schemas/source.schema.json",
@@ -341,8 +341,8 @@
     },
     {
       "path": "references/art-methods/mineral_pigment_mural.json",
-      "sha256": "3fd5e9caea5dfde5e4ab8da1dad2caa5fef7d756250294c748eea209df0ec3f3",
-      "size": 3265
+      "sha256": "4dc5db566d5a32f2561c057dc9c68f1addf0f6d4da71a4d87a9b1afd22ecc431",
+      "size": 4966
     },
     {
       "path": "references/art-methods/paper_cut_layered.json",
