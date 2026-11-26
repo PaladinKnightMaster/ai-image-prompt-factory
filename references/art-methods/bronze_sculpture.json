@@ -70,5 +70,26 @@
     }
   ],
   "scope_note": "This module controls material/production behavior. It does not select an era by itself.",
-  "version": "1.1.0"
+  "version": "1.2.0",
+  "supported_art_method_emission_contracts": [
+    "legacy",
+    "state_aware_v1"
+  ],
+  "technique": {
+    "prompt_core": "Render a cast copper-alloy sculpture with true metallic reflection, chased surface detail, plausible joins and mounts; model hair/cloth as cast metal masses, not living strands. Surface finish may include deliberate workshop coloration or intentionally applied patination as a fabrication choice.",
+    "surface": "Metal reflects its environment with specular, view-dependent highlights. Finish may be polished metal and/or a deliberately applied chemical/workshop patinated coloration (including intentional brown, black, or green-toned finishing), without implying archaeological age or active decay.",
+    "edge": "Keep cast edges crisp through modeled volumes; thin projections need casting and support logic rather than carved-stone mass."
+  },
+  "condition_overlays": {
+    "newly_created": null,
+    "modern_reconstruction": null,
+    "replica": null,
+    "fantasy_artifact": null,
+    "in_period": "Show modest in-period handling wear only: light polish or surface abrasion appropriate to use, without archaeological damage or active corrosion by default.",
+    "aged": "Show restrained naturally developed stable surface patina appropriate to copper alloy and environment, with rubbed high points from time; avoid neon-uniform corrosion blankets.",
+    "damaged": "Show visible metal damage with dents, cracks, losses, or pitting that follow bronze deformation and fracture behavior rather than random grunge.",
+    "excavated": "Allow uneven burial or mineral accretions and burial-context surface effects where appropriate; avoid a generic mud coating over every surface.",
+    "partially_restored": "Keep original and repaired metal zones visibly distinguishable but coherent; avoid perfect invisible restoration unless separately specified.",
+    "museum_conserved": "Present a stabilized, cleaned, and supported bronze surface with readable stable conservation patina and controlled sheen rather than uncontrolled active corrosion."
+  }
 }
