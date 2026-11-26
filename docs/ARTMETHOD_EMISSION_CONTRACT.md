@@ -21,7 +21,10 @@ When `state_aware_v1` is listed, the pack must also provide:
 - `technique.prompt_core` / `technique.surface` / `technique.edge`
 - `condition_overlays` keyed by the ten registry artifact states
 
-Current Track A pack: `mineral_pigment_mural` v1.2.0 (legacy strings preserved).
+Capable packs:
+
+- Track A: `mineral_pigment_mural` v1.2.0 (legacy strings preserved).
+- Track B pilot: `bronze_sculpture` v1.2.0 (legacy strings preserved; four-part metal semantics — see [BRONZE_ARTMETHOD_STATE_AWARE.md](BRONZE_ARTMETHOD_STATE_AWARE.md)).
 
 ## Behavior
 

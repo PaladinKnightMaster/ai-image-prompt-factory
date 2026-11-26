@@ -301,8 +301,8 @@
     },
     {
       "path": "references/art-methods/bronze_sculpture.json",
-      "sha256": "4d1d0c565ce876dfba44a5754483a945f1ffe2b6f1a22fa667bbc54c5d1c10d1",
-      "size": 3338
+      "sha256": "f95201e45877d9f6a770aa60dbca3afdd7ff7b4626ded13ddc019f3660ad983a",
+      "size": 5414
     },
     {
       "path": "references/art-methods/carved_stone_relief.json",
